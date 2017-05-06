@@ -1,25 +1,21 @@
 package hu.mik.beans;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="t_user")
-public class User {
+public class Role {
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_GEN")
-	@SequenceGenerator(name="SEQ_GEN", sequenceName="s_user", allocationSize=1, initialValue=1)
+	@SequenceGenerator(name="SEQ_GEN", initialValue=1, allocationSize=1, sequenceName="s_role")
 	private Integer id;
 	@Column(name="username")
 	private String username;
-	@Column(name="passwd")
-	private String password;
+	@Column(name="role")
+	private String role;
 	
 		
 	public Integer getId() {
@@ -34,10 +30,12 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPassword() {
-		return password;
+	public String getRole() {
+		return role;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setRole(String role) {
+		this.role = role;
 	}
+	
+	
 }

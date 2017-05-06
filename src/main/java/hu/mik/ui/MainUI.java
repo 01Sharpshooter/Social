@@ -42,7 +42,7 @@ public class MainUI extends UI implements ViewDisplay{
 		viewDisplay=new Panel();
 		viewDisplay.setSizeFull();
 		rootContainer.addComponent(viewDisplay);
-		rootContainer.setExpandRatio(viewDisplay, 1.0f);		
+		rootContainer.setExpandRatio(viewDisplay, 1.0f);
 		
 	}
 
