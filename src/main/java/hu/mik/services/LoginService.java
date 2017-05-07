@@ -4,6 +4,6 @@ import hu.mik.beans.User;
 
 public interface LoginService {
 	
-	public void findUserById(String username);	
+	public void findUserByUsername(String username);	
 	
 }

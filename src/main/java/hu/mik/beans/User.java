@@ -1,10 +1,13 @@
 package hu.mik.beans;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,8 +23,9 @@ public class User {
 	private String username;
 	@Column(name="passwd")
 	private String password;
+	@Column(name="role")
+	private String role;
 	
-		
 	public Integer getId() {
 		return id;
 	}
@@ -40,4 +44,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 }

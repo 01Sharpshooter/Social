@@ -3,7 +3,7 @@ package hu.mik.services;
 public class LoginServiceImpl implements LoginService{
 
 	@Override
-	public void findUserById(String username) {
+	public void findUserByUsername(String username) {
 		// TODO Auto-generated method stub
 		
 	}

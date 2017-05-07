@@ -29,24 +29,31 @@ public class UserDaoImplement implements UserDao{
 
 	@Override
 	public boolean takenUsername(String username) {
-		List<User> list=new ArrayList<>();
-		list=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
-				.setParameter("username", username)
-				.getResultList();	
+		List<User> list=findByUsername(username);	
 
-		if(!list.isEmpty()){
-			return true;
+		if(list==null){
+			return false;
 		}
 		else{
-			return false;
+			return true;
 		}
 	}
 
 	@Override
-	public User userByName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> findByUsername(String username) {
+		List<User> list=new ArrayList<>();
+		list=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
+				.setParameter("username", username)
+				.getResultList();
+		if(list.isEmpty()){
+			return null;
+		}else{
+			return list;
+		}
 	}
+
+
+
 
 	
 

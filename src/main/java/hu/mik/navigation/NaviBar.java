@@ -2,9 +2,12 @@ package hu.mik.navigation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.views.LoginView;
@@ -24,7 +27,18 @@ public class NaviBar {
 		naviBar.addComponent(createNavigationButton("Main", MainView.NAME));
 		naviBar.addComponent(createNavigationButton("Messages", MessagesView.NAME));
 		naviBar.addComponent(createNavigationButton("Registration", RegistrationView.NAME));
-		naviBar.addComponent(createNavigationButton("Login", LoginView.NAME));
+		Button logoutButton=new Button("Logout");
+		logoutButton.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				usedUI.getPage().setLocation("/login");
+				VaadinService.getCurrentRequest().getWrappedSession().invalidate();			
+				
+			}
+		});		
+		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		naviBar.addComponent(logoutButton);
 		return naviBar;
 	}
 	

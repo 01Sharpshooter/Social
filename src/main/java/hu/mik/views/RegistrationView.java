@@ -12,6 +12,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -19,7 +20,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.services.EncryptService;
-import hu.mik.services.RegistrationService;
+import hu.mik.services.UserService;
 
 @UIScope
 @SpringView(name=RegistrationView.NAME)
@@ -28,7 +29,7 @@ public class RegistrationView extends VerticalLayout implements View {
 	private Label success=new Label();
 	
 	@Autowired
-	private RegistrationService regService;
+	private UserService userService;
 	
 	@Autowired
 	private EncryptService encService;
@@ -61,13 +62,13 @@ public class RegistrationView extends VerticalLayout implements View {
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
 				if(nameTF.isEmpty() || pwTF.isEmpty() || pwTFAgain.isEmpty()){
 					success.setCaption("Empty field!");
-				}else if(regService.takenUserName(nameTF.getValue())){	
+				}else if(userService.takenUserName(nameTF.getValue())){	
 					success.setCaption("This username is already taken. Please choose another one!");					
 				}else if(!pwTF.getValue().equals(pwTFAgain.getValue())){
 					success.setCaption("Passwords are not matching!");
 				}else{
 					success.setCaption("Successful registration!");
-					regService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
+					userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
 				}				
 			}
 		});

@@ -1,6 +1,8 @@
 package hu.mik.dao;
 
 
+import java.util.List;
+
 import hu.mik.beans.User;
 
 public interface UserDao{
@@ -8,6 +10,6 @@ public interface UserDao{
 	
 	public boolean takenUsername(String username);
 	
-	public User userByName(String username);
+	public List<User> findByUsername(String username);
 	
 }
