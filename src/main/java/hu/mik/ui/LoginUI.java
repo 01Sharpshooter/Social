@@ -34,7 +34,6 @@ import hu.mik.navigation.NaviBar;
 import hu.mik.services.EncryptService;
 import hu.mik.services.UserService;
 import hu.mik.views.LoginView;
-import scala.annotation.meta.setter;
 
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path="/login")
