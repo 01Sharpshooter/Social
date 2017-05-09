@@ -33,7 +33,6 @@ import hu.mik.constants.ThemeConstants;
 import hu.mik.navigation.NaviBar;
 import hu.mik.services.EncryptService;
 import hu.mik.services.UserService;
-import hu.mik.views.LoginView;
 
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path="/login")
@@ -47,7 +46,7 @@ public class LoginUI extends UI{
 
 	@Override
 	protected void init(VaadinRequest request) {
-		if(session.getAttribute("Username")==null){
+		if(session.getAttribute("User")==null){
 			final VerticalLayout layout=new VerticalLayout();
 			Label title=new Label("Login");
 			title.setStyleName(ValoTheme.LABEL_H1);
@@ -80,11 +79,13 @@ public class LoginUI extends UI{
 						User user=userService.findUserByUsername(userName);
 						if(user!=null){
 							if(encService.comparePW(passWord, user.getPassword())){							
-				                session.setAttribute("Username", userName);
+				                session.setAttribute("User", user);
 								getPage().setLocation("/main");
 							}else{
 								success.setValue("Wrong username or password.");
 							}
+						}else{
+							success.setValue("Wrong username or password.");
 						}
 					}else{
 						success.setValue("One or more fields are empty.");

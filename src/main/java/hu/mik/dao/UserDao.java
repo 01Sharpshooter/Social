@@ -5,6 +5,7 @@ import java.util.List;
 
 import hu.mik.beans.User;
 
+
 public interface UserDao{
 	public void save(User user);
 	

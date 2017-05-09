@@ -1,0 +1,30 @@
+@import "shared/variables";
+
+@import "util/bourbon/bourbon";
+
+@import "util/lists";
+
+@import "util/css3";
+
+@import "util/color";
+
+@import "util/anim";
+
+@import "util/gradient";
+
+@import "util/bevel-and-shadow";
+
+@import "util/util";
+
+@import "fonts/fonts";
+
+@import "shared/global";
+
+@import "components/all";
+
+name: valo-global args: []
+
+.myTheme {
+	name: valo-common args: []
+	name: valo-components args: []
+}

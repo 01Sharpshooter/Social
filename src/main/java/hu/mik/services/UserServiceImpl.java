@@ -1,11 +1,13 @@
 package hu.mik.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import hu.mik.beans.User;
 import hu.mik.constants.UserConstants;
 import hu.mik.dao.UserDao;
+
 @Component
 public class UserServiceImpl implements UserService{
 	@Autowired
@@ -18,15 +20,15 @@ public class UserServiceImpl implements UserService{
 		user.setUsername(username);
 		user.setPassword(passwd);
 		user.setRole(UserConstants.DEFAULT_ROLE);
+		user.setImage(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
 		userDao.save(user);
 		
 	}
-
 	@Override
 	public boolean takenUserName(String username) {		
 		return userDao.takenUsername(username);
 	}
-
+	
 	@Override
 	public User findUserByUsername(String username) {
 		if(userDao.findByUsername(username)!=null){
@@ -35,6 +37,12 @@ public class UserServiceImpl implements UserService{
 		else{
 			return null;
 		}
+		
+	}
+
+	@Override
+	public void saveChanges(User user) {
+		userDao.save(user);
 		
 	}
 	

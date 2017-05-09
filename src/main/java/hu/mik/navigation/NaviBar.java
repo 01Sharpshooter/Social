@@ -10,10 +10,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
-import hu.mik.views.LoginView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
-import hu.mik.views.RegistrationView;
 
 public class NaviBar {
 	@Autowired
@@ -22,11 +20,9 @@ public class NaviBar {
 	public CssLayout getNaviBar(UI ui){
 		usedUI=ui;
 		CssLayout naviBar=new CssLayout();
-		naviBar.setCaption("Menu");
 		naviBar.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		naviBar.addComponent(createNavigationButton("Main", MainView.NAME));
 		naviBar.addComponent(createNavigationButton("Messages", MessagesView.NAME));
-		naviBar.addComponent(createNavigationButton("Registration", RegistrationView.NAME));
 		Button logoutButton=new Button("Logout");
 		logoutButton.addClickListener(new ClickListener() {
 			

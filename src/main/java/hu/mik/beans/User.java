@@ -25,6 +25,8 @@ public class User {
 	private String password;
 	@Column(name="role")
 	private String role;
+	@Column(name="image")
+	private String image;
 	
 	public Integer getId() {
 		return id;
@@ -50,5 +52,13 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	
 	
 }

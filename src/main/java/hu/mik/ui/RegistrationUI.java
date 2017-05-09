@@ -5,16 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.constants.ThemeConstants;
@@ -35,9 +39,13 @@ public class RegistrationUI extends UI{
 	
 	@Override
 	protected void init(VaadinRequest request) {
-		if(session.getAttribute("Username")==null){
-			final FormLayout layout=new FormLayout();
+		if(session.getAttribute("User")==null){
+			final VerticalLayout layout=new VerticalLayout();
 			setContent(layout);	
+			Label title=new Label("Registration");
+			title.setStyleName(ValoTheme.LABEL_H1);
+			layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+			layout.addComponent(title);
 			
 			TextField nameTF=new TextField("Name");
 			nameTF.setIcon(VaadinIcons.USER);
@@ -69,7 +77,12 @@ public class RegistrationUI extends UI{
 					}else if(!pwTF.getValue().equals(pwTFAgain.getValue())){
 						success.setCaption("Passwords are not matching!");
 					}else{
-						success.setCaption("Successful registration!");
+						layout.removeAllComponents();
+						success.setValue("Successful registration!");
+						success.setStyleName(ValoTheme.LABEL_H1);
+						layout.addComponent(success);
+						Link link=new Link("Login", new ExternalResource("/login"));
+						layout.addComponent(link);
 						userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
 					}				
 				}

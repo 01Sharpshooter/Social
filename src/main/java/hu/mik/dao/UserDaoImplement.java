@@ -7,7 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +23,16 @@ public class UserDaoImplement implements UserDao{
 
 	@Override
 	public void save(User user) {
-		em.persist(user);
+		if(findByUsername(user.getUsername())==null){
+			em.persist(user);
+		}else{
+			em.merge(user);
+		}
 		
 	}
-
 	@Override
 	public boolean takenUsername(String username) {
-		List<User> list=findByUsername(username);	
+		List<User> list=findByUsername(username);
 
 		if(list==null){
 			return false;
@@ -38,7 +41,6 @@ public class UserDaoImplement implements UserDao{
 			return true;
 		}
 	}
-
 	@Override
 	public List<User> findByUsername(String username) {
 		List<User> list=new ArrayList<>();
