@@ -80,6 +80,7 @@ public class LoginUI extends UI{
 						if(user!=null){
 							if(encService.comparePW(passWord, user.getPassword())){							
 				                session.setAttribute("User", user);
+				    			MainUI.getOnlineUsers().add(user);				    			
 								getPage().setLocation("/main");
 							}else{
 								success.setValue("Wrong username or password.");

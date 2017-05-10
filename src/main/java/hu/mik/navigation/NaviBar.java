@@ -3,6 +3,7 @@ package hu.mik.navigation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.UI;
@@ -10,12 +11,15 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
+import hu.mik.beans.User;
+import hu.mik.ui.MainUI;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 
 public class NaviBar {
 	@Autowired
 	private UI usedUI;
+	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	
 	public CssLayout getNaviBar(UI ui){
 		usedUI=ui;
@@ -29,8 +33,9 @@ public class NaviBar {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				usedUI.getPage().setLocation("/login");
-				VaadinService.getCurrentRequest().getWrappedSession().invalidate();			
-				
+				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
+				session.invalidate();		
+				session=null;
 			}
 		});		
 		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);

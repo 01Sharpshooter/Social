@@ -71,11 +71,11 @@ public class RegistrationUI extends UI{
 				@Override
 				public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
 					if(nameTF.isEmpty() || pwTF.isEmpty() || pwTFAgain.isEmpty()){
-						success.setCaption("Empty field!");
+						success.setValue("Empty field!");
 					}else if(userService.takenUserName(nameTF.getValue())){	
-						success.setCaption("This username is already taken. Please choose another one!");					
+						success.setValue("This username is already taken. Please choose another one!");					
 					}else if(!pwTF.getValue().equals(pwTFAgain.getValue())){
-						success.setCaption("Passwords are not matching!");
+						success.setValue("Passwords are not matching!");
 					}else{
 						layout.removeAllComponents();
 						success.setValue("Successful registration!");

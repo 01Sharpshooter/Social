@@ -3,6 +3,9 @@ package hu.mik.ui;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -39,18 +42,20 @@ import hu.mik.navigation.SideMenu;
 @SpringViewDisplay
 @Theme(ThemeConstants.UI_THEME)
 public class MainUI extends UI implements ViewDisplay{
-
+	
+	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	
 	@Override
 	protected void init(VaadinRequest request){
 		if(session.getAttribute("User")!=null){			
-			User user=(User)session.getAttribute("User");			
+			User user=(User)session.getAttribute("User");	
 			final HorizontalLayout base=new HorizontalLayout();
 			final VerticalLayout sideMenu=new SideMenu(user, this).getSideMenu();
 			final VerticalLayout workingSpace=new VerticalLayout();
-			final HorizontalLayout upperMenu=new HorizontalLayout();			
+			final HorizontalLayout upperMenu=new HorizontalLayout();	
+			VaadinService.getCurrentRequest().getWrappedSession().setAttribute("UI", this);
 			sideMenu.setSpacing(false);
 			workingSpace.setSizeFull();
 			base.setSizeFull();
@@ -82,6 +87,11 @@ public class MainUI extends UI implements ViewDisplay{
 		
 	}
 
+	public static List<User> getOnlineUsers() {
+		return onlineUsers;
+	}
+	
+	
 	
 	
 	

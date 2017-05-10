@@ -10,5 +10,7 @@ public class UserConstants {
 	
 	public static final String DEFAULT_PROFILE_PICTURE="images/user.png";
 	
+	public static final String[] ALLOWED_PICTURE_TYPES={"image/jpeg","image/png","image/gif"};
+	
 	
 }
