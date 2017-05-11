@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -37,7 +38,6 @@ import hu.mik.navigation.NaviBar;
 import hu.mik.navigation.SideMenu;
 
 
-
 @SpringUI(path="/main")
 @SpringViewDisplay
 @Theme(ThemeConstants.UI_THEME)
@@ -56,7 +56,8 @@ public class MainUI extends UI implements ViewDisplay{
 			final VerticalLayout workingSpace=new VerticalLayout();
 			final HorizontalLayout upperMenu=new HorizontalLayout();	
 			VaadinService.getCurrentRequest().getWrappedSession().setAttribute("UI", this);
-			sideMenu.setSpacing(false);
+			sideMenu.setSpacing(true);
+			sideMenu.setSizeFull();
 			workingSpace.setSizeFull();
 			base.setSizeFull();
 			NaviBar naviBar=new NaviBar();

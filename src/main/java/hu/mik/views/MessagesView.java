@@ -1,6 +1,5 @@
 package hu.mik.views;
 
-import static org.mockito.Matchers.intThat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
+import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.ui.MainUI;
 
@@ -51,13 +51,17 @@ public class MessagesView extends VerticalLayout implements View {
 		
 		for(int i=0; i<users.size();i++){			
 			userDiv=new HorizontalLayout();
+			userDiv.setStyleName(ThemeConstants.BORDERED);
 			userDiv.setSizeFull();
 			userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 			Image image=new Image("", new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+users.get(i).getImage())));
-			image.setWidth("80%");
-			image.setHeight("80%");
+//			image.setWidth("80%");
+//			image.setHeight("80%");
+			image.setSizeFull();
 			userDiv.addComponent(image);
-			userDiv.addComponent(new Label(users.get(i).getUsername()));
+			Label label=new Label(users.get(i).getUsername());
+			label.setSizeUndefined();
+			userDiv.addComponent(label);
 			userList.addComponent(userDiv);
 		}
 	}

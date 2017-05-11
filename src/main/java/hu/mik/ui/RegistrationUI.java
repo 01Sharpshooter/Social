@@ -73,9 +73,17 @@ public class RegistrationUI extends UI{
 					if(nameTF.isEmpty() || pwTF.isEmpty() || pwTFAgain.isEmpty()){
 						success.setValue("Empty field!");
 					}else if(userService.takenUserName(nameTF.getValue())){	
-						success.setValue("This username is already taken. Please choose another one!");					
+						success.setValue("This username is already taken. Please choose another one!");	
+						setFocusedComponent(nameTF);
+						nameTF.setStyleName(ThemeConstants.WRONG_FIELD);
 					}else if(!pwTF.getValue().equals(pwTFAgain.getValue())){
+						nameTF.setStyleName("");
 						success.setValue("Passwords are not matching!");
+						setFocusedComponent(pwTF);
+						pwTF.clear();
+						pwTFAgain.clear();
+						pwTF.setStyleName(ThemeConstants.WRONG_FIELD);
+						pwTFAgain.setStyleName(ThemeConstants.WRONG_FIELD);
 					}else{
 						layout.removeAllComponents();
 						success.setValue("Successful registration!");

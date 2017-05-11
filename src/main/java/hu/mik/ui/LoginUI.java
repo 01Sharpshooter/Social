@@ -84,12 +84,16 @@ public class LoginUI extends UI{
 								getPage().setLocation("/main");
 							}else{
 								success.setValue("Wrong username or password.");
+								pwTF.clear();
+								setFocusedComponent(pwTF);
 							}
 						}else{
 							success.setValue("Wrong username or password.");
+							pwTF.clear();
+							setFocusedComponent(pwTF);
 						}
 					}else{
-						success.setValue("One or more fields are empty.");
+						success.setValue("One or more fields are empty.");						
 					}
 				}
 			});

@@ -28,11 +28,6 @@
 	<dependencies>
 <!-- 		<dependency> -->
 <!-- 		    <groupId>com.vaadin</groupId> -->
-<!-- 		    <artifactId>vaadin-sass-compiler</artifactId> -->
-<!-- 		    <version>0.9.13</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 		    <groupId>com.vaadin</groupId> -->
 <!-- 		    <artifactId>vaadin-client</artifactId> -->
 <!-- 		    <scope>provided</scope> -->
 <!-- 		</dependency> -->
@@ -41,23 +36,19 @@
 		    <artifactId>vaadin-themes</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.vaadin</groupId>
-		    <artifactId>vaadin-theme-compiler</artifactId>
-		    <version>7.1.15</version>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiled</artifactId>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 		    <groupId>com.vaadin</groupId> -->
-<!-- 		    <artifactId>vaadin-client-compiled</artifactId> -->
-<!-- 		</dependency> -->
+			
 		<dependency>
 		   <groupId>org.vaadin.liveimageeditor</groupId>
 		   <artifactId>live-image-editor</artifactId>
 		   <version>2.0</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 		    <groupId>com.vaadin</groupId> -->
-<!-- 		    <artifactId>vaadin-server</artifactId> -->
-<!-- 		</dependency>		 -->
+		<dependency>
+		    <groupId>com.vaadin</groupId>
+		    <artifactId>vaadin-server</artifactId>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
@@ -84,10 +75,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-websocket</artifactId> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -105,32 +96,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 		   <groupId>org.vaadin.addons</groupId> -->
-<!-- 		   <artifactId>loginform</artifactId> -->
-<!-- 		   <version>0.6.2</version> -->
-<!-- 		</dependency>	 -->
-<!-- 		<dependency> -->
-<!-- 		  <groupId>com.vaadin.addons</groupId> -->
-<!-- 		  <artifactId>vaadin-chameleon-theme</artifactId> -->
-<!-- 		  <version>1.0.2</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 	    	<groupId>com.jhlabs</groupId> -->
-<!-- 		    <artifactId>filters</artifactId> -->
-<!-- 		    <version>2.0.235-1</version> -->
-<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -143,6 +111,11 @@
 			<version>11.2.0.3.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/ojdbc6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.3</version>
 		</dependency>
 	</dependencies>
 	
@@ -190,6 +163,18 @@
 			<plugin>
 		        <groupId>com.vaadin</groupId>
 		        <artifactId>vaadin-maven-plugin</artifactId>
+		        <configuration>
+					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/</webappDirectory>
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/</hostedWebapp>
+					<noServer>true</noServer>
+<!-- 					Remove draftCompile when project is ready  -->
+					<draftCompile>true</draftCompile>
+					<compileReport>true</compileReport>
+					<style>OBF</style>
+					<style>DETAILED</style>
+					<strict>true</strict>
+				</configuration>
 		        <executions>
 		            <execution>
 		                <goals>

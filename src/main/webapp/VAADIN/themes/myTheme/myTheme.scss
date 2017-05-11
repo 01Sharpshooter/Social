@@ -1,0 +1,41 @@
+
+@import "../valo/valo";
+
+@mixin myTheme{
+  @include valo;
+  		
+  	$blue:#00BFFF;
+  	$blue_shadow:#00b6cd;
+  
+    .bordered{
+  		border:1px solid $blue;
+  		border-radius:10px;
+  		box-shadow:2px 2px 2px $blue_shadow;
+  	}
+  
+  	.sideMenuColor{
+  		background-color:$blue;
+  		border:1px solid $blue;
+  		border-radius:4px;
+  		box-shadow:3px 3px 3px $blue_shadow;
+  	}
+  
+  	.wrongField{
+  		border:2px solid red;
+  			
+  	}
+  	
+  	.blueTextH1{
+  		text-color: $blue;
+  		display: block;
+	    font-size: 2em;
+	    margin-top: 0.67em;
+	    margin-bottom: 0.67em;
+	    margin-left: 0;
+	    margin-right: 0;
+	    font-weight: bold;	
+  	}
+  
+
+
+}

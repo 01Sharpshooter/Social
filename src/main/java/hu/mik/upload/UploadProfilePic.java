@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;
 
 import com.vaadin.navigator.View;
 import com.vaadin.server.FileResource;
@@ -35,7 +37,7 @@ import hu.mik.services.UserServiceImpl;
 import hu.mik.views.PictureUploadView;
 
 @Component
-public class UploadProfilePic implements Receiver, SucceededListener{
+public class UploadProfilePic implements Receiver, SucceededListener, ImageReceiver{
 	
 	@Autowired
 	UserService userService;
@@ -54,7 +56,6 @@ public class UploadProfilePic implements Receiver, SucceededListener{
 	public void uploadSucceeded(SucceededEvent event) {		
 		User user=(User)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		String[] allowedTypes=UserConstants.ALLOWED_PICTURE_TYPES;
-		System.out.println(mimeType);
 		for(String type : allowedTypes){
 			if(mimeType.equals(type)){
 				upload=true;
@@ -65,7 +66,6 @@ public class UploadProfilePic implements Receiver, SucceededListener{
 			}
 		}
 		if(upload){		
-			System.out.println(user.getImage());
 			if(!user.getImage().equals("user.png")){
 				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage());
 				fileToDel.delete();
@@ -99,6 +99,12 @@ public class UploadProfilePic implements Receiver, SucceededListener{
 
 	public void setView(View view) {
 		this.view = view;
+	}
+
+	@Override
+	public void receiveImage(InputStream inputStream) {
+		
+		
 	}
 	
 	
