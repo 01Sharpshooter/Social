@@ -13,6 +13,29 @@
   		box-shadow:2px 2px 2px $blue_shadow;
   	}
   
+  	.blueText{
+  		color: $blue;
+  	}
+  
+  	.thickBordered{
+  		border: 2px solid $blue;
+  		border-radius:10px;
+  		box-shadow:-2px -2px 20px -2px $blue_shadow;
+  	}
+  	
+  	.workingSpace{
+  		background-color: $blue;
+  		border: 2px solid $blue;
+  		border-radius:10px;
+  		box-shadow:-2px -2px 20px -2px $blue_shadow;
+  	}
+  
+  	.chatMessage{
+  		border: 2px solid $blue;
+  		background-color: $blue;
+  		border-radius:4px;
+  	}
+  
   	.sideMenu{
   		background-color:$blue;
   		border:1px solid $blue;

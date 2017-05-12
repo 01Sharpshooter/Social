@@ -4,6 +4,7 @@ package hu.mik.ui;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
@@ -95,6 +96,7 @@ public class RegistrationUI extends UI{
 					}				
 				}
 			});
+			submit.setClickShortcut(KeyCode.ENTER);
 			layout.addComponent(success);
 			
 			layout.addComponent(submit);

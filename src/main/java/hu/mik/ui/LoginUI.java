@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -97,6 +98,7 @@ public class LoginUI extends UI{
 					}
 				}
 			});
+			submit.setClickShortcut(KeyCode.ENTER);
 			layout.addComponent(submit);
 			Button register=new Button("Registration");
 			register.setStyleName(ValoTheme.BUTTON_SMALL);

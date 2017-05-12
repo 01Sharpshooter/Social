@@ -1,5 +1,7 @@
 package hu.mik.navigation;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.server.VaadinService;
@@ -12,6 +14,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
+import hu.mik.constants.ThemeConstants;
 import hu.mik.ui.MainUI;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
@@ -39,6 +42,7 @@ public class NaviBar {
 			}
 		});		
 		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(logoutButton);
 		return naviBar;
 	}
@@ -46,6 +50,7 @@ public class NaviBar {
 	private Button createNavigationButton(String caption, final String ViewName){
 		Button button=new Button(caption);
 		button.addStyleName(ValoTheme.BUTTON_SMALL);
+		button.addStyleName(ThemeConstants.BLUE_TEXT);
 		button.addClickListener(event -> usedUI.getNavigator().navigateTo(ViewName));
 		return button;
 	}

@@ -68,6 +68,7 @@ public class MainUI extends UI implements ViewDisplay{
 			workingSpace.addComponent(viewDisplay);
 			workingSpace.setExpandRatio(upperMenu, 1);
 			workingSpace.setExpandRatio(viewDisplay, 9);
+			workingSpace.setStyleName(ThemeConstants.BORDERED_THICK);
 			base.addComponent(sideMenu);
 			base.addComponent(workingSpace);
 			base.setExpandRatio(sideMenu, 15);
