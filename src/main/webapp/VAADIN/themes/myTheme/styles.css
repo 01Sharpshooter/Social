@@ -12508,7 +12508,7 @@ div.v-layout.v-horizontal.v-widget {
 	box-shadow: 2px 2px 2px #00b6cd;
 }
 
-.myTheme .sideMenuColor {
+.myTheme .sideMenu {
 	background-color: #00BFFF;
 	border: 1px solid #00BFFF;
 	border-radius: 4px;
@@ -12520,11 +12520,22 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .blueTextH1 {
-	text-color: #00BFFF;
+	color: #00BFFF;
 	display: block;
 	font-size: 2em;
 	margin-top: 0.67em;
 	margin-bottom: 0.67em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+}
+
+.myTheme .blueTextH3 {
+	color: #00BFFF;
+	display: block;
+	font-size: 1.17em;
+	margin-top: 1em;
+	margin-bottom: 1em;
 	margin-left: 0;
 	margin-right: 0;
 	font-weight: bold;

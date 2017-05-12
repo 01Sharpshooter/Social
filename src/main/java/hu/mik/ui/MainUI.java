@@ -55,7 +55,6 @@ public class MainUI extends UI implements ViewDisplay{
 			final VerticalLayout sideMenu=new SideMenu(user, this).getSideMenu();
 			final VerticalLayout workingSpace=new VerticalLayout();
 			final HorizontalLayout upperMenu=new HorizontalLayout();	
-			VaadinService.getCurrentRequest().getWrappedSession().setAttribute("UI", this);
 			sideMenu.setSpacing(true);
 			sideMenu.setSizeFull();
 			workingSpace.setSizeFull();

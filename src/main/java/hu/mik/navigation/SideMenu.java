@@ -31,19 +31,28 @@ public class SideMenu extends VerticalLayout{
 	}	
 	
 	public SideMenu getSideMenu(){		
-		addStyleName(ThemeConstants.SIDE_MENU);
-		name.setValue(user.getUsername());
-		name.addStyleName(ValoTheme.LABEL_H2);
-		this.addComponent(name);
+		this.addStyleName(ThemeConstants.SIDE_MENU);		
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		VerticalLayout header=new VerticalLayout();
+		VerticalLayout menu=new VerticalLayout();
+		header.setDefaultComponentAlignment(Alignment.TOP_LEFT);
+		menu.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		header.setSpacing(false);
+		header.setMargin(false);
+		this.addComponent(header);
+		this.addComponent(menu);
+		this.setExpandRatio(header, 3);
+		this.setExpandRatio(menu, 7);
 		this.setSpacing(false);
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage()))); 
-		image.setHeight("80%");
-		image.setWidth("80%");
-		addComponent(image);	
-		addComponent(menuBar);
+		image.setHeight("100%");
+		image.setWidth("100%");
+		name.setValue(user.getUsername());
+		name.addStyleName(ValoTheme.LABEL_H2);
+		header.addComponent(name);
+		header.addComponent(image);	
+		header.addComponent(menuBar);
 		MenuItem options=menuBar.addItem("Options", null);
-		options.setStyleName(ValoTheme.BUTTON_LINK);
 		MenuItem changePicture=options.addItem("Change picture", new Command() {
 			
 			@Override

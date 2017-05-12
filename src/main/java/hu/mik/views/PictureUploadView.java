@@ -2,16 +2,21 @@ package hu.mik.views;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.liveimageeditor.LiveImageEditor;
+import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
@@ -33,7 +38,7 @@ import hu.mik.upload.UploadProfilePicEdit;
 
 @ViewScope
 @SpringView(name=PictureUploadView.NAME)
-public class PictureUploadView extends VerticalLayout implements View{
+public class PictureUploadView extends VerticalLayout implements View, ImageReceiver{
 	public static final String NAME="PictureUpload";
 	
 	@Autowired
@@ -43,21 +48,22 @@ public class PictureUploadView extends VerticalLayout implements View{
 	
 	private Image editImage=new Image();
 	
-	private LiveImageEditor editor=new LiveImageEditor(uploadProfilePicture);
+	private LiveImageEditor editor=new LiveImageEditor(this::receiveImage);
 	
 	private Upload upload;
 	
-	private boolean edit=false;
+	private boolean edit=true;
 	
 	private CssLayout navigation;
+
+	private VerticalLayout editorLayout;
 	
 	@PostConstruct
 	public void init(){	
-		ui=(UI)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("UI");
 		uploadProfilePicture.setView(this);
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		upload=new Upload("Upload a new profile picture! (JPEG/PNG/GIF)", uploadProfilePicture);
-		upload.setImmediateMode(false);
+		upload.setImmediateMode(true);
 		upload.addSucceededListener(uploadProfilePicture);
 		addComponent(upload);
 		}
@@ -76,14 +82,16 @@ public class PictureUploadView extends VerticalLayout implements View{
 		VerticalLayout editorLayout=this.getEditor(ops);
 		upload.setVisible(false);
 		addComponent(editorLayout);
+		editorLayout.setVisible(edit);
 		
 	}
 	
 	public VerticalLayout getEditor(ByteArrayOutputStream ops){
-		VerticalLayout editorLayout=new VerticalLayout();
+		editorLayout=new VerticalLayout();
+		addComponent(editorLayout);
 		editorLayout.setSizeFull();
 		Label instructions=new Label("Scroll to zoom, move by dragging the mouse, rotate by shift+mouse dragging.");
-		instructions.setStyleName(ThemeConstants.BLUE_TEXT_H1);
+		instructions.setStyleName(ThemeConstants.BLUE_TEXT_H3);
 		editorLayout.addComponent(instructions);
 		editorLayout.addComponent(editor);
 		editorLayout.addComponent(editImage);
@@ -91,13 +99,17 @@ public class PictureUploadView extends VerticalLayout implements View{
 		navigation.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		Button uploadButton=new Button("Upload", this::uploadListener);
 		Button resetButton=new Button("Reset", this::resetListener);
-		Button cancelButton=new Button("Cancel", this:cancelListener);
+		Button cancelButton=new Button("Cancel", this::cancelListener);
+		navigation.addComponent(uploadButton);
+		navigation.addComponent(resetButton);
+		navigation.addComponent(cancelButton);
 		editorLayout.addComponent(navigation);
-		editor.setWidth(80, Unit.PERCENTAGE);
-		editor.setHeight(80, Unit.PERCENTAGE);
+		editor.setWidth(300, Unit.PIXELS);
+		editor.setHeight(300, Unit.PIXELS);
 		editor.setImage(ops.toByteArray());
 		editor.resetTransformations();
-		editor.setVisible(visible);
+		editImage.setVisible(edit);
+		editor.setVisible(edit);
 		
 		return editorLayout;
 	}
@@ -111,9 +123,16 @@ public class PictureUploadView extends VerticalLayout implements View{
 	}
 	
 	private void cancelListener(Button.ClickEvent event){
-		editor.setVisible(!edit);
-		editor.setVisible(!edit);
+		editorLayout.setVisible(!edit);
+		upload.setVisible(edit);
+	}
+
+	@Override
+	public void receiveImage(InputStream inputStream) {
+        uploadProfilePicture.receiveImage(inputStream);
 		
 	}
+	
+	
 
 }

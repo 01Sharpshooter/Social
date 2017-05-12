@@ -1,20 +1,27 @@
 package hu.mik.upload;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;
 
 import com.vaadin.navigator.View;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
@@ -26,11 +33,9 @@ import hu.mik.services.UserService;
 import hu.mik.views.PictureUploadView;
 
 @Component
-public class UploadProfilePicEdit implements Receiver, SucceededListener, ImageReceiver{
+public class UploadProfilePicEdit implements Receiver, SucceededListener{
 	@Autowired
-	UserService userService;
-	
-	private File newImage;
+	UserService userService;	
 	
 	private View view;
 	
@@ -38,13 +43,15 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener, ImageR
 	
 	private boolean upload=true;
 	
+	private String fileName;
+	
 	private ByteArrayOutputStream ops;
+	
 	
 
 	@EventListener
 	@Override
 	public void uploadSucceeded(SucceededEvent event) {		
-		User user=(User)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		String[] allowedTypes=UserConstants.ALLOWED_PICTURE_TYPES;
 		for(String type : allowedTypes){
 			if(mimeType.equals(type)){
@@ -64,7 +71,8 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener, ImageR
 	}
 
 	@Override
-	public OutputStream receiveUpload(String filename, String mimeType) {		
+	public OutputStream receiveUpload(String filename, String mimeType) {	
+		this.fileName=filename;
 		this.mimeType=mimeType;
 		return ops = new ByteArrayOutputStream();	
 	}
@@ -76,10 +84,30 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener, ImageR
 	public void setView(View view) {
 		this.view = view;
 	}
-
-	@Override
-	public void receiveImage(InputStream inputStream) {
-		
-		
+	
+	public void receiveImage(InputStream ins) {
+		User user=(User)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+		String imageName=System.currentTimeMillis()+fileName;
+		File imageSave=new File(UserConstants.PROFILE_PICTURE_LOCATION+imageName);
+		FileOutputStream ops=null;
+		int cursor;
+		try {
+			ops=new FileOutputStream(imageSave);
+			while((cursor=ins.read())!=-1){				
+				ops.write(cursor);
+			}
+			ins.close();
+			ops.close();
+			if(!user.getImage().equals("user.png")){
+				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage());
+				fileToDel.delete();
+			}
+			user.setImage(imageName);
+			userService.saveChanges(user);
+			((PictureUploadView) view).imageChange();			
+			
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 }

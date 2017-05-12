@@ -9,6 +9,8 @@ public class ThemeConstants {
 	
 	public static final String BLUE_TEXT_H1="blueTextH1";
 	
+	public static final String BLUE_TEXT_H3="blueTextH3";
+	
 	public static final String SIDE_MENU="sideMenu";
 	
 	public static final String BORDERED="bordered";
