@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService{
 		user.setUsername(username);
 		user.setPassword(passwd);
 		user.setRole(UserConstants.DEFAULT_ROLE);
-		user.setImage(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
+		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
 		userDao.save(user);
 		
 	}

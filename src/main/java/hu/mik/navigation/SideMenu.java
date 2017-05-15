@@ -35,7 +35,7 @@ public class SideMenu extends VerticalLayout{
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		VerticalLayout header=new VerticalLayout();
 		VerticalLayout menu=new VerticalLayout();
-		header.setDefaultComponentAlignment(Alignment.TOP_LEFT);
+		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		menu.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		header.setSpacing(false);
 		header.setMargin(false);
@@ -44,7 +44,7 @@ public class SideMenu extends VerticalLayout{
 		this.setExpandRatio(header, 3);
 		this.setExpandRatio(menu, 7);
 		this.setSpacing(false);
-		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage()))); 
+		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))); 
 		image.setHeight("100%");
 		image.setWidth("100%");
 		name.setValue(user.getUsername());

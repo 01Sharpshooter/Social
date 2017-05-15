@@ -1,5 +1,8 @@
 package hu.mik.beans;
 
+import java.io.File;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,9 +10,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.web.context.annotation.ApplicationScope;
+
+import com.vaadin.server.FileResource;
+import com.vaadin.ui.Image;
+
+import hu.mik.constants.UserConstants;
 
 @Entity
 @Table(name="t_user")
@@ -26,7 +39,11 @@ public class User {
 	@Column(name="role")
 	private String role;
 	@Column(name="image")
-	private String image;
+	private String imageName;
+	@OneToMany(mappedBy="newsUser")
+	private List<News> news;
+	@Transient
+	private Image image;
 	
 	public Integer getId() {
 		return id;
@@ -52,12 +69,35 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public String getImage() {
+	public String getImageName() {
+		return imageName;
+	}
+	public void setImageName(String image) {
+		this.imageName = image;
+	}
+	public List<News> getNews() {
+		return news;
+	}
+	public void setNews(List<News> news) {
+		this.news = news;
+	}
+	public Image getImage() {
 		return image;
 	}
-	public void setImage(String image) {
+	public void setImage(Image image) {
 		this.image = image;
 	}
+	
+	@PostLoad
+	public void setUserImage(){
+		this.image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+this.getImageName())));
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

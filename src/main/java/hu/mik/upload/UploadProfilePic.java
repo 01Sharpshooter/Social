@@ -66,11 +66,11 @@ public class UploadProfilePic implements Receiver, SucceededListener, ImageRecei
 			}
 		}
 		if(upload){		
-			if(!user.getImage().equals("user.png")){
-				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage());
+			if(!user.getImageName().equals("user.png")){
+				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName());
 				fileToDel.delete();
 			}
-			user.setImage(newImage.getName());
+			user.setImageName(newImage.getName());
 			userService.saveChanges(user);
 			((PictureUploadView) view).imageChange();
 		}

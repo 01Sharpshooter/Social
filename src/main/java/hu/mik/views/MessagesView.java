@@ -99,7 +99,7 @@ public class MessagesView extends VerticalLayout implements View {
 			userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 			userDiv.setMargin(false);
 			userDiv.addLayoutClickListener(this::layoutClickListener);
-			Image image=new Image("", new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+users.get(i).getImage())));
+			Image image=new Image("", new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+users.get(i).getImageName())));
 			image.setWidth(60, Unit.PIXELS);
 			image.setHeight(60, Unit.PIXELS);
 			image.setSizeFull();
@@ -128,7 +128,7 @@ public class MessagesView extends VerticalLayout implements View {
 			scroll+=scrollGrowth;
 			Label newMessage=new Label(message);
 			newMessage.setHeight(panel.getHeight()/6, panel.getHeightUnits());
-			newMessage.setWidth(panel.getWidth(), panel.getWidthUnits());
+			newMessage.setWidth(panel.getWidth()/2, panel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE);			
 			messages.addComponent(newMessage);
 			panel.setScrollTop(scroll);

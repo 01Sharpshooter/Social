@@ -1,5 +1,7 @@
 package hu.mik.ui;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Push;
@@ -8,6 +10,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
@@ -19,6 +22,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
@@ -31,6 +35,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
+import hu.mik.constants.UserConstants;
 import hu.mik.navigation.NaviBar;
 import hu.mik.services.EncryptService;
 import hu.mik.services.UserService;
@@ -79,7 +84,9 @@ public class LoginUI extends UI{
 					if(IsvalidName(userName) && IsvalidPassword(passWord)){
 						User user=userService.findUserByUsername(userName);
 						if(user!=null){
-							if(encService.comparePW(passWord, user.getPassword())){							
+							if(encService.comparePW(passWord, user.getPassword())){	
+								user.setImage(new Image(null, new FileResource(
+										new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))));
 				                session.setAttribute("User", user);
 				    			MainUI.getOnlineUsers().add(user);				    			
 								getPage().setLocation("/main");

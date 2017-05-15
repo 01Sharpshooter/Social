@@ -98,11 +98,11 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener{
 			}
 			ins.close();
 			ops.close();
-			if(!user.getImage().equals("user.png")){
-				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImage());
+			if(!user.getImageName().equals("user.png")){
+				File fileToDel=new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName());
 				fileToDel.delete();
 			}
-			user.setImage(imageName);
+			user.setImageName(imageName);
 			userService.saveChanges(user);
 			((PictureUploadView) view).imageChange();			
 			

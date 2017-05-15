@@ -12529,6 +12529,7 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #00BFFF;
 	background-color: #00BFFF;
 	border-radius: 4px;
+	text-align: right;
 }
 
 .myTheme .sideMenu {
