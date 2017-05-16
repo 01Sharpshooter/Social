@@ -1,5 +1,7 @@
 package hu.mik.services;
 
+import java.util.List;
+
 import hu.mik.beans.User;
 
 public interface UserService {
@@ -10,5 +12,7 @@ public interface UserService {
 	public User findUserByUsername(String username);	
 	
 	public void saveChanges(User user);
+	
+	public List<User> listAll();
 	
 }

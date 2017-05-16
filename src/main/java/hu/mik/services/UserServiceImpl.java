@@ -1,5 +1,7 @@
 package hu.mik.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void saveChanges(User user) {
 		userDao.save(user);
+		
+	}
+	@Override
+	public List<User> listAll() {
+		return userDao.findAll();
 		
 	}
 	

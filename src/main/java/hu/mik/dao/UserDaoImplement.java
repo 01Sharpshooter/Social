@@ -53,6 +53,13 @@ public class UserDaoImplement implements UserDao{
 			return list;
 		}
 	}
+	@Override
+	public List<User> findAll() {
+		List<User> list=new ArrayList<>();
+		list=em.createQuery("SELECT u FROM User u", User.class).getResultList();
+		return list;	
+		
+	}
 
 
 

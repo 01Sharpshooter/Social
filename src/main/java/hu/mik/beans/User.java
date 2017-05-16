@@ -13,11 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
+import javax.persistence.PostUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.annotation.ApplicationScope;
+import org.springframework.web.context.annotation.SessionScope;
 
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.Image;

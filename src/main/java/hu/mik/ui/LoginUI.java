@@ -85,8 +85,8 @@ public class LoginUI extends UI{
 						User user=userService.findUserByUsername(userName);
 						if(user!=null){
 							if(encService.comparePW(passWord, user.getPassword())){	
-								user.setImage(new Image(null, new FileResource(
-										new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))));
+//								user.setImage(new Image(null, new FileResource(
+//										new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))));
 				                session.setAttribute("User", user);
 				    			MainUI.getOnlineUsers().add(user);				    			
 								getPage().setLocation("/main");

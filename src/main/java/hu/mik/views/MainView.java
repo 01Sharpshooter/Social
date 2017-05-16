@@ -1,24 +1,18 @@
 package hu.mik.views;
 
-import java.beans.FeatureDescriptor;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,7 +27,7 @@ import hu.mik.components.NewsLayout;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.NewsService;
 
-@UIScope
+@ViewScope
 @SpringView(name=MainView.NAME)
 public class MainView extends VerticalLayout implements View{
 	public static final String NAME="";
@@ -107,11 +101,6 @@ public class MainView extends VerticalLayout implements View{
 		if(message.length()!=0){			
 			newsService.saveNews(news);
 			newMessage(news);
-			Label newMessage=new Label(message);
-			newMessage.setHeight(panel.getHeight()/6, panel.getHeightUnits());
-			newMessage.setWidth(panel.getWidth()/2, panel.getWidthUnits());
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE);	
-//			messages.addComponent(newMessage);
 		}
 	}
 }
