@@ -12,8 +12,10 @@ import javax.imageio.ImageIO;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.event.UIEvents;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FontIcon;
 import com.vaadin.server.VaadinRequest;
@@ -36,6 +38,8 @@ import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.navigation.NaviBar;
 import hu.mik.navigation.SideMenu;
+import hu.mik.views.MainView;
+import hu.mik.views.MessagesView;
 
 
 @SpringUI(path="/main")
@@ -50,11 +54,13 @@ public class MainUI extends UI implements ViewDisplay{
 	@Override
 	protected void init(VaadinRequest request){
 		if(session.getAttribute("User")!=null){			
+			addPollListener(this::pollListener);
 			User user=(User)session.getAttribute("User");	
 			final HorizontalLayout base=new HorizontalLayout();
 			final VerticalLayout sideMenu=new SideMenu(user, this).getSideMenu();
 			final VerticalLayout workingSpace=new VerticalLayout();
 			final HorizontalLayout upperMenu=new HorizontalLayout();	
+			this.getNavigator().addViewChangeListener(this::viewChangeListener);
 			sideMenu.setSpacing(true);
 			sideMenu.setSizeFull();
 			workingSpace.setSizeFull();
@@ -90,6 +96,21 @@ public class MainUI extends UI implements ViewDisplay{
 
 	public static List<User> getOnlineUsers() {
 		return onlineUsers;
+	}
+	
+	private boolean viewChangeListener(ViewChangeEvent event){
+//		if(event.getViewName().equals(MessagesView.NAME)){
+//			this.setPollInterval(1000);
+//		}else{
+//			this.setPollInterval(-1);
+//		}
+		return true;
+	}
+	
+	private void pollListener(UIEvents.PollEvent event){
+		if(this.getNavigator().getCurrentView().getClass()==MessagesView.class){
+			((MessagesView)getNavigator().getCurrentView()).fillMessages();
+		}
 	}
 	
 	

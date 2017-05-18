@@ -41,7 +41,6 @@ public class NewsLayout{
 		message.setSizeFull();
 		message.setStyleName(ThemeConstants.BLUE_TEXT_H3);
 		layout.addComponent(message);
-		System.out.println(news.getTime());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateString=df.format(news.getTime());
 		Label date=new Label(dateString);

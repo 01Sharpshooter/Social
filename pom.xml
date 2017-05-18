@@ -32,6 +32,10 @@
 <!-- 		    <scope>provided</scope> -->
 <!-- 		</dependency> -->
 		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-push</artifactId>
+		</dependency>
+		<dependency>
 		    <groupId>com.vaadin</groupId>
 		    <artifactId>vaadin-themes</artifactId>
 		</dependency>

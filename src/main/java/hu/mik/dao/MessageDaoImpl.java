@@ -25,7 +25,7 @@ public class MessageDaoImpl implements MessageDao {
 		list=em.createQuery("select m from Message m where "
 				+ "(m.senderId= :id1 and m.receiverId= :id2)"
 				+ "or (m.senderId= :id2 and m.receiverId= :id1)"
-				+ "order by m.time asc", 
+				+ "order by m.time desc", 
 				Message.class)
 				.setParameter("id1", id1)
 				.setParameter("id2", id2)

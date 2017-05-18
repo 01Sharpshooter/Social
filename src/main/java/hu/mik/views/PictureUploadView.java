@@ -33,8 +33,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.constants.ThemeConstants;
-import hu.mik.upload.UploadProfilePic;
-import hu.mik.upload.UploadProfilePicEdit;
+import hu.mik.listeners.UploadProfilePic;
+import hu.mik.listeners.UploadProfilePicEdit;
 
 @ViewScope
 @SpringView(name=PictureUploadView.NAME)
