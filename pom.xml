@@ -26,11 +26,6 @@
 	</properties>	
 
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 		    <groupId>com.vaadin</groupId> -->
-<!-- 		    <artifactId>vaadin-client</artifactId> -->
-<!-- 		    <scope>provided</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
@@ -79,10 +74,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.boot</groupId> -->
-<!-- 			<artifactId>spring-boot-starter-websocket</artifactId> -->
-<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -104,10 +95,10 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-jta-atomikos</artifactId> -->
+<!-- 		</dependency> -->
 		
 		<dependency>
 			<artifactId>com.oracle</artifactId>

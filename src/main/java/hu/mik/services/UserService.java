@@ -11,6 +11,8 @@ public interface UserService {
 	
 	public User findUserByUsername(String username);	
 	
+	public User findUserById(int id);	
+	
 	public void saveChanges(User user);
 	
 	public List<User> listAll();

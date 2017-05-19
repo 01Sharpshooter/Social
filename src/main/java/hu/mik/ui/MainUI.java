@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 
-
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.event.UIEvents;
@@ -36,26 +36,31 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
+import hu.mik.listeners.NewMessageListener;
 import hu.mik.navigation.NaviBar;
 import hu.mik.navigation.SideMenu;
+import hu.mik.services.MessageBroadcastService;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 
 
+@SuppressWarnings("serial")
 @SpringUI(path="/main")
 @SpringViewDisplay
 @Theme(ThemeConstants.UI_THEME)
-public class MainUI extends UI implements ViewDisplay{
+@Push
+public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+	private User user;
+	private MessagesView messageView;
 	
 	@Override
 	protected void init(VaadinRequest request){
 		if(session.getAttribute("User")!=null){			
-			addPollListener(this::pollListener);
-			User user=(User)session.getAttribute("User");	
+			user=(User)session.getAttribute("User");	
 			final HorizontalLayout base=new HorizontalLayout();
 			final VerticalLayout sideMenu=new SideMenu(user, this).getSideMenu();
 			final VerticalLayout workingSpace=new VerticalLayout();
@@ -99,18 +104,36 @@ public class MainUI extends UI implements ViewDisplay{
 	}
 	
 	private boolean viewChangeListener(ViewChangeEvent event){
-//		if(event.getViewName().equals(MessagesView.NAME)){
-//			this.setPollInterval(1000);
-//		}else{
-//			this.setPollInterval(-1);
-//		}
+		if(event.getViewName().equals(MessagesView.NAME)){
+			this.messageView=(MessagesView) event.getNewView();
+//			MessageBroadcastService.register(this, user);
+		}else{
+			MessageBroadcastService.unregister(this, user.getUsername());
+		}
 		return true;
 	}
 	
-	private void pollListener(UIEvents.PollEvent event){
-		if(this.getNavigator().getCurrentView().getClass()==MessagesView.class){
-			((MessagesView)getNavigator().getCurrentView()).fillMessages();
-		}
+	
+	
+
+	@Override
+	public void detach() {
+		MessageBroadcastService.unregister(this, user.getUsername());
+		super.detach();
+	}
+
+	@Override
+	public void receiveMessage(String message, int senderId) {
+		access(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(messageView!=null){
+					messageView.receiveMessage(message, senderId);
+				}				
+			}
+		});
+		
 	}
 	
 	

@@ -60,6 +60,18 @@ public class UserDaoImplement implements UserDao{
 		return list;	
 		
 	}
+	@Override
+	public List<User> findById(int id) {
+		List<User> list=new ArrayList<>();
+		list=em.createQuery("SELECT u FROM User u where u.id= :id", User.class)
+				.setParameter("id", id)
+				.getResultList();
+		if(list.isEmpty()){
+			return null;
+		}else{
+			return list;
+		}
+	}
 
 
 
