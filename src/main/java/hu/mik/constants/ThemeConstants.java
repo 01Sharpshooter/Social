@@ -21,6 +21,8 @@ public class ThemeConstants {
 	
 	public static final String BORDERED_THICK="thickBordered";
 	
+	public static final String BORDERED_GREEN="borderedGreen";
+	
 	public static final String WRONG_FIELD="wrongField";
 
 	public static final String CHAT_MESSAGE = "chatMessage";

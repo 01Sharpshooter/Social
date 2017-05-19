@@ -49,8 +49,6 @@ import hu.mik.ui.MainUI;
 public class MessagesView extends VerticalLayout implements View {
 	public static final String NAME="messages";
 	
-	//újdonság
-//	private Bean
 	
 	@Autowired
 	MessageService messageService;
@@ -60,13 +58,13 @@ public class MessagesView extends VerticalLayout implements View {
 	
 	private List<User> users=MainUI.getOnlineUsers();
 	private Panel messagesPanel=new Panel();
+	private Panel userListPanel=new Panel();
 	private VerticalLayout messagesLayout;
 	private Message message;
 	private TextField textField;
 	private Button sendButton;
 	private int scroll=100;
 	private int scrollGrowth=50;
-	private List<String> names=new CopyOnWriteArrayList<>();
 	private int senderId;
 	private int receiverId;
 	private User sender;
@@ -74,9 +72,12 @@ public class MessagesView extends VerticalLayout implements View {
 	private HorizontalLayout textWriter;
 	private VerticalLayout chat;
 	private List<Message> messagesList;
+	private int prevUserDivId=-1;
+	private VerticalLayout userList;
+	private VerticalLayout empty;
 	
 	@PostConstruct
-	public void init(){		
+	public void init(){				
 		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		senderId=sender.getId();
 		
@@ -86,14 +87,15 @@ public class MessagesView extends VerticalLayout implements View {
 		HorizontalLayout base=new HorizontalLayout();
 		base.setMargin(false);
 		base.setSpacing(false);
-		base.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+//		base.setDefaultComponentAlignment(Alignment.TOP_CENTER);
 		base.setSizeFull();
 		
-		HorizontalLayout userDiv;
+		userList=new VerticalLayout();	
+//		userList.addStyleName(ThemeConstants.BORDERED);
 		
-		VerticalLayout userList=new VerticalLayout();	
-		userList.setSpacing(false);
-		userList.setSizeFull();
+		userListPanel.setSizeFull();
+		userListPanel.setContent(userList);
+		userListPanel.addStyleName(ThemeConstants.BORDERED);
 		
 		textWriter=this.createTextWriter();
 		
@@ -107,37 +109,42 @@ public class MessagesView extends VerticalLayout implements View {
 		chat.setSizeFull();
 		
 		addComponent(base);
-		base.addComponent(userList);
+		base.addComponent(userListPanel);
 		base.addComponent(chat);			
-		base.setExpandRatio(userList, 3);
+		base.setExpandRatio(userListPanel, 3);
 		base.setExpandRatio(chat, 7);
 		
-		
-		for(User user: users){	
-//			if(user!=this.sender){
-				userDiv=createUserDiv(user);
-				userList.addComponent(userDiv);				
-//			}
+		if(users.size()>1){
+			for(User user: users){	
+				if(user!=this.sender){
+					HorizontalLayout userDiv=createUserDiv(user);
+					userList.addComponent(userDiv);	
+					userDiv=createUserDiv(user);
+				}
+			}
+		}else{
+			userList.addComponent(new Label("There's no other online user. Check back later! :)"));
 		}
 	}
 
 	private HorizontalLayout createUserDiv(User user) {
 		HorizontalLayout userDiv=new HorizontalLayout();
 		userDiv.setWidth("100%");
-		userDiv.setHeight("20%");
+		userDiv.setHeight(userListPanel.getHeight()/6, userListPanel.getHeightUnits());
 		userDiv.addStyleName(ThemeConstants.BORDERED);
-		userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-		userDiv.setMargin(false);
-		Image image=new Image("", new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
-		image.setWidth(60, Unit.PIXELS);
-		image.setHeight(60, Unit.PIXELS);
-		image.setSizeFull();
+		userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+//		userDiv.setMargin(false);
+		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
+		image.setHeight("80%");
+		image.setWidth("80");
 		userDiv.addComponent(image);
 		Button button=new Button(user.getUsername(),this::userBtnClickListener);
-		button.setWidthUndefined();
+		button.setSizeFull();
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.setId(user.getId().toString());
 		userDiv.addComponent(button);
+		userDiv.setExpandRatio(image, 1);
+		userDiv.setExpandRatio(button, 2);
 		return userDiv;
 		
 	}
@@ -158,10 +165,12 @@ public class MessagesView extends VerticalLayout implements View {
 		sendButton=new Button("Send", this::sendButtonClicked);
 		sendButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		sendButton.setClickShortcut(KeyCode.ENTER);
+		sendButton.setSizeUndefined();
 		textWriter.addComponent(textField);
 		textWriter.addComponent(sendButton);
 		textWriter.setExpandRatio(textField, 9);
 		textWriter.setExpandRatio(sendButton, 1);	
+		textWriter.setSizeFull();
 		textWriter.setEnabled(false);
 		return textWriter;
 	}
@@ -176,7 +185,7 @@ public class MessagesView extends VerticalLayout implements View {
 	
 	private void userBtnClickListener(Button.ClickEvent event){
 		messagesLayout.setCaption(event.getButton().getCaption());
-		event.getButton().addStyleName(ThemeConstants.BORDERED_THICK);
+		event.getButton().getParent().addStyleName(ThemeConstants.BORDERED_GREEN);
 		textWriter.setEnabled(true);
 		messagesLayout.removeAllComponents();
 		receiverId=Integer.parseInt(event.getButton().getId());
@@ -185,6 +194,11 @@ public class MessagesView extends VerticalLayout implements View {
 		fillMessages();
 		messagesPanel.setScrollTop(scroll);
 		MessageBroadcastService.register((MainUI)this.getUI(), sender.getUsername());
+		if(prevUserDivId!=-1 && prevUserDivId!=userList.getComponentIndex(event.getButton().getParent())){
+			userList.getComponent(prevUserDivId).removeStyleName(ThemeConstants.BORDERED_GREEN);			
+		}
+		prevUserDivId=userList.getComponentIndex(event.getButton().getParent());
+		textField.focus();
 	}
 	
 	public void fillMessages() {

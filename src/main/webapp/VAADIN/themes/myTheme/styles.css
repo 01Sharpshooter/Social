@@ -12518,6 +12518,12 @@ div.v-layout.v-horizontal.v-widget {
 	box-shadow: -2px -2px 20px -2px #00b6cd;
 }
 
+.myTheme .borderedGreen {
+	border: 1px solid #00FF00;
+	border-radius: 10px;
+	box-shadow: 2px 2px 2px #00FF00;
+}
+
 .myTheme .workingSpace {
 	background-color: #00BFFF;
 	border: 2px solid #00BFFF;
