@@ -14,7 +14,6 @@ public class MessageBroadcastService {
 	
 	public static synchronized void register(NewMessageListener messageListener, String username){
 		if(!usernames.contains(username)){
-			System.out.println(username);
 			messageListeners.add(messageListener);
 			usernames.add(username);
 		}

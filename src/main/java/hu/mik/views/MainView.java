@@ -53,13 +53,14 @@ public class MainView extends VerticalLayout implements View{
 	private String message;
 	private Panel panel=new Panel();
 	private List<News> newsList;
+	private HorizontalLayout textWriter;
 	
 	@PostConstruct
 	public void init(){
 		user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		newsList=newsService.lastGivenNewsAll(20);
 		feed=createFeed(newsList);	
-		HorizontalLayout textWriter=createTextWriter();
+		textWriter=createTextWriter();
 		panel.setSizeFull();
 		panel.setContent(feed);
 		this.addComponent(textWriter);
@@ -162,6 +163,7 @@ public class MainView extends VerticalLayout implements View{
 				event.getButton().getCaption()));
 		changeNews(newsService.lastGivenNewsUser(20,
 				userService.findUserByUsername(event.getButton().getCaption())));
+		this.removeComponent(textWriter);
 	}
 	
 	private void changeNews(List<News> newsList){

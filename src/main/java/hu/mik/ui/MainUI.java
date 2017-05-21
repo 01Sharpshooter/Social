@@ -112,6 +112,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
+		changeSideMenu(user);
 		return true;
 	}
 	
