@@ -36,7 +36,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
-import hu.mik.navigation.NaviBar;
 import hu.mik.services.EncryptService;
 import hu.mik.services.UserService;
 

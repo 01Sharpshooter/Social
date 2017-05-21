@@ -3,45 +3,48 @@ package hu.mik.ui;
 
 
 import java.io.File;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.imageio.ImageIO;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.event.UIEvents;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.FontIcon;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.MenuBar.Command;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ValoTheme;
 
+import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
-import hu.mik.navigation.NaviBar;
-import hu.mik.navigation.SideMenu;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
+import hu.mik.views.PictureUploadView;
 
 
 @SuppressWarnings("serial")
@@ -56,22 +59,22 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private MessagesView messageView;
+	private VerticalLayout sideMenu;
+	private VerticalLayout oldSideMenu;
+	private HorizontalLayout base=new HorizontalLayout();
 	
 	@Override
 	protected void init(VaadinRequest request){
 		if(session.getAttribute("User")!=null){			
 			user=(User)session.getAttribute("User");	
-			final HorizontalLayout base=new HorizontalLayout();
-			final VerticalLayout sideMenu=new SideMenu(user, this).getSideMenu();
+			sideMenu=createSideMenu(user);
+			oldSideMenu=sideMenu;
 			final VerticalLayout workingSpace=new VerticalLayout();
 			final HorizontalLayout upperMenu=new HorizontalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
-			sideMenu.setSpacing(true);
-			sideMenu.setSizeFull();
 			workingSpace.setSizeFull();
 			base.setSizeFull();
-			NaviBar naviBar=new NaviBar();
-			final CssLayout navigationBar=naviBar.getNaviBar(getUI());
+			final CssLayout navigationBar=createNaviBar();
 			upperMenu.addComponent(navigationBar);
 			viewDisplay=new Panel();
 			viewDisplay.setSizeFull();
@@ -106,7 +109,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private boolean viewChangeListener(ViewChangeEvent event){
 		if(event.getViewName().equals(MessagesView.NAME)){
 			this.messageView=(MessagesView) event.getNewView();
-//			MessageBroadcastService.register(this, user);
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
@@ -136,8 +138,89 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		
 	}
 	
+	public VerticalLayout createSideMenu(User sideUser){		
+		VerticalLayout sideMenu=new VerticalLayout();
+		sideMenu.addStyleName(ThemeConstants.SIDE_MENU);		
+		sideMenu.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		VerticalLayout header=new VerticalLayout();
+		VerticalLayout menu=new VerticalLayout();
+		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		menu.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		header.setSpacing(false);
+		header.setMargin(false);
+		sideMenu.addComponent(header);
+		sideMenu.addComponent(menu);
+		sideMenu.setExpandRatio(header, 3);
+		sideMenu.setExpandRatio(menu, 7);
+		sideMenu.setSpacing(true);
+		sideMenu.setSizeFull();
+		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+sideUser.getImageName()))); 
+		image.setHeight("100%");
+		image.setWidth("100%");
+		Label name=new Label();
+		name.setValue(sideUser.getUsername());
+		name.addStyleName(ValoTheme.LABEL_H2);
+		header.addComponent(name);
+		header.addComponent(image);	
+		if(sideUser.equals(user)){
+			MenuBar menuBar=new MenuBar();
+			header.addComponent(menuBar);
+			MenuItem options=menuBar.addItem("Options", null);
+			menuBar.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
+			MenuItem changePicture=options.addItem("Change picture", new Command() {
+				
+				@Override
+				public void menuSelected(MenuItem selectedItem) {
+					getNavigator().navigateTo(PictureUploadView.NAME);
+					
+				}
+			});
+		}
+		return sideMenu;
+	}
 	
+	public CssLayout createNaviBar(){
+		CssLayout naviBar=new CssLayout();
+		naviBar.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+		Button mainButton=new Button("Main");
+		mainButton.addClickListener(this::mainClickListener);
+		mainButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		mainButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		naviBar.addComponent(mainButton);
+		naviBar.addComponent(createNavigationButton("Messages", MessagesView.NAME));
+		Button logoutButton=new Button("Logout");
+		logoutButton.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				getPage().setLocation("/login");
+				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
+				session.invalidate();		
+				session=null;
+			}
+		});		
+		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		naviBar.addComponent(logoutButton);
+		return naviBar;
+	}
 	
+	private Button createNavigationButton(String caption, final String viewName){
+		Button button=new Button(caption);
+		button.addStyleName(ValoTheme.BUTTON_SMALL);
+		button.addStyleName(ThemeConstants.BLUE_TEXT);
+		button.addClickListener(event -> getNavigator().navigateTo(viewName));
+		return button;
+	}
 	
+	public void changeSideMenu(User sideUser){
+		VerticalLayout userSideMenu=createSideMenu(sideUser);
+		base.replaceComponent(oldSideMenu, userSideMenu);
+		oldSideMenu=userSideMenu;
+	}
 	
+	private void mainClickListener(Button.ClickEvent event){
+		changeSideMenu(user);
+		getNavigator().navigateTo(MainView.NAME);
+	}
 }

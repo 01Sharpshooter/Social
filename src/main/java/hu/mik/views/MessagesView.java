@@ -3,19 +3,12 @@ package hu.mik.views;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.servlet.mvc.ServletForwardingController;
-
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
@@ -24,8 +17,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -123,7 +114,7 @@ public class MessagesView extends VerticalLayout implements View {
 				}
 			}
 		}else{
-			userList.addComponent(new Label("There's no other online user. Check back later! :)"));
+			userList.addComponent(new Label("Nobody's online :("));
 		}
 	}
 
@@ -267,7 +258,6 @@ public class MessagesView extends VerticalLayout implements View {
 
 	public void receiveMessage(String message2, int senderId) {
 		if(senderId==receiverId){
-			System.out.println("Incomiiiing");
 			Label newMessage=new Label(message2);
 			newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 			newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
