@@ -177,6 +177,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 				}
 			});
 		}
+		
+//		if(sideUser!=user)
 		return sideMenu;
 	}
 	
