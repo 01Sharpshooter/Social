@@ -55,6 +55,7 @@ import hu.mik.services.MessageBroadcastService;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 import hu.mik.views.PictureUploadView;
+import hu.mik.views.RequestsView;
 
 
 @SuppressWarnings("serial")
@@ -243,6 +244,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			int count=friendRequestService.findAllByRequestedId(user.getId()).size();
 			Button friendRequestsButton=new Button("Requests ("+count+")");
 			friendRequestsButton.addClickListener(this::friendRequestsClickListener);
+			friendRequestsButton.addStyleName(ValoTheme.BUTTON_SMALL);
+			friendRequestsButton.addStyleName(ThemeConstants.BLUE_TEXT);
 			menu.addComponent(friendRequestsButton);
 			
 		}
@@ -341,7 +344,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	private void friendRequestsClickListener(Button.ClickEvent event){
-		
+		getNavigator().navigateTo(RequestsView.NAME);
+	}
+	
+	public void changeToRequestor(User user){
+		getNavigator().navigateTo(MainView.NAME);
+		((MainView)getNavigator().getCurrentView()).changeToRequestor(user);
+		changeSideMenu(user);	
 	}
 	
 }

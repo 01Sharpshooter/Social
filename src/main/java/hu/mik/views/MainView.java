@@ -169,5 +169,9 @@ public class MainView extends VerticalLayout implements View{
 	private void changeNews(List<News> newsList){
 		this.panel.setContent(createFeed(newsList));
 	}
+	
+	public void changeToRequestor(User user){
+		changeNews(newsService.lastGivenNewsUser(20, user));
+	}
 }
 
