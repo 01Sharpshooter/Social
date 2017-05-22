@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.icons.VaadinIcons;
@@ -40,6 +41,7 @@ import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ValoTheme;
 
+import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.Friendship;
 import hu.mik.beans.News;
@@ -60,6 +62,7 @@ import hu.mik.views.PictureUploadView;
 @SpringViewDisplay
 @Theme(ThemeConstants.UI_THEME)
 @Push
+@PreserveOnRefresh
 public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Autowired
@@ -161,7 +164,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		VerticalLayout header=new VerticalLayout();
 		VerticalLayout menu=new VerticalLayout();
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-		menu.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		menu.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		menu.setWidth("100%");
 //		header.setSizeFull();
 		header.setSpacing(false);
@@ -223,6 +226,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 						menu.addComponent(acceptRequestButton);
 						menu.addComponent(rejectRequestButton);
 					}
+				}else{
+					menu.addComponent(new Label("Request sent."));
 				}
 			}else{
 				name.setContentMode(ContentMode.HTML);
@@ -234,6 +239,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 				menu.addComponent(removeFriendButton);
 				
 			}
+		}else{
+			int count=friendRequestService.findAllByRequestedId(user.getId()).size();
+			Button friendRequestsButton=new Button("Requests ("+count+")");
+			friendRequestsButton.addClickListener(this::friendRequestsClickListener);
+			menu.addComponent(friendRequestsButton);
+			
 		}
 		return sideMenu;
 	}
@@ -272,8 +283,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		return button;
 	}
 	
-	public void changeSideMenu(User sideUser){
-		VerticalLayout userSideMenu=createSideMenu(sideUser);
+	public void changeSideMenu(User user){
+		VerticalLayout userSideMenu=createSideMenu(user);
 		base.replaceComponent(oldSideMenu, userSideMenu);
 		oldSideMenu=userSideMenu;
 	}
@@ -288,6 +299,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		fr.setRequestorId(user.getId());
 		fr.setRequestedId(sideUser.getId());
 		friendRequestService.saveFriendRequest(fr);
+		MessageBox.createInfo()
+			.withOkButton()
+			.withCaption("User removed from friends")
+			.withMessage("Request has been sent to "+sideUser.getUsername())
+			.open();
+		refreshSideMenu();
 	}
 	
 	private void acceptRequestClickListener(Button.ClickEvent event){
@@ -300,14 +317,31 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		fs.setUserId(sideUser.getId());
 		fs.setFriendId(user.getId());
 		friendshipService.saveFriendship(fs);
+		refreshSideMenu();
 	}
 	
 	private void rejectRequestClickListener(Button.ClickEvent event){
 		friendRequestService.deleteFriendRequest(sideUser.getId(), user.getId());
+		refreshSideMenu();
 	}
 	
 	private void removeFriendClickListener(Button.ClickEvent event){
 		friendshipService.deleteFriendship(user.getId(), sideUser.getId());
 		friendshipService.deleteFriendship(sideUser.getId(), user.getId());
+		MessageBox.createInfo()
+		.withOkButton()
+		.withCaption("Request sent")
+		.withMessage(sideUser.getUsername()+" has been removed from your friends.")
+		.open();
+		refreshSideMenu();
 	}
+	
+	private void refreshSideMenu(){
+		changeSideMenu(sideUser);
+	}
+	
+	private void friendRequestsClickListener(Button.ClickEvent event){
+		
+	}
+	
 }
