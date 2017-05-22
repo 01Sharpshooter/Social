@@ -3,10 +3,12 @@ package hu.mik.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import hu.mik.beans.Friendship;
 import hu.mik.dao.FriendShipDao;
 
+@Component
 public class FriendShipServiceImpl implements FriendshipService{
 	
 	@Autowired
@@ -28,8 +30,8 @@ public class FriendShipServiceImpl implements FriendshipService{
 	}
 
 	@Override
-	public void deleteFriendship(Friendship friendship) {
-		friendshipDao.deleteFriendship(friendship);
+	public void deleteFriendship(int userId, int friendId) {
+		friendshipDao.deleteFriendship(userId, friendId);
 		
 	}
 

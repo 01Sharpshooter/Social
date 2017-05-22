@@ -12,5 +12,5 @@ public interface FriendShipDao {
 	
 	public Friendship saveFriendship(Friendship friendship);
 	
-	public void deleteFriendship(Friendship friendship);
+	public void deleteFriendship(int userId, int friendId);
 }

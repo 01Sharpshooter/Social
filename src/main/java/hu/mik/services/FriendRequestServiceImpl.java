@@ -3,10 +3,12 @@ package hu.mik.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.dao.FriendRequestDao;
 
+@Component
 public class FriendRequestServiceImpl implements FriendRequestService{
 	
 	@Autowired
@@ -19,8 +21,7 @@ public class FriendRequestServiceImpl implements FriendRequestService{
 
 	@Override
 	public FriendRequest findOne(int requestorId, int requestedId) {
-		// TODO Auto-generated method stub
-		return null;
+		return friendRequestDao.findOne(requestorId, requestedId);
 	}
 
 	@Override
@@ -29,8 +30,8 @@ public class FriendRequestServiceImpl implements FriendRequestService{
 	}
 
 	@Override
-	public void deleteFriendRequest(FriendRequest request) {
-		friendRequestDao.deleteFriendRequest(request);
+	public void deleteFriendRequest(int requestorId, int requestedId) {
+		friendRequestDao.deleteFriendRequest(requestorId, requestedId);
 		
 	}
 	

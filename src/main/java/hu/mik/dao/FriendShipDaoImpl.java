@@ -38,8 +38,8 @@ public class FriendShipDaoImpl implements FriendShipDao{
 	}
 
 	@Override
-	public void deleteFriendship(Friendship friendship) {
-		em.remove(friendship);
+	public void deleteFriendship(int userId, int friendId) {
+		em.remove(findOne(userId, friendId));
 		
 	}
 

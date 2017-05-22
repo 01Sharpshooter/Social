@@ -11,6 +11,6 @@ public interface FriendRequestService {
 	
 	public FriendRequest saveFriendRequest(FriendRequest request);
 	
-	public void deleteFriendRequest(FriendRequest request);
+	public void deleteFriendRequest(int requestorId, int requestedId);
 
 }

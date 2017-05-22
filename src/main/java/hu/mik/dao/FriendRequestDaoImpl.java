@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.mik.beans.FriendRequest;
+import hu.mik.beans.Friendship;
 import hu.mik.services.UserService;
 
 @Repository
@@ -32,20 +34,33 @@ public class FriendRequestDaoImpl implements FriendRequestDao{
 	}
 
 	@Override
-	public hu.mik.beans.FriendRequest findOne(int requestorId, int requestedId) {
-		// TODO Auto-generated method stub
-		return null;
+	public FriendRequest findOne(int requestorId, int requestedId) {
+		FriendRequest fr;
+		try {
+			fr=em.createQuery("select fr from FriendRequest fr where requestorid= :requestorId and requestedid= :requestedId", 
+					FriendRequest.class)
+					.setParameter("requestorId", requestorId)
+					.setParameter("requestedId", requestedId)
+					.getSingleResult();
+			
+		} catch (NoResultException e) {
+			fr=null;
+		}		
+		return fr;
 	}
 
 	@Override
 	public FriendRequest saveFriendRequest(FriendRequest request) {
-		em.persist(request);
+		if(findOne(request.getRequestorId(), request.getRequestedId())==null){
+			em.persist(request);
+		}
 		return request;
 	}
 
 	@Override
-	public void deleteFriendRequest(FriendRequest request) {
-		em.remove(request);
+	public void deleteFriendRequest(int requestorId, int requestedId) {
+		FriendRequest fr=findOne(requestorId, requestedId);
+		em.remove(fr);
 		
 	}
 

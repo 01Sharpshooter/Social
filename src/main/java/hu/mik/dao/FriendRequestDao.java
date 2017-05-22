@@ -11,5 +11,5 @@ public interface FriendRequestDao {
 	
 	public FriendRequest saveFriendRequest(FriendRequest request);
 	
-	public void deleteFriendRequest(FriendRequest request);
+	public void deleteFriendRequest(int requestorId, int requestedId);
 }
