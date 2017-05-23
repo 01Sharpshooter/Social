@@ -3,6 +3,7 @@ package hu.mik.views;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
@@ -29,6 +30,7 @@ import hu.mik.beans.Message;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
+import hu.mik.services.FriendshipService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
@@ -47,7 +49,11 @@ public class MessagesView extends VerticalLayout implements View {
 	@Autowired
 	UserService userService;
 	
-	private List<User> users=MainUI.getOnlineUsers();
+	@Autowired
+	FriendshipService friendshipService;
+	
+	private List<User> onlineUsers=MainUI.getOnlineUsers();
+	private List<User> friendList=new ArrayList<>();
 	private Panel messagesPanel=new Panel();
 	private Panel userListPanel=new Panel();
 	private VerticalLayout messagesLayout;
@@ -71,6 +77,8 @@ public class MessagesView extends VerticalLayout implements View {
 	public void init(){				
 		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		senderId=sender.getId();
+		
+		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
 		
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setSizeFull();
@@ -105,8 +113,8 @@ public class MessagesView extends VerticalLayout implements View {
 		base.setExpandRatio(userListPanel, 3);
 		base.setExpandRatio(chat, 7);
 		
-		if(users.size()>1){
-			for(User user: users){	
+		if(friendList.size()>0){
+			for(User user: friendList){	
 				if(user!=this.sender){
 					HorizontalLayout userDiv=createUserDiv(user);
 					userList.addComponent(userDiv);	
@@ -114,7 +122,7 @@ public class MessagesView extends VerticalLayout implements View {
 				}
 			}
 		}else{
-			userList.addComponent(new Label("Nobody's online :("));
+			userList.addComponent(new Label("No friends to show :("));
 		}
 	}
 
@@ -127,7 +135,7 @@ public class MessagesView extends VerticalLayout implements View {
 //		userDiv.setMargin(false);
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
 		image.setHeight("80%");
-		image.setWidth("80");
+		image.setWidth("80%");
 		userDiv.addComponent(image);
 		Button button=new Button(user.getUsername(),this::userBtnClickListener);
 		button.setSizeFull();

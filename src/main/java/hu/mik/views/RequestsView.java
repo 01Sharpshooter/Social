@@ -42,7 +42,7 @@ public class RequestsView extends VerticalLayout implements View{
 	private HorizontalLayout row=new HorizontalLayout();
 	private VerticalLayout rows=new VerticalLayout();
 	private HorizontalLayout userDiv;
-	private int divsPerRow=3;
+	private int divsPerRow=5;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -52,14 +52,20 @@ public class RequestsView extends VerticalLayout implements View{
 
 	private void fill() {
 		this.addComponent(panel);
+		this.setMargin(false);
+		this.setSizeFull();
 		
-		panel.setWidth("100%");
+		panel.setSizeFull();
 		panel.setContent(rows);
+		rows.setHeight("100%");
 		rows.setWidth("100%");
+		rows.addComponent(row);
+		panel.setCaption("Your friend requests:");
+		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 		
 		user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 		List<FriendRequest> requests=friendRequestService.findAllByRequestedId(user.getId());
-		rows.addComponent(row);
+		
 		int i=0;		
 		for(FriendRequest request : requests){
 			i++;
@@ -69,15 +75,18 @@ public class RequestsView extends VerticalLayout implements View{
 			image.setHeight("100%");
 			Button nameButton=new Button(requestUser.getUsername(), this::userNameListener);
 			nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			nameButton.addStyleName(ValoTheme.LABEL_H1);
+			nameButton.setSizeFull();
 			userDiv=new HorizontalLayout();
+			userDiv.setHeight("100%");
+			userDiv.setWidth(panel.getWidth()/divsPerRow, panel.getWidthUnits());
 			userDiv.addComponent(image);
 			userDiv.addComponent(nameButton);
-			userDiv.setWidth(panel.getWidth()/divsPerRow, panel.getWidthUnits());
 			userDiv.addStyleName(ThemeConstants.BORDERED);
+			System.out.println(userDiv.getWidth());
 			row.addComponent(userDiv);
 			if(i==divsPerRow){
 				row=new HorizontalLayout();
+				row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 				rows.addComponent(row);
 				i=0;
 			}

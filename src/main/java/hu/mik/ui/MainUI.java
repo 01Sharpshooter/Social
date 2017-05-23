@@ -140,7 +140,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 
 	@Override
 	public void detach() {
-		MessageBroadcastService.unregister(this, user.getUsername());
+		if(user!=null){
+			MessageBroadcastService.unregister(this, user.getUsername());
+		}
 		super.detach();
 	}
 
@@ -304,7 +306,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		friendRequestService.saveFriendRequest(fr);
 		MessageBox.createInfo()
 			.withOkButton()
-			.withCaption("User removed from friends")
+			.withCaption("Request sent")
 			.withMessage("Request has been sent to "+sideUser.getUsername())
 			.open();
 		refreshSideMenu();
@@ -333,7 +335,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		friendshipService.deleteFriendship(sideUser.getId(), user.getId());
 		MessageBox.createInfo()
 		.withOkButton()
-		.withCaption("Request sent")
+		.withCaption("User removed from friends")
 		.withMessage(sideUser.getUsername()+" has been removed from your friends.")
 		.open();
 		refreshSideMenu();
