@@ -3,8 +3,6 @@ package hu.mik.ui;
 
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -44,7 +42,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.Friendship;
-import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
@@ -52,6 +49,7 @@ import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.MessageBroadcastService;
+import hu.mik.views.FriendListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 import hu.mik.views.PictureUploadView;
@@ -128,10 +126,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private boolean viewChangeListener(ViewChangeEvent event){
 		if(event.getViewName().equals(MessagesView.NAME)){
 			this.messageView=(MessagesView) event.getNewView();
+			changeSideMenu(user);
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
-		changeSideMenu(user);
 		return true;
 	}
 	
@@ -169,7 +167,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		menu.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		menu.setWidth("100%");
-//		header.setSizeFull();
 		header.setSpacing(false);
 		header.setMargin(false);
 		sideMenu.addComponent(header);
@@ -180,19 +177,16 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		sideMenu.setMargin(false);
 		sideMenu.setSizeFull();
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+sideUser.getImageName()))); 
-//		image.setHeight("100%");
+		image.addStyleName(ThemeConstants.BORDERED);
 		image.setWidth("60%");
 		Label name=new Label();
 		name.setValue(sideUser.getUsername());
 		name.addStyleName(ValoTheme.LABEL_H2);
 		header.addComponent(name);
 		header.addComponent(image);	
-//		header.setExpandRatio(image, 6);
-//		header.setExpandRatio(name, 2);
 		if(sideUser.getId()==user.getId()){
 			MenuBar menuBar=new MenuBar();
 			header.addComponent(menuBar);
-//			header.setExpandRatio(menuBar, 2);
 			MenuItem options=menuBar.addItem("Options", null);
 			menuBar.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
 			MenuItem changePicture=options.addItem("Change picture", new Command() {
@@ -251,6 +245,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			menu.addComponent(friendRequestsButton);
 			
 		}
+		
+		Button friendListButton=new Button("Friendlist", this::friendListClickListener);
+		menu.addComponent(friendListButton);
+		friendListButton.addStyleName(ValoTheme.BUTTON_SMALL);
+		friendListButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		
 		return sideMenu;
 	}
 	
@@ -341,6 +341,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		refreshSideMenu();
 	}
 	
+	private void friendListClickListener(Button.ClickEvent event){
+		getNavigator().navigateTo(FriendListView.NAME);
+		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
+	}
+	
 	private void refreshSideMenu(){
 		changeSideMenu(sideUser);
 	}
@@ -349,9 +354,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		getNavigator().navigateTo(RequestsView.NAME);
 	}
 	
-	public void changeToRequestor(User user){
+	public void changeToUser(User user){
 		getNavigator().navigateTo(MainView.NAME);
-		((MainView)getNavigator().getCurrentView()).changeToRequestor(user);
+		((MainView)getNavigator().getCurrentView()).changeToUser(user);
 		changeSideMenu(user);	
 	}
 	

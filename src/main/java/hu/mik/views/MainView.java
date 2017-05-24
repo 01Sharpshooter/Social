@@ -142,6 +142,7 @@ public class MainView extends VerticalLayout implements View{
 		header.addComponent(image);
 		image.setWidth("100%");
 		image.setHeight("100%");
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		layout.setSizeFull();
 		Button nameButton=new Button(user.getUsername(), this::userNameListener);
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -170,7 +171,7 @@ public class MainView extends VerticalLayout implements View{
 		this.panel.setContent(createFeed(newsList));
 	}
 	
-	public void changeToRequestor(User user){
+	public void changeToUser(User user){
 		changeNews(newsService.lastGivenNewsUser(20, user));
 	}
 }

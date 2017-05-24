@@ -1,7 +1,6 @@
 package hu.mik.views;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -27,6 +27,7 @@ import hu.mik.services.FriendRequestService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
 
+@SuppressWarnings("serial")
 @ViewScope
 @SpringView(name=RequestsView.NAME)
 public class RequestsView extends VerticalLayout implements View{
@@ -73,16 +74,17 @@ public class RequestsView extends VerticalLayout implements View{
 			Image image=new Image(null, new FileResource(
 					new File(UserConstants.PROFILE_PICTURE_LOCATION+requestUser.getImageName())));
 			image.setHeight("100%");
+			image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 			Button nameButton=new Button(requestUser.getUsername(), this::userNameListener);
 			nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 			nameButton.setSizeFull();
 			userDiv=new HorizontalLayout();
+			userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 			userDiv.setHeight("100%");
 			userDiv.setWidth(panel.getWidth()/divsPerRow, panel.getWidthUnits());
 			userDiv.addComponent(image);
 			userDiv.addComponent(nameButton);
 			userDiv.addStyleName(ThemeConstants.BORDERED);
-			System.out.println(userDiv.getWidth());
 			row.addComponent(userDiv);
 			if(i==divsPerRow){
 				row=new HorizontalLayout();
@@ -96,7 +98,7 @@ public class RequestsView extends VerticalLayout implements View{
 	}
 	
 	private void userNameListener(Button.ClickEvent event){
-		((MainUI)getUI()).changeToRequestor(userService.findUserByUsername(event.getButton().getCaption()));
+		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));
 	}
 
 }

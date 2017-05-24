@@ -12504,8 +12504,13 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .bordered {
 	border: 1px solid #00BFFF;
-	border-radius: 10px;
+	border-radius: 12px;
 	box-shadow: 2px 2px 2px #00b6cd;
+}
+
+.myTheme .borderedImage {
+	border-style: hidden;
+	border-radius: 12px;
 }
 
 .myTheme .blueText {

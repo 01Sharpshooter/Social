@@ -19,6 +19,8 @@ public class ThemeConstants {
 	
 	public static final String BORDERED="bordered";
 	
+	public static final String BORDERED_IMAGE="borderedImage";
+	
 	public static final String BORDERED_THICK="thickBordered";
 	
 	public static final String BORDERED_GREEN="borderedGreen";
