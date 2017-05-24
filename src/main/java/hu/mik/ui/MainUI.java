@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.event.ContextClickEvent;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -31,6 +34,7 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
@@ -54,6 +58,7 @@ import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 import hu.mik.views.PictureUploadView;
 import hu.mik.views.RequestsView;
+import hu.mik.views.UserListView;
 
 
 @SuppressWarnings("serial")
@@ -78,6 +83,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private VerticalLayout sideMenu;
 	private VerticalLayout oldSideMenu;
 	private HorizontalLayout base=new HorizontalLayout();
+	private TextField nameSearchTf;
 	
 	@Override
 	protected void init(VaadinRequest request){
@@ -127,6 +133,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		if(event.getViewName().equals(MessagesView.NAME)){
 			this.messageView=(MessagesView) event.getNewView();
 			changeSideMenu(user);
+		}else if(event.getViewName().equals(UserListView.NAME)){
+			changeSideMenu(user);
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
@@ -169,6 +177,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		menu.setWidth("100%");
 		header.setSpacing(false);
 		header.setMargin(false);
+		header.addStyleName(ThemeConstants.SIDE_HEADER);
 		sideMenu.addComponent(header);
 		sideMenu.addComponent(menu);
 		sideMenu.setExpandRatio(header, 3);
@@ -274,6 +283,17 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 				session=null;
 			}
 		});		
+		nameSearchTf=new TextField();
+		nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
+		nameSearchTf.setValue("Search for a user...");
+		nameSearchTf.addFocusListener(this::nameSearchFocusListener);
+		naviBar.addComponent(nameSearchTf);
+		Button namesearchButton=new Button("Search", this::nameSearchClickListener);
+//		namesearchButton.setClickShortcut(KeyCode.ENTER);
+		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		naviBar.addComponent(namesearchButton);
+		
 		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
 		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(logoutButton);
@@ -352,6 +372,18 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	private void friendRequestsClickListener(Button.ClickEvent event){
 		getNavigator().navigateTo(RequestsView.NAME);
+	}
+	
+	private void nameSearchClickListener(Button.ClickEvent event){
+		if(!nameSearchTf.isEmpty()){
+			getNavigator().navigateTo(UserListView.NAME);		
+			((UserListView)getNavigator().getCurrentView()).fill(nameSearchTf.getValue());
+			nameSearchTf.clear();
+		}
+	}
+	
+	private void nameSearchFocusListener(FocusEvent event){
+		((TextField)event.getComponent()).clear();
 	}
 	
 	public void changeToUser(User user){

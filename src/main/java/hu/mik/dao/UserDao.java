@@ -17,4 +17,6 @@ public interface UserDao{
 	
 	public List<User> findAll();
 	
+	public List<User> findAllLike(String username);
+	
 }

@@ -72,6 +72,18 @@ public class UserDaoImplement implements UserDao{
 			return list;
 		}
 	}
+	@Override
+	public List<User> findAllLike(String username) {
+		List<User> list=new ArrayList<>();
+		list=em.createQuery("SELECT u FROM User u where u.username LIKE CONCAT('%',:username,'%')", User.class)
+				.setParameter("username", username)
+				.getResultList();
+		if(list.isEmpty()){
+			return null;
+		}else{
+			return list;
+		}
+	}
 
 
 

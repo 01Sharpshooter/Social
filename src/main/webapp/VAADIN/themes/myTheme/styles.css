@@ -12550,6 +12550,13 @@ div.v-layout.v-horizontal.v-widget {
 	box-shadow: 3px 3px 3px #00b6cd;
 }
 
+.myTheme .sideHeader {
+	background-color: #696969;
+	border-bottom: 1px solid #696969;
+	border-radius: 4px;
+	box-shadow: 3px 3px 3px #696969;
+}
+
 .myTheme .wrongField {
 	border: 2px solid red;
 }

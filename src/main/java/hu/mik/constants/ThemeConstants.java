@@ -15,6 +15,8 @@ public class ThemeConstants {
 	
 	public static final String SIDE_MENU="sideMenu";
 	
+	public static final String SIDE_HEADER="sideHeader";
+	
 	public static final String WORKING_SPACE="workingSpace";
 	
 	public static final String BORDERED="bordered";

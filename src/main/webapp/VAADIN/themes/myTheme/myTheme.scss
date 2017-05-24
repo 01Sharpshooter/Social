@@ -7,6 +7,7 @@
   	$blue:#00BFFF;
   	$blue_shadow:#00b6cd;
   	$green:#00FF00;
+  	$grey: #696969;
   
     .bordered{
   		border:1px solid $blue;
@@ -54,6 +55,13 @@
   		border:1px solid $blue;
   		border-radius:4px;
   		box-shadow:3px 3px 3px $blue_shadow;
+  	}
+  	
+  	.sideHeader{
+  		background-color:$grey;
+  		border-bottom:1px solid $grey;
+  		border-radius:4px;
+  		box-shadow:3px 3px 3px $grey;
   	}
   
   	.wrongField{

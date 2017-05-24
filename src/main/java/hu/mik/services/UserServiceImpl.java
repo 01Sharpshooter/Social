@@ -61,6 +61,10 @@ public class UserServiceImpl implements UserService{
 			return null;
 		}
 	}
+	@Override
+	public List<User> findAllLike(String username) {
+		return userDao.findAllLike(username);
+	}
 	
 	
 	

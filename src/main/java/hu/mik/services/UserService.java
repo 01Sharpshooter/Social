@@ -17,4 +17,6 @@ public interface UserService {
 	
 	public List<User> listAll();
 	
+	public List<User> findAllLike(String username);
+	
 }
