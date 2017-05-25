@@ -12509,8 +12509,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .borderedImage {
-	border-style: hidden;
-	border-radius: 12px;
+	border: 2px solid #00BFFF;
+	border-radius: 200px;
 }
 
 .myTheme .blueText {
@@ -12545,7 +12545,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .sideMenu {
 	background-color: #00BFFF;
-	border: 1px solid #00BFFF;
+	border: 1px outset #00BFFF;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px #00b6cd;
 }
@@ -12553,8 +12553,8 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme .sideHeader {
 	color: #00BFFF;
 	background-color: #696969;
-	border: 1px solid #00BFFF;
-	border-radius: 4px;
+	border: 4px solid #00BFFF;
+	border-style: inset;
 }
 
 .myTheme .wrongField {

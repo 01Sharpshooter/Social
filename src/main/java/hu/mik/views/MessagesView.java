@@ -75,7 +75,8 @@ public class MessagesView extends VerticalLayout implements View {
 	
 	@PostConstruct
 	public void init(){				
-		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+//		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+		sender=(User) getUI().getSession().getAttribute("User");
 		senderId=sender.getId();
 		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));

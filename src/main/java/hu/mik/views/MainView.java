@@ -92,7 +92,12 @@ public class MainView extends VerticalLayout implements View{
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-				
+		if(event.getParameters().length()>0){
+			String parameters[]=event.getParameters().split("/");
+			int userId=Integer.parseInt(parameters[0]);
+			changeToUser(userService.findUserById(userId));
+		}
+		
 	}
 	
 	private void sendButtonClicked(Button.ClickEvent event){

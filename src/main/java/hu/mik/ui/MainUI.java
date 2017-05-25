@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
@@ -24,6 +25,8 @@ import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
@@ -83,7 +86,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
-	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+	private VaadinSession session;
 	private User user;
 	private User sideUser;
 	private MessagesView messageView;
@@ -94,9 +97,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Override
 	protected void init(VaadinRequest request){	
-			System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());	
-			user=userService.findUserByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-//			user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+			session=getUI().getSession();
+			user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			session.setAttribute("User", user);
 			sideMenu=createSideMenu(user);
 			oldSideMenu=sideMenu;
 			final VerticalLayout workingSpace=new VerticalLayout();
@@ -190,7 +193,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		sideMenu.setMargin(false);
 		sideMenu.setSizeFull();
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+sideUser.getImageName()))); 
-		image.addStyleName(ThemeConstants.BORDERED);
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		image.setWidth("60%");
 		Label name=new Label();
 		name.setValue(sideUser.getUsername());
@@ -283,9 +286,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				getPage().setLocation("/login");
+				getPage().setLocation("/logout");
 				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
-				session.invalidate();		
+				session.close();		
 				session=null;
 			}
 		});		
@@ -393,8 +396,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	public void changeToUser(User user){
-		getNavigator().navigateTo(MainView.NAME);
-		((MainView)getNavigator().getCurrentView()).changeToUser(user);
+		getNavigator().navigateTo(MainView.NAME+"/"+user.getId());
+//		((MainView)getNavigator().getCurrentView()).changeToUser(user);
 		changeSideMenu(user);	
 	}
 	
