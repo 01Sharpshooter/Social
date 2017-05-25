@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
@@ -39,8 +41,8 @@ public class User {
 	private String username;
 	@Column(name="passwd")
 	private String password;
-	@Column(name="role")
-	private String role;
+	@Column(name="enabled")
+	private int enabled;
 	@Column(name="image")
 	private String imageName;
 	@OneToMany(mappedBy="newsUser")
@@ -66,11 +68,12 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRole() {
-		return role;
+
+	public int getEnabled() {
+		return enabled;
 	}
-	public void setRole(String role) {
-		this.role = role;
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
 	}
 	public String getImageName() {
 		return imageName;

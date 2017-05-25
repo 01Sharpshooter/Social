@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
 
+import org.hibernate.dialect.lock.UpdateLockingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.liveimageeditor.LiveImageEditor;
 import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;
@@ -24,6 +25,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.constants.ThemeConstants;
 import hu.mik.listeners.UploadProfilePicEdit;
+import hu.mik.ui.MainUI;
 
 @ViewScope
 @SpringView(name=PictureUploadView.NAME)
@@ -64,7 +66,9 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 	}
 	
 	public void imageChange(){
-		getUI().getPage().reload();
+		((MainUI)getUI()).refreshSideMenu();
+		this.editorLayout.setVisible(!edit);
+		upload.setVisible(true);
 	}
 
 	public void editImage(ByteArrayOutputStream ops) {

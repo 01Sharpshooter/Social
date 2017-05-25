@@ -58,10 +58,10 @@
   	}
   	
   	.sideHeader{
+  		color: $blue;
   		background-color:$grey;
-  		border-bottom:1px solid $grey;
+  		border:1px solid $blue;
   		border-radius:4px;
-  		box-shadow:3px 3px 3px $grey;
   	}
   
   	.wrongField{

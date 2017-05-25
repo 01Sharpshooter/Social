@@ -1,30 +1,20 @@
 package hu.mik.ui;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.risto.formsender.FormSender;
+import org.vaadin.risto.formsender.widgetset.client.shared.Method;
 
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -35,12 +25,12 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.EncryptService;
 import hu.mik.services.UserService;
 
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path="/login")
+//@Widgetset("hu.mik.widgetset.WidgetSet")
 public class LoginUI extends UI{
 	@Autowired
 	private UserService userService;
@@ -84,11 +74,16 @@ public class LoginUI extends UI{
 						User user=userService.findUserByUsername(userName);
 						if(user!=null){
 							if(encService.comparePW(passWord, user.getPassword())){	
-//								user.setImage(new Image(null, new FileResource(
-//										new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))));
-				                session.setAttribute("User", user);
+//				                session.setAttribute("User", user);
+								FormSender formSender=new FormSender();
+								formSender.setFormAction(VaadinServlet.getCurrent().getServletContext().getContextPath() + "/j_spring_security_check");
+								formSender.setFormMethod(Method.POST);
+								formSender.addValue("username", nameTF.getValue());
+								formSender.addValue("password", pwTF.getValue());
+								formSender.setFormTarget("_top");
+								formSender.extend(getUI());
+								formSender.submit();
 				    			MainUI.getOnlineUsers().add(user);				    			
-								getPage().setLocation("/main");
 							}else{
 								success.setValue("Wrong username or password.");
 								pwTF.clear();

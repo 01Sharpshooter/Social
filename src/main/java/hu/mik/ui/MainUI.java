@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.ContextClickEvent;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -53,6 +56,7 @@ import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.MessageBroadcastService;
+import hu.mik.services.UserService;
 import hu.mik.views.FriendListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
@@ -67,12 +71,15 @@ import hu.mik.views.UserListView;
 @Theme(ThemeConstants.UI_THEME)
 @Push
 @PreserveOnRefresh
+//@Widgetset("hu.mik.widgetset.WidgetSet")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Autowired
 	private FriendshipService friendshipService;
 	@Autowired
 	private FriendRequestService friendRequestService;
+	@Autowired
+	private UserService userService;
 	
 	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
@@ -86,9 +93,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private TextField nameSearchTf;
 	
 	@Override
-	protected void init(VaadinRequest request){
-		if(session.getAttribute("User")!=null){			
-			user=(User)session.getAttribute("User");	
+	protected void init(VaadinRequest request){	
+			System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());	
+			user=userService.findUserByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+//			user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
 			sideMenu=createSideMenu(user);
 			oldSideMenu=sideMenu;
 			final VerticalLayout workingSpace=new VerticalLayout();
@@ -112,10 +120,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			base.setMargin(false);
 			setContent(base);
 		}
-		else{
-			getPage().setLocation("/login");
-		}
-	}
 
 	@Override
 	public void showView(View view) {
@@ -191,6 +195,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		Label name=new Label();
 		name.setValue(sideUser.getUsername());
 		name.addStyleName(ValoTheme.LABEL_H2);
+		name.addStyleName(ThemeConstants.BLUE_TEXT);
 		header.addComponent(name);
 		header.addComponent(image);	
 		if(sideUser.getId()==user.getId()){
@@ -198,6 +203,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			header.addComponent(menuBar);
 			MenuItem options=menuBar.addItem("Options", null);
 			menuBar.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
+			menuBar.addStyleName(ThemeConstants.BLUE_TEXT);
 			MenuItem changePicture=options.addItem("Change picture", new Command() {
 				
 				@Override
@@ -366,7 +372,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
 	}
 	
-	private void refreshSideMenu(){
+	public void refreshSideMenu(){
 		changeSideMenu(sideUser);
 	}
 	

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.mik.beans.Role;
 import hu.mik.beans.User;
 
 @Repository
@@ -22,11 +23,10 @@ public class UserDaoImplement implements UserDao{
 	private EntityManager em;
 
 	@Override
-	public void save(User user) {
+	public void save(User user, Role role) {
 		if(findByUsername(user.getUsername())==null){
 			em.persist(user);
-		}else{
-			em.merge(user);
+			em.persist(role);
 		}
 		
 	}
@@ -83,6 +83,11 @@ public class UserDaoImplement implements UserDao{
 		}else{
 			return list;
 		}
+	}
+	@Override
+	public void saveChanges(User user) {
+		em.merge(user);
+		
 	}
 
 

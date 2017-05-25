@@ -11,7 +11,9 @@ alter table t_user
 add CONSTRAINT u_username UNIQUE(username);
 
 alter table t_user
-add role varchar(50);
+add enabled int default(1);
+
+select * from t_user;
 
 alter table t_user
 add image varchar(50);

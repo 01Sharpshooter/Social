@@ -4,6 +4,7 @@ package hu.mik.ui;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
@@ -28,6 +29,7 @@ import hu.mik.services.UserService;
 
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path="/registration")
+//@Widgetset("hu.mik.widgetset.WidgetSet")
 public class RegistrationUI extends UI{
 	@Autowired
 	private UserService userService;

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import hu.mik.beans.Role;
 import hu.mik.beans.User;
 import hu.mik.constants.UserConstants;
 import hu.mik.dao.UserDao;
@@ -21,9 +22,12 @@ public class UserServiceImpl implements UserService{
 		User user=new User();
 		user.setUsername(username);
 		user.setPassword(passwd);
-		user.setRole(UserConstants.DEFAULT_ROLE);
+		user.setEnabled(1);
 		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
-		userDao.save(user);
+		Role role=new Role();
+		role.setUsername(username);
+		role.setRole(UserConstants.DEFAULT_ROLE);
+		userDao.save(user, role);
 		
 	}
 	@Override
@@ -44,7 +48,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void saveChanges(User user) {
-		userDao.save(user);
+		userDao.saveChanges(user);
 		
 	}
 	@Override

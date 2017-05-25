@@ -3,11 +3,12 @@ package hu.mik.dao;
 
 import java.util.List;
 
+import hu.mik.beans.Role;
 import hu.mik.beans.User;
 
 
 public interface UserDao{
-	public void save(User user);
+	public void save(User user, Role role);
 	
 	public boolean takenUsername(String username);
 	
@@ -18,5 +19,7 @@ public interface UserDao{
 	public List<User> findAll();
 	
 	public List<User> findAllLike(String username);
+
+	public void saveChanges(User user);
 	
 }
