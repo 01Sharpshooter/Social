@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll();
 		http.headers().frameOptions().sameOrigin();
 		http.csrf().disable();
+		
+//		SecurityContextPersistenceFilter filter=new SecurityContextPersistenceFilter(http.getSharedObject(SecurityContextRepository.class));
+////		filter.setForceEagerSessionCreation(true);
+//		http.addFilter(filter);
 	}
 	
 	@Autowired

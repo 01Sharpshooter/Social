@@ -6,8 +6,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
@@ -71,12 +74,13 @@ public class MessagesView extends VerticalLayout implements View {
 	private List<Message> messagesList;
 	private int prevUserDivId=-1;
 	private VerticalLayout userList;
-	private VerticalLayout empty;
 	
 	@PostConstruct
-	public void init(){				
-//		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
-		sender=(User) getUI().getSession().getAttribute("User");
+	public void init(){
+		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+//		sender=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+//		sender=(User) getUI().getSession().getAttribute("User");
 		senderId=sender.getId();
 		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));

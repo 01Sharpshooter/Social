@@ -19,9 +19,11 @@ import com.vaadin.event.ContextClickEvent;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -31,6 +33,7 @@ import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -74,7 +77,6 @@ import hu.mik.views.UserListView;
 @Theme(ThemeConstants.UI_THEME)
 @Push
 @PreserveOnRefresh
-//@Widgetset("hu.mik.widgetset.WidgetSet")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Autowired
@@ -86,7 +88,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
-	private VaadinSession session;
+	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private User sideUser;
 	private MessagesView messageView;
@@ -97,9 +99,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Override
 	protected void init(VaadinRequest request){	
-			session=getUI().getSession();
 			user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 			session.setAttribute("User", user);
+			onlineUsers.add(user);
 			sideMenu=createSideMenu(user);
 			oldSideMenu=sideMenu;
 			final VerticalLayout workingSpace=new VerticalLayout();
@@ -288,7 +290,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			public void buttonClick(ClickEvent event) {
 				getPage().setLocation("/logout");
 				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
-				session.close();		
+//				session.invalidate();
 				session=null;
 			}
 		});		
@@ -298,7 +300,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		nameSearchTf.addFocusListener(this::nameSearchFocusListener);
 		naviBar.addComponent(nameSearchTf);
 		Button namesearchButton=new Button("Search", this::nameSearchClickListener);
-//		namesearchButton.setClickShortcut(KeyCode.ENTER);
+		namesearchButton.setClickShortcut(KeyCode.ENTER);
 		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
 		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(namesearchButton);

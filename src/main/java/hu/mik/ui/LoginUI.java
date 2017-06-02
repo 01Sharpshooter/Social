@@ -74,7 +74,6 @@ public class LoginUI extends UI{
 						User user=userService.findUserByUsername(userName);
 						if(user!=null){
 							if(encService.comparePW(passWord, user.getPassword())){	
-//				                session.setAttribute("User", user);
 								FormSender formSender=new FormSender();
 								formSender.setFormAction(VaadinServlet.getCurrent().getServletContext().getContextPath() + "/j_spring_security_check");
 								formSender.setFormMethod(Method.POST);
@@ -82,8 +81,7 @@ public class LoginUI extends UI{
 								formSender.addValue("password", pwTF.getValue());
 								formSender.setFormTarget("_top");
 								formSender.extend(getUI());
-								formSender.submit();
-				    			MainUI.getOnlineUsers().add(user);				    			
+								formSender.submit();			    			
 							}else{
 								success.setValue("Wrong username or password.");
 								pwTF.clear();

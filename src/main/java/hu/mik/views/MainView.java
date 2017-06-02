@@ -71,12 +71,18 @@ public class MainView extends VerticalLayout implements View{
 
 	private VerticalLayout createFeed(List<News> newsList) {
 		VerticalLayout feed=new VerticalLayout();
-		for(int i=newsList.size()-1;i>=0;i--){
-			userDiv=new VerticalLayout();
-			userDiv.setHeight(panel.getHeight()/6, panel.getHeightUnits());
-			userDiv.addComponent(createNewsLayout(newsList.get(i)));
-			userDiv.addStyleName(ThemeConstants.BORDERED);
-			feed.addComponent(userDiv);
+		if(!newsList.isEmpty()){
+			for(int i=newsList.size()-1;i>=0;i--){
+				userDiv=new VerticalLayout();
+				userDiv.setHeight(panel.getHeight()/6, panel.getHeightUnits());
+				userDiv.addComponent(createNewsLayout(newsList.get(i)));
+				userDiv.addStyleName(ThemeConstants.BORDERED);
+				feed.addComponent(userDiv);
+			}
+		}else{
+			Label label=new Label("This user has not posted anything yet.");
+			label.setStyleName(ThemeConstants.BLUE_TEXT_H3);
+			feed.addComponent(label);
 		}
 		
 		return feed;
@@ -177,7 +183,8 @@ public class MainView extends VerticalLayout implements View{
 	}
 	
 	public void changeToUser(User user){
-		changeNews(newsService.lastGivenNewsUser(20, user));
+		changeNews(newsService.lastGivenNewsUser(20, user));	
+		this.removeComponent(textWriter);
 	}
 }
 
