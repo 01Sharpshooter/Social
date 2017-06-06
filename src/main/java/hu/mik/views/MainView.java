@@ -9,12 +9,14 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -57,7 +59,11 @@ public class MainView extends VerticalLayout implements View{
 	
 	@PostConstruct
 	public void init(){
-		user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
+		if(context!=null){
+			user=userService.findUserByUsername(context.getAuthentication().getName());
+		}
 		newsList=newsService.lastGivenNewsAll(20);
 		feed=createFeed(newsList);	
 		textWriter=createTextWriter();

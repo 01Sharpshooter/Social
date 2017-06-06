@@ -9,7 +9,9 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -17,6 +19,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -77,10 +80,10 @@ public class MessagesView extends VerticalLayout implements View {
 	
 	@PostConstruct
 	public void init(){
-		sender=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
-//		sender=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
+		sender=userService.findUserByUsername(context.getAuthentication().getName());
 		
-//		sender=(User) getUI().getSession().getAttribute("User");
 		senderId=sender.getId();
 		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
@@ -181,7 +184,7 @@ public class MessagesView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
+//		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 		
 	}
 	

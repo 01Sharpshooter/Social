@@ -38,11 +38,10 @@ public class RegistrationUI extends UI{
 	
 	private Label success=new Label();
 	
-	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	
 	@Override
 	protected void init(VaadinRequest request) {
-		if(session.getAttribute("User")==null){
+			getPage().setTitle("Registration");
 			final VerticalLayout layout=new VerticalLayout();
 			setContent(layout);	
 			Label title=new Label("Registration");
@@ -102,9 +101,6 @@ public class RegistrationUI extends UI{
 			layout.addComponent(success);
 			
 			layout.addComponent(submit);
-		}else{
-			getPage().setLocation("/main");
-		}	
 	}
 }
 

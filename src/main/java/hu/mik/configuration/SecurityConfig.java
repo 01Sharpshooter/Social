@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(FREE_PAGES_ANT).permitAll()
-		.anyRequest().hasAuthority("user").
+		.anyRequest().hasAnyAuthority("user", "admin").
 		and().formLogin().loginPage(LOGIN_PAGE)
 		.loginProcessingUrl(SECURITY_URL)
 		.defaultSuccessUrl(DEFAULT_PAGE_URL, true)
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		
 //		SecurityContextPersistenceFilter filter=new SecurityContextPersistenceFilter(http.getSharedObject(SecurityContextRepository.class));
-////		filter.setForceEagerSessionCreation(true);
+//		filter.setForceEagerSessionCreation(true);
 //		http.addFilter(filter);
 	}
 	

@@ -3,37 +3,30 @@ package hu.mik.ui;
 
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Widgetset;
-import com.vaadin.event.ContextClickEvent;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServlet;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
-import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -63,6 +56,7 @@ import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
+import hu.mik.views.AdminView;
 import hu.mik.views.FriendListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
@@ -97,10 +91,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private HorizontalLayout base=new HorizontalLayout();
 	private TextField nameSearchTf;
 	
+	private SecurityContext securityContext=SecurityContextHolder.getContext();
+	
 	@Override
 	protected void init(VaadinRequest request){	
-			user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-			session.setAttribute("User", user);
+			getPage().setTitle("Serious");
+			user=userService.findUserByUsername(securityContext.getAuthentication().getName());
+			session.setAttribute("SecurityContext", securityContext);
 			onlineUsers.add(user);
 			sideMenu=createSideMenu(user);
 			oldSideMenu=sideMenu;
@@ -277,6 +274,17 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	public CssLayout createNaviBar(){
 		CssLayout naviBar=new CssLayout();
 		naviBar.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
+		for(GrantedAuthority authority : auth){
+			if(authority.getAuthority().equals("admin")){
+				Button adminButton=new Button("Admin");
+				adminButton.addClickListener(this::adminClickListener);
+				adminButton.setStyleName(ValoTheme.BUTTON_SMALL);
+				adminButton.addStyleName(ThemeConstants.BLUE_TEXT);
+				naviBar.addComponent(adminButton);
+				break;
+			}
+		}
 		Button mainButton=new Button("Main");
 		mainButton.addClickListener(this::mainClickListener);
 		mainButton.setStyleName(ValoTheme.BUTTON_SMALL);
@@ -391,6 +399,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			((UserListView)getNavigator().getCurrentView()).fill(nameSearchTf.getValue());
 			nameSearchTf.clear();
 		}
+	}
+	
+	private void adminClickListener(Button.ClickEvent event){
+		getNavigator().navigateTo(AdminView.NAME);
 	}
 	
 	private void nameSearchFocusListener(FocusEvent event){

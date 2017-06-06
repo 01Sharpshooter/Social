@@ -36,12 +36,10 @@ public class LoginUI extends UI{
 	private UserService userService;
 	@Autowired
 	private EncryptService encService;
-	
-	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 
 	@Override
 	protected void init(VaadinRequest request) {
-		if(session.getAttribute("User")==null){
+			getPage().setTitle("Login");
 			final VerticalLayout layout=new VerticalLayout();
 			Label title=new Label("Login");
 			title.setStyleName(ValoTheme.LABEL_H1);
@@ -50,6 +48,10 @@ public class LoginUI extends UI{
 			layout.addComponent(title);
 			Label success=new Label();
 			layout.addComponent(success);
+			
+			if(request.getParameter("error")!=null){
+				success.setValue("We're sorry to inform you that your account has been suspended.");
+			}
 			
 			TextField nameTF=new TextField("Name");
 			nameTF.setIcon(VaadinIcons.USER);
@@ -103,9 +105,7 @@ public class LoginUI extends UI{
 			register.setStyleName(ValoTheme.BUTTON_SMALL);
 			register.addClickListener(event->getPage().setLocation("/registration"));
 			layout.addComponent(register);
-		}else{
-			getPage().setLocation("/main");
-		}
+		
 	}
 	
 	private boolean IsvalidName(String userName){

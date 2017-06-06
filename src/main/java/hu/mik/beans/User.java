@@ -93,7 +93,6 @@ public class User {
 	public void setImage(Image image) {
 		this.image = image;
 	}
-	
 	@PostLoad
 	public void setUserImage(){
 		this.image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+this.getImageName())));

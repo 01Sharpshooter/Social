@@ -4,11 +4,13 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -64,7 +66,10 @@ public class RequestsView extends VerticalLayout implements View{
 		panel.setCaption("Your friend requests:");
 		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 		
-		user=(User) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
+		user=userService.findUserByUsername(context.getAuthentication().getName());
+		
 		List<FriendRequest> requests=friendRequestService.findAllByRequestedId(user.getId());
 		
 		int i=0;		
