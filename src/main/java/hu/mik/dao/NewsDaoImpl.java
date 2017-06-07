@@ -23,7 +23,7 @@ public class NewsDaoImpl implements NewsDao{
 	@Override
 	public List<News> lastGivenNewsAll(int number) {
 		List<News> list=new ArrayList<>();
-		list=em.createQuery("select n from News n order by n.time asc", News.class)
+		list=em.createQuery("select n from News n order by n.time desc", News.class)
 				.setFirstResult(0)
 				.setMaxResults(number-1)
 				.getResultList();
@@ -33,7 +33,7 @@ public class NewsDaoImpl implements NewsDao{
 	@Override
 	public List<News> lastGivenNewsUser(int number, User user) {
 		List<News> list=new ArrayList<>();
-		list=em.createQuery("select n from News n where n.newsUser= :user order by n.time asc", News.class)
+		list=em.createQuery("select n from News n where n.newsUser= :user order by n.time desc", News.class)
 				.setParameter("user", user)
 				.setFirstResult(0)
 				.setMaxResults(number-1)

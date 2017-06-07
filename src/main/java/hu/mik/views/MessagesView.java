@@ -77,6 +77,9 @@ public class MessagesView extends VerticalLayout implements View {
 	private List<Message> messagesList;
 	private int prevUserDivId=-1;
 	private VerticalLayout userList;
+
+
+	private int messageNumberAtOnce=20;
 	
 	@PostConstruct
 	public void init(){
@@ -197,7 +200,7 @@ public class MessagesView extends VerticalLayout implements View {
 		messagesLayout.removeAllComponents();
 		receiverId=Integer.parseInt(event.getButton().getId());
 		receiver=userService.findUserById(receiverId);
-		messagesList=messageService.findAllByUserIDs(20, senderId, receiverId);
+		messagesList=messageService.findAllByUserIDs(messageNumberAtOnce, senderId, receiverId);
 		fillMessages();
 		messagesPanel.setScrollTop(scroll);
 		MessageBroadcastService.register((MainUI)this.getUI(), sender.getUsername());

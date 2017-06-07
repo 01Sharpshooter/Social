@@ -56,6 +56,7 @@ public class MainView extends VerticalLayout implements View{
 	private Panel panel=new Panel();
 	private List<News> newsList;
 	private HorizontalLayout textWriter;
+	private int newsNumberAtOnce=20;
 	
 	@PostConstruct
 	public void init(){
@@ -78,10 +79,10 @@ public class MainView extends VerticalLayout implements View{
 	private VerticalLayout createFeed(List<News> newsList) {
 		VerticalLayout feed=new VerticalLayout();
 		if(!newsList.isEmpty()){
-			for(int i=newsList.size()-1;i>=0;i--){
+			for(News news:newsList){
 				userDiv=new VerticalLayout();
 				userDiv.setHeight(panel.getHeight()/6, panel.getHeightUnits());
-				userDiv.addComponent(createNewsLayout(newsList.get(i)));
+				userDiv.addComponent(createNewsLayout(news));
 				userDiv.addStyleName(ThemeConstants.BORDERED);
 				feed.addComponent(userDiv);
 			}
@@ -179,7 +180,7 @@ public class MainView extends VerticalLayout implements View{
 	private void userNameListener(Button.ClickEvent event){
 		((MainUI)getUI()).changeSideMenu(userService.findUserByUsername(
 				event.getButton().getCaption()));
-		changeNews(newsService.lastGivenNewsUser(20,
+		changeNews(newsService.lastGivenNewsUser(newsNumberAtOnce,
 				userService.findUserByUsername(event.getButton().getCaption())));
 		this.removeComponent(textWriter);
 	}
