@@ -15,12 +15,14 @@ import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Component;
 import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;
 
 import com.vaadin.navigator.View;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload.Receiver;
@@ -86,7 +88,10 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener{
 	}
 	
 	public void receiveImage(InputStream ins) {
-		User user=(User)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("User");
+		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
+		User user=userService.findUserByUsername(context.getAuthentication().getName());
+		
 		String imageName=System.currentTimeMillis()+fileName;
 		File imageSave=new File(UserConstants.PROFILE_PICTURE_LOCATION+imageName);
 		FileOutputStream ops=null;

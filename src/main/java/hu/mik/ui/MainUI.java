@@ -174,6 +174,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	public VerticalLayout createSideMenu(User sideUser){	
 		this.sideUser=sideUser;
+		this.user=userService.findUserById(user.getId());
 		VerticalLayout sideMenu=new VerticalLayout();
 		sideMenu.addStyleName(ThemeConstants.SIDE_MENU);		
 		VerticalLayout header=new VerticalLayout();
@@ -308,7 +309,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		nameSearchTf.addFocusListener(this::nameSearchFocusListener);
 		naviBar.addComponent(nameSearchTf);
 		Button namesearchButton=new Button("Search", this::nameSearchClickListener);
-		namesearchButton.setClickShortcut(KeyCode.ENTER);
 		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
 		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(namesearchButton);
@@ -386,6 +386,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	public void refreshSideMenu(){
+		int id=sideUser.getId();
+		sideUser=userService.findUserById(id);
 		changeSideMenu(sideUser);
 	}
 	
