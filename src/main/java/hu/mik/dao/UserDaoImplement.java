@@ -32,9 +32,9 @@ public class UserDaoImplement implements UserDao{
 	}
 	@Override
 	public boolean takenUsername(String username) {
-		List<User> list=findByUsername(username);
+		User user=findByUsername(username);
 
-		if(list==null){
+		if(user==null){
 			return false;
 		}
 		else{
@@ -42,16 +42,16 @@ public class UserDaoImplement implements UserDao{
 		}
 	}
 	@Override
-	public List<User> findByUsername(String username) {
-		List<User> list=new ArrayList<>();
-		list=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
-				.setParameter("username", username)
-				.getResultList();
-		if(list.isEmpty()){
-			return null;
-		}else{
-			return list;
+	public User findByUsername(String username) {
+		User user;
+		try {
+			user=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
+					.setParameter("username", username)
+					.getSingleResult();
+		} catch (Exception e) {
+			user=null;
 		}
+		return user;
 	}
 	@Override
 	public List<User> findAll() {
@@ -61,16 +61,16 @@ public class UserDaoImplement implements UserDao{
 		
 	}
 	@Override
-	public List<User> findById(int id) {
-		List<User> list=new ArrayList<>();
-		list=em.createQuery("SELECT u FROM User u where u.id= :id", User.class)
-				.setParameter("id", id)
-				.getResultList();
-		if(list.isEmpty()){
-			return null;
-		}else{
-			return list;
+	public User findById(int id) {
+		User user;
+		try {
+			user=em.createQuery("SELECT u FROM User u where u.id= :id", User.class)
+					.setParameter("id", id)
+					.getSingleResult();
+		} catch (Exception e) {
+			user=null;
 		}
+		return user;
 	}
 	@Override
 	public List<User> findAllLike(String username) {

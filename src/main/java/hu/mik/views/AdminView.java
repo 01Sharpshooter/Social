@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.context.ApplicationContext;
 
 import com.vaadin.data.provider.ListDataProvider;
@@ -41,10 +42,6 @@ public class AdminView extends VerticalLayout implements View{
 	@Autowired
 	private UserService userService;
 	
-	private ListDataProvider<User> baseDataProvider;
-	
-//	private ListDataProvider<User> nameDataProvider;
-	
 	Grid<User> grid;
 	
 	@SuppressWarnings("unchecked")
@@ -53,7 +50,6 @@ public class AdminView extends VerticalLayout implements View{
 		HorizontalLayout filtersLayout=new HorizontalLayout();
 		VerticalLayout nameSearchLayout=new VerticalLayout();
 		nameSearchLayout.setMargin(false);
-		baseDataProvider=new ListDataProvider<>(userService.listAll());
 		TextField nameTf=new TextField("Search by username:");
 		nameSearchLayout.addComponent(nameTf);
 		Label notFoundLbl=new Label("No user found :(");
@@ -95,13 +91,12 @@ public class AdminView extends VerticalLayout implements View{
 			notFoundLbl.setVisible(false);
 			radioButtonGroup.setSelectedItem("All");
 			nameTf.clear();
-			grid.setDataProvider(baseDataProvider);
-			baseDataProvider.clearFilters();
+			grid.setDataProvider(new ListDataProvider<>(userService.listAll()));
 		});
 		nameSearchLayout.addComponent(resetButton);
 		filtersLayout.addComponent(nameSearchLayout);
 		filtersLayout.addComponent(radioButtonGroup);
-		grid=new Grid<User>(baseDataProvider);
+		grid=new Grid<User>(new ListDataProvider<>(userService.listAll()));
 		grid.addColumn(User::getId).setCaption("Id");
 		grid.addColumn(User::getUsername).setCaption("Username");
 		grid.addColumn(user -> {
@@ -114,15 +109,15 @@ public class AdminView extends VerticalLayout implements View{
 		}, new ButtonRenderer<>(clickEvent->{
 			User user=clickEvent.getItem();
 			if(user.getEnabled()==1){
-				user.setEnabled(0);
+				user.setEnabled(0);				
 			}else{
 				user.setEnabled(1);
 			}
 			userService.saveChanges(user);
-			((ListDataProvider<User>)grid.getDataProvider()).refreshAll();
-			if(!grid.getDataProvider().equals(baseDataProvider)){
-				baseDataProvider.refreshItem(user);
-			}
+			String selected=radioButtonGroup.getSelectedItem().get();
+			radioButtonGroup.setSelectedItem("All");
+			radioButtonGroup.setSelectedItem(selected);
+			((ListDataProvider<User>)grid.getDataProvider()).refreshItem(user);
 		}))
 		.setCaption("Enable/Disable users");
 		grid.setSizeFull();

@@ -12,9 +12,9 @@ public interface UserDao{
 	
 	public boolean takenUsername(String username);
 	
-	public List<User> findByUsername(String username);
+	public User findByUsername(String username);
 	
-	public List<User> findById(int id);
+	public User findById(int id);
 	
 	public List<User> findAll();
 	

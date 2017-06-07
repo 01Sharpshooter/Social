@@ -229,7 +229,7 @@ public class MessagesView extends VerticalLayout implements View {
 						Label newMessage=new Label(message.getMessage());
 						newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 						newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
-						newMessage.addStyleName(ThemeConstants.BORDERED_THICK);			
+						newMessage.addStyleName(ThemeConstants.BORDERED);			
 						messagesLayout.addComponent(newMessage);
 						messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 //						panel.setScrollTop(scroll);

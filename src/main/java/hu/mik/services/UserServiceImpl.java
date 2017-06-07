@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User findUserByUsername(String username) {
 		if(userDao.findByUsername(username)!=null){
-			return userDao.findByUsername(username).get(0);
+			return userDao.findByUsername(username);
 		}
 		else{
 			return null;
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User findUserById(int id) {
 		if(userDao.findById(id)!=null){
-			return userDao.findById(id).get(0);
+			return userDao.findById(id);
 		}
 		else{
 			return null;
