@@ -42,7 +42,9 @@ public class AdminView extends VerticalLayout implements View{
 	@Autowired
 	private UserService userService;
 	
-	Grid<User> grid;
+	private Grid<User> grid;
+	
+	private RadioButtonGroup<String> radioButtonGroup;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -63,10 +65,11 @@ public class AdminView extends VerticalLayout implements View{
 				}else{
 					notFoundLbl.setVisible(true);
 				}
+				radioButtonGroup.setSelectedItem("All");
 			});
 		nameSearchLayout.addComponent(nameBtn);
 		nameSearchLayout.addComponent(notFoundLbl);
-		RadioButtonGroup<String> radioButtonGroup=new RadioButtonGroup<>("Filter");
+		radioButtonGroup=new RadioButtonGroup<>("Filter");
 		radioButtonGroup.setItems("All", "Enabled", "Disabled");
 		radioButtonGroup.setSelectedItem("All");
 		radioButtonGroup.addSelectionListener(new SingleSelectionListener<String>() {

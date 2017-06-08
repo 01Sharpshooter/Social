@@ -138,9 +138,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private boolean viewChangeListener(ViewChangeEvent event){
 		if(event.getViewName().equals(MessagesView.NAME)){
 			this.messageView=(MessagesView) event.getNewView();
-			changeSideMenu(user);
+			if(!sideUser.equals(user))
+				changeSideMenu(user);
 		}else if(event.getViewName().equals(UserListView.NAME)){
-			changeSideMenu(user);
+			if(!sideUser.equals(user))
+				changeSideMenu(user);
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
