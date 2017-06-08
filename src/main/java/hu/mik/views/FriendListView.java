@@ -49,18 +49,11 @@ public static final String NAME="FriendListView";
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		
-	}
-	
-	@PostConstruct
-	public void init(){
-		
-	}
-
-	public void fill(User sideUser) {
 		this.addComponent(panel);
 		this.setMargin(false);
 		this.setSizeFull();
+		User sideUser=userService.findUserById(Integer.parseInt(event.getParameters()));
+		((MainUI)getUI()).changeSideMenu(sideUser);
 		
 		panel.setSizeFull();
 		panel.setContent(rows);
@@ -98,8 +91,8 @@ public static final String NAME="FriendListView";
 			}
 			
 		}		
-		
 	}
+	
 	
 	private void userNameListener(Button.ClickEvent event){
 		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));

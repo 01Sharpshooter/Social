@@ -190,7 +190,7 @@ public class MainView extends VerticalLayout implements View{
 	}
 	
 	public void changeToUser(User user){
-		changeNews(newsService.lastGivenNewsUser(20, user));	
+		changeNews(newsService.lastGivenNewsUser(newsNumberAtOnce, user));	
 		this.removeComponent(textWriter);
 	}
 }

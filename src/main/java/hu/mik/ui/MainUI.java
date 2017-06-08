@@ -383,8 +383,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	private void friendListClickListener(Button.ClickEvent event){
-		getNavigator().navigateTo(FriendListView.NAME);
-		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
+		getNavigator().navigateTo(FriendListView.NAME+"/"+sideUser.getId());
+//		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
 	}
 	
 	public void refreshSideMenu(){
