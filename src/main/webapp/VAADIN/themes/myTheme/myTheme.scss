@@ -13,9 +13,14 @@
   		border: 5px solid $green;
   		border-radius:200px;
 	}
-	#profilePicture{
+	#profilePicture, #menuIcon{
 		height:50px;
 		margin-top:5px;
+	}
+	#menuIcon{
+		float:right;
+		display: none;
+		padding-right: 10px;
 	}
 	#username{
 		color:white;
@@ -66,11 +71,15 @@
 		.v-textfield{
 			float:right;
 			margin-top:15px;
+			width:150px;
 		}
 	}
 	#navigationBar[width-range~="0-768px"] {
   		.v-label:not(#username){
-  			display:none;
+/*   			display:none; */
+  		}
+  		#menuIcon{
+/*   			display: block; */
   		}
 	}
   	#viewDisplay{
@@ -168,12 +177,7 @@
 	    margin-right: 0;
 	    font-weight: bold;	
   	}
-/*   	.responsiveSideMenu[width-range~="0-768px"]{ */
-/*   		.sideMenuMenu{ */
-/*   			display:none; */
-/*   		} */
-  		
-/*   	} */
+  	
   	.responsiveFont[width-range~="0px-25px"] {
    		font-size: 70%;
 	}
@@ -184,35 +188,35 @@
    		font-size: 100%;
 	}
   	.responsiveFont[width-range~="76-100px"] {
-  		color: $green;
+
    		font-size: 120%;
 	}
 	.responsiveFont[width-range~="101px-200px"] {
-  		color: $green;
+
    		font-size: 120%;
 	}
 	.responsiveFont[width-range~="201px-300px"] {
-  		color: $green;
+
    		font-size: 130%;
 	}
   	.responsiveFont[width-range~="301px-400px"] {
-  		color: $green;
+
    		font-size: 140%;
 	}
 	.responsiveFont[width-range~="401px-500px"] {
-  		color: $green;
+
    		font-size: 150%;
 	}
 	.responsiveFont[width-range~="501px-600px"] {
-  		color: $green;
+
    		font-size: 160%;
 	}
 	.responsiveFont[width-range~="601px-700px"] {
-  		color: $green;
+
    		font-size: 170%;
 	}
   	.responsiveFont[width-range~="701px-800px"] {
-  		color: $green;
+
    		font-size: 180%;
 	}
 

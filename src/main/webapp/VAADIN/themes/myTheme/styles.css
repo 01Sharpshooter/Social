@@ -12507,9 +12507,15 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 200px;
 }
 
-.myTheme #profilePicture {
+.myTheme #profilePicture, .myTheme #menuIcon {
 	height: 50px;
 	margin-top: 5px;
+}
+
+.myTheme #menuIcon {
+	float: right;
+	display: none;
+	padding-right: 10px;
 }
 
 .myTheme #username {
@@ -12569,10 +12575,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #navigationBar .v-textfield {
 	float: right;
 	margin-top: 15px;
-}
-
-.myTheme #navigationBar[width-range~="0-768px"] .v-label:not(#username) {
-	display: none;
+	width: 150px;
 }
 
 .myTheme #viewDisplay {

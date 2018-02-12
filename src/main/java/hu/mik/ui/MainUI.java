@@ -288,10 +288,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		Label name=new Label();
 		name.setValue(user.getUsername());
 		name.setId("username");
-//		name.addStyleName(ThemeConstants.BLUE_TEXT);
-		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+//		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		naviBar.addComponent(name);
-		
+		image=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
+		image.setId("menuIcon");
+		naviBar.addComponent(image);
 		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
 		for(GrantedAuthority authority : auth){
 			if(authority.getAuthority().equals("admin")){
@@ -300,7 +301,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			}
 		}
 		Label lblMain=new Label("Main");
-//		lblMain.setHeight("100%");
 		naviBar.addComponent(lblMain);
 		Label lblMessages=new Label("Messages");
 		naviBar.addComponent(lblMessages);
@@ -321,13 +321,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		return naviBar;
 	}
 	
-	private Button createNavigationButton(String caption, final String viewName){
-		Button button=new Button(caption);
-		button.addStyleName(ValoTheme.BUTTON_SMALL);
-		button.addStyleName(ThemeConstants.BLUE_TEXT);
-		button.addClickListener(event -> getNavigator().navigateTo(viewName));
-		return button;
-	}
 	
 	public void changeSideMenu(User user){
 //		VerticalLayout userSideMenu=createSideMenu(user);
@@ -357,10 +350,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		
 	}
 	
-	private void mainClickListener(Button.ClickEvent event){
-//		changeSideMenu(user);
-		getNavigator().navigateTo(MainView.NAME);
-	}
 	
 	private void profileImageClickListener(com.vaadin.event.MouseEvents.ClickEvent event) {
 		getNavigator().navigateTo(PictureUploadView.NAME);
@@ -429,10 +418,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			((UserListView)getNavigator().getCurrentView()).fill(nameSearchTf.getValue());
 			nameSearchTf.clear();
 		}
-	}
-	
-	private void adminClickListener(Button.ClickEvent event){
-		getNavigator().navigateTo(AdminView.NAME);
 	}
 	
 	private void nameSearchFocusListener(FocusEvent event){

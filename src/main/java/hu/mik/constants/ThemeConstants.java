@@ -35,4 +35,6 @@ public class ThemeConstants {
 
 	public static final String CHAT_MESSAGE = "chatMessage";
 	
+	public static final String SYSTEM_IMAGE_MENU_ICON="images/System/menu-icon.png";
+	
 }
