@@ -82,7 +82,7 @@ public class LoginUI extends UI{
 								formSender.addValue("username", nameTF.getValue());
 								formSender.addValue("password", pwTF.getValue());
 								formSender.setFormTarget("_top");
-								formSender.extend(getUI());
+								formSender.extend(getUI());								
 								formSender.submit();			    			
 							}else{
 								success.setValue("Wrong username or password.");

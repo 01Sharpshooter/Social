@@ -9,6 +9,84 @@
   	$green:#00FF00;
   	$grey: #696969;
   
+  	#profilePicture:hover{
+  		border: 5px solid $green;
+  		border-radius:200px;
+	}
+	#profilePicture{
+		height:50px;
+		margin-top:5px;
+	}
+	#username{
+		color:white;
+		padding-right: 20px;
+	}
+	#username:hover{
+		color:$green;
+	}
+	#navigationBar{
+		text-align: left;
+		background: $grey;
+		float:left;
+		font-size: 18px;
+		padding-left:10px;
+		width:100%;
+		height:60px;
+		overflow: hidden;
+		margin:15px auto;
+		border-radius:15px;
+		.v-label{			
+			padding-left:10px;
+			padding-top:20px;
+			padding-bottom:20px;			
+    		text-align: center;
+    		height: 100%;
+		}
+		.v-label:not(#username){
+			color:$green;
+			padding-right:10px;
+			border-style: solid;
+    		border-color: white;
+    		border-top:none;
+    		border-bottom:none;
+    		border-right:1px;
+    		border-width: 1px;
+		}
+		.v-label:hover:not(#username){
+			font-size:20px;
+			padding-top:18px;
+			color:white;
+			background-color: $green;			
+		}
+		.v-button{
+			float:right;
+			margin-top:15px;
+			margin-right:10px
+		}
+		.v-textfield{
+			float:right;
+			margin-top:15px;
+		}
+	}
+	#navigationBar[width-range~="0-768px"] {
+  		.v-label:not(#username){
+  			display:none;
+  		}
+	}
+  	#viewDisplay{
+  		padding: 10px;
+	}
+	#base{
+		padding: 10px;
+		font-family: arial;
+	}
+  	#sideMenu{
+  		width:15%;
+  	}
+  	#workingSpace{
+  		width:85%;
+  	}
+  	
     .bordered{
   		border:1px solid $blue;
   		border-radius:12px;
@@ -58,10 +136,10 @@
   	}
   	
   	.sideHeader{
-  		color: $blue;
   		background-color:$grey;
   		border:4px solid $blue;
   		border-style: inset;
+  		
   	}
   
   	.wrongField{
@@ -90,6 +168,61 @@
 	    margin-right: 0;
 	    font-weight: bold;	
   	}
+/*   	.responsiveSideMenu[width-range~="0-768px"]{ */
+/*   		.sideMenuMenu{ */
+/*   			display:none; */
+/*   		} */
+  		
+/*   	} */
+  	.responsiveFont[width-range~="0px-25px"] {
+   		font-size: 70%;
+	}
+	.responsiveFont[width-range~="26-50px"] {
+   		font-size: 80%;
+	}
+	.responsiveFont[width-range~="51-75px"] {
+   		font-size: 100%;
+	}
+  	.responsiveFont[width-range~="76-100px"] {
+  		color: $green;
+   		font-size: 120%;
+	}
+	.responsiveFont[width-range~="101px-200px"] {
+  		color: $green;
+   		font-size: 120%;
+	}
+	.responsiveFont[width-range~="201px-300px"] {
+  		color: $green;
+   		font-size: 130%;
+	}
+  	.responsiveFont[width-range~="301px-400px"] {
+  		color: $green;
+   		font-size: 140%;
+	}
+	.responsiveFont[width-range~="401px-500px"] {
+  		color: $green;
+   		font-size: 150%;
+	}
+	.responsiveFont[width-range~="501px-600px"] {
+  		color: $green;
+   		font-size: 160%;
+	}
+	.responsiveFont[width-range~="601px-700px"] {
+  		color: $green;
+   		font-size: 170%;
+	}
+  	.responsiveFont[width-range~="701px-800px"] {
+  		color: $green;
+   		font-size: 180%;
+	}
+
+	.responsiveFont[width-range~="801px-900px"] {
+	    font-size: 190%;
+	}
+
+	.responsiveFont[width-range~="901px-"] {
+	    font-size: 200%;
+	}
   
 
 

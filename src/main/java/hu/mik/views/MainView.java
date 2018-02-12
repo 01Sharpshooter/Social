@@ -15,6 +15,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
@@ -168,7 +169,9 @@ public class MainView extends VerticalLayout implements View{
 		header.addComponent(nameButton);
 		Label message=new Label(news.getMessage());
 		message.setSizeFull();
-		message.setStyleName(ThemeConstants.BLUE_TEXT_H3);
+		message.setStyleName(ThemeConstants.BLUE_TEXT);
+		message.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+		Responsive.makeResponsive(message);
 		layout.addComponent(message);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateString=df.format(news.getTime());

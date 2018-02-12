@@ -12502,6 +12502,96 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
+.myTheme #profilePicture:hover {
+	border: 5px solid #00FF00;
+	border-radius: 200px;
+}
+
+.myTheme #profilePicture {
+	height: 50px;
+	margin-top: 5px;
+}
+
+.myTheme #username {
+	color: white;
+	padding-right: 20px;
+}
+
+.myTheme #username:hover {
+	color: #00FF00;
+}
+
+.myTheme #navigationBar {
+	text-align: left;
+	background: #696969;
+	float: left;
+	font-size: 18px;
+	padding-left: 10px;
+	width: 100%;
+	height: 60px;
+	overflow: hidden;
+	margin: 15px auto;
+	border-radius: 15px;
+}
+
+.myTheme #navigationBar .v-label {
+	padding-left: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+	height: 100%;
+}
+
+.myTheme #navigationBar .v-label:not(#username) {
+	color: #00FF00;
+	padding-right: 10px;
+	border-style: solid;
+	border-color: white;
+	border-top: none;
+	border-bottom: none;
+	border-right: 1px;
+	border-width: 1px;
+}
+
+.myTheme #navigationBar .v-label:hover:not(#username) {
+	font-size: 20px;
+	padding-top: 18px;
+	color: white;
+	background-color: #00FF00;
+}
+
+.myTheme #navigationBar .v-button {
+	float: right;
+	margin-top: 15px;
+	margin-right: 10px;
+}
+
+.myTheme #navigationBar .v-textfield {
+	float: right;
+	margin-top: 15px;
+}
+
+.myTheme #navigationBar[width-range~="0-768px"] .v-label:not(#username) {
+	display: none;
+}
+
+.myTheme #viewDisplay {
+	padding: 10px;
+}
+
+.myTheme #base {
+	padding: 10px;
+	font-family: arial;
+}
+
+.myTheme #sideMenu {
+	width: 15%;
+}
+
+.myTheme #workingSpace {
+	width: 85%;
+}
+
 .myTheme .bordered {
 	border: 1px solid #00BFFF;
 	border-radius: 12px;
@@ -12551,7 +12641,6 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .sideHeader {
-	color: #00BFFF;
 	background-color: #696969;
 	border: 4px solid #00BFFF;
 	border-style: inset;
@@ -12581,4 +12670,64 @@ div.v-layout.v-horizontal.v-widget {
 	margin-left: 0;
 	margin-right: 0;
 	font-weight: bold;
+}
+
+.myTheme .responsiveFont[width-range~="0px-25px"] {
+	font-size: 70%;
+}
+
+.myTheme .responsiveFont[width-range~="26-50px"] {
+	font-size: 80%;
+}
+
+.myTheme .responsiveFont[width-range~="51-75px"] {
+	font-size: 100%;
+}
+
+.myTheme .responsiveFont[width-range~="76-100px"] {
+	color: #00FF00;
+	font-size: 120%;
+}
+
+.myTheme .responsiveFont[width-range~="101px-200px"] {
+	color: #00FF00;
+	font-size: 120%;
+}
+
+.myTheme .responsiveFont[width-range~="201px-300px"] {
+	color: #00FF00;
+	font-size: 130%;
+}
+
+.myTheme .responsiveFont[width-range~="301px-400px"] {
+	color: #00FF00;
+	font-size: 140%;
+}
+
+.myTheme .responsiveFont[width-range~="401px-500px"] {
+	color: #00FF00;
+	font-size: 150%;
+}
+
+.myTheme .responsiveFont[width-range~="501px-600px"] {
+	color: #00FF00;
+	font-size: 160%;
+}
+
+.myTheme .responsiveFont[width-range~="601px-700px"] {
+	color: #00FF00;
+	font-size: 170%;
+}
+
+.myTheme .responsiveFont[width-range~="701px-800px"] {
+	color: #00FF00;
+	font-size: 180%;
+}
+
+.myTheme .responsiveFont[width-range~="801px-900px"] {
+	font-size: 190%;
+}
+
+.myTheme .responsiveFont[width-range~="901px-"] {
+	font-size: 200%;
 }

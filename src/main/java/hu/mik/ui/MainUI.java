@@ -7,6 +7,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.ejt.vaadin.sizereporter.ComponentResizeEvent;
+import com.ejt.vaadin.sizereporter.ComponentResizeListener;
+import com.ejt.vaadin.sizereporter.SizeReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -15,12 +18,14 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
@@ -33,6 +38,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
@@ -88,7 +94,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private MessagesView messageView;
 	private VerticalLayout sideMenu;
 	private VerticalLayout oldSideMenu;
-	private HorizontalLayout base=new HorizontalLayout();
+	private VerticalLayout base=new VerticalLayout();
 	private TextField nameSearchTf;
 	
 	private SecurityContext securityContext=SecurityContextHolder.getContext();
@@ -99,27 +105,29 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			user=userService.findUserByUsername(securityContext.getAuthentication().getName());
 			session.setAttribute("SecurityContext", securityContext);
 			onlineUsers.add(user);
-			sideMenu=createSideMenu(user);
 			oldSideMenu=sideMenu;
-			final VerticalLayout workingSpace=new VerticalLayout();
-			final HorizontalLayout upperMenu=new HorizontalLayout();	
+			final VerticalLayout workingSpace=new VerticalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
 			workingSpace.setSizeFull();
 			base.setSizeFull();
+			base.setMargin(false);
+			Label title=new Label("Social");
+			title.addStyleName("h1");
 			final CssLayout navigationBar=createNaviBar();
-			upperMenu.addComponent(navigationBar);
 			viewDisplay=new Panel();
 			viewDisplay.setSizeFull();
-			workingSpace.addComponent(upperMenu);
-			workingSpace.addComponent(viewDisplay);
-			workingSpace.setExpandRatio(upperMenu, 1);
-			workingSpace.setExpandRatio(viewDisplay, 9);
-			workingSpace.setStyleName(ThemeConstants.BORDERED_THICK);
-			base.addComponent(sideMenu);
-			base.addComponent(workingSpace);
-			base.setExpandRatio(sideMenu, 15);
-			base.setExpandRatio(workingSpace, 85);
-			base.setMargin(false);
+			viewDisplay.setId("viewDisplay");
+			base.setId("base");
+			navigationBar.setId("navigationBar");
+			base.addComponent(title);
+			base.addComponent(navigationBar);
+			base.addComponent(viewDisplay);
+			base.setExpandRatio(title, 5);
+			base.setExpandRatio(navigationBar, 15);
+			base.setExpandRatio(viewDisplay, 80);
+			base.setStyleName(ThemeConstants.BORDERED_THICK);
+
+			Responsive.makeResponsive(base);
 			setContent(base);
 		}
 
@@ -138,11 +146,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private boolean viewChangeListener(ViewChangeEvent event){
 		if(event.getViewName().equals(MessagesView.NAME)){
 			this.messageView=(MessagesView) event.getNewView();
-			if(!sideUser.equals(user))
-				changeSideMenu(user);
+//			if(!sideUser.equals(user))
+//				changeSideMenu(user);
 		}else if(event.getViewName().equals(UserListView.NAME)){
-			if(!sideUser.equals(user))
-				changeSideMenu(user);
+//			if(!sideUser.equals(user))
+//				changeSideMenu(user);
 		}else{
 			MessageBroadcastService.unregister(this, user.getUsername());
 		}
@@ -178,46 +186,39 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		this.sideUser=sideUser;
 		this.user=userService.findUserById(user.getId());
 		VerticalLayout sideMenu=new VerticalLayout();
-		sideMenu.addStyleName(ThemeConstants.SIDE_MENU);		
+		sideMenu.addStyleName(ThemeConstants.SIDE_MENU);
+		sideMenu.addStyleName(ThemeConstants.RESPONSIVE_SIDE_MENU);
 		VerticalLayout header=new VerticalLayout();
 		VerticalLayout menu=new VerticalLayout();
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		menu.addStyleName("sideMenuMenu");
 		menu.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		menu.setWidth("100%");
+		menu.setSpacing(false);
+		menu.setMargin(false);
 		header.setSpacing(false);
 		header.setMargin(false);
 		header.addStyleName(ThemeConstants.SIDE_HEADER);
 		sideMenu.addComponent(header);
 		sideMenu.addComponent(menu);
-		sideMenu.setExpandRatio(header, 3);
-		sideMenu.setExpandRatio(menu, 7);
-		sideMenu.setSpacing(true);
+		sideMenu.setExpandRatio(header, 25);
+		sideMenu.setExpandRatio(menu, 75);
+		sideMenu.setSpacing(false);		
 		sideMenu.setMargin(false);
 		sideMenu.setSizeFull();
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+sideUser.getImageName()))); 
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		image.setWidth("60%");
+		if(sideUser.getId()==user.getId()){
+			image.setId("profilePicture");
+			image.addClickListener(this::profileImageClickListener);
+		}
 		Label name=new Label();
 		name.setValue(sideUser.getUsername());
-		name.addStyleName(ValoTheme.LABEL_H2);
 		name.addStyleName(ThemeConstants.BLUE_TEXT);
+		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		header.addComponent(name);
 		header.addComponent(image);	
-		if(sideUser.getId()==user.getId()){
-			MenuBar menuBar=new MenuBar();
-			header.addComponent(menuBar);
-			MenuItem options=menuBar.addItem("Options", null);
-			menuBar.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
-			menuBar.addStyleName(ThemeConstants.BLUE_TEXT);
-			MenuItem changePicture=options.addItem("Change picture", new Command() {
-				
-				@Override
-				public void menuSelected(MenuItem selectedItem) {
-					getNavigator().navigateTo(PictureUploadView.NAME);
-					
-				}
-			});
-		}
 		
 		if(sideUser.getId()!=user.getId()){
 			if(friendshipService.findOne(user.getId(), sideUser.getId())==null){
@@ -276,48 +277,47 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	public CssLayout createNaviBar(){
 		CssLayout naviBar=new CssLayout();
-		naviBar.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+		naviBar.setWidth("100%");
+		naviBar.addLayoutClickListener(this::naviBarClickListener);
+		Responsive.makeResponsive(naviBar);
+		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))); 
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
+		image.setId("profilePicture");
+		image.addClickListener(this::profileImageClickListener);
+		naviBar.addComponent(image);
+		Label name=new Label();
+		name.setValue(user.getUsername());
+		name.setId("username");
+//		name.addStyleName(ThemeConstants.BLUE_TEXT);
+		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+		naviBar.addComponent(name);
+		
 		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
 		for(GrantedAuthority authority : auth){
 			if(authority.getAuthority().equals("admin")){
-				Button adminButton=new Button("Admin");
-				adminButton.addClickListener(this::adminClickListener);
-				adminButton.setStyleName(ValoTheme.BUTTON_SMALL);
-				adminButton.addStyleName(ThemeConstants.BLUE_TEXT);
-				naviBar.addComponent(adminButton);
-				break;
+				Label lblAdmin=new Label("Admin");
+				naviBar.addComponent(lblAdmin);
 			}
 		}
-		Button mainButton=new Button("Main");
-		mainButton.addClickListener(this::mainClickListener);
-		mainButton.setStyleName(ValoTheme.BUTTON_SMALL);
-		mainButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		naviBar.addComponent(mainButton);
-		naviBar.addComponent(createNavigationButton("Messages", MessagesView.NAME));
-		Button logoutButton=new Button("Logout");
-		logoutButton.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getPage().setLocation("/logout");
-				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
-//				session.invalidate();
-				session=null;
-			}
-		});		
+		Label lblMain=new Label("Main");
+//		lblMain.setHeight("100%");
+		naviBar.addComponent(lblMain);
+		Label lblMessages=new Label("Messages");
+		naviBar.addComponent(lblMessages);
+		Label lblLogout=new Label("Logout");
+		naviBar.addComponent(lblLogout);
 		nameSearchTf=new TextField();
 		nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
 		nameSearchTf.setValue("Search for a user...");
 		nameSearchTf.addFocusListener(this::nameSearchFocusListener);
-		naviBar.addComponent(nameSearchTf);
 		Button namesearchButton=new Button("Search", this::nameSearchClickListener);
 		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
 		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(namesearchButton);
-		
-		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
-		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		naviBar.addComponent(logoutButton);
+		naviBar.addComponent(nameSearchTf);
+//		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
+//		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
+//		naviBar.addComponent(logoutButton);
 		return naviBar;
 	}
 	
@@ -330,14 +330,40 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	public void changeSideMenu(User user){
-		VerticalLayout userSideMenu=createSideMenu(user);
-		base.replaceComponent(oldSideMenu, userSideMenu);
-		oldSideMenu=userSideMenu;
+//		VerticalLayout userSideMenu=createSideMenu(user);
+//		base.replaceComponent(oldSideMenu, userSideMenu);
+//		oldSideMenu=userSideMenu;
+	}
+	private void naviBarClickListener(LayoutClickEvent event) {
+
+		if(event.getClickedComponent()!=null && event.getClickedComponent().getClass().equals(Label.class)) {
+			Label lblClicked=(Label) event.getClickedComponent();
+			switch (lblClicked.getValue()) {
+			case "Main":
+				getNavigator().navigateTo(MainView.NAME);
+				break;
+			case "Messages":
+				getNavigator().navigateTo(MessagesView.NAME);
+				break;
+			case "Logout":
+				getPage().setLocation("/logout");
+				MainUI.getOnlineUsers().remove((User)session.getAttribute("User"));
+				session=null;
+			case "Admin":
+				getNavigator().navigateTo(AdminView.NAME);
+				break;
+			}
+		}
+		
 	}
 	
 	private void mainClickListener(Button.ClickEvent event){
-		changeSideMenu(user);
+//		changeSideMenu(user);
 		getNavigator().navigateTo(MainView.NAME);
+	}
+	
+	private void profileImageClickListener(com.vaadin.event.MouseEvents.ClickEvent event) {
+		getNavigator().navigateTo(PictureUploadView.NAME);
 	}
 	
 	private void friendRequestClickListener(Button.ClickEvent event){
@@ -390,7 +416,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	public void refreshSideMenu(){
 		int id=sideUser.getId();
 		sideUser=userService.findUserById(id);
-		changeSideMenu(sideUser);
+//		changeSideMenu(sideUser);
 	}
 	
 	private void friendRequestsClickListener(Button.ClickEvent event){
@@ -416,7 +442,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	public void changeToUser(User user){
 		getNavigator().navigateTo(MainView.NAME+"/"+user.getId());
 //		((MainView)getNavigator().getCurrentView()).changeToUser(user);
-		changeSideMenu(user);	
+//		changeSideMenu(user);	
 	}
 	
 }

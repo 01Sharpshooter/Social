@@ -121,8 +121,8 @@ public class MessagesView extends VerticalLayout implements View {
 		addComponent(base);
 		base.addComponent(userListPanel);
 		base.addComponent(chat);			
-		base.setExpandRatio(userListPanel, 3);
-		base.setExpandRatio(chat, 7);
+		base.setExpandRatio(userListPanel, 15);
+		base.setExpandRatio(chat, 85);
 		
 		if(friendList.size()>0){
 			for(User user: friendList){	
@@ -149,6 +149,7 @@ public class MessagesView extends VerticalLayout implements View {
 		image.setWidth("80%");
 		userDiv.addComponent(image);
 		Button button=new Button(user.getUsername(),this::userBtnClickListener);
+		button.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		button.setSizeFull();
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.setId(user.getId().toString());

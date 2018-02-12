@@ -13,6 +13,10 @@ public class ThemeConstants {
 	
 	public static final String BLUE_TEXT="blueText";
 	
+	public static final String RESPONSIVE_FONT="responsiveFont";
+	
+	public static final String RESPONSIVE_SIDE_MENU="responsiveSideMenu";
+	
 	public static final String SIDE_MENU="sideMenu";
 	
 	public static final String SIDE_HEADER="sideHeader";
