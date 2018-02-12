@@ -66,9 +66,9 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 	}
 	
 	public void imageChange(){
-//		((MainUI)getUI()).refreshSideMenu();
-//		this.editorLayout.setVisible(!edit);
-//		upload.setVisible(true);
+		((MainUI)getUI()).refreshImage();
+		this.editorLayout.setVisible(!edit);
+		upload.setVisible(true);
 	}
 
 	public void editImage(ByteArrayOutputStream ops) {

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+import com.vaadin.event.ContextClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
@@ -20,6 +21,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -101,6 +103,7 @@ public class MessagesView extends VerticalLayout implements View {
 		base.setSizeFull();
 		
 		userList=new VerticalLayout();	
+		userList.setId("userListPanelMessages");
 //		userList.addStyleName(ThemeConstants.BORDERED);
 		
 		userListPanel.setSizeFull();
@@ -129,7 +132,6 @@ public class MessagesView extends VerticalLayout implements View {
 				if(user!=this.sender){
 					HorizontalLayout userDiv=createUserDiv(user);
 					userList.addComponent(userDiv);	
-					userDiv=createUserDiv(user);
 				}
 			}
 		}else{
@@ -148,14 +150,19 @@ public class MessagesView extends VerticalLayout implements View {
 		image.setHeight("80%");
 		image.setWidth("80%");
 		userDiv.addComponent(image);
+		userDiv.setId(user.getId().toString());
+		userDiv.addLayoutClickListener(this::userDivClickListener);
+		Label lblName=new Label(user.getUsername());	
+		lblName.setId(user.getId().toString());
+		userDiv.addComponent(lblName);
 		Button button=new Button(user.getUsername(),this::userBtnClickListener);
-		button.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-		button.setSizeFull();
-		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-		button.setId(user.getId().toString());
-		userDiv.addComponent(button);
+//		button.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+//		button.setSizeFull();
+//		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+//		button.setId(user.getId().toString());
+//		userDiv.addComponent(button);
 		userDiv.setExpandRatio(image, 1);
-		userDiv.setExpandRatio(button, 2);
+		userDiv.setExpandRatio(lblName, 2);
 		return userDiv;
 		
 	}
@@ -212,6 +219,24 @@ public class MessagesView extends VerticalLayout implements View {
 		textField.focus();
 	}
 	
+	private void userDivClickListener(LayoutClickEvent event) {
+//		messagesLayout.setCaption(event.getButton().getCaption());
+		event.getComponent().addStyleName(ThemeConstants.BORDERED_GREEN);
+		textWriter.setEnabled(true);
+		messagesLayout.removeAllComponents();
+		receiverId=Integer.parseInt(event.getComponent().getId());
+		receiver=userService.findUserById(receiverId);
+		messagesList=messageService.findAllByUserIDs(messageNumberAtOnce, senderId, receiverId);
+		fillMessages();
+		messagesPanel.setScrollTop(scroll);
+		MessageBroadcastService.register((MainUI)this.getUI(), sender.getUsername());
+		if(prevUserDivId!=-1 && prevUserDivId!=userList.getComponentIndex(event.getComponent())){
+			userList.getComponent(prevUserDivId).removeStyleName(ThemeConstants.BORDERED_GREEN);			
+		}
+		prevUserDivId=userList.getComponentIndex(event.getComponent());
+		textField.focus();
+	}
+	
 	public void fillMessages() {
 		messagesList=messageService.findAllByUserIDs(20, senderId, receiverId);
 		if(messagesList!=null){
@@ -221,19 +246,19 @@ public class MessagesView extends VerticalLayout implements View {
 					message=messagesList.get(i);				
 					if(message.getSenderId()==this.senderId){
 						scroll+=scrollGrowth;
-						Label newMessage=new Label(message.getMessage());
+						Label newMessage=new Label("<span id=\"messageSpan\">"+message.getMessage()+"</span>", ContentMode.HTML);
 						newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 						newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
-						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE);			
+						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);			
 						messagesLayout.addComponent(newMessage);
 //						panel.setScrollTop(scroll);
 					}
 					else{
 						scroll+=scrollGrowth;
-						Label newMessage=new Label(message.getMessage());
+						Label newMessage=new Label("<span id=\"messageSpan\">"+message.getMessage()+"</span>", ContentMode.HTML);
 						newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 						newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
-						newMessage.addStyleName(ThemeConstants.BORDERED);			
+						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);			
 						messagesLayout.addComponent(newMessage);
 						messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 //						panel.setScrollTop(scroll);
@@ -266,10 +291,10 @@ public class MessagesView extends VerticalLayout implements View {
 			MessageBroadcastService.sendMessage(message.getMessage(), senderId, receiver.getUsername());
 //			messagesList.add(message);
 			scroll+=scrollGrowth;
-			Label newMessage=new Label(message.getMessage());
+			Label newMessage=new Label("<span id=\"messageSpan\">"+message.getMessage()+"</span>", ContentMode.HTML);
 			newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 			newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE);			
+			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);			
 			messagesLayout.addComponent(newMessage);
 			messagesPanel.setScrollTop(scroll);
 		}
@@ -278,10 +303,10 @@ public class MessagesView extends VerticalLayout implements View {
 
 	public void receiveMessage(String message2, int senderId) {
 		if(senderId==receiverId){
-			Label newMessage=new Label(message2);
+			Label newMessage=new Label("<span id=\"messageSpan\">"+message2+"</span>", ContentMode.HTML);
 			newMessage.setHeight(messagesPanel.getHeight()/6, messagesPanel.getHeightUnits());
 			newMessage.setWidth(messagesPanel.getWidth()/2, messagesPanel.getWidthUnits());
-			newMessage.addStyleName(ThemeConstants.BORDERED);			
+			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);			
 			messagesLayout.addComponent(newMessage);
 			messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 			messagesPanel.setScrollTop(scroll);

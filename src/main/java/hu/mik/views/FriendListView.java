@@ -95,7 +95,7 @@ public static final String NAME="FriendListView";
 	
 	
 	private void userNameListener(Button.ClickEvent event){
-		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));
+//		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));
 	}
 
 	

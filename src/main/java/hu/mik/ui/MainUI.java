@@ -92,11 +92,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private User sideUser;
+	private Image naviBarImage;
 	private MessagesView messageView;
-	private VerticalLayout sideMenu;
-	private VerticalLayout oldSideMenu;
 	private VerticalLayout base=new VerticalLayout();
 	private TextField nameSearchTf;
+	private CssLayout navigationBar;
 	
 	private SecurityContext securityContext=SecurityContextHolder.getContext();
 	
@@ -106,7 +106,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			user=userService.findUserByUsername(securityContext.getAuthentication().getName());
 			session.setAttribute("SecurityContext", securityContext);
 			onlineUsers.add(user);
-			oldSideMenu=sideMenu;
 			final VerticalLayout workingSpace=new VerticalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
 			workingSpace.setSizeFull();
@@ -114,7 +113,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			base.setMargin(false);
 			Label title=new Label("Social");
 			title.addStyleName("h1");
-			final CssLayout navigationBar=createNaviBar();
+			navigationBar=createNaviBar();
 			viewDisplay=new Panel();
 			viewDisplay.setSizeFull();
 			viewDisplay.setId("viewDisplay");
@@ -281,19 +280,19 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		naviBar.setWidth("100%");
 		naviBar.addLayoutClickListener(this::naviBarClickListener);
 		Responsive.makeResponsive(naviBar);
-		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))); 
-		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		image.setId("profilePicture");
-		image.addClickListener(this::profileImageClickListener);
-		naviBar.addComponent(image);
+		naviBarImage=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))); 
+		naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
+		naviBarImage.setId("profilePicture");
+		naviBarImage.addClickListener(this::profileImageClickListener);
+		naviBar.addComponent(naviBarImage);
 		Label name=new Label();
 		name.setValue(user.getUsername());
 		name.setId("username");
 //		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		naviBar.addComponent(name);
-		image=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
-		image.setId("menuIcon");
-		naviBar.addComponent(image);
+		Image naviBarIcon=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
+		naviBarIcon.setId("menuIcon");
+		naviBar.addComponent(naviBarIcon);
 		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
 		for(GrantedAuthority authority : auth){
 			if(authority.getAuthority().equals("admin")){
@@ -369,7 +368,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			.withCaption("Request sent")
 			.withMessage("Request has been sent to "+sideUser.getUsername())
 			.open();
-		refreshSideMenu();
+		refreshImage();
 	}
 	
 	private void acceptRequestClickListener(Button.ClickEvent event){
@@ -382,12 +381,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		fs.setUserId(sideUser.getId());
 		fs.setFriendId(user.getId());
 		friendshipService.saveFriendship(fs);
-		refreshSideMenu();
+		refreshImage();
 	}
 	
 	private void rejectRequestClickListener(Button.ClickEvent event){
 		friendRequestService.deleteFriendRequest(sideUser.getId(), user.getId());
-		refreshSideMenu();
+		refreshImage();
 	}
 	
 	private void removeFriendClickListener(Button.ClickEvent event){
@@ -398,7 +397,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		.withCaption("User removed from friends")
 		.withMessage(sideUser.getUsername()+" has been removed from your friends.")
 		.open();
-		refreshSideMenu();
+		refreshImage();
 	}
 	
 	private void friendListClickListener(Button.ClickEvent event){
@@ -406,10 +405,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 //		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
 	}
 	
-	public void refreshSideMenu(){
-		int id=sideUser.getId();
-		sideUser=userService.findUserById(id);
-//		changeSideMenu(sideUser);
+	public void refreshImage(){		
+		User changedUser=userService.findUserById(this.user.getId());
+		user.setImageName(changedUser.getImageName());
+		((Image)navigationBar.getComponent(0)).setSource(new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
 	}
 	
 	private void friendRequestsClickListener(Button.ClickEvent event){
@@ -428,10 +427,5 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		((TextField)event.getComponent()).clear();
 	}
 	
-	public void changeToUser(User user){
-		getNavigator().navigateTo(MainView.NAME+"/"+user.getId());
-//		((MainView)getNavigator().getCurrentView()).changeToUser(user);
-//		changeSideMenu(user);	
-	}
 	
 }

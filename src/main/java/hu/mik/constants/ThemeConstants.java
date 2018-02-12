@@ -33,7 +33,9 @@ public class ThemeConstants {
 	
 	public static final String WRONG_FIELD="wrongField";
 
-	public static final String CHAT_MESSAGE = "chatMessage";
+	public static final String CHAT_MESSAGE_SENT = "chatMessageSent";
+	
+	public static final String CHAT_MESSAGE_RECEIVED = "chatMessageReceived";
 	
 	public static final String SYSTEM_IMAGE_MENU_ICON="images/System/menu-icon.png";
 	
