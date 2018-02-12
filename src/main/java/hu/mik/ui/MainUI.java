@@ -67,6 +67,7 @@ import hu.mik.views.FriendListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 import hu.mik.views.PictureUploadView;
+import hu.mik.views.ProfileView;
 import hu.mik.views.RequestsView;
 import hu.mik.views.UserListView;
 
@@ -123,8 +124,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			base.addComponent(navigationBar);
 			base.addComponent(viewDisplay);
 			base.setExpandRatio(title, 5);
-			base.setExpandRatio(navigationBar, 15);
-			base.setExpandRatio(viewDisplay, 80);
+			base.setExpandRatio(navigationBar, 10);
+			base.setExpandRatio(viewDisplay, 85);
 			base.setStyleName(ThemeConstants.BORDERED_THICK);
 
 			Responsive.makeResponsive(base);
@@ -344,6 +345,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 				session=null;
 			case "Admin":
 				getNavigator().navigateTo(AdminView.NAME);
+				break;
+			default:
+				getNavigator().navigateTo(ProfileView.NAME+"/"+user.getId());
 				break;
 			}
 		}

@@ -12675,6 +12675,18 @@ div.v-layout.v-horizontal.v-widget {
 	font-weight: bold;
 }
 
+.myTheme #profileHeader {
+	text-align: center;
+}
+
+.myTheme #profileHeader .v-image {
+	height: 150px;
+}
+
+.myTheme #profileHeader .v-label {
+	text-align: center;
+}
+
 .myTheme .responsiveFont[width-range~="0px-25px"] {
 	font-size: 70%;
 }
@@ -12688,42 +12700,34 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .responsiveFont[width-range~="76-100px"] {
-	color: #00FF00;
 	font-size: 120%;
 }
 
 .myTheme .responsiveFont[width-range~="101px-200px"] {
-	color: #00FF00;
 	font-size: 120%;
 }
 
 .myTheme .responsiveFont[width-range~="201px-300px"] {
-	color: #00FF00;
 	font-size: 130%;
 }
 
 .myTheme .responsiveFont[width-range~="301px-400px"] {
-	color: #00FF00;
 	font-size: 140%;
 }
 
 .myTheme .responsiveFont[width-range~="401px-500px"] {
-	color: #00FF00;
 	font-size: 150%;
 }
 
 .myTheme .responsiveFont[width-range~="501px-600px"] {
-	color: #00FF00;
 	font-size: 160%;
 }
 
 .myTheme .responsiveFont[width-range~="601px-700px"] {
-	color: #00FF00;
 	font-size: 170%;
 }
 
 .myTheme .responsiveFont[width-range~="701px-800px"] {
-	color: #00FF00;
 	font-size: 180%;
 }
 

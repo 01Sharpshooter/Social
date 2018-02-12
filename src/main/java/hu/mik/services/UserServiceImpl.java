@@ -58,12 +58,7 @@ public class UserServiceImpl implements UserService{
 	}
 	@Override
 	public User findUserById(int id) {
-		if(userDao.findById(id)!=null){
-			return userDao.findById(id);
-		}
-		else{
-			return null;
-		}
+		return userDao.findById(id);
 	}
 	@Override
 	public List<User> findAllLike(String username) {

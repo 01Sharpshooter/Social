@@ -177,7 +177,15 @@
 	    margin-right: 0;
 	    font-weight: bold;	
   	}
-  	
+  	#profileHeader{
+  		text-align: center;
+  		.v-image{
+  			height:150px;
+  		}
+  		.v-label{
+  			text-align: center;
+  		}
+  	}
   	.responsiveFont[width-range~="0px-25px"] {
    		font-size: 70%;
 	}
