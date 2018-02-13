@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
@@ -16,6 +17,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -58,6 +60,7 @@ public class UserListView extends VerticalLayout implements View{
 		rows.addComponent(row);
 		panel.setCaption("Users with similar names:");
 		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
+		row.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		userList=userService.findAllLike(username);
 		
 		int i=0;		
@@ -68,16 +71,21 @@ public class UserListView extends VerticalLayout implements View{
 						new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Button nameButton=new Button(user.getUsername(), this::userNameListener);
-				nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-				nameButton.setSizeFull();
+				Label lblName=new Label(user.getUsername());	
+//				lblName.setId(user.getId().toString());
+//				userDiv.addComponent(lblName);
+//				Button nameButton=new Button(user.getUsername(), this::userNameListener);
+//				nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+//				nameButton.setSizeFull();
 				userDiv=new HorizontalLayout();
 				userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 				userDiv.setHeight("100%");
 				userDiv.setWidth(panel.getWidth()/divsPerRow, panel.getWidthUnits());
 				userDiv.addComponent(image);
-				userDiv.addComponent(nameButton);
+				userDiv.addComponent(lblName);
+				userDiv.setId(user.getId().toString());
 				userDiv.addStyleName(ThemeConstants.BORDERED);
+				userDiv.addLayoutClickListener(this::layoutClickListener);
 				row.addComponent(userDiv);
 				if(i==divsPerRow){
 					row=new HorizontalLayout();
@@ -90,8 +98,8 @@ public class UserListView extends VerticalLayout implements View{
 		}
 	}
 	
-	private void userNameListener(Button.ClickEvent event){
-//		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));
+	private void layoutClickListener(LayoutClickEvent event){
+		((MainUI)getUI()).getNavigator().navigateTo(ProfileView.NAME+"/"+event.getComponent().getId());
 	}
 	
 }

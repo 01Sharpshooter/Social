@@ -103,8 +103,8 @@ public class MessagesView extends VerticalLayout implements View {
 		base.setSizeFull();
 		
 		userList=new VerticalLayout();	
-		userList.setId("userListPanelMessages");
-//		userList.addStyleName(ThemeConstants.BORDERED);
+//		userList.setId("userListPanelMessages");
+		userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		
 		userListPanel.setSizeFull();
 		userListPanel.setContent(userList);
@@ -155,7 +155,7 @@ public class MessagesView extends VerticalLayout implements View {
 		Label lblName=new Label(user.getUsername());	
 		lblName.setId(user.getId().toString());
 		userDiv.addComponent(lblName);
-		Button button=new Button(user.getUsername(),this::userBtnClickListener);
+//		Button button=new Button(user.getUsername(),this::userBtnClickListener);
 //		button.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 //		button.setSizeFull();
 //		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);

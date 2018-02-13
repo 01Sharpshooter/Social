@@ -30,7 +30,7 @@
 	#username:hover{
 		color:$green;
 	}
-	#userListPanelMessages{
+	.hoverGreenLayouts{
 		.v-layout:hover{
 			border: 1px solid $green;
   			border-radius:10px;
@@ -139,8 +139,9 @@
   	}
   
   	.chatMessageSent{  		
-  		text-align: right;
+  		text-align: left;
   		line-height:1.2;
+  		color:black;
   		#messageSpan{
   			border: 2px solid $blue;
   			background-color: $blue;
@@ -164,7 +165,8 @@
   			border-radius:4px;
   			box-shadow:3px 3px 3px $blue_shadow;
   			border:1px outset $blue;
-  			border-top-color:$light-blue;
+  			border-top:0px;
+  			border-left:0px;
   			padding-left:1px;
   			padding-right: 5px;
   			padding-bottom:2px;
@@ -214,6 +216,13 @@
   	}
   	#profileHeader{
   		text-align: center;
+  		width:100%;
+  		border: 2px solid $blue;
+  			background-color: $light-blue;
+  			border-radius:4px;
+  			box-shadow:3px 3px 3px $blue_shadow;
+  			border:1px outset $blue;
+  			padding-bottom:5px;
   		.v-image{
   			height:150px;
   		}

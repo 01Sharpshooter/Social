@@ -12527,7 +12527,7 @@ div.v-layout.v-horizontal.v-widget {
 	color: #00FF00;
 }
 
-.myTheme #userListPanelMessages .v-layout:hover {
+.myTheme .hoverGreenLayouts .v-layout:hover {
 	border: 1px solid #00FF00;
 	border-radius: 10px;
 	box-shadow: 2px 2px 2px #00FF00;
@@ -12636,8 +12636,9 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .chatMessageSent {
-	text-align: right;
+	text-align: left;
 	line-height: 1.2;
+	color: black;
 }
 
 .myTheme .chatMessageSent #messageSpan {
@@ -12664,7 +12665,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px #00b6cd;
 	border: 1px outset #00BFFF;
-	border-top-color: #eaf2ff;
+	border-top: 0px;
+	border-left: 0px;
 	padding-left: 1px;
 	padding-right: 5px;
 	padding-bottom: 2px;
@@ -12712,6 +12714,13 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #profileHeader {
 	text-align: center;
+	width: 100%;
+	border: 2px solid #00BFFF;
+	background-color: #eaf2ff;
+	border-radius: 4px;
+	box-shadow: 3px 3px 3px #00b6cd;
+	border: 1px outset #00BFFF;
+	padding-bottom: 5px;
 }
 
 .myTheme #profileHeader .v-image {

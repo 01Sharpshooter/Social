@@ -39,4 +39,6 @@ public class ThemeConstants {
 	
 	public static final String SYSTEM_IMAGE_MENU_ICON="images/System/menu-icon.png";
 	
+	public static final String HOVER_GREEN_LAYOUTS = "hoverGreenLayouts";
+	
 }
