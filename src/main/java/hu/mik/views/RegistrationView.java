@@ -68,7 +68,7 @@ public class RegistrationView extends VerticalLayout implements View {
 					success.setCaption("Passwords are not matching!");
 				}else{
 					success.setCaption("Successful registration!");
-					userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
+//					userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
 				}				
 			}
 		});

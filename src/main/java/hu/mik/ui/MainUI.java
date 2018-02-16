@@ -57,7 +57,9 @@ import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.Friendship;
 import hu.mik.beans.User;
-import hu.mik.beans.UserLdap;
+import hu.mik.beans.LdapUser;
+import hu.mik.constants.LdapConstants;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
@@ -67,7 +69,7 @@ import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
 import hu.mik.views.AdminView;
-import hu.mik.views.FriendListView;
+import hu.mik.views.ContactListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
 import hu.mik.views.PictureUploadView;
@@ -98,7 +100,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private Panel viewDisplay;
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
-	private UserLdap userLdap;
+	private LdapUser userLdap;
 	private User sideUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
@@ -117,12 +119,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			String userName=securityContext.getAuthentication().getName();
 			user=userService.findUserByUsername(userName);
 			userLdap=ldapService.findUserByUsername(userName);
-			System.out.println(userLdap.getFullName());
+			System.out.println(ldapService.findGroupByGroupName("users").getListOfMembers());
 			if(user==null) {
-				user=userService.registerUser(userName, "asd");
+				user=userService.registerUser(userName);
 			}
 			session.setAttribute("SecurityContext", securityContext);
-			session.setAttribute("LdapUserUsername", userLdap.getUsername());
+			session.setAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER, userLdap.getUsername());
 			onlineUsers.add(user);
 			final VerticalLayout workingSpace=new VerticalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
@@ -134,8 +136,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			Responsive.makeResponsive(title);
 			title.addStyleName(ThemeConstants.RESPONSIVE_FONT);			
 			title.addStyleName("h1");
-			navigationBar=createNaviBar();
 			dropDownMenu=createDropDownMenu();
+			navigationBar=createNaviBar();
 			viewDisplay=new Panel();
 			viewDisplay.setSizeFull();
 			viewDisplay.setId("viewDisplay");
@@ -168,6 +170,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
 		Label lblMain=new Label("Main");
 		dropDownMenu.addComponent(lblMain);
+		Label lblProfile=new Label("Profile");
+		dropDownMenu.addComponent(lblProfile);
 		Label lblMessages=new Label("Messages");
 		dropDownMenu.addComponent(lblMessages);
 		Label lblLogout=new Label("Logout");
@@ -243,15 +247,18 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		naviBar.addComponent(naviBarIcon);
 		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
 		for(GrantedAuthority authority : auth){
-			if(authority.getAuthority().equals("ROLE_ADMINS")){
+			if(authority.getAuthority().equals("ROLE_"+LdapConstants.GROUP_ADMIN_NAME.toUpperCase())){
 				Label lblAdmin=new Label("Admin");
 				naviBar.addComponent(lblAdmin);
+				dropDownMenu.addComponent(lblAdmin);
 			}
 		}
 		Label lblMain=new Label("Main");
 		naviBar.addComponent(lblMain);
 		Label lblMessages=new Label("Messages");
 		naviBar.addComponent(lblMessages);
+		Label lblContacts=new Label("Contacts");
+		naviBar.addComponent(lblContacts);
 		Label lblLogout=new Label("Logout");
 		naviBar.addComponent(lblLogout);
 		nameSearchTf=new TextField();
@@ -267,17 +274,24 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	private void naviBarClickListener(LayoutClickEvent event) {
-		if(event.getComponent().equals(dropDownMenu)) {
+		if(event.getComponent().equals(dropDownMenu) && event.getClickedComponent()!=null) {
 			changeDropDownVisibility();
 		}
 		if(event.getClickedComponent()!=null && event.getClickedComponent().getClass().equals(Label.class)) {
 			Label lblClicked=(Label) event.getClickedComponent();
+//			for(Component lbl:navigationBar) {
+//				lbl.removeStyleName(ThemeConstants.GREEN_HIGHLIGHT);
+//			}
+//			lblClicked.addStyleName(ThemeConstants.GREEN_HIGHLIGHT);
 			switch (lblClicked.getValue()) {
 			case "Main":
 				getNavigator().navigateTo(MainView.NAME);
 				break;
 			case "Messages":
 				getNavigator().navigateTo(MessagesView.NAME);
+				break;
+			case "Contacts":
+				getNavigator().navigateTo(ContactListView.NAME+"/"+userLdap.getUsername());
 				break;
 			case "Logout":
 				getPage().setLocation("/logout");
@@ -350,7 +364,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	}
 	
 	private void friendListClickListener(Button.ClickEvent event){
-		getNavigator().navigateTo(FriendListView.NAME+"/"+sideUser.getId());
+		getNavigator().navigateTo(ContactListView.NAME+"/"+sideUser.getId());
 //		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
 	}
 	

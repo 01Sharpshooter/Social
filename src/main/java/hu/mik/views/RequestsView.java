@@ -23,6 +23,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.User;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendRequestService;
@@ -67,8 +68,8 @@ public class RequestsView extends VerticalLayout implements View{
 		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 		
 		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
-		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
-		user=userService.findUserByUsername(context.getAuthentication().getName());
+		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+		user=userService.findUserByUsername(username);
 		
 		List<FriendRequest> requests=friendRequestService.findAllByRequestedId(user.getId());
 		

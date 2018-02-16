@@ -75,7 +75,7 @@ public class LoginUI extends UI{
 					String passWord=pwTF.getValue();
 					
 					if(IsvalidName(userName) && IsvalidPassword(passWord)){
-						User user=userService.findUserByUsername(userName);
+//						User user=userService.findUserByUsername(userName);
 //						if(user!=null){
 //							if(encService.comparePW(passWord, user.getPassword())){	
 								FormSender formSender=new FormSender();

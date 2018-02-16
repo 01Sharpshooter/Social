@@ -34,5 +34,10 @@ public class FriendRequestServiceImpl implements FriendRequestService{
 		friendRequestDao.deleteFriendRequest(requestorId, requestedId);
 		
 	}
+
+	@Override
+	public boolean IsAlreadyRequested(int requestorId, int requestedId) {
+		return friendRequestDao.IsAlreadyRequested(requestorId, requestedId);
+	}
 	
 }

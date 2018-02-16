@@ -32,6 +32,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.News;
 import hu.mik.beans.User;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.NewsService;
@@ -62,9 +63,9 @@ public class MainView extends VerticalLayout implements View{
 	@PostConstruct
 	public void init(){
 		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
-		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
-		if(context!=null){
-			user=userService.findUserByUsername(context.getAuthentication().getName());
+		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+		if(username!=null){
+			user=userService.findUserByUsername(username);
 		}
 		newsList=newsService.lastGivenNewsAll(20);
 		feed=createFeed(newsList);	
@@ -165,6 +166,7 @@ public class MainView extends VerticalLayout implements View{
 		Button nameButton=new Button(user.getUsername(), this::userNameListener);
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		nameButton.addStyleName(ValoTheme.LABEL_H1);
+		nameButton.setId(user.getUsername());
 		header.addComponent(nameButton);
 		Label message=new Label(news.getMessage());
 		message.setSizeFull();
@@ -182,9 +184,7 @@ public class MainView extends VerticalLayout implements View{
 	private void userNameListener(Button.ClickEvent event){
 //		((MainUI)getUI()).changeSideMenu(userService.findUserByUsername(
 //				event.getButton().getCaption()));
-		changeNews(newsService.lastGivenNewsUser(newsNumberAtOnce,
-				userService.findUserByUsername(event.getButton().getCaption())));
-		this.removeComponent(textWriter);
+		getUI().getNavigator().navigateTo(ProfileView.NAME+"/"+event.getButton().getId());
 	}
 	
 	private void changeNews(List<News> newsList){

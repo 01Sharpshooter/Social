@@ -64,4 +64,12 @@ public class FriendRequestDaoImpl implements FriendRequestDao{
 		
 	}
 
+	@Override
+	public boolean IsAlreadyRequested(int requestorId, int requestedId) {
+		if(findOne(requestorId, requestedId)==null) {
+			return false;
+		}
+		return true;
+	}
+
 }

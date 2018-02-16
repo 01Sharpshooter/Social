@@ -39,10 +39,6 @@ public class User {
 	private Integer id;
 	@Column(name="username")
 	private String username;
-	@Column(name="passwd")	
-	private String password;
-	@Column(name="enabled")
-	private int enabled;
 	@Column(name="image")
 	private String imageName;
 	@OneToMany(mappedBy="newsUser")
@@ -59,19 +55,6 @@ public class User {
 	}
 	public void setUsername(String username) {
 		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public int getEnabled() {
-		return enabled;
-	}
-	public void setEnabled(int enabled) {
-		this.enabled = enabled;
 	}
 	public String getImageName() {
 		return imageName;

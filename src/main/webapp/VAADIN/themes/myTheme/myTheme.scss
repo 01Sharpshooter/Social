@@ -37,6 +37,30 @@
   			box-shadow:2px 2px 2px $green;
 		}
 	}
+	.greenHighlight{
+		font-size:20px;
+		padding-top:18px;
+		color:white;
+		background-color: $green;	
+	}
+	.manyUserLayout{
+/* 		font-size:18px; */
+		text-align: left;
+/* 		height: 100%; */
+		.v-horizontallayout{
+			width:25%;
+		}
+	}
+	.manyUserLayout[width-range~="451px-768px"]{
+		.v-horizontallayout{
+			width:50%;
+		}
+	}
+	.manyUserLayout[width-range~="0-450px"]{
+		.v-horizontallayout{
+			width:100%;
+		}
+	}
 	
 	#dropDownMenu{
 		position:absolute;
@@ -93,7 +117,7 @@
 			font-size:20px;
 			padding-top:18px;
 			color:white;
-			background-color: $green;			
+			background-color: $green;	
 		}
 		.v-button{
 			float:right;

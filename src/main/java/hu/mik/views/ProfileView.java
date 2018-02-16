@@ -29,7 +29,9 @@ import com.vaadin.ui.VerticalLayout;
 import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.User;
-import hu.mik.beans.UserLdap;
+import hu.mik.beans.LdapUser;
+import hu.mik.constants.StringConstants;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendRequestService;
@@ -43,6 +45,9 @@ public class ProfileView extends VerticalLayout implements View{
 	public static final String NAME="profile";
 	
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
+	private User dbSessionUser;
+	private String profileUsername;
+	private User dbProfileUser;
 	
 	@Autowired
 	UserService userService;
@@ -53,25 +58,27 @@ public class ProfileView extends VerticalLayout implements View{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if(event.getParameters().length()>0){
-			String ldapSessionUsername=(String) session.getAttribute("LdapUserUsername");
-			UserLdap ldapSessionUser=ldapService.findUserByUsername(ldapSessionUsername);
+			String ldapSessionUsername=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+			dbSessionUser=userService.findUserByUsername(ldapSessionUsername);
 			String parameters[]=event.getParameters().split("/");
-			String profileUsername=parameters[0];
-			UserLdap ldapProfileUser=ldapService.findUserByUsername(profileUsername);
-			User dbUser=userService.findUserByUsername(profileUsername);
+			profileUsername=parameters[0];
+			LdapUser ldapProfileUser=ldapService.findUserByUsername(profileUsername);
+			dbProfileUser=userService.findUserByUsername(profileUsername);
 			if(ldapProfileUser==null) {
 				Label lblMissing=new Label("Sorry, we could not find the person you were looking for.");
 				this.addComponent(lblMissing);
 			}else {
 				CssLayout header=new CssLayout();
-				CssLayout headerButtonList=new CssLayout();
-				Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+dbUser.getImageName())));
+				CssLayout headerButtonList=createHeaderBtnList();
+				
+				Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+dbProfileUser.getImageName())));
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName=new Label(ldapProfileUser.getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
 				header.setId("profileHeader");
 				header.addComponent(image);
 				header.addComponent(lblName);
+				header.addComponent(headerButtonList);
 				FormLayout form=new FormLayout();
 				form.addStyleName(ThemeConstants.BORDERED);
 				form.setMargin(true);
@@ -97,7 +104,7 @@ public class ProfileView extends VerticalLayout implements View{
 					if(component.getClass().equals(TextField.class)) {
 						component.addStyleName(ThemeConstants.BLUE_TEXT);
 						component.setWidth("30%");	
-						if(profileUsername!=ldapSessionUsername) {
+						if(!profileUsername.equals(ldapSessionUsername)) {
 							component.setEnabled(false);
 						}
 					}
@@ -105,6 +112,23 @@ public class ProfileView extends VerticalLayout implements View{
 			}
 		}
 		
+	}
+	private CssLayout createHeaderBtnList() {
+		CssLayout headerButtonList=new CssLayout();
+		
+		Button btnFriendRequest=new Button();
+		
+		if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId())) {
+			btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);
+		}else {
+			btnFriendRequest.setCaption(StringConstants.BTN_CANCEL_REQUEST);
+		}
+		
+		btnFriendRequest.addClickListener(this::friendRequestClickListener);
+		
+		headerButtonList.addComponent(btnFriendRequest);
+		
+		return headerButtonList;
 	}
 	private String checkandSetIfNull(String text) {
 		if(text==null) {
@@ -114,16 +138,23 @@ public class ProfileView extends VerticalLayout implements View{
 	}
 	
 	private void friendRequestClickListener(Button.ClickEvent event){
-		FriendRequest fr=new FriendRequest();
-//		fr.setRequestorId(user.getId());
-//		fr.setRequestedId(sideUser.getId());
-		friendRequestService.saveFriendRequest(fr);
-		MessageBox.createInfo()
-			.withOkButton()
-			.withCaption("Request sent")
-//			.withMessage("Request has been sent to "+sideUser.getUsername())
-			.open();
-//		refreshImage();
+		if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId())) {
+			LdapUser ldapProfile=ldapService.findUserByUsername(profileUsername);
+			FriendRequest fr=new FriendRequest();
+			fr.setRequestorId(dbSessionUser.getId());
+			fr.setRequestedId(dbProfileUser.getId());
+			friendRequestService.saveFriendRequest(fr);
+			event.getButton().setCaption(StringConstants.BTN_CANCEL_REQUEST);
+			MessageBox.createInfo()
+				.withOkButton()
+				.withCaption("Request sent")
+				.withMessage("Request has been sent to "+ldapProfile.getFullName())
+				.open();
+		}else {
+			friendRequestService.deleteFriendRequest(dbSessionUser.getId(), dbProfileUser.getId());
+			event.getButton().setCaption(StringConstants.BTN_FRIEND_REQUEST);
+		}
+
 	}
 	
 }

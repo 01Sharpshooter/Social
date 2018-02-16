@@ -93,7 +93,7 @@ public class RegistrationUI extends UI{
 						layout.addComponent(success);
 						Link link=new Link("Login", new ExternalResource("/login"));
 						layout.addComponent(link);
-						userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
+//						userService.registerUser(nameTF.getValue(), encService.encryptPw(pwTF.getValue()));					
 					}				
 				}
 			});

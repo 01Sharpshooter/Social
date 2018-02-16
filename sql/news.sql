@@ -4,3 +4,6 @@ alter table t_news
 add constraint fk_news_user foreign key (user_id) references t_user(id);
 
 create sequence s_news;
+
+drop table t_news;
+drop sequence s_news;

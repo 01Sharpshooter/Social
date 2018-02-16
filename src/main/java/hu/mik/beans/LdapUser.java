@@ -6,8 +6,10 @@ import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
-@Entry(base="ou=users,dc=social,dc=com", objectClasses= {"top", "inetOrgPerson", "person"})
-public class UserLdap {
+import hu.mik.constants.LdapConstants;
+
+@Entry(base=LdapConstants.OU_USERS, objectClasses= {"top", "inetOrgPerson", "person"})
+public class LdapUser {
 	@Id
 	private Name id;
 	

@@ -10,6 +10,8 @@ import hu.mik.beans.User;
 public interface UserDao{
 	public User save(User user, Role role);
 	
+	public User save(User user);
+	
 	public boolean takenUsername(String username);
 	
 	public User findByUsername(String username);

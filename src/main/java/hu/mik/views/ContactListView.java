@@ -31,8 +31,8 @@ import hu.mik.ui.MainUI;
 
 @SuppressWarnings("serial")
 @ViewScope
-@SpringView(name=FriendListView.NAME)
-public class FriendListView extends VerticalLayout implements View{
+@SpringView(name=ContactListView.NAME)
+public class ContactListView extends VerticalLayout implements View{
 public static final String NAME="FriendListView";
 	
 	@Autowired
@@ -52,18 +52,17 @@ public static final String NAME="FriendListView";
 		this.addComponent(panel);
 		this.setMargin(false);
 		this.setSizeFull();
-		User sideUser=userService.findUserById(Integer.parseInt(event.getParameters()));
-//		((MainUI)getUI()).changeSideMenu(sideUser);
+		User dbUser=userService.findUserByUsername(event.getParameters());
 		
 		panel.setSizeFull();
 		panel.setContent(rows);
 		rows.setHeight("100%");
 		rows.setWidth("100%");
 		rows.addComponent(row);
-		panel.setCaption(sideUser.getUsername()+"'s "+"Friendlist:");
+//		panel.setCaption(sideUser.getUsername()+"'s "+"Friendlist:");
 		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 		
-		friendshipService.findAllByUserId(sideUser.getId()).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
+		friendshipService.findAllByUserId(dbUser.getId()).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
 		
 		int i=0;		
 		for(User user : friendList){
@@ -74,6 +73,7 @@ public static final String NAME="FriendListView";
 			image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 			Button nameButton=new Button(user.getUsername(), this::userNameListener);
 			nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+			nameButton.setId(user.getUsername());
 			nameButton.setSizeFull();
 			userDiv=new HorizontalLayout();
 			userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -95,7 +95,7 @@ public static final String NAME="FriendListView";
 	
 	
 	private void userNameListener(Button.ClickEvent event){
-//		((MainUI)getUI()).changeToUser(userService.findUserByUsername(event.getButton().getCaption()));
+		getUI().getNavigator().navigateTo(ProfileView.NAME+"/"+event.getButton().getId());
 	}
 
 	

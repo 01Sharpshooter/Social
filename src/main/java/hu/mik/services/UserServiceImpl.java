@@ -18,16 +18,14 @@ public class UserServiceImpl implements UserService{
 	
 
 	@Override
-	public User registerUser(String username, String passwd) {
+	public User registerUser(String username) {
 		User user=new User();
 		user.setUsername(username);
-		user.setPassword(passwd);
-		user.setEnabled(1);
 		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
 		Role role=new Role();
 		role.setUsername(username);
 		role.setRole(UserConstants.DEFAULT_ROLE);
-		return userDao.save(user, role);
+		return userDao.save(user);
 		
 	}
 	@Override

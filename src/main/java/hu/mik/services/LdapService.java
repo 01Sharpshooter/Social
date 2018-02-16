@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import hu.mik.beans.UserLdap;
+import hu.mik.beans.LdapGroup;
+import hu.mik.beans.LdapUser;
 
 public interface LdapService {
-	public UserLdap findUserByUsername(String username);
+	public LdapUser findUserByUsername(String username);
 	
-	public List<UserLdap> findByFullNameContaining(String fullName);
+	public List<LdapUser> findByFullNameContaining(String fullName);
+	
+	public LdapGroup findGroupByGroupName(String groupName);
 }

@@ -7,13 +7,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.mik.beans.LdapUser;
 import hu.mik.beans.Role;
 import hu.mik.beans.User;
+import hu.mik.constants.UserConstants;
+import hu.mik.services.LdapService;
 
 @Repository
 @Transactional(propagation=Propagation.REQUIRED)
@@ -21,12 +25,22 @@ public class UserDaoImplement implements UserDao{
 	
 	@PersistenceContext
 	private EntityManager em;
+	@Autowired
+	LdapService ldapService;
 
 	@Override
 	public User save(User user, Role role) {
 		if(findByUsername(user.getUsername())==null){
 			em.persist(user);
 			em.persist(role);
+		}
+		return findByUsername(user.getUsername());
+	}
+	
+	@Override
+	public User save(User user) {
+		if(findByUsername(user.getUsername())==null){
+			em.persist(user);
 		}
 		return findByUsername(user.getUsername());
 	}
@@ -43,13 +57,20 @@ public class UserDaoImplement implements UserDao{
 	}
 	@Override
 	public User findByUsername(String username) {
-		User user;
+		User user=null;
 		try {
 			user=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
 					.setParameter("username", username)
 					.getSingleResult();
 		} catch (Exception e) {
-			user=null;
+//			user=null;
+			LdapUser ldapUser=ldapService.findUserByUsername(username);
+			if(ldapUser!=null) {
+				user=new User();
+				user.setUsername(username);
+				user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
+				em.persist(user);			
+			}
 		}
 		return user;
 	}

@@ -18,6 +18,7 @@ import com.vaadin.event.selection.SingleSelectionEvent;
 import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
@@ -32,7 +33,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.ButtonRenderer;
 
+import hu.mik.beans.LdapGroup;
+import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
+import hu.mik.constants.LdapConstants;
+import hu.mik.constants.SystemConstants;
+import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 
 @SuppressWarnings("serial")
@@ -42,7 +48,9 @@ public class AdminView extends VerticalLayout implements View{
 	public static final String NAME="admin";
 
 	@Autowired
-	private UserService userService;
+	private UserService userService;	
+	@Autowired
+	private LdapService ldapService;
 	
 	private Grid<User> grid;
 	
@@ -51,6 +59,12 @@ public class AdminView extends VerticalLayout implements View{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void enter(ViewChangeEvent event) {
+		String username=(String) VaadinService.getCurrentRequest().getWrappedSession().getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+		LdapUser ldapUser=ldapService.findUserByUsername(username);
+		LdapGroup group=ldapService.findGroupByGroupName(LdapConstants.GROUP_ADMIN_NAME);
+		if(!group.getListOfMembers().contains(ldapUser.getId())) {
+			getUI().getNavigator().navigateTo(MainView.NAME);
+		}
 		HorizontalLayout filtersLayout=new HorizontalLayout();
 		VerticalLayout nameSearchLayout=new VerticalLayout();
 		nameSearchLayout.setMargin(false);
@@ -81,10 +95,10 @@ public class AdminView extends VerticalLayout implements View{
 			public void selectionChange(SingleSelectionEvent<String> event) {
 				if(event.getSource().getValue().equals("Enabled")){
 					((ListDataProvider<User>)grid.getDataProvider()).clearFilters();
-					((ListDataProvider<User>)grid.getDataProvider()).addFilterByValue(User::getEnabled, 1);
+//					((ListDataProvider<User>)grid.getDataProvider()).addFilterByValue(User::getEnabled, 1);
 				}else if(event.getSource().getValue().equals("Disabled")){
 					((ListDataProvider<User>)grid.getDataProvider()).clearFilters();
-					((ListDataProvider<User>)grid.getDataProvider()).addFilterByValue(User::getEnabled, 0);
+//					((ListDataProvider<User>)grid.getDataProvider()).addFilterByValue(User::getEnabled, 0);
 				}else{
 					((ListDataProvider<User>)grid.getDataProvider()).clearFilters();
 				}
@@ -104,27 +118,27 @@ public class AdminView extends VerticalLayout implements View{
 		grid=new Grid<User>(new ListDataProvider<>(userService.listAll()));
 		grid.addColumn(User::getId).setCaption("Id");
 		grid.addColumn(User::getUsername).setCaption("Username");
-		grid.addColumn(user -> {
-			if(user.getEnabled()==0){
-				return "Enable";
-			}
-			else{
-				return "Disable";
-			}
-		}, new ButtonRenderer<>(clickEvent->{
-			User user=clickEvent.getItem();
-			if(user.getEnabled()==1){
-				user.setEnabled(0);				
-			}else{
-				user.setEnabled(1);
-			}
-			userService.saveChanges(user);
-			String selected=radioButtonGroup.getSelectedItem().get();
-			radioButtonGroup.setSelectedItem("All");
-			radioButtonGroup.setSelectedItem(selected);
-			((ListDataProvider<User>)grid.getDataProvider()).refreshItem(user);
-		}))
-		.setCaption("Enable/Disable users");
+//		grid.addColumn(user -> {
+//			if(user.getEnabled()==0){
+//				return "Enable";
+//			}
+//			else{
+//				return "Disable";
+//			}
+//		}, new ButtonRenderer<>(clickEvent->{
+//			User user=clickEvent.getItem();
+//			if(user.getEnabled()==1){
+//				user.setEnabled(0);				
+//			}else{
+//				user.setEnabled(1);
+//			}
+//			userService.saveChanges(user);
+//			String selected=radioButtonGroup.getSelectedItem().get();
+//			radioButtonGroup.setSelectedItem("All");
+//			radioButtonGroup.setSelectedItem(selected);
+//			((ListDataProvider<User>)grid.getDataProvider()).refreshItem(user);
+//		}))
+//		.setCaption("Enable/Disable users");
 		grid.setSizeFull();
 		addComponent(filtersLayout);
 		addComponent(grid);

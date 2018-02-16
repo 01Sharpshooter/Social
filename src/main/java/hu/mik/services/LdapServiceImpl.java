@@ -5,24 +5,33 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hu.mik.beans.UserLdap;
+import hu.mik.beans.LdapGroup;
+import hu.mik.beans.LdapUser;
+import hu.mik.dao.LdapRepositoryGroups;
 import hu.mik.dao.LdapRepositoryUser;
 
 @Service
 public class LdapServiceImpl implements LdapService{
 	@Autowired
-	private LdapRepositoryUser ldapRepository;
-
+	private LdapRepositoryUser ldapRepositoryUsers;
+	@Autowired
+	private LdapRepositoryGroups ldapRepositoryGroups;
 
 	@Override
-	public UserLdap findUserByUsername(String username) {
-		return ldapRepository.findByUsername(username);
+	public LdapUser findUserByUsername(String username) {
+		return ldapRepositoryUsers.findByUsername(username);
 	}
 
 
 	@Override
-	public List<UserLdap> findByFullNameContaining(String fullName) {
-		return ldapRepository.findByFullNameContaining(fullName);
+	public List<LdapUser> findByFullNameContaining(String fullName) {
+		return ldapRepositoryUsers.findByFullNameContaining(fullName);
+	}
+
+
+	@Override
+	public LdapGroup findGroupByGroupName(String groupName) {
+		return ldapRepositoryGroups.findByGroupName(groupName);
 	}
 
 }

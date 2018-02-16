@@ -3,10 +3,10 @@ package hu.mik.dao;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import hu.mik.beans.UserLdap;
+import hu.mik.beans.LdapUser;
 
 @Repository
-public interface LdapRepositoryUser extends org.springframework.data.ldap.repository.LdapRepository<UserLdap>{
-	UserLdap findByUsername(String username);
-	List<UserLdap> findByFullNameContaining(String fullName);
+public interface LdapRepositoryUser extends org.springframework.data.ldap.repository.LdapRepository<LdapUser>{
+	LdapUser findByUsername(String username);
+	List<LdapUser> findByFullNameContaining(String fullName);
 }

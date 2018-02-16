@@ -36,6 +36,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendshipService;
@@ -86,8 +87,8 @@ public class MessagesView extends VerticalLayout implements View {
 	@PostConstruct
 	public void init(){
 		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
-		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
-		sender=userService.findUserByUsername(context.getAuthentication().getName());
+		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+		sender=userService.findUserByUsername(username);
 		
 		senderId=sender.getId();
 		

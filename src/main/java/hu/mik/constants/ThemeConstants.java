@@ -43,4 +43,7 @@ public class ThemeConstants {
 	
 	public static final String NAVIGATION_BAR_ICON = "navigationBarIcon";
 	
+	public static final String GREEN_HIGHLIGHT = "greenHighlight";
+	
+	public static final String MANY_USER_LAYOUT = "manyUserLayout";
 }

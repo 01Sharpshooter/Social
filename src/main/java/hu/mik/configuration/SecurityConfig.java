@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+import hu.mik.constants.LdapConstants;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -56,9 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		  .authoritiesByUsernameQuery("select username, role from t_role where username=?");
 		auth
 		.ldapAuthentication()
-			.userSearchBase("ou=users, dc=social, dc=com")
+			.userSearchBase(LdapConstants.OU_USERS)
 			.userSearchFilter("uid={0}")
-			.groupSearchBase("ou=groups, dc=social, dc=com")
+			.groupSearchBase(LdapConstants.OU_GROUPS)
 			.groupRoleAttribute("cn")
 			.groupSearchFilter("member={0}")
 			.contextSource()

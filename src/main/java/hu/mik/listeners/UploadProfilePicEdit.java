@@ -30,6 +30,7 @@ import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 
 import hu.mik.beans.User;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.UserService;
 import hu.mik.views.PictureUploadView;
@@ -89,8 +90,8 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener{
 	
 	public void receiveImage(InputStream ins) {
 		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
-		SecurityContext context=(SecurityContext) session.getAttribute("SecurityContext");
-		User user=userService.findUserByUsername(context.getAuthentication().getName());
+		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
+		User user=userService.findUserByUsername(username);
 		
 		String imageName=System.currentTimeMillis()+fileName;
 		File imageSave=new File(UserConstants.PROFILE_PICTURE_LOCATION+imageName);
