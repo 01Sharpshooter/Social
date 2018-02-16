@@ -23,9 +23,11 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
+import hu.mik.beans.UserLdap;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendshipService;
+import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
 
@@ -35,6 +37,9 @@ public class UserListView extends VerticalLayout implements View{
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	LdapService ldapService;
 	
 	private Panel panel=new Panel();
 	private HorizontalLayout row=new HorizontalLayout();
@@ -51,7 +56,8 @@ public class UserListView extends VerticalLayout implements View{
 		this.addComponent(panel);
 		this.setMargin(false);
 		this.setSizeFull();
-		List<User> userList=new ArrayList<>();
+//		List<User> userList=new ArrayList<>();
+		List<UserLdap> userListLdap=new ArrayList<>();
 		
 		panel.setSizeFull();
 		panel.setContent(rows);
@@ -61,17 +67,21 @@ public class UserListView extends VerticalLayout implements View{
 		panel.setCaption("Users with similar names:");
 		row.setHeight(panel.getHeight()/divsPerRow, panel.getHeightUnits());
 		row.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		userList=userService.findAllLike(username);
+//		userList=userService.findAllLike(username);
+		userListLdap=ldapService.findByFullNameContaining(username);
+		System.out.println(userListLdap);
+		
 		
 		int i=0;		
-		if(userList!=null){
-			for(User user : userList){
+		if(userListLdap!=null){
+			for(UserLdap user : userListLdap){
 				i++;
+				User DbUser=userService.findUserByUsername(user.getUsername());
 				Image image=new Image(null, new FileResource(
-						new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
+						new File(UserConstants.PROFILE_PICTURE_LOCATION+DbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName=new Label(user.getUsername());	
+				Label lblName=new Label(user.getFullName());	
 //				lblName.setId(user.getId().toString());
 //				userDiv.addComponent(lblName);
 //				Button nameButton=new Button(user.getUsername(), this::userNameListener);
@@ -83,7 +93,7 @@ public class UserListView extends VerticalLayout implements View{
 				userDiv.setWidth(panel.getWidth()/divsPerRow, panel.getWidthUnits());
 				userDiv.addComponent(image);
 				userDiv.addComponent(lblName);
-				userDiv.setId(user.getId().toString());
+				userDiv.setId(user.getUsername());
 				userDiv.addStyleName(ThemeConstants.BORDERED);
 				userDiv.addLayoutClickListener(this::layoutClickListener);
 				row.addComponent(userDiv);

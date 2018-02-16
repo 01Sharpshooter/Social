@@ -8,7 +8,7 @@ import hu.mik.beans.User;
 
 
 public interface UserDao{
-	public void save(User user, Role role);
+	public User save(User user, Role role);
 	
 	public boolean takenUsername(String username);
 	

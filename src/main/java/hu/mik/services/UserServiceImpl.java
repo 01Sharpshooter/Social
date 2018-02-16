@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService{
 	
 
 	@Override
-	public void registerUser(String username, String passwd) {
+	public User registerUser(String username, String passwd) {
 		User user=new User();
 		user.setUsername(username);
 		user.setPassword(passwd);
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService{
 		Role role=new Role();
 		role.setUsername(username);
 		role.setRole(UserConstants.DEFAULT_ROLE);
-		userDao.save(user, role);
+		return userDao.save(user, role);
 		
 	}
 	@Override

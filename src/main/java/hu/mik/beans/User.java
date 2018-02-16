@@ -39,7 +39,7 @@ public class User {
 	private Integer id;
 	@Column(name="username")
 	private String username;
-	@Column(name="passwd")
+	@Column(name="passwd")	
 	private String password;
 	@Column(name="enabled")
 	private int enabled;
@@ -47,8 +47,6 @@ public class User {
 	private String imageName;
 	@OneToMany(mappedBy="newsUser")
 	private List<News> news;
-	@Transient
-	private Image image;
 	
 	public Integer getId() {
 		return id;
@@ -86,16 +84,6 @@ public class User {
 	}
 	public void setNews(List<News> news) {
 		this.news = news;
-	}
-	public Image getImage() {
-		return image;
-	}
-	public void setImage(Image image) {
-		this.image = image;
-	}
-	@PostLoad
-	public void setUserImage(){
-		this.image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+this.getImageName())));
 	}
 	
 	

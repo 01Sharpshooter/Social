@@ -5,6 +5,7 @@ import org.vaadin.risto.formsender.FormSender;
 import org.vaadin.risto.formsender.widgetset.client.shared.Method;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
@@ -30,6 +31,7 @@ import hu.mik.services.UserService;
 
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path="/login")
+@Viewport("width=device-width,initial-scale=1")
 //@Widgetset("hu.mik.widgetset.WidgetSet")
 public class LoginUI extends UI{
 	@Autowired
@@ -74,8 +76,8 @@ public class LoginUI extends UI{
 					
 					if(IsvalidName(userName) && IsvalidPassword(passWord)){
 						User user=userService.findUserByUsername(userName);
-						if(user!=null){
-							if(encService.comparePW(passWord, user.getPassword())){	
+//						if(user!=null){
+//							if(encService.comparePW(passWord, user.getPassword())){	
 								FormSender formSender=new FormSender();
 								formSender.setFormAction(VaadinServlet.getCurrent().getServletContext().getContextPath() + "/j_spring_security_check");
 								formSender.setFormMethod(Method.POST);
@@ -84,16 +86,16 @@ public class LoginUI extends UI{
 								formSender.setFormTarget("_top");
 								formSender.extend(getUI());								
 								formSender.submit();			    			
-							}else{
-								success.setValue("Wrong username or password.");
-								pwTF.clear();
-								setFocusedComponent(pwTF);
-							}
-						}else{
-							success.setValue("Wrong username or password.");
-							pwTF.clear();
-							setFocusedComponent(pwTF);
-						}
+//							}else{
+//								success.setValue("Wrong username or password.");
+//								pwTF.clear();
+//								setFocusedComponent(pwTF);
+//							}
+//						}else{
+//							success.setValue("Wrong username or password.");
+//							pwTF.clear();
+//							setFocusedComponent(pwTF);
+//						}
 					}else{
 						success.setValue("One or more fields are empty.");						
 					}

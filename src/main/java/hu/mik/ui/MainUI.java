@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -32,6 +33,7 @@ import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -55,11 +57,13 @@ import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.Friendship;
 import hu.mik.beans.User;
+import hu.mik.beans.UserLdap;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
+import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
 import hu.mik.views.AdminView;
@@ -78,6 +82,7 @@ import hu.mik.views.UserListView;
 @Theme(ThemeConstants.UI_THEME)
 @Push
 @PreserveOnRefresh
+@Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	@Autowired
@@ -86,34 +91,51 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private FriendRequestService friendRequestService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LdapService ldapService;
 	
 	private static List<User> onlineUsers=new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
 	private WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
+	private UserLdap userLdap;
 	private User sideUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
 	private VerticalLayout base=new VerticalLayout();
 	private TextField nameSearchTf;
 	private CssLayout navigationBar;
+	private CssLayout dropDownMenu;
+	private boolean menuIconFlag=false;
 	
 	private SecurityContext securityContext=SecurityContextHolder.getContext();
 	
 	@Override
 	protected void init(VaadinRequest request){	
 			getPage().setTitle("Serious");
-			user=userService.findUserByUsername(securityContext.getAuthentication().getName());
+			System.out.println(securityContext.getAuthentication());
+			String userName=securityContext.getAuthentication().getName();
+			user=userService.findUserByUsername(userName);
+			userLdap=ldapService.findUserByUsername(userName);
+			System.out.println(userLdap.getFullName());
+			if(user==null) {
+				user=userService.registerUser(userName, "asd");
+			}
 			session.setAttribute("SecurityContext", securityContext);
+			session.setAttribute("LdapUserUsername", userLdap.getUsername());
 			onlineUsers.add(user);
 			final VerticalLayout workingSpace=new VerticalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
 			workingSpace.setSizeFull();
 			base.setSizeFull();
-			base.setMargin(false);
+			base.setMargin(false);		
 			Label title=new Label("Social");
+			title.setSizeFull();
+			Responsive.makeResponsive(title);
+			title.addStyleName(ThemeConstants.RESPONSIVE_FONT);			
 			title.addStyleName("h1");
 			navigationBar=createNaviBar();
+			dropDownMenu=createDropDownMenu();
 			viewDisplay=new Panel();
 			viewDisplay.setSizeFull();
 			viewDisplay.setId("viewDisplay");
@@ -121,9 +143,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			navigationBar.setId("navigationBar");
 			base.addComponent(title);
 			base.addComponent(navigationBar);
+			base.addComponent(dropDownMenu);
 			base.addComponent(viewDisplay);
 			base.setExpandRatio(title, 5);
 			base.setExpandRatio(navigationBar, 10);
+			base.setExpandRatio(dropDownMenu, 1);
 			base.setExpandRatio(viewDisplay, 85);
 			base.setStyleName(ThemeConstants.BORDERED_THICK);
 
@@ -137,6 +161,20 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			viewDisplay.setContent((Component) view);
 		}
 		
+	}
+	private CssLayout createDropDownMenu() {
+		CssLayout dropDownMenu=new CssLayout();
+		dropDownMenu.setId("dropDownMenu");
+		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
+		Label lblMain=new Label("Main");
+		dropDownMenu.addComponent(lblMain);
+		Label lblMessages=new Label("Messages");
+		dropDownMenu.addComponent(lblMessages);
+		Label lblLogout=new Label("Logout");
+		dropDownMenu.addComponent(lblLogout);
+		dropDownMenu.setVisible(false);
+		dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
+		return dropDownMenu;
 	}
 
 	public static List<User> getOnlineUsers() {
@@ -182,107 +220,15 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		
 	}
 	
-	public VerticalLayout createSideMenu(User sideUser){	
-		this.sideUser=sideUser;
-		this.user=userService.findUserById(user.getId());
-		VerticalLayout sideMenu=new VerticalLayout();
-		sideMenu.addStyleName(ThemeConstants.SIDE_MENU);
-		sideMenu.addStyleName(ThemeConstants.RESPONSIVE_SIDE_MENU);
-		VerticalLayout header=new VerticalLayout();
-		VerticalLayout menu=new VerticalLayout();
-		header.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-		menu.addStyleName("sideMenuMenu");
-		menu.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-		menu.setWidth("100%");
-		menu.setSpacing(false);
-		menu.setMargin(false);
-		header.setSpacing(false);
-		header.setMargin(false);
-		header.addStyleName(ThemeConstants.SIDE_HEADER);
-		sideMenu.addComponent(header);
-		sideMenu.addComponent(menu);
-		sideMenu.setExpandRatio(header, 25);
-		sideMenu.setExpandRatio(menu, 75);
-		sideMenu.setSpacing(false);		
-		sideMenu.setMargin(false);
-		sideMenu.setSizeFull();
-		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+sideUser.getImageName()))); 
-		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		image.setWidth("60%");
-		if(sideUser.getId()==user.getId()){
-			image.setId("profilePicture");
-			image.addClickListener(this::profileImageClickListener);
-		}
-		Label name=new Label();
-		name.setValue(sideUser.getUsername());
-		name.addStyleName(ThemeConstants.BLUE_TEXT);
-		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-		header.addComponent(name);
-		header.addComponent(image);	
-		
-		if(sideUser.getId()!=user.getId()){
-			if(friendshipService.findOne(user.getId(), sideUser.getId())==null){
-				if(friendRequestService.findOne(user.getId(), sideUser.getId())==null){
-					if(friendRequestService.findOne(sideUser.getId(), user.getId())==null){
-						Button friendRequestButton=new Button("Friend request");
-						friendRequestButton.addClickListener(this::friendRequestClickListener);
-						friendRequestButton.addStyleName(ValoTheme.BUTTON_SMALL);
-						friendRequestButton.addStyleName(ThemeConstants.BLUE_TEXT);
-						menu.addComponent(friendRequestButton);
-						menu.setComponentAlignment(friendRequestButton, Alignment.MIDDLE_LEFT);
-					}else{
-						Label acceptLabel=new Label("Accept friend request?");
-						Button acceptRequestButton=new Button("Accept");
-						acceptRequestButton.addClickListener(this::acceptRequestClickListener);
-						acceptRequestButton.addStyleName(ValoTheme.BUTTON_SMALL);
-						acceptRequestButton.addStyleName(ThemeConstants.BLUE_TEXT);
-						Button rejectRequestButton=new Button("Reject");
-						rejectRequestButton.addClickListener(this::rejectRequestClickListener);
-						rejectRequestButton.addStyleName(ValoTheme.BUTTON_SMALL);
-						rejectRequestButton.addStyleName(ThemeConstants.BLUE_TEXT);
-						menu.addComponent(acceptLabel);
-						menu.addComponent(acceptRequestButton);
-						menu.addComponent(rejectRequestButton);
-					}
-				}else{
-					menu.addComponent(new Label("Request sent."));
-				}
-			}else{
-				name.setContentMode(ContentMode.HTML);
-				name.setValue("("+VaadinIcons.CHECK.getHtml()+") "+sideUser.getUsername());
-				Button removeFriendButton=new Button("Remove friend");
-				removeFriendButton.addClickListener(this::removeFriendClickListener);
-				removeFriendButton.addStyleName(ValoTheme.BUTTON_SMALL);
-				removeFriendButton.addStyleName(ThemeConstants.BLUE_TEXT);
-				menu.addComponent(removeFriendButton);
-				
-			}
-		}else{
-			int count=friendRequestService.findAllByRequestedId(user.getId()).size();
-			Button friendRequestsButton=new Button("Requests ("+count+")");
-			friendRequestsButton.addClickListener(this::friendRequestsClickListener);
-			friendRequestsButton.addStyleName(ValoTheme.BUTTON_SMALL);
-			friendRequestsButton.addStyleName(ThemeConstants.BLUE_TEXT);
-			menu.addComponent(friendRequestsButton);
-			
-		}
-		
-		Button friendListButton=new Button("Friendlist", this::friendListClickListener);
-		menu.addComponent(friendListButton);
-		friendListButton.addStyleName(ValoTheme.BUTTON_SMALL);
-		friendListButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		
-		return sideMenu;
-	}
-	
 	public CssLayout createNaviBar(){
 		CssLayout naviBar=new CssLayout();
 		naviBar.setWidth("100%");
 		naviBar.addLayoutClickListener(this::naviBarClickListener);
 		Responsive.makeResponsive(naviBar);
 		naviBarImage=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName()))); 
-		naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		naviBarImage.setId("profilePicture");
+		naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
+		naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviBarImage.addClickListener(this::profileImageClickListener);
 		naviBar.addComponent(naviBarImage);
 		Label name=new Label();
@@ -291,11 +237,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 //		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		naviBar.addComponent(name);
 		Image naviBarIcon=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
+		naviBarIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviBarIcon.setId("menuIcon");
+		naviBarIcon.addClickListener(this::menuIconClickListener);
 		naviBar.addComponent(naviBarIcon);
 		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
 		for(GrantedAuthority authority : auth){
-			if(authority.getAuthority().equals("admin")){
+			if(authority.getAuthority().equals("ROLE_ADMINS")){
 				Label lblAdmin=new Label("Admin");
 				naviBar.addComponent(lblAdmin);
 			}
@@ -315,20 +263,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		naviBar.addComponent(namesearchButton);
 		naviBar.addComponent(nameSearchTf);
-//		logoutButton.setStyleName(ValoTheme.BUTTON_SMALL);
-//		logoutButton.addStyleName(ThemeConstants.BLUE_TEXT);
-//		naviBar.addComponent(logoutButton);
 		return naviBar;
 	}
 	
-	
-	public void changeSideMenu(User user){
-//		VerticalLayout userSideMenu=createSideMenu(user);
-//		base.replaceComponent(oldSideMenu, userSideMenu);
-//		oldSideMenu=userSideMenu;
-	}
 	private void naviBarClickListener(LayoutClickEvent event) {
-
+		if(event.getComponent().equals(dropDownMenu)) {
+			changeDropDownVisibility();
+		}
 		if(event.getClickedComponent()!=null && event.getClickedComponent().getClass().equals(Label.class)) {
 			Label lblClicked=(Label) event.getClickedComponent();
 			switch (lblClicked.getValue()) {
@@ -346,7 +287,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 				getNavigator().navigateTo(AdminView.NAME);
 				break;
 			default:
-				getNavigator().navigateTo(ProfileView.NAME+"/"+user.getId());
+				getNavigator().navigateTo(ProfileView.NAME+"/"+userLdap.getUsername());
 				break;
 			}
 		}
@@ -356,6 +297,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	
 	private void profileImageClickListener(com.vaadin.event.MouseEvents.ClickEvent event) {
 		getNavigator().navigateTo(PictureUploadView.NAME);
+	}
+	
+	private void menuIconClickListener(com.vaadin.event.MouseEvents.ClickEvent event) {
+		changeDropDownVisibility();
+	}
+	private void changeDropDownVisibility(){
+		menuIconFlag=!menuIconFlag;
+		dropDownMenu.setVisible(menuIconFlag);
 	}
 	
 	private void friendRequestClickListener(Button.ClickEvent event){

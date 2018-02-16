@@ -12502,12 +12502,12 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
-.myTheme #profilePicture:hover {
+.myTheme .navigationBarIcon:hover {
 	border: 5px solid #00FF00;
 	border-radius: 200px;
 }
 
-.myTheme #profilePicture, .myTheme #menuIcon {
+.myTheme .navigationBarIcon {
 	height: 50px;
 	margin-top: 5px;
 }
@@ -12515,7 +12515,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #menuIcon {
 	float: right;
 	display: none;
-	padding-right: 10px;
+	margin-right: 10px;
 }
 
 .myTheme #username {
@@ -12533,6 +12533,30 @@ div.v-layout.v-horizontal.v-widget {
 	box-shadow: 2px 2px 2px #00FF00;
 }
 
+.myTheme #dropDownMenu {
+	position: absolute;
+	background-color: #696969;
+	width: 220px;
+	height: 60%;
+	z-index: 2;
+	right: 10px;
+	top: 112px;
+	padding-top: 10px;
+	border-top-color: #696969;
+}
+
+.myTheme #dropDownMenu .v-label {
+	width: 100%;
+	height: 15%;
+	border-bottom: 1px solid;
+	border-bottom-color: #00FF00;
+	color: white;
+}
+
+.myTheme #dropDownMenu .v-label:hover {
+	background-color: #00FF00;
+}
+
 .myTheme #navigationBar {
 	text-align: left;
 	background: #696969;
@@ -12542,8 +12566,10 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100%;
 	height: 60px;
 	overflow: hidden;
-	margin: 15px auto;
+	margin: 10px auto;
 	border-radius: 15px;
+	position: relative;
+	z-index: 3;
 }
 
 .myTheme #navigationBar .v-label {
@@ -12584,6 +12610,29 @@ div.v-layout.v-horizontal.v-widget {
 	width: 150px;
 }
 
+.myTheme #navigationBar[width-range~="451px-768px"] .v-label:not(#username) {
+	display: none;
+}
+
+.myTheme #navigationBar[width-range~="451px-768px"] #menuIcon {
+	display: block;
+}
+
+.myTheme #navigationBar[width-range~="0-450px"] .v-label {
+	display: none;
+}
+
+.myTheme #navigationBar[width-range~="0-450px"] #menuIcon {
+	display: block;
+}
+
+.myTheme #navigationBar[width-range~="0-450px"] .v-textfield {
+	float: right;
+	margin-top: 15px;
+	width: 110px;
+	font-size: 10px;
+}
+
 .myTheme #viewDisplay {
 	padding: 10px;
 }
@@ -12591,6 +12640,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base {
 	padding: 10px;
 	font-family: arial;
+	min-width: 240px;
 }
 
 .myTheme #sideMenu {
@@ -12729,18 +12779,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #profileHeader .v-label {
 	text-align: center;
-}
-
-.myTheme .responsiveFont[width-range~="0px-25px"] {
-	font-size: 70%;
-}
-
-.myTheme .responsiveFont[width-range~="26-50px"] {
-	font-size: 80%;
-}
-
-.myTheme .responsiveFont[width-range~="51-75px"] {
-	font-size: 100%;
 }
 
 .myTheme .responsiveFont[width-range~="76-100px"] {

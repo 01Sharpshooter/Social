@@ -41,4 +41,6 @@ public class ThemeConstants {
 	
 	public static final String HOVER_GREEN_LAYOUTS = "hoverGreenLayouts";
 	
+	public static final String NAVIGATION_BAR_ICON = "navigationBarIcon";
+	
 }

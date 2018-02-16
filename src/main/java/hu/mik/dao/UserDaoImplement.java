@@ -23,12 +23,12 @@ public class UserDaoImplement implements UserDao{
 	private EntityManager em;
 
 	@Override
-	public void save(User user, Role role) {
+	public User save(User user, Role role) {
 		if(findByUsername(user.getUsername())==null){
 			em.persist(user);
 			em.persist(role);
 		}
-		
+		return findByUsername(user.getUsername());
 	}
 	@Override
 	public boolean takenUsername(String username) {

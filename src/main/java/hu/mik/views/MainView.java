@@ -74,7 +74,6 @@ public class MainView extends VerticalLayout implements View{
 		this.addComponent(textWriter);
 		this.addComponent(panel);		
 		
-		
 	}
 
 	private VerticalLayout createFeed(List<News> newsList) {
@@ -130,7 +129,7 @@ public class MainView extends VerticalLayout implements View{
 	
 	public HorizontalLayout createTextWriter(){
 		HorizontalLayout textWriter=new HorizontalLayout();
-		textWriter.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		textWriter.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		textWriter.setWidth("100%");
 		textWriter.setCaption("Share your thoughts...");
 		
@@ -143,8 +142,8 @@ public class MainView extends VerticalLayout implements View{
 		textField.setWidth("100%");
 		textWriter.addComponent(sendButton);
 		sendButton.setSizeUndefined();
-		textWriter.setExpandRatio(textField, 9);
-		textWriter.setExpandRatio(sendButton, 1);
+		textWriter.setExpandRatio(textField, 75);
+		textWriter.setExpandRatio(sendButton, 25);
 		
 		return textWriter;
 	}
@@ -181,8 +180,8 @@ public class MainView extends VerticalLayout implements View{
 	}
 	
 	private void userNameListener(Button.ClickEvent event){
-		((MainUI)getUI()).changeSideMenu(userService.findUserByUsername(
-				event.getButton().getCaption()));
+//		((MainUI)getUI()).changeSideMenu(userService.findUserByUsername(
+//				event.getButton().getCaption()));
 		changeNews(newsService.lastGivenNewsUser(newsNumberAtOnce,
 				userService.findUserByUsername(event.getButton().getCaption())));
 		this.removeComponent(textWriter);

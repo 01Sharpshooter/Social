@@ -53,7 +53,7 @@ public static final String NAME="FriendListView";
 		this.setMargin(false);
 		this.setSizeFull();
 		User sideUser=userService.findUserById(Integer.parseInt(event.getParameters()));
-		((MainUI)getUI()).changeSideMenu(sideUser);
+//		((MainUI)getUI()).changeSideMenu(sideUser);
 		
 		panel.setSizeFull();
 		panel.setContent(rows);
