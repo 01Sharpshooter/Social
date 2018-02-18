@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.navigator.View;
@@ -26,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.User;
+import hu.mik.components.UserListLayout;
 import hu.mik.beans.LdapUser;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
@@ -40,10 +43,11 @@ public class UserListView extends VerticalLayout implements View{
 	public static final String NAME="userList";
 	
 	@Autowired
-	UserService userService;
-	
+	UserService userService;	
 	@Autowired
 	LdapService ldapService;
+	@Autowired
+	UserListLayout userListLayout;
 	
 	private Panel panel=new Panel();
 	private HorizontalLayout userDiv;
@@ -57,44 +61,17 @@ public class UserListView extends VerticalLayout implements View{
 	public void fill(String username) {
 		CssLayout layout=new CssLayout();
 		this.addComponent(panel);
-//		this.setMargin(false);
 		this.setSizeFull();
 		List<LdapUser> userListLdap=new ArrayList<>();
 		
 		panel.setSizeFull();
-		panel.setContent(layout);
-		Responsive.makeResponsive(layout);
-		layout.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
-		layout.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		layout.setWidth("100%");
 		panel.setCaption("Users with similar names:");
-//		userList=userService.findAllLike(username);
 		userListLdap=ldapService.findByFullNameContaining(username);		
-		
-		int i=0;		
+			
 		if(userListLdap!=null){
-			for(LdapUser user : userListLdap){
-				i++;
-				User DbUser=userService.findUserByUsername(user.getUsername());
-				Image image=new Image(null, new FileResource(
-						new File(UserConstants.PROFILE_PICTURE_LOCATION+DbUser.getImageName())));
-				image.setHeight("100%");
-				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName=new Label(user.getFullName());	
-				userDiv=new HorizontalLayout();
-				userDiv.setHeight("60px");
-				userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-				userDiv.addComponent(image);
-				userDiv.addComponent(lblName);
-				userDiv.setId(user.getUsername());
-				userDiv.addStyleName(ThemeConstants.BORDERED);
-//				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-				userDiv.addLayoutClickListener(this::layoutClickListener);
-//				Responsive.makeResponsive(lblName);
-				layout.addComponent(userDiv);
-				
-			}		
+			layout=userListLayout.createUserListLayoutFromLdap(userListLdap);
 		}
+		panel.setContent(layout);
 	}
 	
 	private void layoutClickListener(LayoutClickEvent event){

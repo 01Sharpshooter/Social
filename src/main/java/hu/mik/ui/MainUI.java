@@ -56,6 +56,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.Friendship;
+import hu.mik.beans.LdapGroup;
 import hu.mik.beans.User;
 import hu.mik.beans.LdapUser;
 import hu.mik.constants.LdapConstants;
@@ -109,6 +110,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private CssLayout navigationBar;
 	private CssLayout dropDownMenu;
 	private boolean menuIconFlag=false;
+	private LdapGroup adminGroup;
 	
 	private SecurityContext securityContext=SecurityContextHolder.getContext();
 	
@@ -126,6 +128,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			session.setAttribute("SecurityContext", securityContext);
 			session.setAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER, userLdap.getUsername());
 			onlineUsers.add(user);
+			adminGroup=ldapService.findGroupByGroupName(LdapConstants.GROUP_ADMIN_NAME);
 			final VerticalLayout workingSpace=new VerticalLayout();	
 			this.getNavigator().addViewChangeListener(this::viewChangeListener);
 			workingSpace.setSizeFull();
@@ -168,6 +171,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		CssLayout dropDownMenu=new CssLayout();
 		dropDownMenu.setId("dropDownMenu");
 		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
+		if(adminGroup.getListOfMembers().contains(userLdap.getId())) {
+			Label lblAdmin=new Label("Admin");
+			dropDownMenu.addComponent(lblAdmin);
+		}
 		Label lblMain=new Label("Main");
 		dropDownMenu.addComponent(lblMain);
 		Label lblProfile=new Label("Profile");
@@ -238,20 +245,16 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		Label name=new Label();
 		name.setValue(user.getUsername());
 		name.setId("username");
-//		name.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 		naviBar.addComponent(name);
 		Image naviBarIcon=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
 		naviBarIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviBarIcon.setId("menuIcon");
 		naviBarIcon.addClickListener(this::menuIconClickListener);
 		naviBar.addComponent(naviBarIcon);
-		Collection<? extends GrantedAuthority> auth=securityContext.getAuthentication().getAuthorities();
-		for(GrantedAuthority authority : auth){
-			if(authority.getAuthority().equals("ROLE_"+LdapConstants.GROUP_ADMIN_NAME.toUpperCase())){
-				Label lblAdmin=new Label("Admin");
-				naviBar.addComponent(lblAdmin);
-				dropDownMenu.addComponent(lblAdmin);
-			}
+
+		if(adminGroup.getListOfMembers().contains(userLdap.getId())) {
+			Label lblAdmin=new Label("Admin");
+			naviBar.addComponent(lblAdmin);
 		}
 		Label lblMain=new Label("Main");
 		naviBar.addComponent(lblMain);

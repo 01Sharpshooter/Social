@@ -75,13 +75,15 @@ public class ProfileView extends VerticalLayout implements View{
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName=new Label(ldapProfileUser.getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
+				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 				header.setId("profileHeader");
 				header.addComponent(image);
 				header.addComponent(lblName);
 				header.addComponent(headerButtonList);
 				FormLayout form=new FormLayout();
 				form.addStyleName(ThemeConstants.BORDERED);
-				form.setMargin(true);
+				form.setMargin(false);
+				form.setId("profileBody");
 				form.setSizeFull();
 				
 				this.addComponent(header);
@@ -103,7 +105,7 @@ public class ProfileView extends VerticalLayout implements View{
 				for (Component component : form) {
 					if(component.getClass().equals(TextField.class)) {
 						component.addStyleName(ThemeConstants.BLUE_TEXT);
-						component.setWidth("30%");	
+//						component.setWidth("100px");	
 						if(!profileUsername.equals(ldapSessionUsername)) {
 							component.setEnabled(false);
 						}
@@ -117,6 +119,7 @@ public class ProfileView extends VerticalLayout implements View{
 		CssLayout headerButtonList=new CssLayout();
 		
 		Button btnFriendRequest=new Button();
+		btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
 		
 		if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId())) {
 			btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);

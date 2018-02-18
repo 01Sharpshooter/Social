@@ -12502,6 +12502,171 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
+.myTheme #base[width-range~="0-450px"] .manyUserLayout .v-horizontallayout {
+	width: 100%;
+}
+
+.myTheme #base[width-range~="0-450px"] .responsiveFont {
+	font-size: 125%;
+}
+
+.myTheme #base[width-range~="0-450px"] #navigationBar .v-label {
+	display: none;
+}
+
+.myTheme #base[width-range~="0-450px"] #navigationBar #menuIcon {
+	display: block;
+}
+
+.myTheme #base[width-range~="0-450px"] #navigationBar .v-textfield {
+	float: right;
+	margin-top: 15px;
+	width: 110px;
+	font-size: 10px;
+}
+
+.myTheme #base[width-range~="0-450px"] #profileHeader .v-image {
+	height: 100px;
+}
+
+.myTheme #base[width-range~="0-450px"] #profileHeader .v-button {
+	font-size: 12px;
+	padding-left: 10px;
+	padding-right: 10px;
+	height: 30px;
+}
+
+.myTheme #base[width-range~="0-450px"] #profileBody .v-textfield {
+	width: 100%;
+	font-size: 80%;
+}
+
+.myTheme #base[width-range~="451px-768px"] .manyUserLayout .v-horizontallayout {
+	width: 50%;
+}
+
+.myTheme #base[width-range~="451px-768px"] .responsiveFont {
+	font-size: 150%;
+}
+
+.myTheme #base[width-range~="451px-768px"] #navigationBar .v-label:not(#username) {
+	display: none;
+}
+
+.myTheme #base[width-range~="451px-768px"] #navigationBar #menuIcon {
+	display: block;
+}
+
+.myTheme #base[width-range~="451px-768px"] #profileHeader .v-image {
+	height: 125px;
+}
+
+.myTheme #base[width-range~="451px-768px"] #profileBody .v-textfield {
+	width: 70%;
+}
+
+.myTheme #base {
+	padding: 10px;
+	font-family: arial;
+	min-width: 240px;
+}
+
+.myTheme #base .manyUserLayout {
+	text-align: left;
+}
+
+.myTheme #base .manyUserLayout .v-horizontallayout {
+	width: 25%;
+}
+
+.myTheme #base .responsiveFont {
+	font-size: 200%;
+}
+
+.myTheme #base #navigationBar {
+	text-align: left;
+	background: #696969;
+	float: left;
+	font-size: 18px;
+	padding-left: 10px;
+	width: 100%;
+	height: 60px;
+	overflow: hidden;
+	margin: 10px auto;
+	border-radius: 15px;
+	position: relative;
+	z-index: 3;
+}
+
+.myTheme #base #navigationBar .v-label {
+	padding-left: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+	height: 100%;
+}
+
+.myTheme #base #navigationBar .v-label:not(#username) {
+	color: #00FF00;
+	padding-right: 10px;
+	border-style: solid;
+	border-color: white;
+	border-top: none;
+	border-bottom: none;
+	border-right: 1px;
+	border-width: 1px;
+}
+
+.myTheme #base #navigationBar .v-label:hover:not(#username) {
+	font-size: 20px;
+	padding-top: 18px;
+	color: white;
+	background-color: #00FF00;
+}
+
+.myTheme #base #navigationBar .v-button {
+	float: right;
+	margin-top: 15px;
+	margin-right: 10px;
+}
+
+.myTheme #base #navigationBar .v-textfield {
+	float: right;
+	margin-top: 15px;
+	width: 150px;
+}
+
+.myTheme #base #profileHeader {
+	text-align: center;
+	width: 100%;
+	border: 2px solid #00BFFF;
+	background-color: #eaf2ff;
+	border-radius: 4px;
+	box-shadow: 3px 3px 3px #00b6cd;
+	border: 1px outset #00BFFF;
+	padding-bottom: 5px;
+}
+
+.myTheme #base #profileHeader .v-image {
+	height: 150px;
+}
+
+.myTheme #base #profileHeader .v-label {
+	text-align: center;
+}
+
+.myTheme #base #profileHeader .v-button {
+	height: 50%;
+}
+
+.myTheme #base #profileBody {
+	padding: 10px;
+}
+
+.myTheme #base #profileBody .v-textfield {
+	width: 40%;
+}
+
 .myTheme .navigationBarIcon:hover {
 	border: 5px solid #00FF00;
 	border-radius: 200px;
@@ -12540,22 +12705,6 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #00FF00;
 }
 
-.myTheme .manyUserLayout {
-	text-align: left;
-}
-
-.myTheme .manyUserLayout .v-horizontallayout {
-	width: 25%;
-}
-
-.myTheme .manyUserLayout[width-range~="451px-768px"] .v-horizontallayout {
-	width: 50%;
-}
-
-.myTheme .manyUserLayout[width-range~="0-450px"] .v-horizontallayout {
-	width: 100%;
-}
-
 .myTheme #dropDownMenu {
 	position: absolute;
 	background-color: #696969;
@@ -12580,90 +12729,8 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #00FF00;
 }
 
-.myTheme #navigationBar {
-	text-align: left;
-	background: #696969;
-	float: left;
-	font-size: 18px;
-	padding-left: 10px;
-	width: 100%;
-	height: 60px;
-	overflow: hidden;
-	margin: 10px auto;
-	border-radius: 15px;
-	position: relative;
-	z-index: 3;
-}
-
-.myTheme #navigationBar .v-label {
-	padding-left: 10px;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	text-align: center;
-	height: 100%;
-}
-
-.myTheme #navigationBar .v-label:not(#username) {
-	color: #00FF00;
-	padding-right: 10px;
-	border-style: solid;
-	border-color: white;
-	border-top: none;
-	border-bottom: none;
-	border-right: 1px;
-	border-width: 1px;
-}
-
-.myTheme #navigationBar .v-label:hover:not(#username) {
-	font-size: 20px;
-	padding-top: 18px;
-	color: white;
-	background-color: #00FF00;
-}
-
-.myTheme #navigationBar .v-button {
-	float: right;
-	margin-top: 15px;
-	margin-right: 10px;
-}
-
-.myTheme #navigationBar .v-textfield {
-	float: right;
-	margin-top: 15px;
-	width: 150px;
-}
-
-.myTheme #navigationBar[width-range~="451px-768px"] .v-label:not(#username) {
-	display: none;
-}
-
-.myTheme #navigationBar[width-range~="451px-768px"] #menuIcon {
-	display: block;
-}
-
-.myTheme #navigationBar[width-range~="0-450px"] .v-label {
-	display: none;
-}
-
-.myTheme #navigationBar[width-range~="0-450px"] #menuIcon {
-	display: block;
-}
-
-.myTheme #navigationBar[width-range~="0-450px"] .v-textfield {
-	float: right;
-	margin-top: 15px;
-	width: 110px;
-	font-size: 10px;
-}
-
 .myTheme #viewDisplay {
 	padding: 10px;
-}
-
-.myTheme #base {
-	padding: 10px;
-	font-family: arial;
-	min-width: 240px;
 }
 
 .myTheme #sideMenu {
@@ -12783,63 +12850,4 @@ div.v-layout.v-horizontal.v-widget {
 	margin-left: 0;
 	margin-right: 0;
 	font-weight: bold;
-}
-
-.myTheme #profileHeader {
-	text-align: center;
-	width: 100%;
-	border: 2px solid #00BFFF;
-	background-color: #eaf2ff;
-	border-radius: 4px;
-	box-shadow: 3px 3px 3px #00b6cd;
-	border: 1px outset #00BFFF;
-	padding-bottom: 5px;
-}
-
-.myTheme #profileHeader .v-image {
-	height: 150px;
-}
-
-.myTheme #profileHeader .v-label {
-	text-align: center;
-}
-
-.myTheme .responsiveFont[width-range~="76-100px"] {
-	font-size: 120%;
-}
-
-.myTheme .responsiveFont[width-range~="101px-200px"] {
-	font-size: 120%;
-}
-
-.myTheme .responsiveFont[width-range~="201px-300px"] {
-	font-size: 130%;
-}
-
-.myTheme .responsiveFont[width-range~="301px-400px"] {
-	font-size: 140%;
-}
-
-.myTheme .responsiveFont[width-range~="401px-500px"] {
-	font-size: 150%;
-}
-
-.myTheme .responsiveFont[width-range~="501px-600px"] {
-	font-size: 160%;
-}
-
-.myTheme .responsiveFont[width-range~="601px-700px"] {
-	font-size: 170%;
-}
-
-.myTheme .responsiveFont[width-range~="701px-800px"] {
-	font-size: 180%;
-}
-
-.myTheme .responsiveFont[width-range~="801px-900px"] {
-	font-size: 190%;
-}
-
-.myTheme .responsiveFont[width-range~="901px-"] {
-	font-size: 200%;
 }
