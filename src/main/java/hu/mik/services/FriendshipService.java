@@ -11,5 +11,7 @@ public interface FriendshipService {
 	
 	public Friendship saveFriendship(Friendship friendship);
 	
+	public void saveFriendship(int userId, int friendId);
+	
 	public void deleteFriendship(int userId, int friendId);
 }

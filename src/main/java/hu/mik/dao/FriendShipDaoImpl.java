@@ -40,6 +40,7 @@ public class FriendShipDaoImpl implements FriendShipDao{
 	@Override
 	public void deleteFriendship(int userId, int friendId) {
 		em.remove(findOne(userId, friendId));
+		em.remove(findOne(friendId, userId));
 		
 	}
 
@@ -57,6 +58,18 @@ public class FriendShipDaoImpl implements FriendShipDao{
 			fs=null;
 		}		
 		return fs;
+	}
+
+	@Override
+	public void saveFriendship(int userId, int friendId) {
+		Friendship fs=new Friendship();
+		fs.setFriendId(userId);
+		fs.setUserId(friendId);
+		em.persist(fs);
+		fs=new Friendship();
+		fs.setFriendId(friendId);
+		fs.setUserId(userId);
+		em.persist(fs);
 	}
 
 }

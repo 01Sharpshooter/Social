@@ -28,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
+import hu.mik.beans.Friendship;
 import hu.mik.beans.User;
 import hu.mik.beans.LdapUser;
 import hu.mik.constants.StringConstants;
@@ -35,6 +36,7 @@ import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendRequestService;
+import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 
@@ -48,6 +50,8 @@ public class ProfileView extends VerticalLayout implements View{
 	private User dbSessionUser;
 	private String profileUsername;
 	private User dbProfileUser;
+	private CssLayout header;
+	private CssLayout headerButtonList;
 	
 	@Autowired
 	UserService userService;
@@ -55,6 +59,9 @@ public class ProfileView extends VerticalLayout implements View{
 	LdapService ldapService;
 	@Autowired
 	FriendRequestService friendRequestService;
+	@Autowired
+	FriendshipService friendShipService;
+	
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if(event.getParameters().length()>0){
@@ -68,7 +75,7 @@ public class ProfileView extends VerticalLayout implements View{
 				Label lblMissing=new Label("Sorry, we could not find the person you were looking for.");
 				this.addComponent(lblMissing);
 			}else {
-				CssLayout header=new CssLayout();
+				header=new CssLayout();
 				CssLayout headerButtonList=createHeaderBtnList();
 				
 				Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+dbProfileUser.getImageName())));
@@ -116,20 +123,30 @@ public class ProfileView extends VerticalLayout implements View{
 		
 	}
 	private CssLayout createHeaderBtnList() {
-		CssLayout headerButtonList=new CssLayout();
+		headerButtonList=new CssLayout();
 		
 		Button btnFriendRequest=new Button();
 		btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
-		
-		if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId())) {
-			btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);
-		}else {
-			btnFriendRequest.setCaption(StringConstants.BTN_CANCEL_REQUEST);
-		}
-		
-		btnFriendRequest.addClickListener(this::friendRequestClickListener);
-		
 		headerButtonList.addComponent(btnFriendRequest);
+		if(dbSessionUser.getId()!=dbProfileUser.getId()) {
+			if(friendShipService.findOne(dbProfileUser.getId(), dbSessionUser.getId())!=null){
+				btnFriendRequest.setCaption(StringConstants.BTN_REMOVE_FRIEND);
+			}else if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId()) &&
+					!friendRequestService.IsAlreadyRequested(dbProfileUser.getId(), dbSessionUser.getId())) {
+				btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);
+			}else if(friendRequestService.IsAlreadyRequested(dbProfileUser.getId(), dbSessionUser.getId())) {
+				btnFriendRequest.setCaption(StringConstants.BTN_ACCEPT_REQUEST);
+				Button btnDeclineRequest=new Button(StringConstants.BTN_DECLINE_REQUEST);
+				btnDeclineRequest.addStyleName(ThemeConstants.BLUE_TEXT);
+				btnDeclineRequest.addClickListener(this::declineRequestClickListener);
+				headerButtonList.addComponent(btnDeclineRequest);
+			}else {
+				btnFriendRequest.setCaption(StringConstants.BTN_CANCEL_REQUEST);
+			}
+			
+			btnFriendRequest.addClickListener(this::friendRequestClickListener);
+			
+		}
 		
 		return headerButtonList;
 	}
@@ -141,7 +158,10 @@ public class ProfileView extends VerticalLayout implements View{
 	}
 	
 	private void friendRequestClickListener(Button.ClickEvent event){
-		if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId())) {
+		if(event.getButton().getCaption().equals(StringConstants.BTN_REMOVE_FRIEND)) {
+			friendShipService.deleteFriendship(dbProfileUser.getId(), dbSessionUser.getId());
+			header.replaceComponent(headerButtonList, createHeaderBtnList());
+		}else if(event.getButton().getCaption().equals(StringConstants.BTN_FRIEND_REQUEST)) {
 			LdapUser ldapProfile=ldapService.findUserByUsername(profileUsername);
 			FriendRequest fr=new FriendRequest();
 			fr.setRequestorId(dbSessionUser.getId());
@@ -153,11 +173,20 @@ public class ProfileView extends VerticalLayout implements View{
 				.withCaption("Request sent")
 				.withMessage("Request has been sent to "+ldapProfile.getFullName())
 				.open();
-		}else {
+		}else if(event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)){
+			friendRequestService.deleteFriendRequest(dbProfileUser.getId(), dbSessionUser.getId());
+			friendShipService.saveFriendship(dbProfileUser.getId(), dbSessionUser.getId());
+			header.replaceComponent(headerButtonList, createHeaderBtnList());
+		}
+		else {
 			friendRequestService.deleteFriendRequest(dbSessionUser.getId(), dbProfileUser.getId());
 			event.getButton().setCaption(StringConstants.BTN_FRIEND_REQUEST);
 		}
 
+	}
+	private void declineRequestClickListener(Button.ClickEvent event) {
+		friendRequestService.deleteFriendRequest(dbProfileUser.getId(), dbSessionUser.getId());
+		header.replaceComponent(headerButtonList, createHeaderBtnList());
 	}
 	
 }

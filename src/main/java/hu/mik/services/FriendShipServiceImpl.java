@@ -35,4 +35,10 @@ public class FriendShipServiceImpl implements FriendshipService{
 		
 	}
 
+	@Override
+	public void saveFriendship(int userId, int friendId) {
+		friendshipDao.saveFriendship(userId, friendId);
+		
+	}
+
 }
