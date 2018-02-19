@@ -19,6 +19,8 @@ public class LdapGroup{
 	private String groupName;	
 	@Attribute(name="member")
 	private List<Name> listOfMembers;
+	@Attribute(name="member")
+	private Name member;
 	
 	
 
@@ -44,6 +46,11 @@ public class LdapGroup{
 
 	public void setListOfMembers(List<Name> listOfMembers) {
 		this.listOfMembers = listOfMembers;
+	}
+	
+	@Override
+	public String toString() {
+		return this.groupName;
 	}
 
 

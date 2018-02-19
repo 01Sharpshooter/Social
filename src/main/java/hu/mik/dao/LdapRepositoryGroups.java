@@ -12,4 +12,5 @@ import hu.mik.beans.LdapUser;
 @Repository
 public interface LdapRepositoryGroups extends org.springframework.data.ldap.repository.LdapRepository<LdapGroup>{
 	LdapGroup findByGroupName(String groupName);
+	List<LdapGroup> findByMember(Name memberId);
 }

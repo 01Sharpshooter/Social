@@ -2,6 +2,8 @@ package hu.mik.services;
 
 import java.util.List;
 
+import javax.naming.Name;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,17 @@ public class LdapServiceImpl implements LdapService{
 	public LdapGroup findGroupByGroupName(String groupName) {
 		return ldapRepositoryGroups.findByGroupName(groupName);
 	}
+
+
+	@Override
+	public List<LdapGroup> findGroupsByUserId(Name memberId) {
+		return ldapRepositoryGroups.findByMember(memberId);
+	}
+
+
+//	@Override
+//	public LdapUser findUserById(Name name) {
+//		return ldapRepositoryUsers.findById(name);
+//	}
 
 }

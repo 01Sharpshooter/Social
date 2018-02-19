@@ -3,15 +3,11 @@ package hu.mik.ui;
 
 
 import java.io.File;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.ejt.vaadin.sizereporter.ComponentResizeEvent;
-import com.ejt.vaadin.sizereporter.ComponentResizeListener;
-import com.ejt.vaadin.sizereporter.SizeReporter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.vaadin.annotations.PreserveOnRefresh;
@@ -20,8 +16,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
@@ -30,27 +24,17 @@ import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
-import com.vaadin.ui.AbsoluteLayout;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
-import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.MenuBar.Command;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ValoTheme;
 
 import de.steinwedel.messagebox.MessageBox;
@@ -121,7 +105,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 			String userName=securityContext.getAuthentication().getName();
 			user=userService.findUserByUsername(userName);
 			userLdap=ldapService.findUserByUsername(userName);
-			System.out.println(ldapService.findGroupByGroupName("users").getListOfMembers());
+			System.out.println(ldapService.findGroupsByUserId(userLdap.getId()));
 			if(user==null) {
 				user=userService.registerUser(userName);
 			}
@@ -171,18 +155,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		CssLayout dropDownMenu=new CssLayout();
 		dropDownMenu.setId("dropDownMenu");
 		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
-		if(adminGroup.getListOfMembers().contains(userLdap.getId())) {
-			Label lblAdmin=new Label("Admin");
-			dropDownMenu.addComponent(lblAdmin);
+		for (Label label : createNaviBarLabelList()) {
+			dropDownMenu.addComponent(label);
 		}
-		Label lblMain=new Label("Main");
-		dropDownMenu.addComponent(lblMain);
-		Label lblProfile=new Label("Profile");
-		dropDownMenu.addComponent(lblProfile);
-		Label lblMessages=new Label("Messages");
-		dropDownMenu.addComponent(lblMessages);
-		Label lblLogout=new Label("Logout");
-		dropDownMenu.addComponent(lblLogout);
 		dropDownMenu.setVisible(false);
 		dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
 		return dropDownMenu;
@@ -243,7 +218,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		naviBarImage.addClickListener(this::profileImageClickListener);
 		naviBar.addComponent(naviBarImage);
 		Label name=new Label();
-		name.setValue(user.getUsername());
+		name.setValue(userLdap.getFullName());
 		name.setId("username");
 		naviBar.addComponent(name);
 		Image naviBarIcon=new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON))); 
@@ -252,18 +227,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		naviBarIcon.addClickListener(this::menuIconClickListener);
 		naviBar.addComponent(naviBarIcon);
 
-		if(adminGroup.getListOfMembers().contains(userLdap.getId())) {
-			Label lblAdmin=new Label("Admin");
-			naviBar.addComponent(lblAdmin);
+		for (Label label : createNaviBarLabelList()) {
+			naviBar.addComponent(label);
 		}
-		Label lblMain=new Label("Main");
-		naviBar.addComponent(lblMain);
-		Label lblMessages=new Label("Messages");
-		naviBar.addComponent(lblMessages);
-		Label lblContacts=new Label("Contacts");
-		naviBar.addComponent(lblContacts);
-		Label lblLogout=new Label("Logout");
-		naviBar.addComponent(lblLogout);
 		nameSearchTf=new TextField();
 		nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
 		nameSearchTf.setValue("Search for a user...");
@@ -393,5 +359,24 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		((TextField)event.getComponent()).clear();
 	}
 	
+	private List<Label> createNaviBarLabelList(){
+		List<Label> lblList=new ArrayList<>();
+		
+		Label lblAdmin=new Label("Admin");
+		Label lblMain=new Label("Main");
+		Label lblMessages=new Label("Messages");
+		Label lblContacts=new Label("Contacts");
+		Label lblLogout=new Label("Logout");
+		
+		if(adminGroup.getListOfMembers().contains(userLdap.getId())) {
+			lblList.add(lblAdmin);
+		}
+		lblList.add(lblMain);
+		lblList.add(lblMessages);
+		lblList.add(lblContacts);
+		lblList.add(lblLogout);
+		
+		return lblList;
+	}
 	
 }

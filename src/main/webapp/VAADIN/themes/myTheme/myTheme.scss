@@ -11,7 +11,7 @@
   	$light-blue: #eaf2ff;
   	
 
-	#base[width-range~="0-450px"]{
+	#base[width-range~="0-550px"]{
 		.manyUserLayout{
 			.v-horizontallayout{
 				width:100%;
@@ -34,6 +34,9 @@
 				font-size:10px;
 			}
 		}	
+		#radioTeamSelect{
+			font-size:12px;
+		}
 		#profileHeader{
 			.v-image{
 				height:100px;
@@ -52,7 +55,7 @@
 			}
 		}
 	}
-	#base[width-range~="451px-768px"]{
+	#base[width-range~="551px-850px"]{
 		.manyUserLayout{
 			.v-horizontallayout{
 				width:50%;
