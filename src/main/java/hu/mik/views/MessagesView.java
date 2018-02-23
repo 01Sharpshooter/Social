@@ -354,17 +354,21 @@ public class MessagesView extends VerticalLayout implements View {
 			messagesPanel.setScrollTop(scroll);	
 			
 		}
+		boolean exists=false;
 		for (Component userDiv : userList) {
 			if(userDiv.getId().equals(String.valueOf(senderId))) {
-				int presentIndex=userList.getComponentIndex(userDiv);
 				userList.removeComponent(userDiv);
 				changeUserDivMessage((CssLayout)userDiv, message2);
 				userList.addComponent(userDiv, 0);
-				userListSelectionChange(userDiv);
+				exists=true;
 				break;
 			}
 		}
-		
+		if(!exists) {
+			User user=userService.findUserById(senderId);
+			CssLayout newDiv=createUserDiv(user, message2);
+			userList.addComponent(newDiv, 0);
+		}
 	}
 	
 	private void userListSelectionChange(Component userDiv) {
