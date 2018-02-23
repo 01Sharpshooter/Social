@@ -26,6 +26,8 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -34,12 +36,15 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
+import hu.mik.components.UserListLayout;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendshipService;
+import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
@@ -61,6 +66,11 @@ public class MessagesView extends VerticalLayout implements View {
 	@Autowired
 	FriendshipService friendshipService;
 	
+	@Autowired
+	UserListLayout userListLayout;
+	@Autowired
+	LdapService ldapService;
+	
 	private List<User> onlineUsers=MainUI.getOnlineUsers();
 	private List<User> friendList=new ArrayList<>();
 	private Panel messagesPanel=new Panel();
@@ -76,40 +86,35 @@ public class MessagesView extends VerticalLayout implements View {
 	private User sender;
 	private User receiver;
 	private HorizontalLayout textWriter;
-	private VerticalLayout chat;
+	private CssLayout chat;
 	private List<Message> messagesList;
-	private int prevUserDivId=-1;
-	private VerticalLayout userList;
+	private CssLayout userList;
 
 
 	private int messageNumberAtOnce=20;
 	
-	@PostConstruct
-	public void init(){
+
+	@Override
+	public void enter(ViewChangeEvent event) {
 		WrappedSession session=VaadinService.getCurrentRequest().getWrappedSession();
 		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
 		sender=userService.findUserByUsername(username);
 		
-		senderId=sender.getId();
-		
+		senderId=sender.getId();		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
 		
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setSizeFull();
+		this.setMargin(false);
+		this.setSpacing(false);
 		
-		HorizontalLayout base=new HorizontalLayout();
-		base.setMargin(false);
-		base.setSpacing(false);
-//		base.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+		CssLayout base=new CssLayout();
+		base.setId("messageBase");
 		base.setSizeFull();
 		
-		userList=new VerticalLayout();	
-//		userList.setId("userListPanelMessages");
+		userList=new CssLayout();	
 		userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		
-		userListPanel.setSizeFull();
-		userListPanel.setContent(userList);
-		userListPanel.addStyleName(ThemeConstants.BORDERED);
+		userList.setId("latestMessagesLayout");
 		
 		textWriter=this.createTextWriter();
 		
@@ -120,124 +125,150 @@ public class MessagesView extends VerticalLayout implements View {
 		messagesPanel.setSizeFull();
 		
 		chat=this.createChat();
-		chat.setSizeFull();
 		
 		addComponent(base);
-		base.addComponent(userListPanel);
+		base.addComponent(userList);
 		base.addComponent(chat);			
-		base.setExpandRatio(userListPanel, 15);
-		base.setExpandRatio(chat, 85);
+		fillUserList();
 		
-		if(friendList.size()>0){
-			for(User user: friendList){	
-				if(user!=this.sender){
-					HorizontalLayout userDiv=createUserDiv(user);
-					userList.addComponent(userDiv);	
+		String parameters[]=event.getParameters().split("/");
+		if(parameters.length>0) {
+			receiver=userService.findUserByUsername(parameters[0]);
+			if(receiver!=null) {
+				receiverId=receiver.getId();
+				boolean exists=false;
+				for (Component userDiv : userList) {
+					if(String.valueOf(receiverId).equals(userDiv.getId())) {
+						exists=true;
+						userList.removeComponent(userDiv);
+						userList.addComponent(userDiv, 0);
+						exists=true;
+						break;
+					}	
+				}
+				if(exists) {
+					userListSelectionChange(userList.getComponent(0));
+				}else {
+					Message lastMessage=messageService.findLastByUserIDs(receiverId, senderId);
+					String messageString;
+					if(lastMessage!=null) {
+						messageString=lastMessage.getMessage();
+					}else {
+						messageString="";
+					}
+					CssLayout newDiv=createUserDiv(receiver, messageString);
+					userList.addComponent(newDiv, 0);
+					userListSelectionChange(newDiv);
+				}
+				fillChat(userList.getComponent(0));
+			}
+		}
+		
+	}
+	
+	private void fillUserList() {
+		List<Message> latestMessages=messageService.findLastestMessagesOfUser(100, senderId);
+		List<Integer> alreadyUsedIds=new ArrayList<>();
+		User user;
+		for (Message message : latestMessages) {
+			boolean amItheSender=message.getSenderId()==senderId;
+			if(amItheSender) {
+				if(!alreadyUsedIds.contains(message.getReceiverId())) {
+					alreadyUsedIds.add(message.getReceiverId());
+					user=userService.findUserById(message.getReceiverId());
+					userList.addComponent(createUserDiv(user, message.getMessage()));
+				}
+			}else {
+				if(!alreadyUsedIds.contains(message.getSenderId())) {
+					alreadyUsedIds.add(message.getSenderId());
+					user=userService.findUserById(message.getSenderId());
+					userList.addComponent(createUserDiv(user, message.getMessage()));
 				}
 			}
-		}else{
-			userList.addComponent(new Label("No friends to show :("));
 		}
+		
 	}
 
-	private HorizontalLayout createUserDiv(User user) {
-		HorizontalLayout userDiv=new HorizontalLayout();
-		userDiv.setWidth("100%");
-		userDiv.setHeight(userListPanel.getHeight()/6, userListPanel.getHeightUnits());
-		userDiv.addStyleName(ThemeConstants.BORDERED);
-		userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-//		userDiv.setMargin(false);
+	@PostConstruct
+	public void init(){	
+		
+		
+	}
+
+	private CssLayout createUserDiv(User user, String lastMessage) {
+		CssLayout userDiv=new CssLayout();
+		LdapUser ldapUser=ldapService.findUserByUsername(user.getUsername());
 		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
-		image.setHeight("80%");
-		image.setWidth("80%");
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		userDiv.addComponent(image);
 		userDiv.setId(user.getId().toString());
 		userDiv.addLayoutClickListener(this::userDivClickListener);
-		Label lblName=new Label(user.getUsername());	
-		lblName.setId(user.getId().toString());
+		Label lblName=new Label(ldapUser.getFullName()+"</br><span id=\"message\">"+lastMessage+"</span>", ContentMode.HTML);	
 		userDiv.addComponent(lblName);
-//		Button button=new Button(user.getUsername(),this::userBtnClickListener);
-//		button.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-//		button.setSizeFull();
-//		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-//		button.setId(user.getId().toString());
-//		userDiv.addComponent(button);
-		userDiv.setExpandRatio(image, 1);
-		userDiv.setExpandRatio(lblName, 2);
+
 		return userDiv;
 		
 	}
+	
+	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage){
+		String name;
+		String[] test=((Label)userDiv.getComponent(1)).getValue().split("<");
+		name=test[0];	
+		userDiv.removeComponent(userDiv.getComponent(1));
+		lastMessage.split("<");
+		Label lblName=new Label(name+"</br><span id=\"message\">"+lastMessage+"</span>", ContentMode.HTML);	
+		userDiv.addComponent(lblName);
+		return userDiv;
+	}
 
-	private VerticalLayout createChat() {
-		VerticalLayout chat=new VerticalLayout();
+	private CssLayout createChat() {
+		CssLayout chat=new CssLayout();
+//		chat.setCaption(receiver.getUsername());
+//		chat.setWidth("75%");
+//		chat.setHeight("100%");
+//		chat.setMargin(false);
 		chat.addComponent(messagesPanel);
 		chat.addComponent(textWriter);
-		chat.setExpandRatio(messagesPanel, 9);
-		chat.setExpandRatio(textWriter, 1);		
+//		chat.setExpandRatio(messagesPanel, 9);
+//		chat.setExpandRatio(textWriter, 1);		
+		chat.setId("chatLayout");
 		return chat;
 	}
 
 	private HorizontalLayout createTextWriter() {
 		HorizontalLayout textWriter=new HorizontalLayout();
 		textField=new TextField();
-		textField.setSizeFull();
+		textField.setWidth("100%");
 		sendButton=new Button("Send", this::sendButtonClicked);
 		sendButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		sendButton.setClickShortcut(KeyCode.ENTER);
 		sendButton.setSizeUndefined();
 		textWriter.addComponent(textField);
 		textWriter.addComponent(sendButton);
-		textWriter.setExpandRatio(textField, 9);
-		textWriter.setExpandRatio(sendButton, 1);	
+		textWriter.setExpandRatio(textField, 7);
+		textWriter.setExpandRatio(sendButton, 3);	
 		textWriter.setSizeFull();
 		textWriter.setEnabled(false);
 		return textWriter;
-	}
-
-	@Override
-	public void enter(ViewChangeEvent event) {
-//		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-		
-	}
-	
-	
-	
-	private void userBtnClickListener(Button.ClickEvent event){
-		messagesLayout.setCaption(event.getButton().getCaption());
-		event.getButton().getParent().addStyleName(ThemeConstants.BORDERED_GREEN);
-		textWriter.setEnabled(true);
-		messagesLayout.removeAllComponents();
-		receiverId=Integer.parseInt(event.getButton().getId());
-		receiver=userService.findUserById(receiverId);
-		messagesList=messageService.findAllByUserIDs(messageNumberAtOnce, senderId, receiverId);
-		fillMessages();
-		messagesPanel.setScrollTop(scroll);
-		MessageBroadcastService.register((MainUI)this.getUI(), sender.getUsername());
-		if(prevUserDivId!=-1 && prevUserDivId!=userList.getComponentIndex(event.getButton().getParent())){
-			userList.getComponent(prevUserDivId).removeStyleName(ThemeConstants.BORDERED_GREEN);			
-		}
-		prevUserDivId=userList.getComponentIndex(event.getButton().getParent());
-		textField.focus();
-	}
+	}	
 	
 	private void userDivClickListener(LayoutClickEvent event) {
 //		messagesLayout.setCaption(event.getButton().getCaption());
-		event.getComponent().addStyleName(ThemeConstants.BORDERED_GREEN);
+		fillChat(event.getComponent());
+	}
+	
+	private void fillChat(Component userDiv) {
 		textWriter.setEnabled(true);
 		messagesLayout.removeAllComponents();
-		receiverId=Integer.parseInt(event.getComponent().getId());
+		receiverId=Integer.parseInt(userDiv.getId());
 		receiver=userService.findUserById(receiverId);
 		messagesList=messageService.findAllByUserIDs(messageNumberAtOnce, senderId, receiverId);
 		fillMessages();
 		messagesPanel.setScrollTop(scroll);
 		MessageBroadcastService.register((MainUI)this.getUI(), sender.getUsername());
-		if(prevUserDivId!=-1 && prevUserDivId!=userList.getComponentIndex(event.getComponent())){
-			userList.getComponent(prevUserDivId).removeStyleName(ThemeConstants.BORDERED_GREEN);			
-		}
-		prevUserDivId=userList.getComponentIndex(event.getComponent());
-		textField.focus();
+		userListSelectionChange(userDiv);		
 	}
-	
+
 	public void fillMessages() {
 		messagesList=messageService.findAllByUserIDs(20, senderId, receiverId);
 		if(messagesList!=null){
@@ -298,6 +329,16 @@ public class MessagesView extends VerticalLayout implements View {
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);			
 			messagesLayout.addComponent(newMessage);
 			messagesPanel.setScrollTop(scroll);
+			
+			for (Component userDiv : userList) {
+				if(userDiv.getId().equals(String.valueOf(receiverId))) {
+					userList.removeComponent(userDiv);
+					changeUserDivMessage((CssLayout)userDiv, message.getMessage());
+					userList.addComponent(userDiv, 0);
+					userListSelectionChange(userDiv);
+					break;
+				}
+			}
 		}
 		
 	}
@@ -310,9 +351,25 @@ public class MessagesView extends VerticalLayout implements View {
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);			
 			messagesLayout.addComponent(newMessage);
 			messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
-			messagesPanel.setScrollTop(scroll);
+			messagesPanel.setScrollTop(scroll);	
+			
+		}
+		for (Component userDiv : userList) {
+			if(userDiv.getId().equals(String.valueOf(senderId))) {
+				int presentIndex=userList.getComponentIndex(userDiv);
+				userList.removeComponent(userDiv);
+				changeUserDivMessage((CssLayout)userDiv, message2);
+				userList.addComponent(userDiv, 0);
+				userListSelectionChange(userDiv);
+				break;
+			}
 		}
 		
+	}
+	
+	private void userListSelectionChange(Component userDiv) {
+		userList.forEach(userDivr->userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
+		userDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
 	}
 	
 }

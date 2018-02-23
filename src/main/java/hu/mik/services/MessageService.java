@@ -9,4 +9,8 @@ public interface MessageService {
 	public List<Message> findAllByUserIDs(int number, int id1, int id2);
 	
 	public void saveMessage(Message message);
+	
+	public List<Message> findLastestMessagesOfUser(int number, int userId);
+	
+	public Message findLastByUserIDs(int id1, int id2);
 }

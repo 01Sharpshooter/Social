@@ -155,6 +155,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 		CssLayout dropDownMenu=new CssLayout();
 		dropDownMenu.setId("dropDownMenu");
 		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
+		Label lblProfile=new Label("Profile");
+		dropDownMenu.addComponent(lblProfile);
 		for (Label label : createNaviBarLabelList()) {
 			dropDownMenu.addComponent(label);
 		}
@@ -288,63 +290,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener{
 	private void changeDropDownVisibility(){
 		menuIconFlag=!menuIconFlag;
 		dropDownMenu.setVisible(menuIconFlag);
-	}
-	
-	private void friendRequestClickListener(Button.ClickEvent event){
-		FriendRequest fr=new FriendRequest();
-		fr.setRequestorId(user.getId());
-		fr.setRequestedId(sideUser.getId());
-		friendRequestService.saveFriendRequest(fr);
-		MessageBox.createInfo()
-			.withOkButton()
-			.withCaption("Request sent")
-			.withMessage("Request has been sent to "+sideUser.getUsername())
-			.open();
-		refreshImage();
-	}
-	
-	private void acceptRequestClickListener(Button.ClickEvent event){
-		friendRequestService.deleteFriendRequest(sideUser.getId(), user.getId());
-		Friendship fs=new Friendship();
-		fs.setUserId(user.getId());
-		fs.setFriendId(sideUser.getId());
-		friendshipService.saveFriendship(fs);
-		fs=new Friendship();
-		fs.setUserId(sideUser.getId());
-		fs.setFriendId(user.getId());
-		friendshipService.saveFriendship(fs);
-		refreshImage();
-	}
-	
-	private void rejectRequestClickListener(Button.ClickEvent event){
-		friendRequestService.deleteFriendRequest(sideUser.getId(), user.getId());
-		refreshImage();
-	}
-	
-	private void removeFriendClickListener(Button.ClickEvent event){
-		friendshipService.deleteFriendship(user.getId(), sideUser.getId());
-		friendshipService.deleteFriendship(sideUser.getId(), user.getId());
-		MessageBox.createInfo()
-		.withOkButton()
-		.withCaption("User removed from friends")
-		.withMessage(sideUser.getUsername()+" has been removed from your friends.")
-		.open();
-		refreshImage();
-	}
-	
-	private void friendListClickListener(Button.ClickEvent event){
-		getNavigator().navigateTo(ContactListView.NAME+"/"+sideUser.getId());
-//		((FriendListView)getNavigator().getCurrentView()).fill(sideUser);
-	}
+	}	
 	
 	public void refreshImage(){		
 		User changedUser=userService.findUserById(this.user.getId());
 		user.setImageName(changedUser.getImageName());
 		((Image)navigationBar.getComponent(0)).setSource(new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+user.getImageName())));
-	}
-	
-	private void friendRequestsClickListener(Button.ClickEvent event){
-		getNavigator().navigateTo(RequestsView.NAME);
 	}
 	
 	private void nameSearchClickListener(Button.ClickEvent event){

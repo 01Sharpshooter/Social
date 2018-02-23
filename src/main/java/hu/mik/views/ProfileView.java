@@ -83,9 +83,21 @@ public class ProfileView extends VerticalLayout implements View{
 				Label lblName=new Label(ldapProfileUser.getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
 				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+				StringBuilder strGroups=new StringBuilder();
+				ldapService.findGroupsByUserId(ldapProfileUser.getId())
+				.forEach(group->strGroups.append(group.getGroupName()+", "));
+				Label lblGroups;
+				if(strGroups.length()!=0) {
+					lblGroups=new Label(strGroups.substring(0, strGroups.length()-2));
+				}else {
+					lblGroups=new Label("Without team");
+				}
+				lblGroups.addStyleName(ThemeConstants.BLUE_TEXT_H3);
+//				lblGroups.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 				header.setId("profileHeader");
 				header.addComponent(image);
 				header.addComponent(lblName);
+				header.addComponent(lblGroups);
 				header.addComponent(headerButtonList);
 				FormLayout form=new FormLayout();
 				form.addStyleName(ThemeConstants.BORDERED);
@@ -125,10 +137,15 @@ public class ProfileView extends VerticalLayout implements View{
 	private CssLayout createHeaderBtnList() {
 		headerButtonList=new CssLayout();
 		
-		Button btnFriendRequest=new Button();
-		btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
-		headerButtonList.addComponent(btnFriendRequest);
 		if(dbSessionUser.getId()!=dbProfileUser.getId()) {
+			Button btnFriendRequest=new Button();
+			btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
+			Button btnMessage=new Button("Message");
+			btnMessage.addStyleName(ThemeConstants.BLUE_TEXT);
+			btnMessage.addClickListener(this::messageClickListener);
+			
+			headerButtonList.addComponent(btnFriendRequest);
+			headerButtonList.addComponent(btnMessage);
 			if(friendShipService.findOne(dbProfileUser.getId(), dbSessionUser.getId())!=null){
 				btnFriendRequest.setCaption(StringConstants.BTN_REMOVE_FRIEND);
 			}else if(!friendRequestService.IsAlreadyRequested(dbSessionUser.getId(), dbProfileUser.getId()) &&
@@ -187,6 +204,9 @@ public class ProfileView extends VerticalLayout implements View{
 	private void declineRequestClickListener(Button.ClickEvent event) {
 		friendRequestService.deleteFriendRequest(dbProfileUser.getId(), dbSessionUser.getId());
 		header.replaceComponent(headerButtonList, createHeaderBtnList());
+	}
+	private void messageClickListener(Button.ClickEvent event) {
+		getUI().getNavigator().navigateTo(MessagesView.NAME+"/"+profileUsername);
 	}
 	
 }

@@ -26,4 +26,14 @@ public class MessageServiceImpl implements MessageService{
 		
 	}
 
+	@Override
+	public List<Message> findLastestMessagesOfUser(int number, int userId) {
+		return messageDao.findLatestMessagesOfUser(number, userId);
+	}
+
+	@Override
+	public Message findLastByUserIDs(int id1, int id2) {
+		return messageDao.findLastByUserIDs(id1, id2);
+	}
+
 }
