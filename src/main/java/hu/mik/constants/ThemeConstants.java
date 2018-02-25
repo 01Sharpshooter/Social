@@ -46,4 +46,6 @@ public class ThemeConstants {
 	public static final String GREEN_HIGHLIGHT = "greenHighlight";
 	
 	public static final String MANY_USER_LAYOUT = "manyUserLayout";
+	
+	public static final String MESSAGES_USER_LIST_SHOW_LABEL="showLabelUserList";
 }

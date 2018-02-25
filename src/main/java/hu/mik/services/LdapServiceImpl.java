@@ -43,6 +43,12 @@ public class LdapServiceImpl implements LdapService{
 	}
 
 
+	@Override
+	public List<LdapUser> findAllUsers() {
+		return ldapRepositoryUsers.findAll();
+	}
+
+
 //	@Override
 //	public LdapUser findUserById(Name name) {
 //		return ldapRepositoryUsers.findById(name);

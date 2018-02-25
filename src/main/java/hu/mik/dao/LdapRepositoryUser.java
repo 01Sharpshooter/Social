@@ -13,5 +13,6 @@ import hu.mik.beans.LdapUser;
 public interface LdapRepositoryUser extends org.springframework.data.ldap.repository.LdapRepository<LdapUser>{
 	LdapUser findByUsername(String username);
 	List<LdapUser> findByFullNameContaining(String fullName);
+	List<LdapUser> findAll();
 //	LdapUser findById(Name name);
 }

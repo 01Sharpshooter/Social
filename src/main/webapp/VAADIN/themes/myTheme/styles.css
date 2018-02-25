@@ -12623,6 +12623,10 @@ div.v-layout.v-horizontal.v-widget {
 	min-width: 240px;
 }
 
+.myTheme #base #messageBase .v-textfield {
+	width: 100%;
+}
+
 .myTheme #base #messageBase #latestMessagesLayout {
 	width: 20%;
 	height: 100%;
@@ -12951,4 +12955,12 @@ div.v-layout.v-horizontal.v-widget {
 	margin-left: 0;
 	margin-right: 0;
 	font-weight: bold;
+}
+
+.myTheme .showLabelUserList .v-csslayout {
+	text-align: left;
+}
+
+.myTheme .showLabelUserList .v-csslayout .v-label {
+	display: relative;
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.event.ContextClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -26,6 +27,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -100,6 +102,7 @@ public class MessagesView extends VerticalLayout implements View {
 		String username=(String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
 		sender=userService.findUserByUsername(username);
 		
+		
 		senderId=sender.getId();		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
 		
@@ -111,6 +114,16 @@ public class MessagesView extends VerticalLayout implements View {
 		CssLayout base=new CssLayout();
 		base.setId("messageBase");
 		base.setSizeFull();
+		
+		TextField tfSearch=new TextField("Search:");
+		tfSearch.addValueChangeListener(this::searchValueChangeListener);
+		base.addComponent(tfSearch);
+		
+		List<String> searchList=new ArrayList<>();
+		ldapService.findAllUsers().forEach(user->searchList.add(user.getFullName()));
+		ComboBox<String> cb=new ComboBox<>("test", searchList);
+		cb.setWidth("100%");
+//		base.addComponent(cb);
 		
 		userList=new CssLayout();	
 		userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
@@ -166,27 +179,35 @@ public class MessagesView extends VerticalLayout implements View {
 		
 	}
 	
-	private void fillUserList() {
-		List<Message> latestMessages=messageService.findLastestMessagesOfUser(100, senderId);
+	private List<CssLayout> fillUserList() {
+		List<Message> latestMessages=messageService.findLastestMessagesOfUser(100, senderId);	
 		List<Integer> alreadyUsedIds=new ArrayList<>();
+		List<CssLayout> userDivs=new ArrayList<>();
+		CssLayout userDiv;
 		User user;
+		
+		
 		for (Message message : latestMessages) {
 			boolean amItheSender=message.getSenderId()==senderId;
 			if(amItheSender) {
 				if(!alreadyUsedIds.contains(message.getReceiverId())) {
 					alreadyUsedIds.add(message.getReceiverId());
 					user=userService.findUserById(message.getReceiverId());
-					userList.addComponent(createUserDiv(user, message.getMessage()));
+					userDiv=createUserDiv(user, message.getMessage());
+					userList.addComponent(userDiv);
+					userDivs.add(userDiv);
 				}
 			}else {
 				if(!alreadyUsedIds.contains(message.getSenderId())) {
 					alreadyUsedIds.add(message.getSenderId());
 					user=userService.findUserById(message.getSenderId());
-					userList.addComponent(createUserDiv(user, message.getMessage()));
+					userDiv=createUserDiv(user, message.getMessage());
+					userList.addComponent(userDiv);
+					userDivs.add(userDiv);
 				}
 			}
 		}
-		
+		return userDivs;
 	}
 
 	@PostConstruct
@@ -210,12 +231,26 @@ public class MessagesView extends VerticalLayout implements View {
 		
 	}
 	
+	private CssLayout createUserDiv(LdapUser user, String lastMessage) {
+		CssLayout userDiv=new CssLayout();
+		User dbUser=userService.findUserByUsername(user.getUsername());
+		Image image=new Image(null, new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION+dbUser.getImageName())));
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
+		userDiv.addComponent(image);
+		userDiv.setId(dbUser.getId().toString());
+		userDiv.addLayoutClickListener(this::userDivClickListener);
+		Label lblName=new Label(user.getFullName()+"</br><span id=\"message\">"+lastMessage+"</span>", ContentMode.HTML);	
+		userDiv.addComponent(lblName);
+
+		return userDiv;
+		
+	}
+	
 	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage){
 		String name;
 		String[] test=((Label)userDiv.getComponent(1)).getValue().split("<");
 		name=test[0];	
 		userDiv.removeComponent(userDiv.getComponent(1));
-		lastMessage.split("<");
 		Label lblName=new Label(name+"</br><span id=\"message\">"+lastMessage+"</span>", ContentMode.HTML);	
 		userDiv.addComponent(lblName);
 		return userDiv;
@@ -374,6 +409,25 @@ public class MessagesView extends VerticalLayout implements View {
 	private void userListSelectionChange(Component userDiv) {
 		userList.forEach(userDivr->userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
 		userDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
+//		changeUserDivMessage(
+//				(CssLayout)userDiv, 
+//				messageService.findLastByUserIDs(senderId, Integer.parseInt(userDiv.getId())).getMessage());
+	}
+	
+	private void searchValueChangeListener(ValueChangeEvent<String> event) {
+		if(event.getValue().equals("")) {
+			userList.removeAllComponents();
+			userList.setSizeUndefined();
+//			userList.removeStyleName(ThemeConstants.MESSAGES_USER_LIST_SHOW_LABEL);
+			fillUserList();
+		}else {
+			userList.removeAllComponents();
+			ldapService.findByFullNameContaining(event.getValue())
+			.forEach(user->userList.addComponent(
+					createUserDiv(user, "")));
+//			userList.setWidth("100%");
+//			userList.addStyleName(ThemeConstants.MESSAGES_USER_LIST_SHOW_LABEL);
+		}
 	}
 	
 }

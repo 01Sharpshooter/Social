@@ -18,5 +18,7 @@ public interface LdapService {
 	
 	public List<LdapGroup> findGroupsByUserId(Name memberId);
 	
+	public List<LdapUser> findAllUsers();
+	
 //	public LdapUser findUserById(Name name);
 }

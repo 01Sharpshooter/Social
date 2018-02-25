@@ -35,6 +35,7 @@ import hu.mik.beans.User;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
+import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
@@ -47,6 +48,8 @@ public class MainView extends VerticalLayout implements View{
 	UserService userService;
 	@Autowired
 	private NewsService newsService;
+	@Autowired
+	private LdapService ldapService;
 	
 	public static final String NAME="";
 	private VerticalLayout feed;
@@ -163,7 +166,9 @@ public class MainView extends VerticalLayout implements View{
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		layout.setSizeFull();
-		Button nameButton=new Button(user.getUsername(), this::userNameListener);
+		Button nameButton=new Button(
+				ldapService.findUserByUsername(user.getUsername()).getFullName(), 
+				this::userNameListener);
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		nameButton.addStyleName(ValoTheme.LABEL_H1);
 		nameButton.setId(user.getUsername());
