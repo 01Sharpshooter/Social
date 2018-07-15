@@ -1,49 +1,48 @@
 package hu.mik.beans;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
 @Entity
-@Table(name="t_role")
+@Table(name = "t_role")
 public class Role {
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_GEN")
-	@SequenceGenerator(name="SEQ_GEN", sequenceName="s_role", allocationSize=1, initialValue=1)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_role", allocationSize = 1, initialValue = 1)
 	private Integer id;
-	@Column(name="username")
+	@Column(name = "username")
 	private String username;
-	@Column(name="role")
+	@Column(name = "role")
 	private String role;
-	
+
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getRole() {
-		return role;
+		return this.role;
 	}
+
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
-	
+
 }

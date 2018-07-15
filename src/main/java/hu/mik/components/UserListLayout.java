@@ -1,7 +1,6 @@
 package hu.mik.components;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,29 +26,29 @@ import hu.mik.ui.MainUI;
 import hu.mik.views.ProfileView;
 
 @Component
-@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SuppressWarnings("serial")
-public class UserListLayout extends CssLayout{
+public class UserListLayout extends CssLayout {
 
 	@Autowired
 	LdapService ldapService;
 	@Autowired
 	UserService userService;
-	
+
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
 		this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		this.setWidth("100%");	
-			
-		if(userListLdap!=null){
-			for(LdapUser user : userListLdap){
-				User DbUser=userService.findUserByUsername(user.getUsername());
-				Image image=new Image(null, new FileResource(
-						new File(UserConstants.PROFILE_PICTURE_LOCATION+DbUser.getImageName())));
+		this.setWidth("100%");
+
+		if (userListLdap != null) {
+			for (LdapUser user : userListLdap) {
+				User DbUser = this.userService.findUserByUsername(user.getUsername());
+				Image image = new Image(null,
+						new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + DbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName=new Label(user.getFullName());	
-				HorizontalLayout userDiv=new HorizontalLayout();
+				Label lblName = new Label(user.getFullName());
+				HorizontalLayout userDiv = new HorizontalLayout();
 				userDiv.setHeight("60px");
 				userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 				userDiv.addComponent(image);
@@ -58,27 +57,26 @@ public class UserListLayout extends CssLayout{
 				userDiv.addStyleName(ThemeConstants.BORDERED);
 				userDiv.addLayoutClickListener(this::layoutClickListener);
 				this.addComponent(userDiv);
-				
-			}		
+
+			}
 		}
 		return this;
 	}
-	
-	
+
 	public CssLayout createUserListLayoutFromDb(List<User> userListDb) {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
 		this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		this.setWidth("100%");	
-			
-		if(userListDb!=null){
-			for(User dbUser : userListDb){
-				LdapUser ldapUser=ldapService.findUserByUsername(dbUser.getUsername());
-				Image image=new Image(null, new FileResource(
-						new File(UserConstants.PROFILE_PICTURE_LOCATION+dbUser.getImageName())));
+		this.setWidth("100%");
+
+		if (userListDb != null) {
+			for (User dbUser : userListDb) {
+				LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
+				Image image = new Image(null,
+						new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + dbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName=new Label(ldapUser.getFullName());	
-				HorizontalLayout userDiv=new HorizontalLayout();
+				Label lblName = new Label(ldapUser.getFullName());
+				HorizontalLayout userDiv = new HorizontalLayout();
 				userDiv.setHeight("60px");
 				userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 				userDiv.addComponent(image);
@@ -87,15 +85,13 @@ public class UserListLayout extends CssLayout{
 				userDiv.addStyleName(ThemeConstants.BORDERED);
 				userDiv.addLayoutClickListener(this::layoutClickListener);
 				this.addComponent(userDiv);
-				
-			}		
+
+			}
 		}
 		return this;
 	}
-	
 
-	private void layoutClickListener(LayoutClickEvent event){
-		((MainUI)getUI()).getNavigator().navigateTo(ProfileView.NAME+"/"+event.getComponent().getId());
+	private void layoutClickListener(LayoutClickEvent event) {
+		((MainUI) this.getUI()).getNavigator().navigateTo(ProfileView.NAME + "/" + event.getComponent().getId());
 	}
 }
-

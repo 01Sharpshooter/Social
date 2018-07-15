@@ -1,6 +1,5 @@
 package hu.mik.dao;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +18,9 @@ import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 
 @Repository
-@Transactional(propagation=Propagation.REQUIRED)
-public class UserDaoImplement implements UserDao{
-	
+@Transactional(propagation = Propagation.REQUIRED)
+public class UserDaoImplement implements UserDao {
+
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -30,90 +28,88 @@ public class UserDaoImplement implements UserDao{
 
 	@Override
 	public User save(User user, Role role) {
-		if(findByUsername(user.getUsername())==null){
-			em.persist(user);
-			em.persist(role);
+		if (this.findByUsername(user.getUsername()) == null) {
+			this.em.persist(user);
+			this.em.persist(role);
 		}
-		return findByUsername(user.getUsername());
+		return this.findByUsername(user.getUsername());
 	}
-	
+
 	@Override
 	public User save(User user) {
-		if(findByUsername(user.getUsername())==null){
-			em.persist(user);
+		if (this.findByUsername(user.getUsername()) == null) {
+			this.em.persist(user);
 		}
-		return findByUsername(user.getUsername());
+		return this.findByUsername(user.getUsername());
 	}
+
 	@Override
 	public boolean takenUsername(String username) {
-		User user=findByUsername(username);
+		User user = this.findByUsername(username);
 
-		if(user==null){
+		if (user == null) {
 			return false;
-		}
-		else{
+		} else {
 			return true;
 		}
 	}
+
 	@Override
 	public User findByUsername(String username) {
-		User user=null;
+		User user = null;
 		try {
-			user=em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
-					.setParameter("username", username)
-					.getSingleResult();
+			user = this.em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
+					.setParameter("username", username).getSingleResult();
 		} catch (Exception e) {
 //			user=null;
-			LdapUser ldapUser=ldapService.findUserByUsername(username);
-			if(ldapUser!=null) {
-				user=new User();
+			LdapUser ldapUser = this.ldapService.findUserByUsername(username);
+			if (ldapUser != null) {
+				user = new User();
 				user.setUsername(username);
 				user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
-				em.persist(user);			
+				this.em.persist(user);
 			}
 		}
 		return user;
 	}
+
 	@Override
 	public List<User> findAll() {
-		List<User> list=new ArrayList<>();
-		list=em.createQuery("SELECT u FROM User u", User.class).getResultList();
-		return list;	
-		
+		List<User> list = new ArrayList<>();
+		list = this.em.createQuery("SELECT u FROM User u", User.class).getResultList();
+		return list;
+
 	}
+
 	@Override
 	public User findById(int id) {
 		User user;
 		try {
-			user=em.createQuery("SELECT u FROM User u where u.id= :id", User.class)
-					.setParameter("id", id)
+			user = this.em.createQuery("SELECT u FROM User u where u.id= :id", User.class).setParameter("id", id)
 					.getSingleResult();
 		} catch (Exception e) {
-			user=null;
+			user = null;
 		}
 		return user;
 	}
+
 	@Override
 	public List<User> findAllLike(String username) {
-		List<User> list=new ArrayList<>();
-		list=em.createQuery("SELECT u FROM User u where UPPER(u.username) LIKE CONCAT('%',:username,'%')", User.class)
-				.setParameter("username", username.toUpperCase())
-				.getResultList();
-		if(list.isEmpty()){
+		List<User> list = new ArrayList<>();
+		list = this.em
+				.createQuery("SELECT u FROM User u where UPPER(u.username) LIKE CONCAT('%',:username,'%')", User.class)
+				.setParameter("username", username.toUpperCase()).getResultList();
+		if (list.isEmpty()) {
 			return null;
-		}else{
+		} else {
 			return list;
 		}
 	}
+
 	@Override
 	public void saveChanges(User user) {
-		em.merge(user);
-		
+		this.em.merge(user);
+
 	}
-
-
-
-
-	
 
 }

@@ -46,8 +46,6 @@ import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
-import hu.mik.services.FriendRequestService;
-import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
@@ -69,10 +67,6 @@ import hu.mik.views.UserListView;
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	@Autowired
-	private FriendshipService friendshipService;
-	@Autowired
-	private FriendRequestService friendRequestService;
-	@Autowired
 	private UserService userService;
 	@Autowired
 	private LdapService ldapService;
@@ -82,7 +76,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private LdapUser userLdap;
-	private User sideUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
 	private VerticalLayout base = new VerticalLayout();
