@@ -75,7 +75,7 @@
 			}
 		}
 	}
-	#base[width-range~="551px-850px"]{
+	#base[width-range~="551px-930px"]{
 		.manyUserLayout{
 			.v-horizontallayout{
 				width:50%;
@@ -86,10 +86,9 @@
 		}
 		#navigationBar {
   			.v-label:not(#username){
-  				display:none;
-	  		}
-	  		#menuIcon{
-	  			display: block;
+  				.folding{
+  					display:none;
+  				}
 	  		}
 		}
 		#profileHeader{
@@ -129,6 +128,7 @@
 		min-width: 240px;
 		
 		#messageBase{
+			overflow:auto;
 			.v-textfield{
 				width:100%;
 /* 				margin-bottom: 10px; */
@@ -448,6 +448,12 @@
 				display:relative;
 			}
 		}
+	}
+	.greenicon .v-icon {
+    	color: $green;
+	}
+	.whiteicon .v-icon {
+    	color: white;
 	}
   
 

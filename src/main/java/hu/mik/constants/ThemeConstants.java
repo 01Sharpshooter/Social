@@ -48,4 +48,8 @@ public class ThemeConstants {
 	public static final String MANY_USER_LAYOUT = "manyUserLayout";
 	
 	public static final String MESSAGES_USER_LIST_SHOW_LABEL="showLabelUserList";
+	
+	public static final String ICON_GREEN="greenicon";
+	
+	public static final String ICON_WHITE="whiteicon";
 }

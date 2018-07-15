@@ -52,7 +52,8 @@ public class LoginUI extends UI{
 			layout.addComponent(success);
 			
 			if(request.getParameter("error")!=null){
-				success.setValue("We're sorry to inform you that your account has been suspended.");
+//				success.setValue("We're sorry to inform you that your account has been suspended.");
+				success.setValue("Wrong username or password.");
 			}
 			
 			TextField nameTF=new TextField("Name");
@@ -103,10 +104,10 @@ public class LoginUI extends UI{
 			});
 			submit.setClickShortcut(KeyCode.ENTER);
 			layout.addComponent(submit);
-			Button register=new Button("Registration");
-			register.setStyleName(ValoTheme.BUTTON_SMALL);
-			register.addClickListener(event->getPage().setLocation("/registration"));
-			layout.addComponent(register);
+//			Button register=new Button("Registration");
+//			register.setStyleName(ValoTheme.BUTTON_SMALL);
+//			register.addClickListener(event->getPage().setLocation("/registration"));
+//			layout.addComponent(register);
 		
 	}
 	

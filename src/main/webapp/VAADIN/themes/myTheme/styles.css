@@ -12569,51 +12569,47 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 12px;
 }
 
-.myTheme #base[width-range~="551px-850px"] .manyUserLayout .v-horizontallayout {
+.myTheme #base[width-range~="551px-930px"] .manyUserLayout .v-horizontallayout {
 	width: 50%;
 }
 
-.myTheme #base[width-range~="551px-850px"] .responsiveFont {
+.myTheme #base[width-range~="551px-930px"] .responsiveFont {
 	font-size: 150%;
 }
 
-.myTheme #base[width-range~="551px-850px"] #navigationBar .v-label:not(#username) {
+.myTheme #base[width-range~="551px-930px"] #navigationBar .v-label:not(#username) .folding {
 	display: none;
 }
 
-.myTheme #base[width-range~="551px-850px"] #navigationBar #menuIcon {
-	display: block;
-}
-
-.myTheme #base[width-range~="551px-850px"] #profileHeader .v-image {
+.myTheme #base[width-range~="551px-930px"] #profileHeader .v-image {
 	height: 125px;
 }
 
-.myTheme #base[width-range~="551px-850px"] #profileBody .v-textfield {
+.myTheme #base[width-range~="551px-930px"] #profileBody .v-textfield {
 	width: 100%;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #latestMessagesLayout {
+.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout {
 	width: 10%;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #latestMessagesLayout .v-csslayout {
+.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout {
 	text-align: center;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #latestMessagesLayout .v-csslayout .v-label {
+.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout .v-label {
 	display: none;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #latestMessagesLayout .v-csslayout .v-image {
+.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout .v-image {
 	height: 100%;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #chatLayout {
+.myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout {
 	width: 90%;
 }
 
-.myTheme #base[width-range~="551px-850px"] #messageBase #chatLayout .v-button {
+.myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout .v-button {
 	font-size: 12px;
 }
 
@@ -12621,6 +12617,10 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 10px;
 	font-family: arial;
 	min-width: 240px;
+}
+
+.myTheme #base #messageBase {
+	overflow: auto;
 }
 
 .myTheme #base #messageBase .v-textfield {
@@ -12957,10 +12957,14 @@ div.v-layout.v-horizontal.v-widget {
 	font-weight: bold;
 }
 
-.myTheme .showLabelUserList .v-csslayout {
-	text-align: left;
-}
-
 .myTheme .showLabelUserList .v-csslayout .v-label {
 	display: relative;
+}
+
+.myTheme .greenicon .v-icon {
+	color: #00FF00;
+}
+
+.myTheme .whiteicon .v-icon {
+	color: white;
 }

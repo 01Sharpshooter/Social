@@ -55,7 +55,7 @@ import hu.mik.ui.MainUI;
 @SuppressWarnings("serial")
 @ViewScope
 @SpringView(name=MessagesView.NAME)
-public class MessagesView extends VerticalLayout implements View {
+public class MessagesView extends Panel implements View {
 	public static final String NAME="messages";
 	
 	
@@ -91,6 +91,7 @@ public class MessagesView extends VerticalLayout implements View {
 	private CssLayout chat;
 	private List<Message> messagesList;
 	private CssLayout userList;
+	private VerticalLayout container;
 
 
 	private int messageNumberAtOnce=20;
@@ -105,13 +106,13 @@ public class MessagesView extends VerticalLayout implements View {
 		
 		senderId=sender.getId();		
 		friendshipService.findAllByUserId(senderId).forEach(friendShip -> friendList.add(userService.findUserById(friendShip.getFriendId())));
-		
+		this.container=new VerticalLayout();
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setSizeFull();
-		this.setMargin(false);
-		this.setSpacing(false);
-		
+//		this.container.setMargin(false);
+//		this.container.setSpacing(false);
 		CssLayout base=new CssLayout();
+		this.setContent(base);
 		base.setId("messageBase");
 		base.setSizeFull();
 		
@@ -139,7 +140,7 @@ public class MessagesView extends VerticalLayout implements View {
 		
 		chat=this.createChat();
 		
-		addComponent(base);
+//		addComponent(base);
 		base.addComponent(userList);
 		base.addComponent(chat);			
 		fillUserList();
