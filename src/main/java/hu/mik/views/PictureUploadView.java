@@ -51,7 +51,7 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 	public void init() {
 		this.uploadProfilePicture.setView(this);
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-		this.upload = new Upload("Upload a new profile picture! (JPEG/PNG/GIF)", this.uploadProfilePicture);
+		this.upload = new Upload("Upload a new profile picture! (JPEG/PNG)", this.uploadProfilePicture);
 		this.upload.setImmediateMode(true);
 		this.upload.addSucceededListener(this.uploadProfilePicture);
 		this.addComponent(this.upload);

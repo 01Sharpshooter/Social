@@ -1,11 +1,18 @@
 package hu.mik.listeners;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -83,15 +90,23 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 
 		String imageName = System.currentTimeMillis() + this.fileName;
 		File imageSave = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
-		FileOutputStream ops = null;
-		int cursor;
+
 		try {
-			ops = new FileOutputStream(imageSave);
-			while ((cursor = ins.read()) != -1) {
-				ops.write(cursor);
-			}
+			BufferedImage bufferedImage = ImageIO.read(ins);
+			ImageWriter writer = ImageIO.getImageWritersByFormatName("jpeg").next();
+			ImageWriteParam writerParam = writer.getDefaultWriteParam();
+			writerParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+			writerParam.setCompressionQuality(0.1f);
+
+			FileOutputStream ops = new FileOutputStream(imageSave);
+			ImageOutputStream imageOS = ImageIO.createImageOutputStream(ops);
+			writer.setOutput(imageOS);
+			writer.write(null, new IIOImage(bufferedImage, null, null), writerParam);
+
+			writer.dispose();
 			ins.close();
 			ops.close();
+
 			if (!user.getImageName().equals("user.png")) {
 				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName());
 				fileToDel.delete();
