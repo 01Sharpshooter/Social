@@ -10,7 +10,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
-import hu.mik.views.RegistrationView;
 
 public class NaviBar {
 	@Autowired
@@ -23,7 +22,6 @@ public class NaviBar {
 		naviBar.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		naviBar.addComponent(this.createNavigationButton("Main", MainView.NAME));
 		naviBar.addComponent(this.createNavigationButton("Messages", MessagesView.NAME));
-		naviBar.addComponent(this.createNavigationButton("Registration", RegistrationView.NAME));
 		Button logoutButton = new Button("Logout");
 		logoutButton.addClickListener(event -> {
 			NaviBar.this.usedUI.getPage().setLocation("/login");

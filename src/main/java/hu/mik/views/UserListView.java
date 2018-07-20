@@ -11,7 +11,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapUser;
 import hu.mik.components.UserListLayout;
@@ -21,7 +20,7 @@ import hu.mik.services.UserService;
 @SuppressWarnings("serial")
 @ViewScope
 @SpringView(name = UserListView.NAME)
-public class UserListView extends VerticalLayout implements View {
+public class UserListView extends Panel implements View {
 	public static final String NAME = "userList";
 
 	@Autowired
@@ -31,27 +30,24 @@ public class UserListView extends VerticalLayout implements View {
 	@Autowired
 	UserListLayout userListLayout;
 
-	private Panel panel = new Panel();
-
 	@Override
 	public void enter(ViewChangeEvent event) {
+		this.setSizeFull();
+		this.setCaption("Users with similar names:");
+		this.fill(event.getParameters());
 
 	}
 
-	public void fill(String username) {
+	private void fill(String username) {
 		CssLayout layout = new CssLayout();
-		this.addComponent(this.panel);
-		this.setSizeFull();
-		List<LdapUser> userListLdap = new ArrayList<>();
 
-		this.panel.setSizeFull();
-		this.panel.setCaption("Users with similar names:");
+		List<LdapUser> userListLdap = new ArrayList<>();
 		userListLdap = this.ldapService.findByFullNameContaining(username);
 
 		if (userListLdap != null) {
 			layout = this.userListLayout.createUserListLayoutFromLdap(userListLdap);
 		}
-		this.panel.setContent(layout);
+		this.setContent(layout);
 	}
 
 }

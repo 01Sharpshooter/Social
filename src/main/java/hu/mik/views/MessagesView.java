@@ -79,11 +79,12 @@ public class MessagesView extends Panel implements View {
 	private User sender;
 	private User receiver;
 	private HorizontalLayout textWriter;
-	private CssLayout chat;
 	private List<Message> messagesList;
 	private CssLayout userList;
 
 	private int messageNumberAtOnce = 20;
+
+	private CssLayout base;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -98,38 +99,27 @@ public class MessagesView extends Panel implements View {
 		this.setSizeFull();
 //		this.container.setMargin(false);
 //		this.container.setSpacing(false);
-		CssLayout base = new CssLayout();
-		this.setContent(base);
-		base.setId("messageBase");
-		base.setSizeFull();
+		this.createContent(event);
 
-		TextField tfSearch = new TextField("Search:");
-		tfSearch.addValueChangeListener(this::searchValueChangeListener);
-		base.addComponent(tfSearch);
+	}
 
-		List<String> searchList = new ArrayList<>();
-		this.ldapService.findAllUsers().forEach(user -> searchList.add(user.getFullName()));
-		ComboBox<String> cb = new ComboBox<>("test", searchList);
-		cb.setWidth("100%");
-//		base.addComponent(cb);
+	private void createContent(ViewChangeEvent event) {
+		this.createBase();
 
-		this.userList = new CssLayout();
-		this.userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		this.userList.setId("latestMessagesLayout");
+		this.createTextFieldSearch();
 
-		this.textWriter = this.createTextWriter();
+		this.createSearchComboBox();
 
-		this.messagesLayout = new VerticalLayout();
-		this.messagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-		this.messagesPanel.setContent(this.messagesLayout);
-		this.messagesPanel.addStyleName(ThemeConstants.BORDERED);
-		this.messagesPanel.setSizeFull();
+		this.createUserList();
 
-		this.chat = this.createChat();
+		this.createTextWriter();
+
+		this.createMessagesPanel();
+
+		this.createChat();
 
 //		addComponent(base);
-		base.addComponent(this.userList);
-		base.addComponent(this.chat);
+
 		this.fillUserList();
 
 		String parameters[] = event.getParameters().split("/");
@@ -164,7 +154,42 @@ public class MessagesView extends Panel implements View {
 				this.fillChat(this.userList.getComponent(0));
 			}
 		}
+	}
 
+	private void createMessagesPanel() {
+		this.messagesLayout = new VerticalLayout();
+		this.messagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+		this.messagesPanel.setContent(this.messagesLayout);
+		this.messagesPanel.addStyleName(ThemeConstants.BORDERED);
+		this.messagesPanel.setSizeFull();
+	}
+
+	private void createUserList() {
+		this.userList = new CssLayout();
+		this.userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
+		this.userList.setId("latestMessagesLayout");
+		this.base.addComponent(this.userList);
+	}
+
+	private void createSearchComboBox() {
+		List<String> searchList = new ArrayList<>();
+		this.ldapService.findAllUsers().forEach(user -> searchList.add(user.getFullName()));
+		ComboBox<String> cb = new ComboBox<>("test", searchList);
+		cb.setWidth("100%");
+//		base.addComponent(cb);
+	}
+
+	private void createTextFieldSearch() {
+		TextField tfSearch = new TextField("Search:");
+		tfSearch.addValueChangeListener(this::searchValueChangeListener);
+		this.base.addComponent(tfSearch);
+	}
+
+	private void createBase() {
+		this.base = new CssLayout();
+		this.setContent(this.base);
+		this.base.setId("messageBase");
+		this.base.setSizeFull();
 	}
 
 	private List<CssLayout> fillUserList() {
@@ -246,7 +271,7 @@ public class MessagesView extends Panel implements View {
 		return userDiv;
 	}
 
-	private CssLayout createChat() {
+	private void createChat() {
 		CssLayout chat = new CssLayout();
 //		chat.setCaption(receiver.getUsername());
 //		chat.setWidth("75%");
@@ -257,24 +282,23 @@ public class MessagesView extends Panel implements View {
 //		chat.setExpandRatio(messagesPanel, 9);
 //		chat.setExpandRatio(textWriter, 1);
 		chat.setId("chatLayout");
-		return chat;
+		this.base.addComponent(chat);
 	}
 
-	private HorizontalLayout createTextWriter() {
-		HorizontalLayout textWriter = new HorizontalLayout();
+	private void createTextWriter() {
+		this.textWriter = new HorizontalLayout();
 		this.textField = new TextField();
 		this.textField.setWidth("100%");
 		this.sendButton = new Button("Send", this::sendButtonClicked);
 		this.sendButton.addStyleName(ThemeConstants.BLUE_TEXT);
 		this.sendButton.setClickShortcut(KeyCode.ENTER);
 		this.sendButton.setSizeUndefined();
-		textWriter.addComponent(this.textField);
-		textWriter.addComponent(this.sendButton);
-		textWriter.setExpandRatio(this.textField, 7);
-		textWriter.setExpandRatio(this.sendButton, 3);
-		textWriter.setSizeFull();
-		textWriter.setEnabled(false);
-		return textWriter;
+		this.textWriter.addComponent(this.textField);
+		this.textWriter.addComponent(this.sendButton);
+		this.textWriter.setExpandRatio(this.textField, 7);
+		this.textWriter.setExpandRatio(this.sendButton, 3);
+		this.textWriter.setSizeFull();
+		this.textWriter.setEnabled(false);
 	}
 
 	private void userDivClickListener(LayoutClickEvent event) {

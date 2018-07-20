@@ -60,8 +60,7 @@ public class LoginUI extends UI {
 		submit.addClickListener(event -> {
 			String userName = nameTF.getValue();
 			String passWord = pwTF.getValue();
-
-			if (LoginUI.this.IsvalidName(userName) && LoginUI.this.IsvalidPassword(passWord)) {
+			if (this.IsvalidName(userName) && this.IsvalidPassword(passWord)) {
 //						User user=userService.findUserByUsername(userName);
 //						if(user!=null){
 //							if(encService.comparePW(passWord, user.getPassword())){
@@ -72,8 +71,9 @@ public class LoginUI extends UI {
 				formSender.addValue("username", nameTF.getValue());
 				formSender.addValue("password", pwTF.getValue());
 				formSender.setFormTarget("_top");
-				formSender.extend(LoginUI.this.getUI());
+				formSender.extend(this.getUI());
 				formSender.submit();
+				System.err.println("login attempt");
 //							}else{
 //								success.setValue("Wrong username or password.");
 //								pwTF.clear();

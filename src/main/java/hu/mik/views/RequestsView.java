@@ -31,7 +31,7 @@ import hu.mik.services.UserService;
 @SuppressWarnings("serial")
 @ViewScope
 @SpringView(name = RequestsView.NAME)
-public class RequestsView extends VerticalLayout implements View {
+public class RequestsView extends Panel implements View {
 	public static final String NAME = "RequestsView";
 
 	@Autowired
@@ -40,7 +40,6 @@ public class RequestsView extends VerticalLayout implements View {
 	UserService userService;
 
 	private User user;
-	private Panel panel = new Panel();
 	private HorizontalLayout row = new HorizontalLayout();
 	private VerticalLayout rows = new VerticalLayout();
 	private HorizontalLayout userDiv;
@@ -53,25 +52,21 @@ public class RequestsView extends VerticalLayout implements View {
 	}
 
 	private void fill() {
-		this.addComponent(this.panel);
-		this.setMargin(false);
 		this.setSizeFull();
-
-		this.panel.setSizeFull();
-		this.panel.setContent(this.rows);
-		this.rows.setHeight("100%");
-		this.rows.setWidth("100%");
+		this.setContent(this.rows);
+		this.rows.setSizeFull();
 		this.rows.addComponent(this.row);
-		this.panel.setCaption("Your friend requests:");
-		this.row.setHeight(this.panel.getHeight() / this.divsPerRow, this.panel.getHeightUnits());
+		this.setCaption("Your friend requests:");
+		this.row.setHeight(this.getHeight() / this.divsPerRow, this.getHeightUnits());
 
 		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
 		this.user = this.userService.findUserByUsername(username);
 
 		List<FriendRequest> requests = this.friendRequestService.findAllByRequestedId(this.user.getId());
-
+//		List<LdapUser> requestsAsLdap
 		int i = 0;
+//		requests.stream().map(r -> this.userService.findUserById(r.getRequestedId())).;
 		for (FriendRequest request : requests) {
 			i++;
 			User requestUser = this.userService.findUserById(request.getRequestorId());
@@ -85,14 +80,14 @@ public class RequestsView extends VerticalLayout implements View {
 			this.userDiv = new HorizontalLayout();
 			this.userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 			this.userDiv.setHeight("100%");
-			this.userDiv.setWidth(this.panel.getWidth() / this.divsPerRow, this.panel.getWidthUnits());
+			this.userDiv.setWidth(this.getWidth() / this.divsPerRow, this.getWidthUnits());
 			this.userDiv.addComponent(image);
 			this.userDiv.addComponent(nameButton);
 			this.userDiv.addStyleName(ThemeConstants.BORDERED);
 			this.row.addComponent(this.userDiv);
 			if (i == this.divsPerRow) {
 				this.row = new HorizontalLayout();
-				this.row.setHeight(this.panel.getHeight() / this.divsPerRow, this.panel.getHeightUnits());
+				this.row.setHeight(this.getHeight() / this.divsPerRow, this.getHeightUnits());
 				this.rows.addComponent(this.row);
 				i = 0;
 			}

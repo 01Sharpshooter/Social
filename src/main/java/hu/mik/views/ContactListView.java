@@ -30,7 +30,7 @@ import hu.mik.services.UserService;
 @SuppressWarnings("serial")
 @ViewScope
 @SpringView(name = ContactListView.NAME)
-public class ContactListView extends VerticalLayout implements View {
+public class ContactListView extends Panel implements View {
 	public static final String NAME = "FriendListView";
 	@Autowired
 	FriendshipService friendshipService;
@@ -43,10 +43,9 @@ public class ContactListView extends VerticalLayout implements View {
 	@Autowired
 	LdapService ldapService;
 
-	private Panel panel = new Panel();
-	private CssLayout layout = new CssLayout();
+	private CssLayout contactsLayout;
 	private List<User> friendList = new ArrayList<>();
-	private VerticalLayout base = new VerticalLayout();
+	private VerticalLayout base;
 	private User dbUser;
 	private LdapUser ldapUser;
 	private List<FriendRequest> requests;
@@ -55,23 +54,34 @@ public class ContactListView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		this.addComponent(this.panel);
-		this.setMargin(false);
-		this.setSizeFull();
-//		base.setMargin(false);
-//		base.setSpacing(false);
 		this.dbUser = this.userService.findUserByUsername(event.getParameters());
 		this.ldapUser = this.ldapService.findUserByUsername(event.getParameters());
+		this.base = new VerticalLayout();
+
+		this.setSizeFull();
+		this.setCaption(this.dbUser.getUsername() + "'s " + "Friendlist:");
 
 		this.requests = this.friendRequestService.findAllByRequestedId(this.dbUser.getId());
 		this.groups = this.ldapService.findGroupsByUserId(this.ldapUser.getId());
 
-		this.panel.setSizeFull();
-		this.panel.setCaption(this.dbUser.getUsername() + "'s " + "Friendlist:");
-
 		this.friendshipService.findAllByUserId(this.dbUser.getId())
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
 
+		this.createContent();
+
+		this.setContent(this.base);
+	}
+
+	private void createContent() {
+		this.contactsLayout = new CssLayout();
+		this.createGroupComboBox();
+		this.createRadioBtnGroup();
+
+		this.base.addComponent(this.contactsLayout);
+		this.base.setExpandRatio(this.contactsLayout, 80);
+	}
+
+	private void createGroupComboBox() {
 		this.groupSelect = new ComboBox<>("Select a team:", this.groups);
 		this.groupSelect.setEmptySelectionAllowed(false);
 		this.groupSelect.addSelectionListener(this::groupSelectionListener);
@@ -80,6 +90,11 @@ public class ContactListView extends VerticalLayout implements View {
 		}
 		this.groupSelect.setVisible(false);
 
+		this.base.addComponent(this.groupSelect);
+		this.base.setExpandRatio(this.groupSelect, 10);
+	}
+
+	private void createRadioBtnGroup() {
 		RadioButtonGroup<String> radioButtonGroup = new RadioButtonGroup<>();
 		List<String> radioFixItems = new ArrayList<>();
 		radioFixItems.add("Friends(" + this.friendList.size() + ")");
@@ -94,28 +109,20 @@ public class ContactListView extends VerticalLayout implements View {
 		radioButtonGroup.addSelectionListener(this::radioBtnListener);
 		radioButtonGroup.setSelectedItem("Friends(" + (this.friendList.size()) + ")");
 
-//		layout=userListLayout.createUserListLayoutFromDb(friendList);
-
 		this.base.addComponent(radioButtonGroup);
-		this.base.addComponent(this.groupSelect);
-		this.base.addComponent(this.layout);
 		this.base.setExpandRatio(radioButtonGroup, 10);
-		this.base.setExpandRatio(this.groupSelect, 10);
-		this.base.setExpandRatio(this.layout, 80);
-
-		this.panel.setContent(this.base);
 	}
 
 	private void radioBtnListener(SingleSelectionEvent<String> event) {
 		String value = event.getSource().getValue();
 		this.groupSelect.setVisible(false);
-		this.layout.removeAllComponents();
+		this.contactsLayout.removeAllComponents();
 		if (value.matches("Requests.*")) {
 			List<User> requestors = new ArrayList<>();
 			this.requests.forEach(request -> requestors.add(this.userService.findUserById(request.getRequestorId())));
-			this.layout = this.userListLayout.createUserListLayoutFromDb(requestors);
+			this.contactsLayout = this.userListLayout.createUserListLayoutFromDb(requestors);
 		} else if (value.matches("Friends.*")) {
-			this.layout = this.userListLayout.createUserListLayoutFromDb(this.friendList);
+			this.contactsLayout = this.userListLayout.createUserListLayoutFromDb(this.friendList);
 		} else if (value.matches("Teams.*")) {
 			this.groupSelect.setVisible(true);
 			this.setLayoutByTeam(this.groupSelect.getValue());
@@ -135,7 +142,7 @@ public class ContactListView extends VerticalLayout implements View {
 				teamMembers.add(this.ldapService.findUserByUsername(name.get(3).substring(4)));
 			}
 		});
-		this.layout.removeAllComponents();
-		this.layout = this.userListLayout.createUserListLayoutFromLdap(teamMembers);
+		this.contactsLayout.removeAllComponents();
+		this.contactsLayout = this.userListLayout.createUserListLayoutFromLdap(teamMembers);
 	}
 }

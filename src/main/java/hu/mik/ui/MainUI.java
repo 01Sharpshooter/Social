@@ -13,7 +13,6 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
-import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -40,6 +39,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
+import hu.mik.beans.SocialUser;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
@@ -76,9 +76,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private LdapUser userLdap;
+	private SocialUser socialUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
-	private VerticalLayout base = new VerticalLayout();
+	private VerticalLayout base;
 	private TextField nameSearchTf;
 	private CssLayout navigationBar;
 	private CssLayout dropDownMenu;
@@ -105,32 +106,42 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		final VerticalLayout workingSpace = new VerticalLayout();
 		this.getNavigator().addViewChangeListener(this::viewChangeListener);
 		workingSpace.setSizeFull();
+
+		this.createContent();
+	}
+
+	private void createContent() {
+		this.base = new VerticalLayout();
 		this.base.setSizeFull();
 		this.base.setMargin(false);
-		Label title = new Label("Social");
-		title.setSizeFull();
-		Responsive.makeResponsive(title);
-		title.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-		title.addStyleName("h1");
-		this.dropDownMenu = this.createDropDownMenu();
-		this.navigationBar = this.createNaviBar();
+
+		Responsive.makeResponsive(this.base);
+
+		this.createTitleComponent();
+		this.createNaviBar();
+		this.createDropDownMenu();
+		this.createViewDisplay();
+		this.base.setId("base");
+
+		this.base.setStyleName(ThemeConstants.BORDERED_THICK);
+		this.setContent(this.base);
+	}
+
+	private void createViewDisplay() {
 		this.viewDisplay = new Panel();
 		this.viewDisplay.setSizeFull();
 		this.viewDisplay.setId("viewDisplay");
-		this.base.setId("base");
-		this.navigationBar.setId("navigationBar");
-		this.base.addComponent(title);
-		this.base.addComponent(this.navigationBar);
-		this.base.addComponent(this.dropDownMenu);
 		this.base.addComponent(this.viewDisplay);
-		this.base.setExpandRatio(title, 5);
-		this.base.setExpandRatio(this.navigationBar, 10);
-		this.base.setExpandRatio(this.dropDownMenu, 1);
 		this.base.setExpandRatio(this.viewDisplay, 85);
-		this.base.setStyleName(ThemeConstants.BORDERED_THICK);
+	}
 
-		Responsive.makeResponsive(this.base);
-		this.setContent(this.base);
+	private void createTitleComponent() {
+		Label title = new Label("Social");
+		title.setSizeFull();
+		title.addStyleName(ThemeConstants.RESPONSIVE_FONT);
+		title.addStyleName("h1");
+		this.base.addComponent(title);
+		this.base.setExpandRatio(title, 5);
 	}
 
 	@Override
@@ -141,19 +152,20 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	}
 
-	private CssLayout createDropDownMenu() {
-		CssLayout dropDownMenu = new CssLayout();
-		dropDownMenu.setId("dropDownMenu");
-		dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
+	private void createDropDownMenu() {
+		this.dropDownMenu = new CssLayout();
+		this.dropDownMenu.setId("dropDownMenu");
+		this.dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
 		Label lblProfile = new Label(VaadinIcons.USER.getHtml() + " Profile", ContentMode.HTML);
 		lblProfile.addStyleName(ThemeConstants.ICON_WHITE);
-		dropDownMenu.addComponent(lblProfile);
+		this.dropDownMenu.addComponent(lblProfile);
 		for (Label label : this.createNaviBarLabelList()) {
-			dropDownMenu.addComponent(label);
+			this.dropDownMenu.addComponent(label);
 		}
-		dropDownMenu.setVisible(false);
-		dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
-		return dropDownMenu;
+		this.dropDownMenu.setVisible(false);
+		this.dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
+		this.base.addComponent(this.dropDownMenu);
+		this.base.setExpandRatio(this.dropDownMenu, 1);
 	}
 
 	public static List<User> getOnlineUsers() {
@@ -163,11 +175,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private boolean viewChangeListener(ViewChangeEvent event) {
 		if (event.getViewName().equals(MessagesView.NAME)) {
 			this.messageView = (MessagesView) event.getNewView();
-//			if(!sideUser.equals(user))
-//				changeSideMenu(user);
 		} else if (event.getViewName().equals(UserListView.NAME)) {
-//			if(!sideUser.equals(user))
-//				changeSideMenu(user);
+
 		} else {
 			MessageBroadcastService.unregister(this, this.user.getUsername());
 		}
@@ -192,41 +201,41 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	}
 
-	public CssLayout createNaviBar() {
-		CssLayout naviBar = new CssLayout();
-		naviBar.setWidth("100%");
-		naviBar.addLayoutClickListener(this::naviBarClickListener);
-		Responsive.makeResponsive(naviBar);
+	public void createNaviBar() {
+		this.navigationBar = new CssLayout();
+		this.navigationBar.setWidth("100%");
+		this.navigationBar.addLayoutClickListener(this::naviBarClickListener);
 		this.naviBarImage = new Image(null,
 				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + this.user.getImageName())));
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		this.naviBarImage.addClickListener(this::profileImageClickListener);
-		naviBar.addComponent(this.naviBarImage);
+		this.navigationBar.addComponent(this.naviBarImage);
 		Label name = new Label();
 		name.setValue(this.userLdap.getFullName());
 		name.setId("username");
-		naviBar.addComponent(name);
+		this.navigationBar.addComponent(name);
 		Image naviBarIcon = new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON)));
 		naviBarIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviBarIcon.setId("menuIcon");
 		naviBarIcon.addClickListener(this::menuIconClickListener);
-		naviBar.addComponent(naviBarIcon);
+		this.navigationBar.addComponent(naviBarIcon);
 
 		for (Label label : this.createNaviBarLabelList()) {
-			naviBar.addComponent(label);
+			this.navigationBar.addComponent(label);
 		}
 		this.nameSearchTf = new TextField();
 		this.nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
-		this.nameSearchTf.setValue("Search for a user...");
-		this.nameSearchTf.addFocusListener(this::nameSearchFocusListener);
+		this.nameSearchTf.setPlaceholder("Search for a user...");
 		Button namesearchButton = new Button("Search", this::nameSearchClickListener);
 		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
 		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		naviBar.addComponent(namesearchButton);
-		naviBar.addComponent(this.nameSearchTf);
-		return naviBar;
+		this.navigationBar.addComponent(namesearchButton);
+		this.navigationBar.addComponent(this.nameSearchTf);
+		this.navigationBar.setId("navigationBar");
+		this.base.addComponent(this.navigationBar);
+		this.base.setExpandRatio(this.navigationBar, 10);
 	}
 
 	private void naviBarClickListener(LayoutClickEvent event) {
@@ -284,14 +293,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	private void nameSearchClickListener(Button.ClickEvent event) {
 		if (!this.nameSearchTf.isEmpty()) {
-			this.getNavigator().navigateTo(UserListView.NAME);
-			((UserListView) this.getNavigator().getCurrentView()).fill(this.nameSearchTf.getValue());
+			this.getNavigator().navigateTo(UserListView.NAME + "/" + this.nameSearchTf.getValue());
+//			((UserListView) this.getNavigator().getCurrentView()).fill(this.nameSearchTf.getValue());
 			this.nameSearchTf.clear();
 		}
-	}
-
-	private void nameSearchFocusListener(FocusEvent event) {
-		((TextField) event.getComponent()).clear();
 	}
 
 	private List<Label> createNaviBarLabelList() {
