@@ -28,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.News;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
@@ -35,6 +36,7 @@ import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
 import hu.mik.services.UserService;
+import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -46,11 +48,14 @@ public class MainView extends VerticalLayout implements View {
 	private NewsService newsService;
 	@Autowired
 	private LdapService ldapService;
+	@Autowired
+	private UserUtils userUtils;
 
-	public static final String NAME = "";
+	public static final String NAME = "home";
 	private VerticalLayout feed;
 	private VerticalLayout userDiv;
 	private User user;
+	private SocialUserWrapper socialUser;
 	private TextField textField;
 	private Button sendButton;
 	private String message;
@@ -61,11 +66,15 @@ public class MainView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
+		if (this.userUtils.getLoggedInUser() == null) {
+			return;
+		}
 		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
 		if (username != null) {
 			this.user = this.userService.findUserByUsername(username);
 		}
+		this.socialUser = this.userUtils.getLoggedInUser();
 		this.newsList = this.newsService.lastGivenNewsAll(this.newsNumberAtOnce);
 		this.feed = this.createFeed(this.newsList);
 		this.textWriter = this.createTextWriter();

@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String LOGIN_PAGE = "/login";
 	private static final String REGISTRATION_PAGE = "/registration";
 	private static final String[] FREE_PAGES_ANT = { "/VAADIN/**", "/vaadinServlet/**", LOGIN_PAGE, REGISTRATION_PAGE };
-	private static final String DEFAULT_PAGE_URL = "/main";
+	private static final String DEFAULT_PAGE_URL = "/main#!home";
 	private static final String ADMIN_PAGE_URL = "/**admin**";
 	private static final String SECURITY_URL = "/j_spring_security_check";
 

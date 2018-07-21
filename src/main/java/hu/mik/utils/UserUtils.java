@@ -15,22 +15,27 @@ import hu.mik.services.UserService;
 @SpringComponent
 @Scope("session")
 public class UserUtils {
-	@Autowired
 	private UserService userService;
-	@Autowired
 	private LdapService ldapService;
 
 	private SocialUserWrapper socialUser;
 
+	@Autowired
+	public UserUtils(UserService userService, LdapService ldapService) {
+		this.userService = userService;
+		this.ldapService = ldapService;
+	}
+
 	public SocialUserWrapper initSocialUser(String username) {
 		SocialUserWrapper socialUser = new SocialUserWrapper();
+		LdapUser ldapUser = this.ldapService.findUserByUsername(username);
+		if (ldapUser == null) {
+			return null;
+		}
 		User user = this.userService.findUserByUsername(username);
-		System.err.println("FINDDB: " + user);
 		if (user == null) {
 			user = this.userService.registerUser(username);
 		}
-		LdapUser ldapUser = this.ldapService.findUserByUsername(username);
-		System.err.println("FINDLDAP: " + ldapUser);
 		socialUser.setDbUser(user);
 		socialUser.setLdapUser(ldapUser);
 		return socialUser;
@@ -38,6 +43,7 @@ public class UserUtils {
 
 	public SocialUserWrapper getLoggedInUser() {
 		if (this.socialUser == null) {
+			System.err.println("!!!!! Új kérés !!!!!");
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			this.socialUser = this.initSocialUser(username);
 		}
