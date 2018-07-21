@@ -24,6 +24,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.Button;
@@ -62,7 +63,7 @@ import hu.mik.views.UserListView;
 @SpringUI(path = "/main")
 @SpringViewDisplay
 @Theme(ThemeConstants.UI_THEME)
-@Push
+@Push(transport = Transport.WEBSOCKET_XHR)
 @PreserveOnRefresh
 @Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {

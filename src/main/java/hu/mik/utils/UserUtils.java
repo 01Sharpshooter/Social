@@ -2,6 +2,7 @@ package hu.mik.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.vaadin.spring.annotation.SpringComponent;
@@ -13,7 +14,7 @@ import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 
 @SpringComponent
-@Scope("session")
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserUtils {
 	private UserService userService;
 	private LdapService ldapService;
