@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 
 	@Override
-	public User registerUser(String username) {
+	public User createDefaultUserWithUsername(String username) {
 		User user = new User();
 		user.setUsername(username);
 		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
@@ -43,12 +43,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void saveChanges(User user) {
-		this.userDao.saveChanges(user);
-
-	}
-
-	@Override
 	public List<User> listAll() {
 		return this.userDao.findAll();
 
@@ -62,6 +56,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAllLike(String username) {
 		return this.userDao.findAllLike(username);
+	}
+
+	@Override
+	public User save(User user) {
+		return this.userDao.save(user);
 	}
 
 }

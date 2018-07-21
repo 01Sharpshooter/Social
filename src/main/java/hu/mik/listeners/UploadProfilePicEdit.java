@@ -112,7 +112,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 				fileToDel.delete();
 			}
 			user.setImageName(imageName);
-			this.userService.saveChanges(user);
+			this.userService.save(user);
 			((PictureUploadView) this.view).imageChange();
 
 		} catch (IOException e) {

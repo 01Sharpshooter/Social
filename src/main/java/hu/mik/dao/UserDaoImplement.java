@@ -11,10 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.mik.beans.LdapUser;
 import hu.mik.beans.Role;
 import hu.mik.beans.User;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 
 @Repository
@@ -39,6 +37,8 @@ public class UserDaoImplement implements UserDao {
 	public User save(User user) {
 		if (this.findByUsername(user.getUsername()) == null) {
 			this.em.persist(user);
+		} else {
+			this.em.merge(user);
 		}
 		return this.findByUsername(user.getUsername());
 	}
@@ -62,13 +62,6 @@ public class UserDaoImplement implements UserDao {
 					.setParameter("username", username).getSingleResult();
 		} catch (Exception e) {
 //			user=null;
-			LdapUser ldapUser = this.ldapService.findUserByUsername(username);
-			if (ldapUser != null) {
-				user = new User();
-				user.setUsername(username);
-				user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
-				this.em.persist(user);
-			}
 		}
 		return user;
 	}
@@ -104,12 +97,6 @@ public class UserDaoImplement implements UserDao {
 		} else {
 			return list;
 		}
-	}
-
-	@Override
-	public void saveChanges(User user) {
-		this.em.merge(user);
-
 	}
 
 }

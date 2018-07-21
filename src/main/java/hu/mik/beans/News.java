@@ -4,12 +4,9 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,9 +18,8 @@ public class News {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
 	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_news", allocationSize = 1, initialValue = 1)
 	private int id;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	private User newsUser;
+	@Column(name = "user_id")
+	private int userId;
 	@Column(name = "message")
 	private String message;
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
@@ -37,12 +33,12 @@ public class News {
 		this.id = id;
 	}
 
-	public User getNewsUser() {
-		return this.newsUser;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setNewsUser(User newsUser) {
-		this.newsUser = newsUser;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getMessage() {

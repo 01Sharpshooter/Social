@@ -5,6 +5,7 @@ import org.vaadin.risto.formsender.widgetset.client.shared.Method;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
@@ -25,7 +26,7 @@ import hu.mik.constants.ThemeConstants;
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path = "/login")
 @Viewport("width=device-width,initial-scale=1")
-//@Widgetset("hu.mik.widgetset.WidgetSet")
+@Widgetset("hu.mik.gwt.SocialWidgetset")
 public class LoginUI extends UI {
 
 	@Override

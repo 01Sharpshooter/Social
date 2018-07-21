@@ -5,18 +5,18 @@ import java.util.List;
 import hu.mik.beans.User;
 
 public interface UserService {
-	public User registerUser(String username);
-	
+	public User createDefaultUserWithUsername(String username);
+
 	public boolean takenUserName(String username);
-	
-	public User findUserByUsername(String username);	
-	
-	public User findUserById(int id);	
-	
-	public void saveChanges(User user);
-	
+
+	public User findUserByUsername(String username);
+
+	public User findUserById(int id);
+
 	public List<User> listAll();
-	
+
 	public List<User> findAllLike(String username);
-	
+
+	public User save(User user);
+
 }

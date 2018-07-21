@@ -59,7 +59,7 @@ public class UploadProfilePic implements Receiver, SucceededListener, ImageRecei
 				fileToDel.delete();
 			}
 			user.setImageName(this.newImage.getName());
-			this.userService.saveChanges(user);
+			this.userService.save(user);
 			((PictureUploadView) this.view).imageChange();
 		} else {
 			this.newImage.delete();

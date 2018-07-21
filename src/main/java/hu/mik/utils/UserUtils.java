@@ -35,7 +35,7 @@ public class UserUtils {
 		}
 		User user = this.userService.findUserByUsername(username);
 		if (user == null) {
-			user = this.userService.registerUser(username);
+			user = this.userService.createDefaultUserWithUsername(username);
 		}
 		socialUser.setDbUser(user);
 		socialUser.setLdapUser(ldapUser);

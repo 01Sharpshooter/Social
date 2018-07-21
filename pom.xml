@@ -26,6 +26,11 @@
 	</properties>	
 
 	<dependencies>
+	<dependency>
+	   <groupId>org.vaadin.addons</groupId>
+	   <artifactId>vaadin-scrollable-panel</artifactId>
+	   <version>2.0</version>
+	</dependency>
 		<dependency>
 		   <groupId>org.vaadin.addons</groupId>
 		   <artifactId>formsender</artifactId>
@@ -221,17 +226,17 @@
 		            </execution>
 		        </executions>
     		</plugin>
-<!--     		<plugin> -->
-<!-- 				<artifactId>maven-clean-plugin</artifactId> -->
-<!-- 				<configuration> -->
-<!-- 					<filesets> -->
-<!-- 						<fileset> -->
-<!-- 							<directory>src/main/webapp/VAADIN/widgetsets/</directory> -->
-<!-- 							<followSymlinks>false</followSymlinks> -->
-<!-- 						</fileset> -->
-<!-- 					</filesets> -->
-<!-- 				</configuration> -->
-<!-- 			</plugin> -->
+    		<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/VAADIN/widgetsets/</directory>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

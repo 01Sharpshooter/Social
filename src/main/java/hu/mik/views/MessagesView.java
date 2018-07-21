@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.HasValue.ValueChangeEvent;
@@ -222,11 +220,6 @@ public class MessagesView extends Panel implements View {
 		return userDivs;
 	}
 
-	@PostConstruct
-	public void init() {
-
-	}
-
 	private CssLayout createUserDiv(User user, String lastMessage) {
 		CssLayout userDiv = new CssLayout();
 		LdapUser ldapUser = this.ldapService.findUserByUsername(user.getUsername());
@@ -317,6 +310,7 @@ public class MessagesView extends Panel implements View {
 		this.messagesPanel.setScrollTop(this.scroll);
 		MessageBroadcastService.register((MainUI) this.getUI(), this.sender.getUsername());
 		this.userListSelectionChange(userDiv);
+
 	}
 
 	public void fillMessages() {

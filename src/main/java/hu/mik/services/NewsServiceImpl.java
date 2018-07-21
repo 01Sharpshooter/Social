@@ -15,8 +15,8 @@ public class NewsServiceImpl implements NewsService {
 	NewsDao newsDao;
 
 	@Override
-	public List<News> lastGivenNewsAll(int number) {
-		return this.newsDao.lastGivenNewsAll(number);
+	public List<News> getPagedNews(int offset, int pageSize) {
+		return this.newsDao.getPagedNews(offset, pageSize);
 	}
 
 	@Override

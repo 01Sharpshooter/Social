@@ -13,6 +13,7 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -65,6 +66,8 @@ import hu.mik.views.UserListView;
 @Theme(ThemeConstants.UI_THEME)
 @Push(transport = Transport.WEBSOCKET_XHR)
 @PreserveOnRefresh
+//@VaadinServletConfiguration(ui = MainUI.class, productionMode = false, widgetset = "hu.mik.gwt.SocialWidgetset.gwt.xml")
+@Widgetset("hu.mik.gwt.SocialWidgetset")
 @Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
@@ -107,7 +110,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.userLdap = this.ldapService.findUserByUsername(userName);
 		System.out.println(this.ldapService.findGroupsByUserId(this.userLdap.getId()));
 		if (this.user == null) {
-			this.user = this.userService.registerUser(userName);
+			this.user = this.userService.createDefaultUserWithUsername(userName);
 		}
 		this.session.setAttribute("SecurityContext", this.securityContext);
 		this.session.setAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER, this.userLdap.getUsername());

@@ -14,37 +14,33 @@ import hu.mik.beans.News;
 import hu.mik.beans.User;
 
 @Repository
-@Transactional(propagation=Propagation.REQUIRED)
-public class NewsDaoImpl implements NewsDao{
-	
+@Transactional(propagation = Propagation.REQUIRED)
+public class NewsDaoImpl implements NewsDao {
+
 	@PersistenceContext
 	EntityManager em;
 
 	@Override
-	public List<News> lastGivenNewsAll(int number) {
-		List<News> list=new ArrayList<>();
-		list=em.createQuery("select n from News n order by n.time desc", News.class)
-				.setFirstResult(0)
-				.setMaxResults(number-1)
-				.getResultList();
+	public List<News> getPagedNews(int offset, int pageSize) {
+		List<News> list = new ArrayList<>();
+		list = this.em.createQuery("select n from News n order by n.time desc", News.class).setFirstResult(offset)
+				.setMaxResults(pageSize - 1).getResultList();
+		System.err.println("!!!PAGED REQUEST!!! " + offset);
 		return list;
 	}
 
 	@Override
 	public List<News> lastGivenNewsUser(int number, User user) {
-		List<News> list=new ArrayList<>();
-		list=em.createQuery("select n from News n where n.newsUser= :user order by n.time desc", News.class)
-				.setParameter("user", user)
-				.setFirstResult(0)
-				.setMaxResults(number-1)
-				.getResultList();
+		List<News> list = new ArrayList<>();
+		list = this.em.createQuery("select n from News n where n.newsUser= :user order by n.time desc", News.class)
+				.setParameter("user", user).setFirstResult(0).setMaxResults(number - 1).getResultList();
 		return list;
 	}
 
 	@Override
 	public void saveNews(News news) {
-		em.persist(news);
-		
+		this.em.persist(news);
+
 	}
-	
+
 }

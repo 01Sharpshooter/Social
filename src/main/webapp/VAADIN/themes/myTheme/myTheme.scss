@@ -127,6 +127,10 @@
 		font-family: arial;
 		min-width: 240px;
 		
+		.scrollablePanel{
+			margin-left: -37px;
+		}
+		
 		#messageBase{
 			overflow:auto;
 			.v-textfield{

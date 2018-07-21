@@ -12619,6 +12619,10 @@ div.v-layout.v-horizontal.v-widget {
 	min-width: 240px;
 }
 
+.myTheme #base .scrollablePanel {
+	margin-left: -37px;
+}
+
 .myTheme #base #messageBase {
 	overflow: auto;
 }

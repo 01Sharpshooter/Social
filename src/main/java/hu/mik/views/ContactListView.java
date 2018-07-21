@@ -20,12 +20,14 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.components.UserListLayout;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
+import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -42,29 +44,33 @@ public class ContactListView extends Panel implements View {
 	UserListLayout userListLayout;
 	@Autowired
 	LdapService ldapService;
+	@Autowired
+	UserUtils userUtils;
 
 	private CssLayout contactsLayout;
 	private List<User> friendList = new ArrayList<>();
 	private VerticalLayout base;
-	private User dbUser;
-	private LdapUser ldapUser;
+//	private User dbUser;
+//	private LdapUser ldapUser;
+	private SocialUserWrapper socialUser;
 	private List<FriendRequest> requests;
 	private List<LdapGroup> groups;
 	private ComboBox<LdapGroup> groupSelect;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		this.dbUser = this.userService.findUserByUsername(event.getParameters());
-		this.ldapUser = this.ldapService.findUserByUsername(event.getParameters());
+//		this.dbUser = this.userService.findUserByUsername(event.getParameters());
+//		this.ldapUser = this.ldapService.findUserByUsername(event.getParameters());
+		this.socialUser = this.userUtils.initSocialUser(event.getParameters());
 		this.base = new VerticalLayout();
 
 		this.setSizeFull();
-		this.setCaption(this.dbUser.getUsername() + "'s " + "Friendlist:");
+		this.setCaption(this.socialUser.getDbUser().getUsername() + "'s " + "Friendlist:");
 
-		this.requests = this.friendRequestService.findAllByRequestedId(this.dbUser.getId());
-		this.groups = this.ldapService.findGroupsByUserId(this.ldapUser.getId());
+		this.requests = this.friendRequestService.findAllByRequestedId(this.socialUser.getDbUser().getId());
+		this.groups = this.ldapService.findGroupsByUserId(this.socialUser.getLdapUser().getId());
 
-		this.friendshipService.findAllByUserId(this.dbUser.getId())
+		this.friendshipService.findAllByUserId(this.socialUser.getDbUser().getId())
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
 
 		this.createContent();
@@ -138,7 +144,7 @@ public class ContactListView extends Panel implements View {
 	private void setLayoutByTeam(LdapGroup team) {
 		List<LdapUser> teamMembers = new ArrayList<>();
 		team.getListOfMembers().forEach(name -> {
-			if (!name.equals(this.ldapUser.getId())) {
+			if (!name.equals(this.socialUser.getLdapUser().getId())) {
 				teamMembers.add(this.ldapService.findUserByUsername(name.get(3).substring(4)));
 			}
 		});

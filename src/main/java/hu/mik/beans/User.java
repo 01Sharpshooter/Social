@@ -1,13 +1,10 @@
 package hu.mik.beans;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -23,8 +20,6 @@ public class User {
 	private String username;
 	@Column(name = "image")
 	private String imageName;
-	@OneToMany(mappedBy = "newsUser")
-	private List<News> news;
 
 	public Integer getId() {
 		return this.id;
@@ -48,14 +43,6 @@ public class User {
 
 	public void setImageName(String image) {
 		this.imageName = image;
-	}
-
-	public List<News> getNews() {
-		return this.news;
-	}
-
-	public void setNews(List<News> news) {
-		this.news = news;
 	}
 
 }

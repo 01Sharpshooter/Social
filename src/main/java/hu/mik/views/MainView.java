@@ -7,22 +7,19 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.addons.scrollablepanel.ScrollablePanel;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -30,7 +27,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.News;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
-import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
@@ -39,7 +35,6 @@ import hu.mik.services.UserService;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
-@ViewScope
 @SpringView(name = MainView.NAME)
 public class MainView extends VerticalLayout implements View {
 	@Autowired
@@ -54,34 +49,40 @@ public class MainView extends VerticalLayout implements View {
 	public static final String NAME = "home";
 	private VerticalLayout feed;
 	private VerticalLayout userDiv;
-	private User user;
 	private SocialUserWrapper socialUser;
 	private TextField textField;
 	private Button sendButton;
 	private String message;
-	private Panel panel = new Panel();
+	private ScrollablePanel panel = new ScrollablePanel();
 	private List<News> newsList;
 	private HorizontalLayout textWriter;
-	private int newsNumberAtOnce = 20;
+	private int pageSize = 10;
+	private int offset = -this.pageSize;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (this.userUtils.getLoggedInUser() == null) {
 			return;
 		}
-		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
-		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
-		if (username != null) {
-			this.user = this.userService.findUserByUsername(username);
-		}
+
 		this.socialUser = this.userUtils.getLoggedInUser();
-		this.newsList = this.newsService.lastGivenNewsAll(this.newsNumberAtOnce);
+		this.newsList = this.newsService.getPagedNews(this.usePageOffset(), this.pageSize);
 		this.feed = this.createFeed(this.newsList);
 		this.textWriter = this.createTextWriter();
 		this.panel.setSizeFull();
 		this.panel.setContent(this.feed);
+		this.panel.addStyleName(ThemeConstants.SCROLLABLE_PANEL);
+		this.panel.addScrollListener(e -> {
+			if (e.getBottom() < 300) {
+				this.newsService.getPagedNews(this.usePageOffset(), this.pageSize)
+						.forEach(news -> this.newMessage(news, false));
+			}
+		});
+		this.setSizeFull();
+
 		this.addComponent(this.textWriter);
 		this.addComponent(this.panel);
+		this.setExpandRatio(this.panel, 1f);
 
 	}
 
@@ -104,35 +105,25 @@ public class MainView extends VerticalLayout implements View {
 		return feed;
 	}
 
-	private void newMessage(News sentNews) {
+	private void newMessage(News sentNews, boolean toTop) {
 		this.userDiv = new VerticalLayout();
 		this.userDiv.setHeight(this.panel.getHeight() / 6, this.panel.getHeightUnits());
 		this.userDiv.addComponent(this.createNewsLayout(sentNews));
 		this.userDiv.addStyleName(ThemeConstants.BORDERED);
-		this.feed.addComponent(this.userDiv, 0);
+		this.feed.addComponent(this.userDiv, toTop ? 0 : this.feed.getComponentCount());
 	}
-
-//	@Override
-//	public void enter(ViewChangeEvent event) {
-//		if (event.getParameters().length() > 0) {
-//			String parameters[] = event.getParameters().split("/");
-//			int userId = Integer.parseInt(parameters[0]);
-//			this.changeToUser(this.userService.findUserById(userId));
-//		}
-//
-//	}
 
 	private void sendButtonClicked(Button.ClickEvent event) {
 		this.message = this.textField.getValue();
 		News news = new News();
 		news.setMessage(this.message);
-		news.setNewsUser(this.user);
+		news.setUserId(this.socialUser.getDbUser().getId());
 		java.util.Date date = new java.util.Date();
 		news.setTime(new Timestamp(date.getTime()));
 		this.textField.clear();
 		if (this.message.length() != 0) {
 			this.newsService.saveNews(news);
-			this.newMessage(news);
+			this.newMessage(news, true);
 		}
 	}
 
@@ -151,8 +142,7 @@ public class MainView extends VerticalLayout implements View {
 		this.textField.setWidth("100%");
 		textWriter.addComponent(this.sendButton);
 		this.sendButton.setSizeUndefined();
-		textWriter.setExpandRatio(this.textField, 75);
-		textWriter.setExpandRatio(this.sendButton, 25);
+		textWriter.setExpandRatio(this.textField, 1f);
 
 		return textWriter;
 	}
@@ -164,7 +154,7 @@ public class MainView extends VerticalLayout implements View {
 		layout.addComponent(header);
 		layout.setSpacing(false);
 		layout.setMargin(false);
-		User user = news.getNewsUser();
+		User user = this.userService.findUserById(news.getUserId());
 		Image image = new Image(null,
 				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
 		header.addComponent(image);
@@ -202,7 +192,12 @@ public class MainView extends VerticalLayout implements View {
 	}
 
 	public void changeToUser(User user) {
-		this.changeNews(this.newsService.lastGivenNewsUser(this.newsNumberAtOnce, user));
+		this.changeNews(this.newsService.lastGivenNewsUser(this.pageSize, user));
 		this.removeComponent(this.textWriter);
+	}
+
+	private int usePageOffset() {
+		this.offset = this.offset + this.pageSize;
+		return this.offset;
 	}
 }
