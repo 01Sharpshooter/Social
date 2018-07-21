@@ -73,7 +73,6 @@ public class LoginUI extends UI {
 				formSender.setFormTarget("_top");
 				formSender.extend(this.getUI());
 				formSender.submit();
-				System.err.println("login attempt");
 //							}else{
 //								success.setValue("Wrong username or password.");
 //								pwTF.clear();

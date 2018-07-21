@@ -39,7 +39,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
-import hu.mik.beans.SocialUser;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
@@ -49,6 +49,7 @@ import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
+import hu.mik.utils.UserUtils;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
 import hu.mik.views.MainView;
@@ -76,7 +77,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 	private User user;
 	private LdapUser userLdap;
-	private SocialUser socialUser;
+	private SocialUserWrapper socialUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
 	private VerticalLayout base;
@@ -86,13 +87,21 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private boolean menuIconFlag = false;
 	private LdapGroup adminGroup;
 
+	@Autowired
+	UserUtils userUtils;
+
 	private SecurityContext securityContext = SecurityContextHolder.getContext();
 
 	@Override
 	protected void init(VaadinRequest request) {
+		this.socialUser = this.userUtils.getLoggedInUser();
+		System.err.println("MainUI: " + this.socialUser.getDbUser());
+		System.err.println("MainUI: " + this.socialUser.getLdapUser());
+
 		this.getPage().setTitle("Serious");
 		System.out.println(this.securityContext.getAuthentication());
 		String userName = this.securityContext.getAuthentication().getName();
+
 		this.user = this.userService.findUserByUsername(userName);
 		this.userLdap = this.ldapService.findUserByUsername(userName);
 		System.out.println(this.ldapService.findGroupsByUserId(this.userLdap.getId()));

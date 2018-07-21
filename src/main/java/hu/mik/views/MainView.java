@@ -6,8 +6,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -61,14 +59,14 @@ public class MainView extends VerticalLayout implements View {
 	private HorizontalLayout textWriter;
 	private int newsNumberAtOnce = 20;
 
-	@PostConstruct
-	public void init() {
+	@Override
+	public void enter(ViewChangeEvent event) {
 		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
 		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
 		if (username != null) {
 			this.user = this.userService.findUserByUsername(username);
 		}
-		this.newsList = this.newsService.lastGivenNewsAll(20);
+		this.newsList = this.newsService.lastGivenNewsAll(this.newsNumberAtOnce);
 		this.feed = this.createFeed(this.newsList);
 		this.textWriter = this.createTextWriter();
 		this.panel.setSizeFull();
@@ -105,15 +103,15 @@ public class MainView extends VerticalLayout implements View {
 		this.feed.addComponent(this.userDiv, 0);
 	}
 
-	@Override
-	public void enter(ViewChangeEvent event) {
-		if (event.getParameters().length() > 0) {
-			String parameters[] = event.getParameters().split("/");
-			int userId = Integer.parseInt(parameters[0]);
-			this.changeToUser(this.userService.findUserById(userId));
-		}
-
-	}
+//	@Override
+//	public void enter(ViewChangeEvent event) {
+//		if (event.getParameters().length() > 0) {
+//			String parameters[] = event.getParameters().split("/");
+//			int userId = Integer.parseInt(parameters[0]);
+//			this.changeToUser(this.userService.findUserById(userId));
+//		}
+//
+//	}
 
 	private void sendButtonClicked(Button.ClickEvent event) {
 		this.message = this.textField.getValue();
