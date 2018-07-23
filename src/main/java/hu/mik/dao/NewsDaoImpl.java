@@ -24,8 +24,7 @@ public class NewsDaoImpl implements NewsDao {
 	public List<News> getPagedNews(int offset, int pageSize) {
 		List<News> list = new ArrayList<>();
 		list = this.em.createQuery("select n from News n order by n.time desc", News.class).setFirstResult(offset)
-				.setMaxResults(pageSize - 1).getResultList();
-		System.err.println("!!!PAGED REQUEST!!! " + offset);
+				.setMaxResults(pageSize).getResultList();
 		return list;
 	}
 

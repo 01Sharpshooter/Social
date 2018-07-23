@@ -99,16 +99,12 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	@Override
 	protected void init(VaadinRequest request) {
 		this.socialUser = this.userUtils.getLoggedInUser();
-		System.err.println("MainUI: " + this.socialUser.getDbUser());
-		System.err.println("MainUI: " + this.socialUser.getLdapUser());
 
 		this.getPage().setTitle("Serious");
-		System.out.println(this.securityContext.getAuthentication());
 		String userName = this.securityContext.getAuthentication().getName();
 
 		this.user = this.userService.findUserByUsername(userName);
 		this.userLdap = this.ldapService.findUserByUsername(userName);
-		System.out.println(this.ldapService.findGroupsByUserId(this.userLdap.getId()));
 		if (this.user == null) {
 			this.user = this.userService.createDefaultUserWithUsername(userName);
 		}

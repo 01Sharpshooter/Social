@@ -15,11 +15,6 @@ public class NewsServiceImpl implements NewsService {
 	NewsDao newsDao;
 
 	@Override
-	public List<News> getPagedNews(int offset, int pageSize) {
-		return this.newsDao.getPagedNews(offset, pageSize);
-	}
-
-	@Override
 	public List<News> lastGivenNewsUser(int number, User user) {
 		return this.newsDao.lastGivenNewsUser(number, user);
 	}
@@ -28,6 +23,11 @@ public class NewsServiceImpl implements NewsService {
 	public void saveNews(News news) {
 		this.newsDao.saveNews(news);
 
+	}
+
+	@Override
+	public List<News> findAllPaged(int offset, int pageSize) {
+		return this.newsDao.getPagedNews(offset, pageSize);
 	}
 
 }

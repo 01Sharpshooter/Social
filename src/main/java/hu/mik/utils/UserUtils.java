@@ -44,7 +44,6 @@ public class UserUtils {
 
 	public SocialUserWrapper getLoggedInUser() {
 		if (this.socialUser == null) {
-			System.err.println("!!!!! Új kérés !!!!!");
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			this.socialUser = this.initSocialUser(username);
 		}
