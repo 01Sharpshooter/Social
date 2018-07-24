@@ -23,7 +23,7 @@ public class PagingLayout<T> extends VerticalLayout {
 	@Autowired
 	private ApplicationContext appCtx;
 	@Autowired
-	private LazyLoadingComponent<T> lazyComponent;
+	private BeanToComponentConverter<T> lazyComponent;
 
 	@Autowired
 	public PagingLayout() {
@@ -35,13 +35,13 @@ public class PagingLayout<T> extends VerticalLayout {
 		List<T> pagedResultList = this.pageableService.findAllPaged(this.offset, this.pageSize);
 		if (!pagedResultList.isEmpty()) {
 			pagedResultList.forEach(object -> this
-					.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).construct(object)));
+					.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).convert(object)));
 			this.offset += this.pageSize;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addNewComponent(T sentNews, int i) {
-		this.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).construct(sentNews), 0);
+		this.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).convert(sentNews), 0);
 	}
 }

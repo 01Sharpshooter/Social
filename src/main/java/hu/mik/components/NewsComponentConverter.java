@@ -28,13 +28,13 @@ import hu.mik.views.ProfileView;
 @SuppressWarnings("serial")
 @SpringComponent(value = "newsComponent")
 @Scope(scopeName = "prototype")
-public class NewsComponent extends VerticalLayout implements LazyLoadingComponent<News> {
+public class NewsComponentConverter extends VerticalLayout implements BeanToComponentConverter<News> {
 	private UserService userService;
 	private LdapService ldapService;
 	private User user;
 
 	@Autowired
-	public NewsComponent(UserService userService, LdapService ldapService) {
+	public NewsComponentConverter(UserService userService, LdapService ldapService) {
 		this.setSpacing(true);
 		this.setMargin(true);
 		this.setSizeFull();
@@ -44,7 +44,7 @@ public class NewsComponent extends VerticalLayout implements LazyLoadingComponen
 	}
 
 	@Override
-	public LazyLoadingComponent<News> construct(News news) {
+	public BeanToComponentConverter<News> convert(News news) {
 		this.createContent(news);
 		return this;
 	}
