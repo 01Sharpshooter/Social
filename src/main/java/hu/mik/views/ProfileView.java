@@ -18,10 +18,11 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import de.steinwedel.messagebox.MessageBox;
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
@@ -29,6 +30,7 @@ import hu.mik.constants.StringConstants;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
+import hu.mik.enums.Texts;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
@@ -67,7 +69,7 @@ public class ProfileView extends VerticalLayout implements View {
 			LdapUser ldapProfileUser = this.ldapService.findUserByUsername(this.profileUsername);
 			this.dbProfileUser = this.userService.findUserByUsername(this.profileUsername);
 			if (ldapProfileUser == null) {
-				Label lblMissing = new Label("Sorry, we could not find the person you were looking for.");
+				Label lblMissing = new Label(Texts.NO_USER_FOUND_FROM_SEARCH.getText());
 				this.addComponent(lblMissing);
 			} else {
 				this.header = new CssLayout();
@@ -120,7 +122,6 @@ public class ProfileView extends VerticalLayout implements View {
 				for (Component component : form) {
 					if (component.getClass().equals(TextField.class)) {
 						component.addStyleName(ThemeConstants.BLUE_TEXT);
-//						component.setWidth("100px");
 						if (!this.profileUsername.equals(ldapSessionUsername)) {
 							component.setEnabled(false);
 						}
@@ -186,8 +187,8 @@ public class ProfileView extends VerticalLayout implements View {
 			fr.setRequestedId(this.dbProfileUser.getId());
 			this.friendRequestService.saveFriendRequest(fr);
 			event.getButton().setCaption(StringConstants.BTN_CANCEL_REQUEST);
-			MessageBox.createInfo().withOkButton().withCaption("Request sent")
-					.withMessage("Request has been sent to " + ldapProfile.getFullName()).open();
+			Notification.show(Texts.FRIEND_REQUEST_NOTIFICATION.getText(), ldapProfile.getFullName(),
+					Type.TRAY_NOTIFICATION);
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)) {
 			this.friendRequestService.deleteFriendRequest(this.dbProfileUser.getId(), this.dbSessionUser.getId());
 			this.friendShipService.saveFriendship(this.dbProfileUser.getId(), this.dbSessionUser.getId());

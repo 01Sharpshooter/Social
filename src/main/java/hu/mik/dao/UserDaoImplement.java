@@ -56,12 +56,12 @@ public class UserDaoImplement implements UserDao {
 
 	@Override
 	public User findByUsername(String username) {
-		User user = null;
+		User user;
 		try {
 			user = this.em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
 					.setParameter("username", username).getSingleResult();
 		} catch (Exception e) {
-//			user=null;
+			user = null;
 		}
 		return user;
 	}
