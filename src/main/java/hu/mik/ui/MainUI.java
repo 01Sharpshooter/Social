@@ -43,6 +43,7 @@ import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
+import hu.mik.configuration.DefaultExceptionHandler;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
@@ -115,6 +116,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		final VerticalLayout workingSpace = new VerticalLayout();
 		this.getNavigator().addViewChangeListener(this::viewChangeListener);
 		workingSpace.setSizeFull();
+
+		this.setErrorHandler(new DefaultExceptionHandler(this));
 
 		this.createContent();
 	}
