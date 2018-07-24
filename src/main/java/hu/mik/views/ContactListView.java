@@ -50,8 +50,6 @@ public class ContactListView extends Panel implements View {
 	private CssLayout contactsLayout;
 	private List<User> friendList = new ArrayList<>();
 	private VerticalLayout base;
-//	private User dbUser;
-//	private LdapUser ldapUser;
 	private SocialUserWrapper socialUser;
 	private List<FriendRequest> requests;
 	private List<LdapGroup> groups;
@@ -59,8 +57,6 @@ public class ContactListView extends Panel implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-//		this.dbUser = this.userService.findUserByUsername(event.getParameters());
-//		this.ldapUser = this.ldapService.findUserByUsername(event.getParameters());
 		this.socialUser = this.userUtils.initSocialUser(event.getParameters());
 		this.base = new VerticalLayout();
 
