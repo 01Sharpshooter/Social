@@ -15163,34 +15163,46 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base {
 	padding: 10px;
+	margin: 5px auto;
 	font-family: arial;
 	min-width: 240px;
+	background: aliceblue;
+}
+
+.myTheme #base .v-panel {
+	border-width: 0px;
 }
 
 .myTheme #base .scrollablePanel {
 	margin-left: -37px;
 }
 
+.myTheme #base .v-textfield {
+	border: 1px solid;
+	border-color: #00BFFF;
+}
+
 .myTheme #base #messageBase {
-	overflow: auto;
+	padding-bottom: 10px;
+	padding-right: 10px;
 }
 
 .myTheme #base #messageBase .v-textfield {
 	width: 100%;
+	margin-bottom: 10px;
 }
 
 .myTheme #base #messageBase #latestMessagesLayout {
 	width: 20%;
 	height: 100%;
 	border-color: gray;
-	border-right: 1px solid;
 	overflow: auto;
 }
 
 .myTheme #base #messageBase #latestMessagesLayout .v-csslayout {
 	width: 100%;
 	height: 55px;
-	border-bottom: 1px solid;
+	border-top: 1px solid;
 	text-align: left;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -15218,14 +15230,19 @@ div.v-layout.v-horizontal.v-widget {
 	margin-right: 3px;
 }
 
+.myTheme #base #messageBase #latestMessagesLayout .v-csslayout:last-child {
+	border-bottom: 1px solid;
+}
+
 .myTheme #base #messageBase #chatLayout {
 	width: 80%;
-	height: 80%;
+	height: 70%;
 }
 
 .myTheme #base #messageBase #chatLayout .v-panel {
 	border-top-left-radius: 0px;
 	margin-bottom: 10px;
+	border-color: #00BFFF;
 }
 
 .myTheme #base .manyUserLayout {
@@ -15242,7 +15259,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #navigationBar {
 	text-align: left;
-	background: #696969;
+	background: darkslategrey;
 	float: left;
 	font-size: 18px;
 	padding-left: 10px;
@@ -15252,6 +15269,7 @@ div.v-layout.v-horizontal.v-widget {
 	margin: 10px auto;
 	border-radius: 15px;
 	position: relative;
+	box-shadow: 2px 3px 10px black;
 	z-index: 3;
 }
 
@@ -15325,8 +15343,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .navigationBarIcon:hover {
-	border: 5px solid #00FF00;
-	border-radius: 200px;
+	border: 4px solid #00FF00;
+	border-radius: 100%;
 }
 
 .myTheme .navigationBarIcon {
@@ -15384,6 +15402,12 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #dropDownMenu .v-label:hover {
 	background-color: #00FF00;
+}
+
+.myTheme #viewDisplay .v-panel {
+	border: 1px solid;
+	border-radius: 5px;
+	border-color: cadetblue;
 }
 
 .myTheme #sideMenu {

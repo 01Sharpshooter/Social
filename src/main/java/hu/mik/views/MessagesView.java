@@ -47,7 +47,7 @@ import hu.mik.ui.MainUI;
 @SuppressWarnings("serial")
 @ViewScope
 @SpringView(name = MessagesView.NAME)
-public class MessagesView extends Panel implements View {
+public class MessagesView extends CssLayout implements View {
 	public static final String NAME = "messages";
 
 	@Autowired
@@ -82,8 +82,6 @@ public class MessagesView extends Panel implements View {
 
 	private int messageNumberAtOnce = 20;
 
-	private CssLayout base;
-
 	@Override
 	public void enter(ViewChangeEvent event) {
 		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
@@ -95,8 +93,6 @@ public class MessagesView extends Panel implements View {
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setSizeFull();
-//		this.container.setMargin(false);
-//		this.container.setSpacing(false);
 		this.createContent(event);
 
 	}
@@ -115,8 +111,6 @@ public class MessagesView extends Panel implements View {
 		this.createMessagesPanel();
 
 		this.createChat();
-
-//		addComponent(base);
 
 		this.fillUserList();
 
@@ -166,7 +160,7 @@ public class MessagesView extends Panel implements View {
 		this.userList = new CssLayout();
 		this.userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.userList.setId("latestMessagesLayout");
-		this.base.addComponent(this.userList);
+		this.addComponent(this.userList);
 	}
 
 	private void createSearchComboBox() {
@@ -180,14 +174,12 @@ public class MessagesView extends Panel implements View {
 	private void createTextFieldSearch() {
 		TextField tfSearch = new TextField("Search:");
 		tfSearch.addValueChangeListener(this::searchValueChangeListener);
-		this.base.addComponent(tfSearch);
+		this.addComponent(tfSearch);
 	}
 
 	private void createBase() {
-		this.base = new CssLayout();
-		this.setContent(this.base);
-		this.base.setId("messageBase");
-		this.base.setSizeFull();
+		this.setId("messageBase");
+		this.setSizeFull();
 	}
 
 	private List<CssLayout> fillUserList() {
@@ -275,7 +267,7 @@ public class MessagesView extends Panel implements View {
 //		chat.setExpandRatio(messagesPanel, 9);
 //		chat.setExpandRatio(textWriter, 1);
 		chat.setId("chatLayout");
-		this.base.addComponent(chat);
+		this.addComponent(chat);
 	}
 
 	private void createTextWriter() {

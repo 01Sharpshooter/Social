@@ -43,7 +43,6 @@ import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
-import hu.mik.configuration.DefaultExceptionHandler;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
@@ -117,7 +116,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.getNavigator().addViewChangeListener(this::viewChangeListener);
 		workingSpace.setSizeFull();
 
-		this.setErrorHandler(new DefaultExceptionHandler(this));
+//		this.setErrorHandler(new DefaultExceptionHandler(this));
 
 		this.createContent();
 	}
@@ -135,7 +134,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.createViewDisplay();
 		this.base.setId("base");
 
-		this.base.setStyleName(ThemeConstants.BORDERED_THICK);
 		this.setContent(this.base);
 	}
 
