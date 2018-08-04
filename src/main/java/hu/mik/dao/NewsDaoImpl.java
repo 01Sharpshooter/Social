@@ -20,11 +20,14 @@ public class NewsDaoImpl implements NewsDao {
 	@PersistenceContext
 	EntityManager em;
 
+	//@formatter:off
 	@Override
 	public List<News> getPagedNews(int offset, int pageSize) {
 		List<News> list = new ArrayList<>();
-		list = this.em.createQuery("select n from News n order by n.time desc", News.class).setFirstResult(offset)
-				.setMaxResults(pageSize).getResultList();
+		list = this.em.createQuery("select n from News n join fetch n.user order by n.time desc", News.class)
+				.setFirstResult(offset)
+				.setMaxResults(pageSize)
+				.getResultList();
 		return list;
 	}
 
@@ -32,7 +35,10 @@ public class NewsDaoImpl implements NewsDao {
 	public List<News> lastGivenNewsUser(int number, User user) {
 		List<News> list = new ArrayList<>();
 		list = this.em.createQuery("select n from News n where n.newsUser= :user order by n.time desc", News.class)
-				.setParameter("user", user).setFirstResult(0).setMaxResults(number - 1).getResultList();
+				.setParameter("user", user)
+				.setFirstResult(0)
+				.setMaxResults(number - 1)
+				.getResultList();
 		return list;
 	}
 

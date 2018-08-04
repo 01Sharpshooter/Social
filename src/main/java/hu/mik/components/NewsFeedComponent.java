@@ -70,7 +70,7 @@ public class NewsFeedComponent extends VerticalLayout {
 	private void addNewNewsComponent(String message) {
 		News news = new News();
 		news.setMessage(message);
-		news.setUserId(this.socialUser.getDbUser().getId());
+		news.setUser(this.socialUser.getDbUser());
 		Date date = new Date();
 		news.setTime(new Timestamp(date.getTime()));
 		if (message.length() != 0) {

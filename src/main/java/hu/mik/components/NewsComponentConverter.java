@@ -22,24 +22,21 @@ import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
-import hu.mik.services.UserService;
 import hu.mik.views.ProfileView;
 
 @SuppressWarnings("serial")
 @SpringComponent(value = "newsComponent")
 @Scope(scopeName = "prototype")
 public class NewsComponentConverter extends VerticalLayout implements BeanToComponentConverter<News> {
-	private UserService userService;
 	private LdapService ldapService;
 	private User user;
 
 	@Autowired
-	public NewsComponentConverter(UserService userService, LdapService ldapService) {
+	public NewsComponentConverter(LdapService ldapService) {
 		this.setSpacing(true);
 		this.setMargin(true);
 		this.setSizeFull();
 		this.addStyleName(ThemeConstants.BORDERED);
-		this.userService = userService;
 		this.ldapService = ldapService;
 	}
 
@@ -74,7 +71,7 @@ public class NewsComponentConverter extends VerticalLayout implements BeanToComp
 	private void createHeader(News news) {
 		HorizontalLayout header = new HorizontalLayout();
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-		this.user = this.userService.findUserById(news.getUserId());
+		this.user = news.getUser();
 		this.createImage(header);
 		this.createNameButton(header);
 		this.addComponent(header);
