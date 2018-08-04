@@ -41,7 +41,7 @@ public class PagingLayout<T> extends VerticalLayout {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void addNewComponent(T sentNews, int i) {
-		this.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).convert(sentNews), 0);
+	public void addNewComponent(T object, int i) {
+		this.addComponent((Component) this.appCtx.getBean(this.lazyComponent.getClass()).convert(object), 0);
 	}
 }
