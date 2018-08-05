@@ -14,5 +14,7 @@ public interface MessageService {
 
 	public Message findLastByUserIDs(int id1, int id2);
 
-	public void setAllPreviousSeen(Integer receiverId, Integer senderId);
+	public int setAllPreviousSeen(Integer receiverId, Integer senderId);
+
+	public Long getNumberOfUnseenMessages(Integer userId);
 }

@@ -36,9 +36,14 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void setAllPreviousSeen(Integer receiverId, Integer senderId) {
-		this.messageDao.setAllPreviousSeen(receiverId, senderId);
+	public int setAllPreviousSeen(Integer receiverId, Integer senderId) {
+		return this.messageDao.setAllPreviousSeen(receiverId, senderId);
 
+	}
+
+	@Override
+	public Long getNumberOfUnseenMessages(Integer userId) {
+		return this.messageDao.getNumberOfUnseenMessages(userId);
 	}
 
 }

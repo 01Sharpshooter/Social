@@ -77,8 +77,8 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public void setAllPreviousSeen(Integer receiverId, Integer senderId) {
-		this.em.createQuery(
+	public int setAllPreviousSeen(Integer receiverId, Integer senderId) {
+		return this.em.createQuery(
 				"UPDATE Message m SET seen = 1"
 				+ " WHERE m.receiverId = :receiverId"
 				+ " AND m.senderId = :senderId"
@@ -87,6 +87,18 @@ public class MessageDaoImpl implements MessageDao {
 		.setParameter("senderId", senderId.intValue())
 		.executeUpdate();
 
+	}
+
+	@Override
+	public Long getNumberOfUnseenMessages(Integer userId) {
+		return (Long) this.em.createQuery(
+				"SELECT COUNT(DISTINCT m.senderId)"
+				+ " FROM Message m"
+				+ " WHERE m.receiverId = :userId"
+				+ " AND m.seen = 0"
+				+ " ORDER BY m.id DESC")
+		.setParameter("userId", userId.intValue())
+		.getResultList().get(0);
 	}
 
 }

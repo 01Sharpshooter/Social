@@ -13,6 +13,8 @@ public interface MessageDao {
 
 	public List<Message> findLatestMessagesOfUser(int number, int userId);
 
-	public void setAllPreviousSeen(Integer receiverId, Integer senderId);
+	public int setAllPreviousSeen(Integer receiverId, Integer senderId);
+
+	public Long getNumberOfUnseenMessages(Integer userId);
 
 }
