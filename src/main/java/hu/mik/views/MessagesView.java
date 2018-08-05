@@ -2,7 +2,9 @@ package hu.mik.views;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -31,7 +32,6 @@ import com.vaadin.ui.VerticalLayout;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
-import hu.mik.components.UserListLayout;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendshipService;
@@ -49,37 +49,35 @@ public class MessagesView extends CssLayout implements View {
 	public static final String NAME = "messages";
 
 	@Autowired
-	MessageService messageService;
+	private MessageService messageService;
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	@Autowired
-	FriendshipService friendshipService;
+	private FriendshipService friendshipService;
 	@Autowired
-	UserListLayout userListLayout;
+	private LdapService ldapService;
 	@Autowired
-	LdapService ldapService;
-	@Autowired
-	UserUtils userUtils;
+	private UserUtils userUtils;
 
-	private List<User> friendList = new ArrayList<>();
-	private Panel messagesPanel = new Panel();
+	private List<User> friendList;
+	private List<Message> messagesList;
+
+	private Panel messagesPanel;
 	private VerticalLayout messagesLayout;
-	private Message message;
-	private TextField textField;
-	private Button sendButton;
+	private CssLayout userList;
+	private HorizontalLayout textWriter;
+
+	private User sender;
+
 	private int scroll = 100;
 	private int scrollGrowth = 50;
 	private int receiverId;
-	private User sender;
-	private HorizontalLayout textWriter;
-	private List<Message> messagesList;
-	private CssLayout userList;
-
 	private int messageNumberAtOnce = 20;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		this.sender = this.userUtils.getLoggedInUser().getDbUser();
+		this.friendList = new ArrayList<>();
 		this.friendshipService.findAllByUserId(this.sender.getId())
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
 		this.addStyleName(ThemeConstants.BORDERED);
@@ -92,8 +90,6 @@ public class MessagesView extends CssLayout implements View {
 		this.createBase();
 
 		this.createTextFieldSearch();
-
-		this.createSearchComboBox();
 
 		this.createUserList();
 
@@ -130,7 +126,7 @@ public class MessagesView extends CssLayout implements View {
 					} else {
 						messageString = "";
 					}
-					CssLayout newDiv = this.createUserDiv(receiver, messageString);
+					CssLayout newDiv = this.createUserDivFromDbUser(receiver, messageString);
 					this.userList.addComponent(newDiv, 0);
 					this.userListSelectionChange(newDiv);
 				}
@@ -142,6 +138,8 @@ public class MessagesView extends CssLayout implements View {
 	private void createMessagesPanel() {
 		this.messagesLayout = new VerticalLayout();
 		this.messagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+
+		this.messagesPanel = new Panel();
 		this.messagesPanel.setContent(this.messagesLayout);
 		this.messagesPanel.addStyleName(ThemeConstants.BORDERED);
 		this.messagesPanel.setSizeFull();
@@ -152,14 +150,6 @@ public class MessagesView extends CssLayout implements View {
 		this.userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.userList.setId("latestMessagesLayout");
 		this.addComponent(this.userList);
-	}
-
-	private void createSearchComboBox() {
-		List<String> searchList = new ArrayList<>();
-		this.ldapService.findAllUsers().forEach(user -> searchList.add(user.getFullName()));
-		ComboBox<String> cb = new ComboBox<>("test", searchList);
-		cb.setWidth("100%");
-//		base.addComponent(cb);
 	}
 
 	private void createTextFieldSearch() {
@@ -186,7 +176,7 @@ public class MessagesView extends CssLayout implements View {
 				if (!alreadyUsedIds.contains(message.getReceiverId())) {
 					alreadyUsedIds.add(message.getReceiverId());
 					user = this.userService.findUserById(message.getReceiverId());
-					userDiv = this.createUserDiv(user, message.getMessage());
+					userDiv = this.createUserDivFromDbUser(user, message.getMessage());
 					this.userList.addComponent(userDiv);
 					userDivs.add(userDiv);
 				}
@@ -194,7 +184,7 @@ public class MessagesView extends CssLayout implements View {
 				if (!alreadyUsedIds.contains(message.getSenderId())) {
 					alreadyUsedIds.add(message.getSenderId());
 					user = this.userService.findUserById(message.getSenderId());
-					userDiv = this.createUserDiv(user, message.getMessage());
+					userDiv = this.createUserDivFromDbUser(user, message.getMessage());
 					this.userList.addComponent(userDiv);
 					userDivs.add(userDiv);
 				}
@@ -203,38 +193,30 @@ public class MessagesView extends CssLayout implements View {
 		return userDivs;
 	}
 
-	private CssLayout createUserDiv(User user, String lastMessage) {
-		CssLayout userDiv = new CssLayout();
-		LdapUser ldapUser = this.ldapService.findUserByUsername(user.getUsername());
-		Image image = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
-		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		userDiv.addComponent(image);
-		userDiv.setId(user.getId().toString());
-		userDiv.addLayoutClickListener(this::userDivClickListener);
-		Label lblName = new Label(ldapUser.getFullName() + "</br><span id=\"message\">" + lastMessage + "</span>",
-				ContentMode.HTML);
-		userDiv.addComponent(lblName);
-
-		return userDiv;
-
+	private CssLayout createUserDivFromDbUser(User dbUser, String lastMessage) {
+		LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
+		return this.createUserDiv(ldapUser, dbUser, lastMessage);
 	}
 
-	private CssLayout createUserDiv(LdapUser user, String lastMessage) {
+	private CssLayout createUserDivFromLdap(LdapUser ldapUser, String lastMessage) {
+		User dbUser = this.userService.findUserByUsername(ldapUser.getUsername());
+		return this.createUserDiv(ldapUser, dbUser, lastMessage);
+	}
+
+	private CssLayout createUserDiv(LdapUser ldapUser, User dbUser, String lastMessage) {
 		CssLayout userDiv = new CssLayout();
-		User dbUser = this.userService.findUserByUsername(user.getUsername());
+
 		Image image = new Image(null,
 				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + dbUser.getImageName())));
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		userDiv.addComponent(image);
 		userDiv.setId(dbUser.getId().toString());
 		userDiv.addLayoutClickListener(this::userDivClickListener);
-		Label lblName = new Label(user.getFullName() + "</br><span id=\"message\">" + lastMessage + "</span>",
+		Label lblName = new Label(ldapUser.getFullName() + "</br><span id=\"message\">" + lastMessage + "</span>",
 				ContentMode.HTML);
 		userDiv.addComponent(lblName);
 
 		return userDiv;
-
 	}
 
 	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage) {
@@ -257,16 +239,21 @@ public class MessagesView extends CssLayout implements View {
 
 	private void createTextWriter() {
 		this.textWriter = new HorizontalLayout();
-		this.textField = new TextField();
-		this.textField.setWidth("100%");
-		this.sendButton = new Button("Send", this::sendButtonClicked);
-		this.sendButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		this.sendButton.setClickShortcut(KeyCode.ENTER);
-		this.sendButton.setSizeUndefined();
-		this.textWriter.addComponent(this.textField);
-		this.textWriter.addComponent(this.sendButton);
-		this.textWriter.setExpandRatio(this.textField, 7);
-		this.textWriter.setExpandRatio(this.sendButton, 3);
+		TextField textField = new TextField();
+		textField.setWidth("100%");
+
+		Button sendButton = new Button("Send", e -> {
+			this.sendMessage(textField.getValue());
+			textField.clear();
+		});
+		sendButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		sendButton.setClickShortcut(KeyCode.ENTER);
+		sendButton.setSizeUndefined();
+
+		this.textWriter.addComponent(textField);
+		this.textWriter.addComponent(sendButton);
+		this.textWriter.setExpandRatio(textField, 7);
+		this.textWriter.setExpandRatio(sendButton, 3);
 		this.textWriter.setSizeFull();
 		this.textWriter.setEnabled(false);
 	}
@@ -294,21 +281,21 @@ public class MessagesView extends CssLayout implements View {
 			if (!this.messagesList.isEmpty()) {
 				this.messagesLayout.removeAllComponents();
 				for (int i = this.messagesList.size() - 1; i >= 0; i--) {
-					this.message = this.messagesList.get(i);
-					if (this.message.getSenderId() == this.sender.getId()) {
+					Message message = this.messagesList.get(i);
+					if (message.getSenderId() == this.sender.getId()) {
 						this.scroll += this.scrollGrowth;
-						Label newMessage = new Label(
-								"<span id=\"messageSpan\">" + this.message.getMessage() + "</span>", ContentMode.HTML);
-						newMessage.setHeight(this.messagesPanel.getHeight() / 6, this.messagesPanel.getHeightUnits());
+						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
+								ContentMode.HTML);
 						newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
+						newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 						this.messagesLayout.addComponent(newMessage);
 					} else {
 						this.scroll += this.scrollGrowth;
-						Label newMessage = new Label(
-								"<span id=\"messageSpan\">" + this.message.getMessage() + "</span>", ContentMode.HTML);
-						newMessage.setHeight(this.messagesPanel.getHeight() / 6, this.messagesPanel.getHeightUnits());
+						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
+								ContentMode.HTML);
 						newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
+						newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
 						this.messagesLayout.addComponent(newMessage);
 						this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
@@ -318,27 +305,20 @@ public class MessagesView extends CssLayout implements View {
 		}
 	}
 
-	private void sendButtonClicked(Button.ClickEvent event) {
-		this.sendMessage();
+	private void sendMessage(String messageText) {
+		Message message = new Message();
+		message.setMessage(messageText);
 
-	}
-
-	private void sendMessage() {
-		this.message = new Message();
-		this.message.setMessage(this.textField.getValue());
-
-		if (this.message.getMessage().length() != 0) {
-			this.message.setSenderId(this.sender.getId());
-			this.message.setReceiverId(this.receiverId);
-			java.util.Date date = new java.util.Date();
-			this.message.setTime(new Timestamp(date.getTime()));
-			this.textField.clear();
-			this.messageService.saveMessage(this.message);
-			MessageBroadcastService.sendMessage(this.message.getMessage(), this.sender.getId(), this.receiverId);
+		if (message.getMessage().length() != 0) {
+			message.setSenderId(this.sender.getId());
+			message.setReceiverId(this.receiverId);
+			message.setTime(new Timestamp(new Date().getTime()));
+			this.messageService.saveMessage(message);
+			MessageBroadcastService.sendMessage(message.getMessage(), this.sender.getId(), this.receiverId);
 			this.scroll += this.scrollGrowth;
-			Label newMessage = new Label("<span id=\"messageSpan\">" + this.message.getMessage() + "</span>",
+			Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 					ContentMode.HTML);
-			newMessage.setHeight(this.messagesPanel.getHeight() / 6, this.messagesPanel.getHeightUnits());
+			newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 			this.messagesLayout.addComponent(newMessage);
@@ -347,7 +327,7 @@ public class MessagesView extends CssLayout implements View {
 			for (Component userDiv : this.userList) {
 				if (userDiv.getId().equals(String.valueOf(this.receiverId))) {
 					this.userList.removeComponent(userDiv);
-					this.changeUserDivMessage((CssLayout) userDiv, this.message.getMessage());
+					this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
 					this.userList.addComponent(userDiv, 0);
 					this.userListSelectionChange(userDiv);
 					break;
@@ -357,12 +337,12 @@ public class MessagesView extends CssLayout implements View {
 
 	}
 
-	public void receiveMessage(String message2, int senderId) {
+	public void receiveMessage(String message, int senderId) {
 		if (senderId == this.receiverId) {
-			Label newMessage = new Label("<span id=\"messageSpan\">" + message2 + "</span>", ContentMode.HTML);
-			newMessage.setHeight(this.messagesPanel.getHeight() / 6, this.messagesPanel.getHeightUnits());
+			Label newMessage = new Label("<span id=\"messageSpan\">" + message + "</span>", ContentMode.HTML);
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
+			newMessage.setDescription(this.getMessageDateDesc(new Date()));
 			this.messagesLayout.addComponent(newMessage);
 			this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 			this.messagesPanel.setScrollTop(this.scroll);
@@ -372,7 +352,7 @@ public class MessagesView extends CssLayout implements View {
 		for (Component userDiv : this.userList) {
 			if (userDiv.getId().equals(String.valueOf(senderId))) {
 				this.userList.removeComponent(userDiv);
-				this.changeUserDivMessage((CssLayout) userDiv, message2);
+				this.changeUserDivMessage((CssLayout) userDiv, message);
 				this.userList.addComponent(userDiv, 0);
 				exists = true;
 				break;
@@ -380,7 +360,7 @@ public class MessagesView extends CssLayout implements View {
 		}
 		if (!exists) {
 			User user = this.userService.findUserById(senderId);
-			CssLayout newDiv = this.createUserDiv(user, message2);
+			CssLayout newDiv = this.createUserDivFromDbUser(user, message);
 			this.userList.addComponent(newDiv, 0);
 		}
 	}
@@ -398,8 +378,14 @@ public class MessagesView extends CssLayout implements View {
 		} else {
 			this.userList.removeAllComponents();
 			this.ldapService.findByFullNameContaining(event.getValue())
-					.forEach(user -> this.userList.addComponent(this.createUserDiv(user, "")));
+					.forEach(user -> this.userList.addComponent(this.createUserDivFromLdap(user, "")));
 		}
+	}
+
+	private String getMessageDateDesc(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm");
+		return sdf.format(date);
+
 	}
 
 }
