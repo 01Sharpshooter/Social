@@ -20,7 +20,7 @@ public class News {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
 	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_news", allocationSize = 1, initialValue = 1)
-	private int id;
+	private Integer id;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", updatable = false)
 	private User user;
@@ -29,11 +29,11 @@ public class News {
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

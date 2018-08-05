@@ -17,37 +17,39 @@ public class Message {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
 	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_messages", allocationSize = 1, initialValue = 1)
-	private int id;
+	private Integer id;
 	@Column(name = "senderid")
-	private int senderId;
+	private Integer senderId;
 	@Column(name = "receiverid")
-	private int receiverId;
+	private Integer receiverId;
 	@Column(name = "message")
 	private String message;
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
+	@Column(name = "seen", columnDefinition = "NUMBER(1)")
+	private boolean seen;
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getSenderId() {
+	public Integer getSenderId() {
 		return this.senderId;
 	}
 
-	public void setSenderId(int senderId) {
+	public void setSenderId(Integer senderId) {
 		this.senderId = senderId;
 	}
 
-	public int getReceiverId() {
+	public Integer getReceiverId() {
 		return this.receiverId;
 	}
 
-	public void setReceiverId(int receiverId) {
+	public void setReceiverId(Integer receiverId) {
 		this.receiverId = receiverId;
 	}
 
@@ -65,6 +67,14 @@ public class Message {
 
 	public void setTime(Timestamp time) {
 		this.time = time;
+	}
+
+	public boolean isSeen() {
+		return this.seen;
+	}
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
 	}
 
 }

@@ -11,6 +11,8 @@ create table t_messages(
   
   create sequence s_messages;
   
+  alter table t_messages add seen number(1) default 0;
+  
   select * from t_messages;
   
   drop table t_messages;

@@ -9,38 +9,40 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="t_friendships")
+@Table(name = "t_friendships")
 public class Friendship {
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_GEN")
-	@SequenceGenerator(name="SEQ_GEN", sequenceName="s_friendships", allocationSize=1, initialValue=1)
-	private int id;
-	@Column(name="userid")
-	private int userId;
-	@Column(name="friendid")
-	private int friendId;
-	
-	public int getId() {
-		return id;
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_friendships", allocationSize = 1, initialValue = 1)
+	private Integer id;
+	@Column(name = "userid")
+	private Integer userId;
+	@Column(name = "friendid")
+	private Integer friendId;
+
+	public Integer getId() {
+		return this.id;
 	}
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public int getUserId() {
-		return userId;
+
+	public Integer getUserId() {
+		return this.userId;
 	}
-	public void setUserId(int userId) {
+
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public int getFriendId() {
-		return friendId;
+
+	public Integer getFriendId() {
+		return this.friendId;
 	}
-	public void setFriendId(int friendId) {
+
+	public void setFriendId(Integer friendId) {
 		this.friendId = friendId;
 	}
-	
-	
-	
-	
+
 }

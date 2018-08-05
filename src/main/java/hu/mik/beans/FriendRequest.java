@@ -9,37 +9,40 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="t_friendrequests")
+@Table(name = "t_friendrequests")
 public class FriendRequest {
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_GEN")
-	@SequenceGenerator(name="SEQ_GEN", sequenceName="s_friendrequests", allocationSize=1, initialValue=1)
-	private int id;
-	@Column(name="requestorid")
-	private int requestorId;
-	@Column(name="requestedid")
-	private int requestedId;
-	
-	public int getId() {
-		return id;
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
+	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_friendrequests", allocationSize = 1, initialValue = 1)
+	private Integer id;
+	@Column(name = "requestorid")
+	private Integer requestorId;
+	@Column(name = "requestedid")
+	private Integer requestedId;
+
+	public Integer getId() {
+		return this.id;
 	}
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public int getRequestorId() {
-		return requestorId;
+
+	public Integer getRequestorId() {
+		return this.requestorId;
 	}
-	public void setRequestorId(int requestorId) {
+
+	public void setRequestorId(Integer requestorId) {
 		this.requestorId = requestorId;
 	}
-	public int getRequestedId() {
-		return requestedId;
+
+	public Integer getRequestedId() {
+		return this.requestedId;
 	}
-	public void setRequestedId(int requestedId) {
+
+	public void setRequestedId(Integer requestedId) {
 		this.requestedId = requestedId;
 	}
-	
-	
-	
+
 }
