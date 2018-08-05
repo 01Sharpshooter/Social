@@ -35,4 +35,10 @@ public class MessageServiceImpl implements MessageService {
 		return this.messageDao.findLastByUserIDs(id1, id2);
 	}
 
+	@Override
+	public void setAllPreviousSeen(Integer receiverId, Integer senderId) {
+		this.messageDao.setAllPreviousSeen(receiverId, senderId);
+
+	}
+
 }

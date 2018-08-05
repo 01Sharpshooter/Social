@@ -69,9 +69,10 @@ public class MessagesView extends CssLayout implements View {
 
 	private User sender;
 
+	private Integer receiverId;
+
 	private int scroll = 100;
 	private int scrollGrowth = 50;
-	private int receiverId;
 	private int messageNumberAtOnce = 20;
 
 	@Override
@@ -171,7 +172,7 @@ public class MessagesView extends CssLayout implements View {
 		User user;
 
 		for (Message message : latestMessages) {
-			boolean amItheSender = message.getSenderId() == this.sender.getId();
+			boolean amItheSender = message.getSenderId().equals(this.sender.getId());
 			if (amItheSender) {
 				if (!alreadyUsedIds.contains(message.getReceiverId())) {
 					alreadyUsedIds.add(message.getReceiverId());
@@ -268,6 +269,7 @@ public class MessagesView extends CssLayout implements View {
 		this.receiverId = Integer.parseInt(userDiv.getId());
 		this.messagesList = this.messageService.findAllByUserIDs(this.messageNumberAtOnce, this.sender.getId(),
 				this.receiverId);
+		this.messageService.setAllPreviousSeen(this.sender.getId(), this.receiverId);
 		this.fillMessages();
 		this.messagesPanel.setScrollTop(this.scroll);
 		MessageBroadcastService.register((MainUI) this.getUI(), this.sender.getId());
@@ -282,7 +284,7 @@ public class MessagesView extends CssLayout implements View {
 				this.messagesLayout.removeAllComponents();
 				for (int i = this.messagesList.size() - 1; i >= 0; i--) {
 					Message message = this.messagesList.get(i);
-					if (message.getSenderId() == this.sender.getId()) {
+					if (message.getSenderId().equals(this.sender.getId())) {
 						this.scroll += this.scrollGrowth;
 						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 								ContentMode.HTML);
@@ -337,8 +339,8 @@ public class MessagesView extends CssLayout implements View {
 
 	}
 
-	public void receiveMessage(String message, int senderId) {
-		if (senderId == this.receiverId) {
+	public void receiveMessage(String message, Integer senderId) {
+		if (senderId.equals(this.receiverId)) {
 			Label newMessage = new Label("<span id=\"messageSpan\">" + message + "</span>", ContentMode.HTML);
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
