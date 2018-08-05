@@ -13,26 +13,26 @@ public class MessageBroadcastService {
 	static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private static LinkedList<NewMessageListener> messageListeners = new LinkedList<NewMessageListener>();
-	private static LinkedList<String> usernames = new LinkedList<>();
+	private static LinkedList<Integer> userIDs = new LinkedList<>();
 
-	public static synchronized void register(NewMessageListener messageListener, String username) {
-		if (!usernames.contains(username)) {
+	public static synchronized void register(NewMessageListener messageListener, Integer userId) {
+		if (!userIDs.contains(userId)) {
 			messageListeners.add(messageListener);
-			usernames.add(username);
+			userIDs.add(userId);
 		}
 	}
 
-	public static synchronized void unregister(NewMessageListener messageListener, String username) {
-		if (usernames.contains(username)) {
+	public static synchronized void unregister(NewMessageListener messageListener, Integer userId) {
+		if (userIDs.contains(userId)) {
 			messageListeners.remove(messageListener);
-			usernames.remove(username);
+			userIDs.remove(userId);
 		}
 	}
 
-	public static synchronized void sendMessage(String message, int senderId, String receiverName) {
+	public static synchronized void sendMessage(String message, Integer senderId, Integer receiverId) {
 		executorService.execute(() -> {
-			if (usernames.contains(receiverName)) {
-				messageListeners.get(usernames.indexOf(receiverName)).receiveMessage(message, senderId);
+			if (userIDs.contains(receiverId)) {
+				messageListeners.get(userIDs.indexOf(receiverId)).receiveMessage(message, senderId);
 			}
 		});
 	}

@@ -188,7 +188,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		} else if (event.getViewName().equals(UserListView.NAME)) {
 
 		} else {
-			MessageBroadcastService.unregister(this, this.user.getUsername());
+			MessageBroadcastService.unregister(this, this.user.getId());
 		}
 		return true;
 	}
@@ -196,7 +196,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	@Override
 	public void detach() {
 		if (this.user != null) {
-			MessageBroadcastService.unregister(this, this.user.getUsername());
+			MessageBroadcastService.unregister(this, this.user.getId());
 		}
 		super.detach();
 	}

@@ -13,8 +13,6 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
@@ -34,7 +32,6 @@ import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
 import hu.mik.components.UserListLayout;
-import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendshipService;
@@ -43,6 +40,7 @@ import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
+import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -52,17 +50,16 @@ public class MessagesView extends CssLayout implements View {
 
 	@Autowired
 	MessageService messageService;
-
 	@Autowired
 	UserService userService;
-
 	@Autowired
 	FriendshipService friendshipService;
-
 	@Autowired
 	UserListLayout userListLayout;
 	@Autowired
 	LdapService ldapService;
+	@Autowired
+	UserUtils userUtils;
 
 	private List<User> friendList = new ArrayList<>();
 	private Panel messagesPanel = new Panel();
@@ -72,10 +69,8 @@ public class MessagesView extends CssLayout implements View {
 	private Button sendButton;
 	private int scroll = 100;
 	private int scrollGrowth = 50;
-	private int senderId;
 	private int receiverId;
 	private User sender;
-	private User receiver;
 	private HorizontalLayout textWriter;
 	private List<Message> messagesList;
 	private CssLayout userList;
@@ -84,12 +79,8 @@ public class MessagesView extends CssLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
-		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
-		this.sender = this.userService.findUserByUsername(username);
-
-		this.senderId = this.sender.getId();
-		this.friendshipService.findAllByUserId(this.senderId)
+		this.sender = this.userUtils.getLoggedInUser().getDbUser();
+		this.friendshipService.findAllByUserId(this.sender.getId())
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setSizeFull();
@@ -116,9 +107,9 @@ public class MessagesView extends CssLayout implements View {
 
 		String parameters[] = event.getParameters().split("/");
 		if (parameters.length > 0) {
-			this.receiver = this.userService.findUserByUsername(parameters[0]);
-			if (this.receiver != null) {
-				this.receiverId = this.receiver.getId();
+			User receiver = this.userService.findUserByUsername(parameters[0]);
+			if (receiver != null) {
+				this.receiverId = receiver.getId();
 				boolean exists = false;
 				for (Component userDiv : this.userList) {
 					if (String.valueOf(this.receiverId).equals(userDiv.getId())) {
@@ -132,14 +123,14 @@ public class MessagesView extends CssLayout implements View {
 				if (exists) {
 					this.userListSelectionChange(this.userList.getComponent(0));
 				} else {
-					Message lastMessage = this.messageService.findLastByUserIDs(this.receiverId, this.senderId);
+					Message lastMessage = this.messageService.findLastByUserIDs(this.receiverId, this.sender.getId());
 					String messageString;
 					if (lastMessage != null) {
 						messageString = lastMessage.getMessage();
 					} else {
 						messageString = "";
 					}
-					CssLayout newDiv = this.createUserDiv(this.receiver, messageString);
+					CssLayout newDiv = this.createUserDiv(receiver, messageString);
 					this.userList.addComponent(newDiv, 0);
 					this.userListSelectionChange(newDiv);
 				}
@@ -183,14 +174,14 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private List<CssLayout> fillUserList() {
-		List<Message> latestMessages = this.messageService.findLastestMessagesOfUser(100, this.senderId);
+		List<Message> latestMessages = this.messageService.findLastestMessagesOfUser(100, this.sender.getId());
 		List<Integer> alreadyUsedIds = new ArrayList<>();
 		List<CssLayout> userDivs = new ArrayList<>();
 		CssLayout userDiv;
 		User user;
 
 		for (Message message : latestMessages) {
-			boolean amItheSender = message.getSenderId() == this.senderId;
+			boolean amItheSender = message.getSenderId() == this.sender.getId();
 			if (amItheSender) {
 				if (!alreadyUsedIds.contains(message.getReceiverId())) {
 					alreadyUsedIds.add(message.getReceiverId());
@@ -258,14 +249,8 @@ public class MessagesView extends CssLayout implements View {
 
 	private void createChat() {
 		CssLayout chat = new CssLayout();
-//		chat.setCaption(receiver.getUsername());
-//		chat.setWidth("75%");
-//		chat.setHeight("100%");
-//		chat.setMargin(false);
 		chat.addComponent(this.messagesPanel);
 		chat.addComponent(this.textWriter);
-//		chat.setExpandRatio(messagesPanel, 9);
-//		chat.setExpandRatio(textWriter, 1);
 		chat.setId("chatLayout");
 		this.addComponent(chat);
 	}
@@ -287,7 +272,6 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void userDivClickListener(LayoutClickEvent event) {
-//		messagesLayout.setCaption(event.getButton().getCaption());
 		this.fillChat(event.getComponent());
 	}
 
@@ -295,24 +279,23 @@ public class MessagesView extends CssLayout implements View {
 		this.textWriter.setEnabled(true);
 		this.messagesLayout.removeAllComponents();
 		this.receiverId = Integer.parseInt(userDiv.getId());
-		this.receiver = this.userService.findUserById(this.receiverId);
-		this.messagesList = this.messageService.findAllByUserIDs(this.messageNumberAtOnce, this.senderId,
+		this.messagesList = this.messageService.findAllByUserIDs(this.messageNumberAtOnce, this.sender.getId(),
 				this.receiverId);
 		this.fillMessages();
 		this.messagesPanel.setScrollTop(this.scroll);
-		MessageBroadcastService.register((MainUI) this.getUI(), this.sender.getUsername());
+		MessageBroadcastService.register((MainUI) this.getUI(), this.sender.getId());
 		this.userListSelectionChange(userDiv);
 
 	}
 
 	public void fillMessages() {
-		this.messagesList = this.messageService.findAllByUserIDs(20, this.senderId, this.receiverId);
+		this.messagesList = this.messageService.findAllByUserIDs(20, this.sender.getId(), this.receiverId);
 		if (this.messagesList != null) {
 			if (!this.messagesList.isEmpty()) {
 				this.messagesLayout.removeAllComponents();
 				for (int i = this.messagesList.size() - 1; i >= 0; i--) {
 					this.message = this.messagesList.get(i);
-					if (this.message.getSenderId() == this.senderId) {
+					if (this.message.getSenderId() == this.sender.getId()) {
 						this.scroll += this.scrollGrowth;
 						Label newMessage = new Label(
 								"<span id=\"messageSpan\">" + this.message.getMessage() + "</span>", ContentMode.HTML);
@@ -320,7 +303,6 @@ public class MessagesView extends CssLayout implements View {
 						newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 						this.messagesLayout.addComponent(newMessage);
-//						panel.setScrollTop(scroll);
 					} else {
 						this.scroll += this.scrollGrowth;
 						Label newMessage = new Label(
@@ -330,7 +312,6 @@ public class MessagesView extends CssLayout implements View {
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
 						this.messagesLayout.addComponent(newMessage);
 						this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
-//						panel.setScrollTop(scroll);
 					}
 				}
 			}
@@ -347,14 +328,13 @@ public class MessagesView extends CssLayout implements View {
 		this.message.setMessage(this.textField.getValue());
 
 		if (this.message.getMessage().length() != 0) {
-			this.message.setSenderId(this.senderId);
+			this.message.setSenderId(this.sender.getId());
 			this.message.setReceiverId(this.receiverId);
 			java.util.Date date = new java.util.Date();
 			this.message.setTime(new Timestamp(date.getTime()));
 			this.textField.clear();
 			this.messageService.saveMessage(this.message);
-			MessageBroadcastService.sendMessage(this.message.getMessage(), this.senderId, this.receiver.getUsername());
-//			messagesList.add(message);
+			MessageBroadcastService.sendMessage(this.message.getMessage(), this.sender.getId(), this.receiverId);
 			this.scroll += this.scrollGrowth;
 			Label newMessage = new Label("<span id=\"messageSpan\">" + this.message.getMessage() + "</span>",
 					ContentMode.HTML);
@@ -408,23 +388,17 @@ public class MessagesView extends CssLayout implements View {
 	private void userListSelectionChange(Component userDiv) {
 		this.userList.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
 		userDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
-//		changeUserDivMessage(
-//				(CssLayout)userDiv,
-//				messageService.findLastByUserIDs(senderId, Integer.parseInt(userDiv.getId())).getMessage());
 	}
 
 	private void searchValueChangeListener(ValueChangeEvent<String> event) {
 		if (event.getValue().equals("")) {
 			this.userList.removeAllComponents();
 			this.userList.setSizeUndefined();
-//			userList.removeStyleName(ThemeConstants.MESSAGES_USER_LIST_SHOW_LABEL);
 			this.fillUserList();
 		} else {
 			this.userList.removeAllComponents();
 			this.ldapService.findByFullNameContaining(event.getValue())
 					.forEach(user -> this.userList.addComponent(this.createUserDiv(user, "")));
-//			userList.setWidth("100%");
-//			userList.addStyleName(ThemeConstants.MESSAGES_USER_LIST_SHOW_LABEL);
 		}
 	}
 
