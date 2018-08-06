@@ -90,7 +90,7 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public Long getNumberOfUnseenMessages(Integer userId) {
+	public Long getNumberOfUnseenConversations(Integer userId) {
 		return (Long) this.em.createQuery(
 				"SELECT COUNT(DISTINCT m.senderId)"
 				+ " FROM Message m"

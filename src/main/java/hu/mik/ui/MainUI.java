@@ -308,7 +308,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
 		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
-		Long unseenCount = this.messageService.getNumberOfUnseenMessages(this.user.getId());
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user.getId());
 		this.lblMessages = new Label(
 				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
@@ -329,8 +329,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		layout.addComponent(lblLogout);
 	}
 
-	public void refreshUnseenMessageNumber() {
-		Long unseenCount = this.messageService.getNumberOfUnseenMessages(this.user.getId());
+	public void refreshUnseenConversationNumber() {
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user.getId());
 		this.navigationBar.forEach(e -> {
 			// Vaadin magic - lbl equals changes from method to method
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {

@@ -15,6 +15,6 @@ public interface MessageDao {
 
 	public int setAllPreviousSeen(Integer receiverId, Integer senderId);
 
-	public Long getNumberOfUnseenMessages(Integer userId);
+	public Long getNumberOfUnseenConversations(Integer userId);
 
 }

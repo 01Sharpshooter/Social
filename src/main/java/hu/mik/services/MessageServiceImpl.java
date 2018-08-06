@@ -42,8 +42,8 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Long getNumberOfUnseenMessages(Integer userId) {
-		return this.messageDao.getNumberOfUnseenMessages(userId);
+	public Long getNumberOfUnseenConversations(Integer userId) {
+		return this.messageDao.getNumberOfUnseenConversations(userId);
 	}
 
 }
