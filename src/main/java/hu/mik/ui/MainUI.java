@@ -1,7 +1,6 @@
 package hu.mik.ui;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,6 +27,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -49,6 +49,7 @@ import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
+import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
@@ -73,6 +74,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private UserService userService;
 	@Autowired
 	private LdapService ldapService;
+	@Autowired
+	private MessageService messageService;
 
 	private static List<User> onlineUsers = new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
@@ -87,6 +90,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private CssLayout dropDownMenu;
 	private boolean menuIconFlag = false;
 	private LdapGroup adminGroup;
+	private Label lblMessages;
 
 	private SecurityContext securityContext = SecurityContextHolder.getContext();
 
@@ -161,9 +165,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		Label lblProfile = new Label(VaadinIcons.USER.getHtml() + " Profile", ContentMode.HTML);
 		lblProfile.addStyleName(ThemeConstants.ICON_WHITE);
 		this.dropDownMenu.addComponent(lblProfile);
-		for (Label label : this.createNaviBarLabelList()) {
-			this.dropDownMenu.addComponent(label);
-		}
+		this.createNaviBarLabelList(this.dropDownMenu);
 		this.dropDownMenu.setVisible(false);
 		this.dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
 		this.base.addComponent(this.dropDownMenu);
@@ -223,10 +225,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		naviBarIcon.setId("menuIcon");
 		naviBarIcon.addClickListener(this::menuIconClickListener);
 		this.navigationBar.addComponent(naviBarIcon);
-
-		for (Label label : this.createNaviBarLabelList()) {
-			this.navigationBar.addComponent(label);
-		}
+		this.createNaviBarLabelList(this.navigationBar);
 		this.nameSearchTf = new TextField();
 		this.nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
 		this.nameSearchTf.setPlaceholder("Search for a user...");
@@ -252,9 +251,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 			case "Main":
 				this.getNavigator().navigateTo(MainView.NAME);
 				break;
-			case "Messages":
-				this.getNavigator().navigateTo(MessagesView.NAME);
-				break;
 			case "Contacts":
 				this.getNavigator().navigateTo(ContactListView.NAME + "/" + this.userLdap.getUsername());
 				break;
@@ -266,8 +262,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 				this.getNavigator().navigateTo(AdminView.NAME);
 				break;
 			default:
-				this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.userLdap.getUsername());
-				break;
+				if (label.contains("Messages")) {
+					this.getNavigator().navigateTo(MessagesView.NAME);
+					break;
+				} else {
+					this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.userLdap.getUsername());
+					break;
+				}
 			}
 		}
 
@@ -301,17 +302,17 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		}
 	}
 
-	private List<Label> createNaviBarLabelList() {
-		List<Label> lblList = new ArrayList<>();
-
+	private void createNaviBarLabelList(AbstractLayout layout) {
 		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
 				ContentMode.HTML);
 		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
 		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
-		Label lblMessages = new Label(VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages</span>",
+		Long unseenCount = this.messageService.getNumberOfUnseenMessages(this.user.getId());
+		this.lblMessages = new Label(
+				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
-		lblMessages.addStyleName(ThemeConstants.ICON_WHITE);
+		this.lblMessages.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblContacts = new Label(VaadinIcons.USERS.getHtml() + "<span class=\"folding\">Contacts</span>",
 				ContentMode.HTML);
 		lblContacts.addStyleName(ThemeConstants.ICON_WHITE);
@@ -320,14 +321,22 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
 
 		if (this.adminGroup.getListOfMembers().contains(this.userLdap.getId())) {
-			lblList.add(lblAdmin);
+			layout.addComponent(lblAdmin);
 		}
-		lblList.add(lblMain);
-		lblList.add(lblMessages);
-		lblList.add(lblContacts);
-		lblList.add(lblLogout);
-
-		return lblList;
+		layout.addComponent(lblMain);
+		layout.addComponent(this.lblMessages);
+		layout.addComponent(lblContacts);
+		layout.addComponent(lblLogout);
 	}
 
+	public void refreshUnseenMessageNumber() {
+		Long unseenCount = this.messageService.getNumberOfUnseenMessages(this.user.getId());
+		this.navigationBar.forEach(e -> {
+			// Vaadin magic - lbl equals changes from method to method
+			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
+				((Label) e).setValue(
+						VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>");
+			}
+		});
+	}
 }

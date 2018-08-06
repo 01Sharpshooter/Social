@@ -269,7 +269,9 @@ public class MessagesView extends CssLayout implements View {
 		this.receiverId = Integer.parseInt(userDiv.getId());
 		this.messagesList = this.messageService.findAllByUserIDs(this.messageNumberAtOnce, this.sender.getId(),
 				this.receiverId);
-		this.messageService.setAllPreviousSeen(this.sender.getId(), this.receiverId);
+		if (this.messageService.setAllPreviousSeen(this.sender.getId(), this.receiverId) != 0) {
+			((MainUI) this.getUI()).refreshUnseenMessageNumber();
+		}
 		this.fillMessages();
 		this.messagesPanel.setScrollTop(this.scroll);
 		MessageBroadcastService.register((MainUI) this.getUI(), this.sender.getId());
