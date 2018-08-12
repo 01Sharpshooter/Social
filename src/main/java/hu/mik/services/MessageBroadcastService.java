@@ -6,6 +6,8 @@ import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Service;
 
+import hu.mik.beans.Message;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.listeners.NewMessageListener;
 
 @Service
@@ -29,10 +31,10 @@ public class MessageBroadcastService {
 		}
 	}
 
-	public static synchronized void sendMessage(String message, Integer senderId, Integer receiverId) {
+	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
 		executorService.execute(() -> {
-			if (userIDs.contains(receiverId)) {
-				messageListeners.get(userIDs.indexOf(receiverId)).receiveMessage(message, senderId);
+			if (userIDs.contains(message.getReceiverId())) {
+				messageListeners.get(userIDs.indexOf(message.getReceiverId())).receiveMessage(message, sender);
 			}
 		});
 	}

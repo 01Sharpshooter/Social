@@ -33,6 +33,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -41,6 +42,8 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
+import hu.mik.beans.Message;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
@@ -112,6 +115,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.getNavigator().addViewChangeListener(this::viewChangeListener);
 		workingSpace.setSizeFull();
 
+		MessageBroadcastService.register(this, this.user.getId());
+
 //		this.setErrorHandler(new DefaultExceptionHandler(this));
 
 		this.createContent();
@@ -179,10 +184,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private boolean viewChangeListener(ViewChangeEvent event) {
 		if (event.getViewName().equals(MessagesView.NAME)) {
 			this.messageView = (MessagesView) event.getNewView();
-		} else if (event.getViewName().equals(UserListView.NAME)) {
-
-		} else {
-			MessageBroadcastService.unregister(this, this.user.getId());
 		}
 		return true;
 	}
@@ -196,11 +197,25 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	@Override
-	public void receiveMessage(String message, int senderId) {
+	public void receiveMessage(Message message, SocialUserWrapper sender) {
 		this.access(() -> {
 			if (this.messageView != null) {
-				this.messageView.receiveMessage(message, senderId);
+				this.messageView.receiveMessage(message);
 			}
+			this.refreshUnseenConversationNumber();
+			Notification notification = Notification.show(sender.getLdapUser().getFullName(), message.getMessage(),
+					Notification.Type.TRAY_NOTIFICATION);
+			notification.setIcon(VaadinIcons.COMMENT);
+			// TODO Notification image and click
+//			notification.setIcon(new FileResource(
+//					new File(UserConstants.PROFILE_PICTURE_LOCATION + sender.getDbUser().getImageName())));
+//			notification.setStyleName("notificationSmallIcon");
+//			notification.setDelayMsec(Notification.DELAY_FOREVER);
+//			notification.addCloseListener(e -> {
+//				if (e.isUserOriginated()) {
+//					this.getNavigator().navigateTo(MessagesView.NAME + "/" + sender.getDbUser().getId());
+//				}
+//			});
 		});
 
 	}
@@ -332,7 +347,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	public void refreshUnseenConversationNumber() {
 		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user.getId());
 		this.navigationBar.forEach(e -> {
-			// Vaadin magic - lbl equals changes from method to method
+			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
+			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
+				((Label) e).setValue(
+						VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>");
+			}
+		});
+		this.dropDownMenu.forEach(e -> {
+			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
 				((Label) e).setValue(
 						VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>");

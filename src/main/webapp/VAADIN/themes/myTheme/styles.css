@@ -15169,6 +15169,19 @@ div.v-layout.v-horizontal.v-widget {
 	background: aliceblue;
 }
 
+.myTheme #base .unseenMessage {
+	font-weight: bold;
+}
+
+.myTheme #base .unseenMessage #message {
+	color: black !important;
+}
+
+.myTheme #base .notificationSmallIcon .v-icon {
+	height: 20px;
+	width: 20px;
+}
+
 .myTheme #base .v-panel {
 	border-width: 0px;
 }

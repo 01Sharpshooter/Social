@@ -129,6 +129,21 @@
 		min-width: 240px;
 		background: aliceblue;
 		
+		.unseenMessage{
+			font-weight: bold;
+			#message {
+				color:black !important;
+			}
+			
+		}
+		
+		.notificationSmallIcon{
+			.v-icon{
+				height: 20px;
+				width: 20px;
+			}
+		}
+		
 		.v-panel{
 			border-width: 0px;
 		}

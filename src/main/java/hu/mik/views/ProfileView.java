@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -24,17 +22,15 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.FriendRequest;
-import hu.mik.beans.LdapUser;
-import hu.mik.beans.User;
+import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.StringConstants;
-import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.enums.Texts;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
-import hu.mik.services.UserService;
+import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -42,47 +38,42 @@ import hu.mik.services.UserService;
 public class ProfileView extends VerticalLayout implements View {
 	public static final String NAME = "profile";
 
-	private WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
-	private User dbSessionUser;
-	private String profileUsername;
-	private User dbProfileUser;
+	private SocialUserWrapper socialSessionUser;
+	private SocialUserWrapper socialProfileUser;
 	private CssLayout header;
 	private CssLayout headerButtonList;
 
 	@Autowired
-	UserService userService;
+	private LdapService ldapService;
 	@Autowired
-	LdapService ldapService;
+	private FriendRequestService friendRequestService;
 	@Autowired
-	FriendRequestService friendRequestService;
+	private FriendshipService friendShipService;
 	@Autowired
-	FriendshipService friendShipService;
+	private UserUtils userUtils;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (event.getParameters().length() > 0) {
-			String ldapSessionUsername = (String) this.session
-					.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
-			this.dbSessionUser = this.userService.findUserByUsername(ldapSessionUsername);
+			this.socialSessionUser = this.userUtils.getLoggedInUser();
 			String parameters[] = event.getParameters().split("/");
-			this.profileUsername = parameters[0];
-			LdapUser ldapProfileUser = this.ldapService.findUserByUsername(this.profileUsername);
-			this.dbProfileUser = this.userService.findUserByUsername(this.profileUsername);
-			if (ldapProfileUser == null) {
+			String profileUsername = parameters[0];
+			this.socialProfileUser = this.userUtils.initSocialUser(profileUsername);
+			if (this.socialProfileUser.getLdapUser() == null) {
 				Label lblMissing = new Label(Texts.NO_USER_FOUND_FROM_SEARCH.getText());
 				this.addComponent(lblMissing);
 			} else {
 				this.header = new CssLayout();
 				CssLayout headerButtonList = this.createHeaderBtnList();
 
-				Image image = new Image(null, new FileResource(
-						new File(UserConstants.PROFILE_PICTURE_LOCATION + this.dbProfileUser.getImageName())));
+				Image image = new Image(null, new FileResource(new File(
+						UserConstants.PROFILE_PICTURE_LOCATION + this.socialProfileUser.getDbUser().getImageName())));
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName = new Label(ldapProfileUser.getFullName());
+				Label lblName = new Label(this.socialProfileUser.getLdapUser().getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
 				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 				StringBuilder strGroups = new StringBuilder();
-				this.ldapService.findGroupsByUserId(ldapProfileUser.getId())
+				this.ldapService.findGroupsByUserId(this.socialProfileUser.getLdapUser().getId())
 						.forEach(group -> strGroups.append(group.getGroupName() + ", "));
 				Label lblGroups;
 				if (strGroups.length() != 0) {
@@ -111,9 +102,12 @@ public class ProfileView extends VerticalLayout implements View {
 				this.setExpandRatio(this.header, 20);
 				this.setExpandRatio(form, 80);
 
-				TextField tfName = new TextField("Name:", this.checkandSetIfNull(ldapProfileUser.getFullName()));
-				TextField tfMobile = new TextField("Mobile:", this.checkandSetIfNull(ldapProfileUser.getMobile()));
-				TextField tfMail = new TextField("E-Mail:", this.checkandSetIfNull(ldapProfileUser.getMail()));
+				TextField tfName = new TextField("Name:",
+						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getFullName()));
+				TextField tfMobile = new TextField("Mobile:",
+						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMobile()));
+				TextField tfMail = new TextField("E-Mail:",
+						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMail()));
 
 				form.addComponent(tfName);
 				form.addComponent(tfMobile);
@@ -122,7 +116,8 @@ public class ProfileView extends VerticalLayout implements View {
 				for (Component component : form) {
 					if (component.getClass().equals(TextField.class)) {
 						component.addStyleName(ThemeConstants.BLUE_TEXT);
-						if (!this.profileUsername.equals(ldapSessionUsername)) {
+						if (!this.socialProfileUser.getUsername()
+								.equals(this.socialSessionUser.getLdapUser().getUsername())) {
 							component.setEnabled(false);
 						}
 					}
@@ -135,7 +130,7 @@ public class ProfileView extends VerticalLayout implements View {
 	private CssLayout createHeaderBtnList() {
 		this.headerButtonList = new CssLayout();
 
-		if (this.dbSessionUser.getId() != this.dbProfileUser.getId()) {
+		if (this.socialSessionUser.getDbUser().getId() != this.socialProfileUser.getDbUser().getId()) {
 			Button btnFriendRequest = new Button();
 			btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
 			Button btnMessage = new Button("Message");
@@ -144,15 +139,16 @@ public class ProfileView extends VerticalLayout implements View {
 
 			this.headerButtonList.addComponent(btnFriendRequest);
 			this.headerButtonList.addComponent(btnMessage);
-			if (this.friendShipService.findOne(this.dbProfileUser.getId(), this.dbSessionUser.getId()) != null) {
+			if (this.friendShipService.findOne(this.socialProfileUser.getDbUser().getId(),
+					this.socialSessionUser.getDbUser().getId()) != null) {
 				btnFriendRequest.setCaption(StringConstants.BTN_REMOVE_FRIEND);
-			} else if (!this.friendRequestService.IsAlreadyRequested(this.dbSessionUser.getId(),
-					this.dbProfileUser.getId())
-					&& !this.friendRequestService.IsAlreadyRequested(this.dbProfileUser.getId(),
-							this.dbSessionUser.getId())) {
+			} else if (!this.friendRequestService.IsAlreadyRequested(this.socialSessionUser.getDbUser().getId(),
+					this.socialProfileUser.getDbUser().getId())
+					&& !this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser().getId(),
+							this.socialSessionUser.getDbUser().getId())) {
 				btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);
-			} else if (this.friendRequestService.IsAlreadyRequested(this.dbProfileUser.getId(),
-					this.dbSessionUser.getId())) {
+			} else if (this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser().getId(),
+					this.socialSessionUser.getDbUser().getId())) {
 				btnFriendRequest.setCaption(StringConstants.BTN_ACCEPT_REQUEST);
 				Button btnDeclineRequest = new Button(StringConstants.BTN_DECLINE_REQUEST);
 				btnDeclineRequest.addStyleName(ThemeConstants.BLUE_TEXT);
@@ -178,35 +174,39 @@ public class ProfileView extends VerticalLayout implements View {
 
 	private void friendRequestClickListener(Button.ClickEvent event) {
 		if (event.getButton().getCaption().equals(StringConstants.BTN_REMOVE_FRIEND)) {
-			this.friendShipService.deleteFriendship(this.dbProfileUser.getId(), this.dbSessionUser.getId());
+			this.friendShipService.deleteFriendship(this.socialProfileUser.getDbUser().getId(),
+					this.socialSessionUser.getDbUser().getId());
 			this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_FRIEND_REQUEST)) {
-			LdapUser ldapProfile = this.ldapService.findUserByUsername(this.profileUsername);
 			FriendRequest fr = new FriendRequest();
-			fr.setRequestorId(this.dbSessionUser.getId());
-			fr.setRequestedId(this.dbProfileUser.getId());
+			fr.setRequestorId(this.socialSessionUser.getDbUser().getId());
+			fr.setRequestedId(this.socialProfileUser.getDbUser().getId());
 			this.friendRequestService.saveFriendRequest(fr);
 			event.getButton().setCaption(StringConstants.BTN_CANCEL_REQUEST);
-			Notification.show(Texts.FRIEND_REQUEST_NOTIFICATION.getText(), ldapProfile.getFullName(),
-					Type.TRAY_NOTIFICATION);
+			Notification.show(Texts.FRIEND_REQUEST_NOTIFICATION.getText(),
+					this.socialProfileUser.getLdapUser().getFullName(), Type.TRAY_NOTIFICATION);
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)) {
-			this.friendRequestService.deleteFriendRequest(this.dbProfileUser.getId(), this.dbSessionUser.getId());
-			this.friendShipService.saveFriendship(this.dbProfileUser.getId(), this.dbSessionUser.getId());
+			this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser().getId(),
+					this.socialSessionUser.getDbUser().getId());
+			this.friendShipService.saveFriendship(this.socialProfileUser.getDbUser().getId(),
+					this.socialSessionUser.getDbUser().getId());
 			this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 		} else {
-			this.friendRequestService.deleteFriendRequest(this.dbSessionUser.getId(), this.dbProfileUser.getId());
+			this.friendRequestService.deleteFriendRequest(this.socialSessionUser.getDbUser().getId(),
+					this.socialProfileUser.getDbUser().getId());
 			event.getButton().setCaption(StringConstants.BTN_FRIEND_REQUEST);
 		}
 
 	}
 
 	private void declineRequestClickListener(Button.ClickEvent event) {
-		this.friendRequestService.deleteFriendRequest(this.dbProfileUser.getId(), this.dbSessionUser.getId());
+		this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser().getId(),
+				this.socialSessionUser.getDbUser().getId());
 		this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 	}
 
 	private void messageClickListener(Button.ClickEvent event) {
-		this.getUI().getNavigator().navigateTo(MessagesView.NAME + "/" + this.profileUsername);
+		this.getUI().getNavigator().navigateTo(MessagesView.NAME + "/" + this.socialProfileUser.getDbUser().getId());
 	}
 
 }

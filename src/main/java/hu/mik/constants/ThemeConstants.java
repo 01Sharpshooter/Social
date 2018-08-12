@@ -51,4 +51,6 @@ public class ThemeConstants {
 	public static final String ICON_WHITE = "whiteicon";
 
 	public static final String SCROLLABLE_PANEL = "scrollablePanel";
+
+	public static final String UNSEEN_MESSAGE = "unseenMessage";
 }
