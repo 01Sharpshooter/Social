@@ -365,6 +365,7 @@ public class MessagesView extends CssLayout implements View {
 			this.messagesLayout.addComponent(newMessage);
 			this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 			this.messagesPanel.setScrollTop(this.scroll);
+			MessageBroadcastService.messageSeen(this.receiverId, this.sender.getDbUser().getId());
 
 		}
 		boolean exists = false;
@@ -372,8 +373,11 @@ public class MessagesView extends CssLayout implements View {
 			if (userDiv.getId().equals(String.valueOf(message.getSenderId()))) {
 				this.userList.removeComponent(userDiv);
 				this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
+				((CssLayout) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
 				this.userList.addComponent(userDiv, 0);
-				userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+				if (!message.getSenderId().equals(this.receiverId)) {
+					userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+				}
 				exists = true;
 				break;
 			}
