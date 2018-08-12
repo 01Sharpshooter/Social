@@ -39,4 +39,12 @@ public class MessageBroadcastService {
 		});
 	}
 
+	public static synchronized void messageSeen(Integer senderId, Integer seenSourceId) {
+		executorService.execute(() -> {
+			if (userIDs.contains(senderId)) {
+				messageListeners.get(userIDs.indexOf(senderId)).messageSeen(seenSourceId);
+			}
+		});
+	}
+
 }

@@ -5,4 +5,6 @@ import hu.mik.beans.SocialUserWrapper;
 
 public interface NewMessageListener {
 	public void receiveMessage(Message message, SocialUserWrapper sender);
+
+	public void messageSeen(Integer receiverId);
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
@@ -96,7 +97,7 @@ public class MessagesView extends CssLayout implements View {
 		this.fillUserList();
 
 		String parameters[] = event.getParameters().split("/");
-		if (parameters.length > 0) {
+		if (parameters.length > 0 && !parameters[0].isEmpty()) {
 			User receiver = this.userService.findUserById(Integer.parseInt(parameters[0]));
 			if (receiver != null) {
 				this.receiverId = receiver.getId();
@@ -203,24 +204,39 @@ public class MessagesView extends CssLayout implements View {
 		userDiv.addComponent(image);
 		userDiv.setId(dbUser.getId().toString());
 		userDiv.addLayoutClickListener(this::userDivClickListener);
-		Label lblName = new Label(
+		Label userDivLbl = new Label(
 				ldapUser.getFullName() + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
 				ContentMode.HTML);
 		if (!lastMessage.isSeen() && lastMessage.getSenderId() != this.sender.getDbUser().getId()) {
+			this.addLabelsToUserDiv(userDiv, userDivLbl, null);
 			userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+		} else if (!lastMessage.isSeen() && lastMessage.getSenderId() == this.sender.getDbUser().getId()) {
+			this.addLabelsToUserDiv(userDiv, userDivLbl, VaadinIcons.ANGLE_DOUBLE_RIGHT);
+		} else if (lastMessage.isSeen() && lastMessage.getSenderId() == this.sender.getDbUser().getId()) {
+			this.addLabelsToUserDiv(userDiv, userDivLbl, VaadinIcons.EYE);
+		} else {
+			this.addLabelsToUserDiv(userDiv, userDivLbl, null);
 		}
-		userDiv.addComponent(lblName);
 
 		return userDiv;
 	}
 
+	private void addLabelsToUserDiv(CssLayout userDiv, Label userDivLbl, VaadinIcons icon) {
+		userDiv.addComponent(userDivLbl);
+		if (icon != null) {
+			userDiv.addComponent(new Label(icon.getHtml(), ContentMode.HTML));
+		} else {
+			userDiv.addComponent(new Label());
+		}
+	}
+
 	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage) {
 		String name;
-		String[] test = ((Label) userDiv.getComponent(1)).getValue().split("<");
-		name = test[0];
+		String[] stringArray = ((Label) userDiv.getComponent(1)).getValue().split("<");
+		name = stringArray[0];
 		userDiv.removeComponent(userDiv.getComponent(1));
 		Label lblName = new Label(name + "</br><span id=\"message\">" + lastMessage + "</span>", ContentMode.HTML);
-		userDiv.addComponent(lblName);
+		userDiv.addComponent(lblName, 1);
 		return userDiv;
 	}
 
@@ -267,6 +283,7 @@ public class MessagesView extends CssLayout implements View {
 			((MainUI) this.getUI()).refreshUnseenConversationNumber();
 		}
 		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
+		MessageBroadcastService.messageSeen(this.receiverId, this.sender.getDbUser().getId());
 		this.fillMessages();
 		this.messagesPanel.setScrollTop(this.scroll);
 		this.userListSelectionChange(userDiv);
@@ -324,8 +341,11 @@ public class MessagesView extends CssLayout implements View {
 
 			for (Component userDiv : this.userList) {
 				if (userDiv.getId().equals(String.valueOf(this.receiverId))) {
+					CssLayout div = (CssLayout) userDiv;
 					this.userList.removeComponent(userDiv);
-					this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
+					this.changeUserDivMessage(div, message.getMessage());
+					div.replaceComponent(div.getComponent(2),
+							new Label(VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml(), ContentMode.HTML));
 					this.userList.addComponent(userDiv, 0);
 					this.userListSelectionChange(userDiv);
 					break;
@@ -391,6 +411,15 @@ public class MessagesView extends CssLayout implements View {
 		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm");
 		return sdf.format(date);
 
+	}
+
+	public void messageSeen(Integer receiverId) {
+		for (Component c : this.userList) {
+			if (c.getId().equals(receiverId.toString())) {
+				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
+						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
+			}
+		}
 	}
 
 }

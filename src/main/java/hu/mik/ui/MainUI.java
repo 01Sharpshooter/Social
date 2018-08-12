@@ -361,4 +361,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 			}
 		});
 	}
+
+	@Override
+	public void messageSeen(Integer receiverId) {
+		this.access(() -> {
+			if (this.messageView != null) {
+				this.messageView.messageSeen(receiverId);
+			}
+		});
+
+	}
 }
