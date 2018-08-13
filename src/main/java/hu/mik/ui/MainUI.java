@@ -33,7 +33,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -202,10 +201,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 			if (this.messageView != null) {
 				this.messageView.receiveMessage(message);
 			}
-			this.refreshUnseenConversationNumber();
-			Notification notification = Notification.show(sender.getLdapUser().getFullName(), message.getMessage(),
-					Notification.Type.TRAY_NOTIFICATION);
-			notification.setIcon(VaadinIcons.COMMENT);
 			// TODO Notification image and click
 //			notification.setIcon(new FileResource(
 //					new File(UserConstants.PROFILE_PICTURE_LOCATION + sender.getDbUser().getImageName())));

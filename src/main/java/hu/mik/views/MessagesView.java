@@ -26,6 +26,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -155,7 +156,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private List<CssLayout> fillUserList() {
-		List<Message> latestMessages = this.messageService.findLastestMessagesOfUser(100,
+		List<Message> latestMessages = this.messageService.findLastestMessagesOfUser(300,
 				this.sender.getDbUser().getId());
 		List<Integer> alreadyUsedIds = new ArrayList<>();
 		List<CssLayout> userDivs = new ArrayList<>();
@@ -365,8 +366,14 @@ public class MessagesView extends CssLayout implements View {
 			this.messagesLayout.addComponent(newMessage);
 			this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 			this.messagesPanel.setScrollTop(this.scroll);
+			this.messageService.setAllPreviousSeen(this.sender.getDbUser().getId(), this.receiverId);
 			MessageBroadcastService.messageSeen(this.receiverId, this.sender.getDbUser().getId());
 
+		} else {
+			((MainUI) this.getUI()).refreshUnseenConversationNumber();
+			Notification notification = Notification.show(this.sender.getLdapUser().getFullName(), message.getMessage(),
+					Notification.Type.TRAY_NOTIFICATION);
+			notification.setIcon(VaadinIcons.COMMENT);
 		}
 		boolean exists = false;
 		for (Component userDiv : this.userList) {
