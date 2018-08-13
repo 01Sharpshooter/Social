@@ -1,6 +1,5 @@
 package hu.mik.views;
 
-import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,12 +9,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.HasValue.ValueChangeEvent;
-import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FileResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
@@ -24,19 +21,19 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
+import hu.mik.components.UserDiv;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
@@ -67,7 +64,7 @@ public class MessagesView extends CssLayout implements View {
 
 	private SocialUserWrapper sender;
 
-	private Integer receiverId;
+	private User receiver;
 
 	private int scroll = 100;
 	private int scrollGrowth = 50;
@@ -75,10 +72,12 @@ public class MessagesView extends CssLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		this.sender = this.userUtils.getLoggedInUser();
-		this.addStyleName(ThemeConstants.BORDERED);
-		this.setSizeFull();
-		this.createContent(event);
+		if (UI.getCurrent() instanceof MainUI) {
+			this.sender = this.userUtils.getLoggedInUser();
+			this.addStyleName(ThemeConstants.BORDERED);
+			this.setSizeFull();
+			this.createContent(event);
+		}
 
 	}
 
@@ -99,30 +98,29 @@ public class MessagesView extends CssLayout implements View {
 
 		String parameters[] = event.getParameters().split("/");
 		if (parameters.length > 0 && !parameters[0].isEmpty()) {
-			User receiver = this.userService.findUserById(Integer.parseInt(parameters[0]));
-			if (receiver != null) {
-				this.receiverId = receiver.getId();
+			this.receiver = this.userService.findUserById(Integer.parseInt(parameters[0]));
+			if (this.receiver != null) {
 				for (Component userDiv : this.userList) {
-					if (String.valueOf(this.receiverId).equals(userDiv.getId())) {
+					if (this.receiver.equals(((UserDiv) userDiv).getUser().getDbUser())) {
 						this.userList.removeComponent(userDiv);
 						this.userList.addComponent(userDiv, 0);
 						this.userListSelectionChange(this.userList.getComponent(0));
-						this.fillChat(this.userList.getComponent(0));
+						this.fillChat((UserDiv) this.userList.getComponent(0));
 						return;
 					}
 				}
 
-				Message lastMessage = this.messageService.findLastByUserIDs(this.receiverId,
-						this.sender.getDbUser().getId());
+				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
+						this.sender.getDbUser());
 				if (lastMessage == null) {
 					lastMessage = new Message();
 					lastMessage.setMessage("");
 					lastMessage.setSeen(false);
 				}
-				CssLayout newDiv = this.createUserDivFromDbUser(receiver, lastMessage);
+				CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
 				this.userList.addComponent(newDiv, 0);
 				this.userListSelectionChange(newDiv);
-				this.fillChat(this.userList.getComponent(0));
+				this.fillChat((UserDiv) this.userList.getComponent(0));
 			}
 		}
 	}
@@ -155,80 +153,38 @@ public class MessagesView extends CssLayout implements View {
 		this.setSizeFull();
 	}
 
-	private List<CssLayout> fillUserList() {
-		List<Message> latestMessages = this.messageService.findLastestMessagesOfUser(300,
-				this.sender.getDbUser().getId());
-		List<Integer> alreadyUsedIds = new ArrayList<>();
-		List<CssLayout> userDivs = new ArrayList<>();
-		CssLayout userDiv;
-		User user;
+	private List<UserDiv> fillUserList() {
+		List<Message> latestMessages = this.messageService.findLatestConversationsOfUser(this.sender.getDbUser());
+		List<UserDiv> userDivs = new ArrayList<>();
+		UserDiv userDiv;
 
 		for (Message message : latestMessages) {
-			boolean amItheSender = message.getSenderId().equals(this.sender.getDbUser().getId());
-			if (amItheSender) {
-				if (!alreadyUsedIds.contains(message.getReceiverId())) {
-					alreadyUsedIds.add(message.getReceiverId());
-					user = this.userService.findUserById(message.getReceiverId());
-					userDiv = this.createUserDivFromDbUser(user, message);
-					this.userList.addComponent(userDiv);
-					userDivs.add(userDiv);
-				}
+			if (message.getReceiver().equals(this.sender.getDbUser())) {
+				userDiv = this.createUserDivFromDbUser(message.getSender(), message);
 			} else {
-				if (!alreadyUsedIds.contains(message.getSenderId())) {
-					alreadyUsedIds.add(message.getSenderId());
-					user = this.userService.findUserById(message.getSenderId());
-					userDiv = this.createUserDivFromDbUser(user, message);
-					this.userList.addComponent(userDiv);
-					userDivs.add(userDiv);
-				}
+				userDiv = this.createUserDivFromDbUser(message.getReceiver(), message);
 			}
+			this.userList.addComponent(userDiv);
+			userDivs.add(userDiv);
 		}
 		return userDivs;
 	}
 
-	private CssLayout createUserDivFromDbUser(User dbUser, Message lastMessage) {
+	private UserDiv createUserDivFromDbUser(User dbUser, Message lastMessage) {
 		LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
 		return this.createUserDiv(ldapUser, dbUser, lastMessage);
 	}
 
-	private CssLayout createUserDivFromLdap(LdapUser ldapUser, Message lastMessage) {
+	private UserDiv createUserDivFromLdap(LdapUser ldapUser, Message lastMessage) {
 		User dbUser = this.userService.findUserByUsername(ldapUser.getUsername());
 		return this.createUserDiv(ldapUser, dbUser, lastMessage);
 	}
 
-	private CssLayout createUserDiv(LdapUser ldapUser, User dbUser, Message lastMessage) {
-		CssLayout userDiv = new CssLayout();
-
-		Image image = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + dbUser.getImageName())));
-		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		userDiv.addComponent(image);
-		userDiv.setId(dbUser.getId().toString());
-		userDiv.addLayoutClickListener(this::userDivClickListener);
-		Label userDivLbl = new Label(
-				ldapUser.getFullName() + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
-				ContentMode.HTML);
-		if (!lastMessage.isSeen() && lastMessage.getSenderId() != this.sender.getDbUser().getId()) {
-			this.addLabelsToUserDiv(userDiv, userDivLbl, null);
-			userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
-		} else if (!lastMessage.isSeen() && lastMessage.getSenderId() == this.sender.getDbUser().getId()) {
-			this.addLabelsToUserDiv(userDiv, userDivLbl, VaadinIcons.ANGLE_DOUBLE_RIGHT);
-		} else if (lastMessage.isSeen() && lastMessage.getSenderId() == this.sender.getDbUser().getId()) {
-			this.addLabelsToUserDiv(userDiv, userDivLbl, VaadinIcons.EYE);
-		} else {
-			this.addLabelsToUserDiv(userDiv, userDivLbl, null);
-		}
-
+	private UserDiv createUserDiv(LdapUser ldapUser, User dbUser, Message lastMessage) {
+		SocialUserWrapper socialUser = new SocialUserWrapper(dbUser, ldapUser);
+		UserDiv userDiv = new UserDiv(socialUser, lastMessage, this.sender.getDbUser().getId());
+		userDiv.addLayoutClickListener(e -> this.fillChat((UserDiv) e.getComponent()));
 		return userDiv;
-	}
-
-	private void addLabelsToUserDiv(CssLayout userDiv, Label userDivLbl, VaadinIcons icon) {
-		userDiv.addComponent(userDivLbl);
-		if (icon != null) {
-			userDiv.addComponent(new Label(icon.getHtml(), ContentMode.HTML));
-		} else {
-			userDiv.addComponent(new Label());
-		}
 	}
 
 	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage) {
@@ -270,21 +226,17 @@ public class MessagesView extends CssLayout implements View {
 		this.textWriter.setEnabled(false);
 	}
 
-	private void userDivClickListener(LayoutClickEvent event) {
-		this.fillChat(event.getComponent());
-	}
-
-	private void fillChat(Component userDiv) {
+	private void fillChat(UserDiv userDiv) {
 		this.textWriter.setEnabled(true);
 		this.messagesLayout.removeAllComponents();
-		this.receiverId = Integer.parseInt(userDiv.getId());
-		this.messagesList = this.messageService.findAllByUserIDs(this.messageNumberAtOnce,
-				this.sender.getDbUser().getId(), this.receiverId);
-		if (this.messageService.setAllPreviousSeen(this.sender.getDbUser().getId(), this.receiverId) != 0) {
+		this.receiver = userDiv.getUser().getDbUser();
+		this.messagesList = this.messageService.findAllByUsers(this.messageNumberAtOnce, this.sender.getDbUser(),
+				this.receiver);
+		if (this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver) != 0) {
 			((MainUI) this.getUI()).refreshUnseenConversationNumber();
 		}
 		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
-		MessageBroadcastService.messageSeen(this.receiverId, this.sender.getDbUser().getId());
+		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
 		this.fillMessages();
 		this.messagesPanel.setScrollTop(this.scroll);
 		this.userListSelectionChange(userDiv);
@@ -292,13 +244,13 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	public void fillMessages() {
-		this.messagesList = this.messageService.findAllByUserIDs(20, this.sender.getDbUser().getId(), this.receiverId);
+		this.messagesList = this.messageService.findAllByUsers(20, this.sender.getDbUser(), this.receiver);
 		if (this.messagesList != null) {
 			if (!this.messagesList.isEmpty()) {
 				this.messagesLayout.removeAllComponents();
 				for (int i = this.messagesList.size() - 1; i >= 0; i--) {
 					Message message = this.messagesList.get(i);
-					if (message.getSenderId().equals(this.sender.getDbUser().getId())) {
+					if (message.getSender().equals(this.sender.getDbUser())) {
 						this.scroll += this.scrollGrowth;
 						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 								ContentMode.HTML);
@@ -326,8 +278,8 @@ public class MessagesView extends CssLayout implements View {
 		message.setMessage(messageText);
 
 		if (message.getMessage().length() != 0) {
-			message.setSenderId(this.sender.getDbUser().getId());
-			message.setReceiverId(this.receiverId);
+			message.setSender(this.sender.getDbUser());
+			message.setReceiver(this.receiver);
 			message.setTime(new Timestamp(new Date().getTime()));
 			this.messageService.saveMessage(message);
 			MessageBroadcastService.sendMessage(message, this.sender);
@@ -341,7 +293,7 @@ public class MessagesView extends CssLayout implements View {
 			this.messagesPanel.setScrollTop(this.scroll);
 
 			for (Component userDiv : this.userList) {
-				if (userDiv.getId().equals(String.valueOf(this.receiverId))) {
+				if (((UserDiv) userDiv).getUser().getDbUser().equals(this.receiver)) {
 					CssLayout div = (CssLayout) userDiv;
 					this.userList.removeComponent(userDiv);
 					this.changeUserDivMessage(div, message.getMessage());
@@ -357,7 +309,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	public void receiveMessage(Message message) {
-		if (message.getSenderId().equals(this.receiverId)) {
+		if (message.getSender().equals(this.receiver)) {
 			Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 					ContentMode.HTML);
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
@@ -366,23 +318,23 @@ public class MessagesView extends CssLayout implements View {
 			this.messagesLayout.addComponent(newMessage);
 			this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
 			this.messagesPanel.setScrollTop(this.scroll);
-			this.messageService.setAllPreviousSeen(this.sender.getDbUser().getId(), this.receiverId);
-			MessageBroadcastService.messageSeen(this.receiverId, this.sender.getDbUser().getId());
+			this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver);
+			MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
 
 		} else {
-			((MainUI) this.getUI()).refreshUnseenConversationNumber();
+			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
 			Notification notification = Notification.show(this.sender.getLdapUser().getFullName(), message.getMessage(),
 					Notification.Type.TRAY_NOTIFICATION);
 			notification.setIcon(VaadinIcons.COMMENT);
 		}
 		boolean exists = false;
 		for (Component userDiv : this.userList) {
-			if (userDiv.getId().equals(String.valueOf(message.getSenderId()))) {
+			if (((UserDiv) userDiv).getUser().getDbUser().equals(message.getSender())) {
 				this.userList.removeComponent(userDiv);
 				this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
 				((CssLayout) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
 				this.userList.addComponent(userDiv, 0);
-				if (!message.getSenderId().equals(this.receiverId)) {
+				if (!message.getSender().equals(this.receiver)) {
 					userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 				}
 				exists = true;
@@ -390,7 +342,7 @@ public class MessagesView extends CssLayout implements View {
 			}
 		}
 		if (!exists) {
-			User user = this.userService.findUserById(message.getSenderId());
+			User user = this.userService.findUserById(message.getSender().getId());
 			CssLayout newDiv = this.createUserDivFromDbUser(user, message);
 			newDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 			this.userList.addComponent(newDiv, 0);
@@ -426,11 +378,19 @@ public class MessagesView extends CssLayout implements View {
 
 	public void messageSeen(Integer receiverId) {
 		for (Component c : this.userList) {
-			if (c.getId().equals(receiverId.toString())) {
+			if (((UserDiv) c).getUser().getDbUser().getId().equals(receiverId)) {
 				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
 						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
 			}
 		}
+	}
+
+	public User getReceiver() {
+		return this.receiver;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 
 }

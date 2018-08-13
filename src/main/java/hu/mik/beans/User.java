@@ -45,4 +45,50 @@ public class User {
 		this.imageName = image;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+		result = prime * result + ((this.imageName == null) ? 0 : this.imageName.hashCode());
+		result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		User other = (User) obj;
+		if (this.id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!this.id.equals(other.id)) {
+			return false;
+		}
+		if (this.imageName == null) {
+			if (other.imageName != null) {
+				return false;
+			}
+		} else if (!this.imageName.equals(other.imageName)) {
+			return false;
+		}
+		if (this.username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!this.username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
+
 }

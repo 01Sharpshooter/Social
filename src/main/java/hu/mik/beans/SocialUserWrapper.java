@@ -1,11 +1,13 @@
 package hu.mik.beans;
 
-import com.vaadin.spring.annotation.SpringComponent;
-
-@SpringComponent
 public class SocialUserWrapper {
 	private User dbUser;
 	private LdapUser ldapUser;
+
+	public SocialUserWrapper(User dbUser, LdapUser ldapUser) {
+		this.dbUser = dbUser;
+		this.ldapUser = ldapUser;
+	}
 
 	public User getDbUser() {
 		return this.dbUser;

@@ -33,8 +33,8 @@ public class MessageBroadcastService {
 
 	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
 		executorService.execute(() -> {
-			if (userIDs.contains(message.getReceiverId())) {
-				messageListeners.get(userIDs.indexOf(message.getReceiverId())).receiveMessage(message, sender);
+			if (userIDs.contains(message.getReceiver().getId())) {
+				messageListeners.get(userIDs.indexOf(message.getReceiver().getId())).receiveMessage(message, sender);
 			}
 		});
 	}

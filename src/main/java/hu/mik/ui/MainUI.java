@@ -183,6 +183,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private boolean viewChangeListener(ViewChangeEvent event) {
 		if (event.getViewName().equals(MessagesView.NAME)) {
 			this.messageView = (MessagesView) event.getNewView();
+		} else if (event.getOldView() instanceof MessagesView) {
+			this.messageView.setReceiver(null);
 		}
 		return true;
 	}
@@ -200,6 +202,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.access(() -> {
 			if (this.messageView != null) {
 				this.messageView.receiveMessage(message);
+			} else {
+				this.refreshUnseenConversationNumber();
 			}
 			// TODO Notification image and click
 //			notification.setIcon(new FileResource(
@@ -318,7 +322,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
 		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
-		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user.getId());
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user);
 		this.lblMessages = new Label(
 				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
@@ -340,7 +344,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	public void refreshUnseenConversationNumber() {
-		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user.getId());
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user);
 		this.navigationBar.forEach(e -> {
 			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {

@@ -4,9 +4,12 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -18,10 +21,12 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
 	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_messages", allocationSize = 1, initialValue = 1)
 	private Integer id;
-	@Column(name = "senderid")
-	private Integer senderId;
-	@Column(name = "receiverid")
-	private Integer receiverId;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "senderid", updatable = false)
+	private User sender;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "receiverid", updatable = false)
+	private User receiver;
 	@Column(name = "message")
 	private String message;
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
@@ -37,20 +42,20 @@ public class Message {
 		this.id = id;
 	}
 
-	public Integer getSenderId() {
-		return this.senderId;
+	public User getSender() {
+		return this.sender;
 	}
 
-	public void setSenderId(Integer senderId) {
-		this.senderId = senderId;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
-	public Integer getReceiverId() {
-		return this.receiverId;
+	public User getReceiver() {
+		return this.receiver;
 	}
 
-	public void setReceiverId(Integer receiverId) {
-		this.receiverId = receiverId;
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getMessage() {
@@ -75,6 +80,12 @@ public class Message {
 
 	public void setSeen(boolean seen) {
 		this.seen = seen;
+	}
+
+	@Override
+	public String toString() {
+		return "Message [id=" + this.id + ", senderId=" + this.sender + ", receiverId=" + this.receiver + ", message="
+				+ this.message + ", time=" + this.time + ", seen=" + this.seen + "]";
 	}
 
 }

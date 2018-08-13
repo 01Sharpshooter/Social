@@ -28,7 +28,6 @@ public class UserUtils {
 	}
 
 	public SocialUserWrapper initSocialUser(String username) {
-		SocialUserWrapper socialUser = new SocialUserWrapper();
 		LdapUser ldapUser = this.ldapService.findUserByUsername(username);
 		if (ldapUser == null) {
 			return null;
@@ -37,8 +36,7 @@ public class UserUtils {
 		if (user == null) {
 			user = this.userService.createDefaultUserWithUsername(username);
 		}
-		socialUser.setDbUser(user);
-		socialUser.setLdapUser(ldapUser);
+		SocialUserWrapper socialUser = new SocialUserWrapper(user, ldapUser);
 		return socialUser;
 	}
 

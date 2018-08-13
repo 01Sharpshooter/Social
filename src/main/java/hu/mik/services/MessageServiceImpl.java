@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.mik.beans.Message;
+import hu.mik.beans.User;
 import hu.mik.dao.MessageDao;
 
 @Service
@@ -15,8 +16,8 @@ public class MessageServiceImpl implements MessageService {
 	MessageDao messageDao;
 
 	@Override
-	public List<Message> findAllByUserIDs(int number, int id1, int id2) {
-		return this.messageDao.findAllByUserIDs(number, id1, id2);
+	public List<Message> findAllByUsers(int number, User user1, User user2) {
+		return this.messageDao.findAllByUsers(number, user1, user2);
 	}
 
 	@Override
@@ -26,24 +27,29 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<Message> findLastestMessagesOfUser(int number, int userId) {
-		return this.messageDao.findLatestMessagesOfUser(number, userId);
+	public List<Message> findLastestMessagesOfUser(int number, User user) {
+		return this.messageDao.findLatestMessagesOfUser(number, user);
 	}
 
 	@Override
-	public Message findLastByUserIDs(int id1, int id2) {
-		return this.messageDao.findLastByUserIDs(id1, id2);
+	public Message findLastMessageOfUsers(User user1, User user2) {
+		return this.messageDao.findLastMessageOfUsers(user1, user2);
 	}
 
 	@Override
-	public int setAllPreviousSeen(Integer receiverId, Integer senderId) {
-		return this.messageDao.setAllPreviousSeen(receiverId, senderId);
+	public int setAllPreviousSeen(User receiver, User sender) {
+		return this.messageDao.setAllPreviousSeen(receiver, sender);
 
 	}
 
 	@Override
-	public Long getNumberOfUnseenConversations(Integer userId) {
-		return this.messageDao.getNumberOfUnseenConversations(userId);
+	public Long getNumberOfUnseenConversations(User user) {
+		return this.messageDao.getNumberOfUnseenConversations(user);
+	}
+
+	@Override
+	public List<Message> findLatestConversationsOfUser(User user) {
+		return this.messageDao.findLatestConversationsOfUser(user);
 	}
 
 }
