@@ -70,6 +70,8 @@ public class MessagesView extends CssLayout implements View {
 	private int scrollGrowth = 50;
 	private int messageNumberAtOnce = 20;
 
+	private TextField tfSearch;
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
@@ -143,9 +145,9 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void createTextFieldSearch() {
-		TextField tfSearch = new TextField("Search:");
-		tfSearch.addValueChangeListener(this::searchValueChangeListener);
-		this.addComponent(tfSearch);
+		this.tfSearch = new TextField("Search:");
+		this.tfSearch.addValueChangeListener(this::searchValueChangeListener);
+		this.addComponent(this.tfSearch);
 	}
 
 	private void createBase() {
@@ -183,7 +185,9 @@ public class MessagesView extends CssLayout implements View {
 	private UserDiv createUserDiv(LdapUser ldapUser, User dbUser, Message lastMessage) {
 		SocialUserWrapper socialUser = new SocialUserWrapper(dbUser, ldapUser);
 		UserDiv userDiv = new UserDiv(socialUser, lastMessage, this.sender.getDbUser().getId());
-		userDiv.addLayoutClickListener(e -> this.fillChat((UserDiv) e.getComponent()));
+		userDiv.addLayoutClickListener(e -> {
+			this.fillChat((UserDiv) e.getComponent());
+		});
 		return userDiv;
 	}
 
@@ -291,6 +295,11 @@ public class MessagesView extends CssLayout implements View {
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 			this.messagesLayout.addComponent(newMessage);
 			this.messagesPanel.setScrollTop(this.scroll);
+
+			if (!this.tfSearch.isEmpty()) {
+				this.tfSearch.clear();
+				return;
+			}
 
 			for (Component userDiv : this.userList) {
 				if (((UserDiv) userDiv).getUser().getDbUser().equals(this.receiver)) {

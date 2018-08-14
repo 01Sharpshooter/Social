@@ -29,7 +29,9 @@ public class UserDiv extends CssLayout {
 		Label userDivLbl = new Label(
 				user.getLdapUser().getFullName() + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
 				ContentMode.HTML);
-		if (!lastMessage.isSeen() && !lastMessage.getSender().getId().equals(loggedId)) {
+		if (lastMessage.getSender() == null) {
+			this.addLabelsToUserDiv(userDivLbl, null);
+		} else if (!lastMessage.isSeen() && !lastMessage.getSender().getId().equals(loggedId)) {
 			this.addLabelsToUserDiv(userDivLbl, null);
 			this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		} else if (!lastMessage.isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
