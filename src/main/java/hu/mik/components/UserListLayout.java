@@ -31,9 +31,9 @@ import hu.mik.views.ProfileView;
 public class UserListLayout extends CssLayout {
 
 	@Autowired
-	LdapService ldapService;
+	private LdapService ldapService;
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.dao.NewsDao;
@@ -31,8 +32,8 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public List<News> getPagedNewsByUsernames(int offset, int pageSize, List<String> usernames) {
-		return this.newsDao.getPagedNewsByUsernames(offset, pageSize, usernames);
+	public List<News> getPagedNewsByLdapGroup(int offset, int pageSize, LdapGroup ldapGroup) {
+		return this.newsDao.getPagedNewsByLdapGroup(offset, pageSize, ldapGroup);
 	}
 
 }

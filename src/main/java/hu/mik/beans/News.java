@@ -61,4 +61,64 @@ public class News {
 		this.time = time;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+		result = prime * result + ((this.message == null) ? 0 : this.message.hashCode());
+		result = prime * result + ((this.time == null) ? 0 : this.time.hashCode());
+		result = prime * result + ((this.user == null) ? 0 : this.user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		News other = (News) obj;
+		if (this.id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!this.id.equals(other.id)) {
+			return false;
+		}
+		if (this.message == null) {
+			if (other.message != null) {
+				return false;
+			}
+		} else if (!this.message.equals(other.message)) {
+			return false;
+		}
+		if (this.time == null) {
+			if (other.time != null) {
+				return false;
+			}
+		} else if (!this.time.equals(other.time)) {
+			return false;
+		}
+		if (this.user == null) {
+			if (other.user != null) {
+				return false;
+			}
+		} else if (!this.user.equals(other.user)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "News [id=" + this.id + ", user=" + this.user + ", message=" + this.message + ", time=" + this.time
+				+ "]";
+	}
+
 }

@@ -4,16 +4,15 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import com.vaadin.server.FileResource;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -22,73 +21,68 @@ import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
+import hu.mik.utils.ApplicationContextHolder;
 import hu.mik.views.ProfileView;
 
-@SuppressWarnings("serial")
-@SpringComponent(value = "newsComponent")
-@Scope(scopeName = "prototype")
-public class NewsComponentConverter extends VerticalLayout implements BeanToComponentConverter<News> {
-	private LdapService ldapService;
-	private User user;
+@Scope(scopeName = "singleton")
+public class NewsComponentConverter {
+	private static User user;
 
-	@Autowired
-	public NewsComponentConverter(LdapService ldapService) {
-		this.setSpacing(true);
-		this.setMargin(true);
-		this.setSizeFull();
-		this.addStyleName(ThemeConstants.BORDERED);
-		this.ldapService = ldapService;
+	public static VerticalLayout convert(News news) {
+		VerticalLayout layout = new VerticalLayout();
+		layout.setSpacing(true);
+		layout.setMargin(true);
+		layout.setSizeFull();
+		layout.addStyleName(ThemeConstants.BORDERED);
+
+		createContent(news, layout);
+		return layout;
 	}
 
-	@Override
-	public BeanToComponentConverter<News> convert(News news) {
-		this.createContent(news);
-		return this;
-	}
-
-	private void createContent(News news) {
-		this.createHeader(news);
-		this.createMessageBlock(news);
-		this.createDateBlock(news);
+	private static void createContent(News news, VerticalLayout layout) {
+		createHeader(news, layout);
+		createMessageBlock(news, layout);
+		createDateBlock(news, layout);
 
 	}
 
-	private void createDateBlock(News news) {
+	private static void createDateBlock(News news, VerticalLayout layout) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateString = df.format(news.getTime());
 		Label date = new Label(dateString);
-		this.addComponent(date);
+		layout.addComponent(date);
 	}
 
-	private void createMessageBlock(News news) {
+	private static void createMessageBlock(News news, VerticalLayout layout) {
 		Label message = new Label(news.getMessage());
 		message.setSizeFull();
 		message.setStyleName(ThemeConstants.BLUE_TEXT);
 		message.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-		this.addComponent(message);
+		layout.addComponent(message);
 	}
 
-	private void createHeader(News news) {
+	private static void createHeader(News news, VerticalLayout layout) {
 		HorizontalLayout header = new HorizontalLayout();
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-		this.user = news.getUser();
-		this.createImage(header);
-		this.createNameButton(header);
-		this.addComponent(header);
+		user = news.getUser();
+		createImage(header);
+		createNameButton(header);
+		layout.addComponent(header);
 	}
 
-	private void createNameButton(HorizontalLayout header) {
-		Button nameButton = new Button(this.ldapService.findUserByUsername(this.user.getUsername()).getFullName(),
-				e -> this.getUI().getNavigator().navigateTo(ProfileView.NAME + "/" + e.getButton().getId()));
+	private static void createNameButton(HorizontalLayout header) {
+		LdapService ldapService = ApplicationContextHolder.getApplicationContext().getBean(LdapService.class);
+		Button nameButton = new Button(ldapService.findUserByUsername(user.getUsername()).getFullName(),
+				e -> UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME + "/" + e.getButton().getId()));
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		nameButton.addStyleName(ValoTheme.LABEL_H1);
-		nameButton.setId(this.user.getUsername());
+		nameButton.setId(user.getUsername());
 		header.addComponent(nameButton);
 	}
 
-	private void createImage(HorizontalLayout header) {
+	private static void createImage(HorizontalLayout header) {
 		Image image = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + this.user.getImageName())));
+				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
 		image.setWidth("100%");
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
