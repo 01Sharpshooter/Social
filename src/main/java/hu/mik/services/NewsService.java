@@ -7,6 +7,8 @@ import hu.mik.beans.User;
 
 public interface NewsService extends PageableService<News> {
 
+	public List<News> getPagedNewsByUsernames(int offset, int pageSize, List<String> usernames);
+
 	public List<News> lastGivenNewsUser(int number, User user);
 
 	public void saveNews(News news);

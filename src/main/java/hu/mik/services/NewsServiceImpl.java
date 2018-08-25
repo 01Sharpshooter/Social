@@ -30,4 +30,9 @@ public class NewsServiceImpl implements NewsService {
 		return this.newsDao.getPagedNews(offset, pageSize);
 	}
 
+	@Override
+	public List<News> getPagedNewsByUsernames(int offset, int pageSize, List<String> usernames) {
+		return this.newsDao.getPagedNewsByUsernames(offset, pageSize, usernames);
+	}
+
 }

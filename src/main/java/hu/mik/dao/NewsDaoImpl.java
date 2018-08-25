@@ -30,6 +30,20 @@ public class NewsDaoImpl implements NewsDao {
 				.getResultList();
 		return list;
 	}
+	@Override
+	public List<News> getPagedNewsByUsernames(int offset, int pageSize, List<String> usernames){
+		List<News> list = new ArrayList<>();
+		list = this.em.createQuery(
+				"SELECT n FROM News n"
+				+ " JOIN FETCH n.user u"
+				+ " WHERE u.username IN (:usernames)"
+				+ " ORDER BY n.time DESC", News.class)
+				.setParameter("usernames", usernames)
+				.setFirstResult(offset)
+				.setMaxResults(pageSize)
+				.getResultList();
+		return list;
+	}
 
 	@Override
 	public List<News> lastGivenNewsUser(int number, User user) {
