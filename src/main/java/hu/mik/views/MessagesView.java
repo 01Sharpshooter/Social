@@ -16,22 +16,20 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
+import hu.mik.components.MessagesPanelScrollable;
 import hu.mik.components.UserDiv;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.LdapService;
@@ -55,20 +53,14 @@ public class MessagesView extends CssLayout implements View {
 	private LdapService ldapService;
 	@Autowired
 	private UserUtils userUtils;
-	private List<Message> messagesList;
 
-	private Panel messagesPanel;
-	private VerticalLayout messagesLayout;
+	private MessagesPanelScrollable messagesPanel;
 	private CssLayout userList;
 	private HorizontalLayout textWriter;
 
 	private SocialUserWrapper sender;
 
 	private User receiver;
-
-	private int scroll = 100;
-	private int scrollGrowth = 50;
-	private int messageNumberAtOnce = 20;
 
 	private TextField tfSearch;
 
@@ -128,13 +120,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void createMessagesPanel() {
-		this.messagesLayout = new VerticalLayout();
-		this.messagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-
-		this.messagesPanel = new Panel();
-		this.messagesPanel.setContent(this.messagesLayout);
-		this.messagesPanel.addStyleName(ThemeConstants.BORDERED);
-		this.messagesPanel.setSizeFull();
+		this.messagesPanel = new MessagesPanelScrollable();
 	}
 
 	private void createUserList() {
@@ -232,49 +218,17 @@ public class MessagesView extends CssLayout implements View {
 
 	private void fillChat(UserDiv userDiv) {
 		this.textWriter.setEnabled(true);
-		this.messagesLayout.removeAllComponents();
 		this.receiver = userDiv.getUser().getDbUser();
-		this.messagesList = this.messageService.findAllByUsers(this.messageNumberAtOnce, this.sender.getDbUser(),
-				this.receiver);
 		if (this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver) != 0) {
 			((MainUI) this.getUI()).refreshUnseenConversationNumber();
 		}
 		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
-		this.fillMessages();
-		this.messagesPanel.setScrollTop(this.scroll);
+		this.messagesPanel.setConversationParticipants(this.sender, this.receiver);
+		this.messagesPanel.firstFill();
+		this.messagesPanel.scrollToBottom();
 		this.userListSelectionChange(userDiv);
 
-	}
-
-	public void fillMessages() {
-		this.messagesList = this.messageService.findAllByUsers(20, this.sender.getDbUser(), this.receiver);
-		if (this.messagesList != null) {
-			if (!this.messagesList.isEmpty()) {
-				this.messagesLayout.removeAllComponents();
-				for (int i = this.messagesList.size() - 1; i >= 0; i--) {
-					Message message = this.messagesList.get(i);
-					if (message.getSender().equals(this.sender.getDbUser())) {
-						this.scroll += this.scrollGrowth;
-						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
-								ContentMode.HTML);
-						newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-						newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
-						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
-						this.messagesLayout.addComponent(newMessage);
-					} else {
-						this.scroll += this.scrollGrowth;
-						Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
-								ContentMode.HTML);
-						newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-						newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
-						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-						this.messagesLayout.addComponent(newMessage);
-						this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
-					}
-				}
-			}
-		}
 	}
 
 	private void sendMessage(String messageText) {
@@ -287,14 +241,13 @@ public class MessagesView extends CssLayout implements View {
 			message.setTime(new Timestamp(new Date().getTime()));
 			this.messageService.saveMessage(message);
 			MessageBroadcastService.sendMessage(message, this.sender);
-			this.scroll += this.scrollGrowth;
 			Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 					ContentMode.HTML);
 			newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
-			this.messagesLayout.addComponent(newMessage);
-			this.messagesPanel.setScrollTop(this.scroll);
+			this.messagesPanel.addMessage(newMessage);
+			this.messagesPanel.scrollToBottom();
 
 			if (!this.tfSearch.isEmpty()) {
 				this.tfSearch.clear();
@@ -324,9 +277,8 @@ public class MessagesView extends CssLayout implements View {
 			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
 			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
 			newMessage.setDescription(this.getMessageDateDesc(new Date()));
-			this.messagesLayout.addComponent(newMessage);
-			this.messagesLayout.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
-			this.messagesPanel.setScrollTop(this.scroll);
+			this.messagesPanel.addReceivedMessage(newMessage);
+			this.messagesPanel.scrollToBottom();
 			this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver);
 			MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
 

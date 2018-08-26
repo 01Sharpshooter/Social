@@ -8,6 +8,8 @@ import hu.mik.beans.User;
 public interface MessageDao {
 	public List<Message> findAllByUsers(int number, User user1, User user2);
 
+	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2);
+
 	public Message findLastMessageOfUsers(User user1, User user2);
 
 	public void save(Message message);

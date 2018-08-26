@@ -52,4 +52,9 @@ public class MessageServiceImpl implements MessageService {
 		return this.messageDao.findLatestConversationsOfUser(user);
 	}
 
+	@Override
+	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2) {
+		return this.messageDao.findAllPagedByUsers(offset, pageSize, user1, user2);
+	}
+
 }

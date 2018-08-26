@@ -9,6 +9,8 @@ public interface MessageService {
 
 	public List<Message> findAllByUsers(int number, User user1, User user2);
 
+	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2);
+
 	public void saveMessage(Message message);
 
 	public List<Message> findLastestMessagesOfUser(int number, User user);

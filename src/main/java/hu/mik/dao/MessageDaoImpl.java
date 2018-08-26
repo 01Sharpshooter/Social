@@ -118,4 +118,22 @@ public class MessageDaoImpl implements MessageDao {
 //
 	}
 
+	@Override
+	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2) {
+		List<Message> list=new ArrayList<>();
+		list=this.em.createQuery("select m from Message m"
+				+ " join fetch m.sender"
+				+ " join fetch m.receiver where"
+				+ " (m.sender= :user1 and m.receiver= :user2)"
+				+ " or (m.sender= :user2 and m.receiver= :user1)"
+				+ " order by m.time desc",
+				Message.class)
+				.setParameter("user1", user1)
+				.setParameter("user2", user2)
+				.setFirstResult(offset)
+				.setMaxResults(pageSize)
+				.getResultList();
+		return list;
+	}
+
 }

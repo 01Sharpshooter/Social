@@ -5,7 +5,7 @@ declare
     v_sender_id number;
     v_receiver_id number;
 begin
-    for i in 1..100000
+    for i in 1..300000
     loop
         select TRUNC(DBMS_RANDOM.VALUE(3, 10)) into v_words_count from dual;
         select dbms_random.string('U', 1) || dbms_random.string('L', dbms_random.value(1,20)) into v_sentence from dual;

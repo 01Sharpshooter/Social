@@ -6,6 +6,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
+import hu.mik.enums.ScrollDirection;
 import hu.mik.services.NewsService;
 
 @SuppressWarnings("serial")
@@ -17,7 +18,7 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private VerticalLayout content;
 
 	public NewsPanelScrollable(LdapGroup ldapGroup) {
-		super();
+		super(ScrollDirection.DOWN);
 		this.ldapGroup = ldapGroup;
 
 		this.content = new VerticalLayout();
@@ -54,10 +55,11 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 		this.offset = 0;
 		this.ldapGroup = ldapGroup;
 		this.loadNextPage();
-		this.setScrollTop(-100000);
+		this.scrollToTop();
 	}
 
 	public void addNews(News news) {
 		this.content.addComponent(NewsComponentConverter.convert(news), 0);
 	}
+
 }
