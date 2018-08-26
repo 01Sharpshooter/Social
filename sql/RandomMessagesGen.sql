@@ -17,7 +17,7 @@ begin
         select id into v_sender_id from (select u.id as id from t_user u order by dbms_random.value) where rownum = 1;
         select id into v_receiver_id from (select u.id as id from t_user u order by dbms_random.value) where rownum = 1;
         insert into T_MESSAGES(id, senderid, receiverid, message, time, seen)
-        values (s_news.nextval, v_sender_id, v_receiver_id, v_sentence, CURRENT_TIMESTAMP, round(DBMS_RANDOM.value(0,1)));
+        values (s_messages.nextval, v_sender_id, v_receiver_id, v_sentence, CURRENT_TIMESTAMP, 1);
     end loop;
     commit;
 end;
