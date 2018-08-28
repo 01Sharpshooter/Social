@@ -1,7 +1,5 @@
 package hu.mik.views;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.View;
@@ -25,11 +23,11 @@ import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.StringConstants;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.enums.Texts;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
+import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
@@ -66,8 +64,8 @@ public class ProfileView extends VerticalLayout implements View {
 				this.header = new CssLayout();
 				CssLayout headerButtonList = this.createHeaderBtnList();
 
-				Image image = new Image(null, new FileResource(new File(
-						UserConstants.PROFILE_PICTURE_LOCATION + this.socialProfileUser.getDbUser().getImageName())));
+				Image image = new Image(null, new FileResource(
+						ProfileImageHelper.loadUserImage(this.socialProfileUser.getDbUser().getImageName())));
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(this.socialProfileUser.getLdapUser().getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);

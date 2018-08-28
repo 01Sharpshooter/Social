@@ -1,6 +1,5 @@
 package hu.mik.views;
 
-import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,9 @@ import hu.mik.beans.FriendRequest;
 import hu.mik.beans.User;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.UserService;
+import hu.mik.utils.ProfileImageHelper;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -71,7 +70,7 @@ public class RequestsView extends Panel implements View {
 			i++;
 			User requestUser = this.userService.findUserById(request.getRequestorId());
 			Image image = new Image(null,
-					new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + requestUser.getImageName())));
+					new FileResource(ProfileImageHelper.loadUserImage(requestUser.getImageName())));
 			image.setHeight("100%");
 			image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 			Button nameButton = new Button(requestUser.getUsername(), this::userNameListener);

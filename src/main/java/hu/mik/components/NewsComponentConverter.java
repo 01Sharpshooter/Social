@@ -1,6 +1,5 @@
 package hu.mik.components;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -19,9 +18,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 import hu.mik.utils.ApplicationContextHolder;
+import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.ProfileView;
 
 @Scope(scopeName = "singleton")
@@ -81,8 +80,7 @@ public class NewsComponentConverter {
 	}
 
 	private static void createImage(HorizontalLayout header) {
-		Image image = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
+		Image image = new Image(null, new FileResource(ProfileImageHelper.loadUserImage(user.getImageName())));
 		image.setWidth("100%");
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);

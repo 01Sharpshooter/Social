@@ -1,7 +1,5 @@
 package hu.mik.components;
 
-import java.io.File;
-
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
 import com.vaadin.shared.ui.ContentMode;
@@ -12,7 +10,7 @@ import com.vaadin.ui.Label;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
+import hu.mik.utils.ProfileImageHelper;
 
 public class UserDiv extends CssLayout {
 	private SocialUserWrapper user;
@@ -22,7 +20,7 @@ public class UserDiv extends CssLayout {
 		this.user = user;
 
 		Image image = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getDbUser().getImageName())));
+				new FileResource(ProfileImageHelper.loadUserImage(user.getDbUser().getImageName())));
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.addComponent(image);
 //		this.addLayoutClickListener(this::userDivClickListener);

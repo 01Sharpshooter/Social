@@ -1,6 +1,5 @@
 package hu.mik.components;
 
-import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,10 @@ import com.vaadin.ui.Label;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
+import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.ProfileView;
 
 @Component
@@ -44,7 +43,7 @@ public class UserListLayout extends CssLayout {
 			for (LdapUser user : userListLdap) {
 				User DbUser = this.userService.findUserByUsername(user.getUsername());
 				Image image = new Image(null,
-						new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + DbUser.getImageName())));
+						new FileResource(ProfileImageHelper.loadUserImage(DbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(user.getFullName());
@@ -72,7 +71,7 @@ public class UserListLayout extends CssLayout {
 			for (User dbUser : userListDb) {
 				LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
 				Image image = new Image(null,
-						new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + dbUser.getImageName())));
+						new FileResource(ProfileImageHelper.loadUserImage(dbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(ldapUser.getFullName());

@@ -30,6 +30,7 @@ import hu.mik.beans.User;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.UserService;
+import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.PictureUploadView;
 
 @SuppressWarnings("serial")
@@ -108,7 +109,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			ops.close();
 
 			if (!user.getImageName().equals("user.png")) {
-				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName());
+				File fileToDel = ProfileImageHelper.loadUserImage(user.getImageName());
 				fileToDel.delete();
 			}
 			user.setImageName(imageName);

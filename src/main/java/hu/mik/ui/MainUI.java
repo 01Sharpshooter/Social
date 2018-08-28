@@ -47,12 +47,12 @@ import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
+import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
 import hu.mik.views.MainView;
@@ -224,7 +224,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.navigationBar.setWidth("100%");
 		this.navigationBar.addLayoutClickListener(this::naviBarClickListener);
 		this.naviBarImage = new Image(null,
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + this.user.getImageName())));
+				new FileResource(ProfileImageHelper.loadUserImage(this.user.getImageName())));
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
@@ -304,8 +304,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	public void refreshImage() {
 		User changedUser = this.userService.findUserById(this.user.getId());
 		this.user.setImageName(changedUser.getImageName());
-		((Image) this.navigationBar.getComponent(0)).setSource(
-				new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + this.user.getImageName())));
+		((Image) this.navigationBar.getComponent(0))
+				.setSource(new FileResource(ProfileImageHelper.loadUserImage(this.user.getImageName())));
 	}
 
 	private void nameSearchClickListener(Button.ClickEvent event) {

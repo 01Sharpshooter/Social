@@ -109,9 +109,11 @@ public class MessageDaoImpl implements MessageDao {
 		return this.em.createQuery(
 				"SELECT mess FROM Message mess "
 				+ "JOIN FETCH mess.sender "
-				+ "JOIN FETCH mess.receiver WHERE (mess.receiver = :user OR mess.sender = :user) AND mess.id IN("
-				+ "SELECT MAX(m.id) FROM Message m GROUP BY (m.receiver+m.sender))"
-				+ "ORDER BY mess.id DESC"
+				+ "JOIN FETCH mess.receiver WHERE mess IN("
+				+ "SELECT MAX(m) FROM Message m"
+				+ " WHERE(m.receiver = :user OR m.sender = :user)"
+				+ " GROUP BY (m.receiver+m.sender))"
+				+ " ORDER BY mess.id DESC"
 				, Message.class)
 				.setParameter("user", user)
 				.getResultList();
