@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -18,8 +17,7 @@ import javax.persistence.Table;
 public class Message {
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
-	@SequenceGenerator(name = "SEQ_GEN", sequenceName = "s_messages", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "senderid", updatable = false)
@@ -31,7 +29,7 @@ public class Message {
 	private String message;
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
-	@Column(name = "seen", columnDefinition = "NUMBER(1)")
+	@Column(name = "seen")
 	private boolean seen;
 
 	public Integer getId() {

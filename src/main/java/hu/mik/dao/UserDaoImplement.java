@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.mik.beans.Role;
@@ -16,7 +15,7 @@ import hu.mik.beans.User;
 import hu.mik.services.LdapService;
 
 @Repository
-@Transactional(propagation = Propagation.REQUIRED)
+@Transactional
 public class UserDaoImplement implements UserDao {
 
 	@PersistenceContext

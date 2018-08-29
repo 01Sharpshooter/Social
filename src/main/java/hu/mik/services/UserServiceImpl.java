@@ -34,10 +34,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByUsername(String username) {
-		if (this.userDao.findByUsername(username) != null) {
-			return this.userDao.findByUsername(username);
+		User user = this.userDao.findByUsername(username);
+		if (user != null) {
+			return user;
 		} else {
-			return null;
+			return this.createDefaultUserWithUsername(username);
 		}
 
 	}

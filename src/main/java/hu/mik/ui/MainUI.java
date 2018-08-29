@@ -53,6 +53,7 @@ import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
 import hu.mik.utils.ProfileImageHelper;
+import hu.mik.utils.UserUtils;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
 import hu.mik.views.MainView;
@@ -78,6 +79,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private LdapService ldapService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private UserUtils userUtils;
 
 	private static List<User> onlineUsers = new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
@@ -99,6 +102,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	@Override
 	protected void init(VaadinRequest request) {
 		this.getPage().setTitle("Serious");
+		if (this.userUtils.getLoggedInUser() == null) {
+			return;
+		}
 		String userName = this.securityContext.getAuthentication().getName();
 
 		this.user = this.userService.findUserByUsername(userName);

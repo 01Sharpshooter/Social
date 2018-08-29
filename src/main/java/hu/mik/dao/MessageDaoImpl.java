@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -82,10 +83,10 @@ public class MessageDaoImpl implements MessageDao {
 	@Override
 	public int setAllPreviousSeen(User receiver, User sender) {
 		return this.em.createQuery(
-				"UPDATE Message m SET seen = 1"
+				"UPDATE Message m SET seen = true"
 				+ " WHERE m.receiver = :receiver"
 				+ " AND m.sender = :sender"
-				+ " AND seen = 0")
+				+ " AND seen = false")
 		.setParameter("receiver", receiver)
 		.setParameter("sender", sender)
 		.executeUpdate();
@@ -94,14 +95,17 @@ public class MessageDaoImpl implements MessageDao {
 
 	@Override
 	public Long getNumberOfUnseenConversations(User user) {
-		return (Long) this.em.createQuery(
-				"SELECT COUNT(DISTINCT m.sender)"
-				+ " FROM Message m"
-				+ " WHERE m.receiver = :user"
-				+ " AND m.seen = 0"
-				+ " ORDER BY m.id DESC")
-		.setParameter("user", user)
-		.getResultList().get(0);
+		try {
+			return (Long) this.em.createQuery(
+					"SELECT COUNT(DISTINCT m.sender)"
+					+ " FROM Message m"
+					+ " WHERE m.receiver = :user"
+					+ " AND m.seen = false")
+			.setParameter("user", user)
+			.getSingleResult();
+		} catch (NoResultException e) {
+			return (long) 0;
+		}
 	}
 
 	@Override
