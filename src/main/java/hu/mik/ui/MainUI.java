@@ -21,8 +21,6 @@ import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
@@ -40,12 +38,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.LdapGroup;
-import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
-import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.LdapService;
@@ -84,9 +80,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	private static List<User> onlineUsers = new CopyOnWriteArrayList<>();
 	private Panel viewDisplay;
-	private WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
-	private User user;
-	private LdapUser userLdap;
+	private SocialUserWrapper socialUser;
 	private Image naviBarImage;
 	private MessagesView messageView;
 	private VerticalLayout base;
@@ -105,22 +99,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		if (this.userUtils.getLoggedInUser() == null) {
 			return;
 		}
-		String userName = this.securityContext.getAuthentication().getName();
-
-		this.user = this.userService.findUserByUsername(userName);
-		this.userLdap = this.ldapService.findUserByUsername(userName);
-		if (this.user == null) {
-			this.user = this.userService.createDefaultUserWithUsername(userName);
-		}
-		this.session.setAttribute("SecurityContext", this.securityContext);
-		this.session.setAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER, this.userLdap.getUsername());
-		onlineUsers.add(this.user);
+		this.socialUser = this.userUtils.getLoggedInUser();
+		onlineUsers.add(this.socialUser.getDbUser());
 		this.adminGroup = this.ldapService.findGroupByGroupName(LdapConstants.GROUP_ADMIN_NAME);
 		final VerticalLayout workingSpace = new VerticalLayout();
 		this.getNavigator().addViewChangeListener(this::viewChangeListener);
 		workingSpace.setSizeFull();
 
-		MessageBroadcastService.register(this, this.user.getId());
+		MessageBroadcastService.register(this, this.socialUser.getDbUser().getId());
 
 //		this.setErrorHandler(new DefaultExceptionHandler(this));
 
@@ -197,8 +183,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	@Override
 	public void detach() {
-		if (this.user != null) {
-			MessageBroadcastService.unregister(this, this.user.getId());
+		if (this.socialUser != null) {
+			MessageBroadcastService.unregister(this, this.socialUser.getDbUser().getId());
 		}
 		super.detach();
 	}
@@ -230,14 +216,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.navigationBar.setWidth("100%");
 		this.navigationBar.addLayoutClickListener(this::naviBarClickListener);
 		this.naviBarImage = new Image(null,
-				new FileResource(ProfileImageHelper.loadUserImage(this.user.getImageName())));
+				new FileResource(ProfileImageHelper.loadUserImage(this.socialUser.getDbUser().getImageName())));
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		this.naviBarImage.addClickListener(this::profileImageClickListener);
 		this.navigationBar.addComponent(this.naviBarImage);
 		Label name = new Label();
-		name.setValue(this.userLdap.getFullName());
+		name.setValue(this.socialUser.getLdapUser().getFullName());
 		name.setId("username");
 		this.navigationBar.addComponent(name);
 		Image naviBarIcon = new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON)));
@@ -272,12 +258,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 				this.getNavigator().navigateTo(MainView.NAME);
 				break;
 			case "Contacts":
-				this.getNavigator().navigateTo(ContactListView.NAME + "/" + this.userLdap.getUsername());
+				this.getNavigator().navigateTo(ContactListView.NAME + "/" + this.socialUser.getUsername());
 				break;
 			case "Logout":
 				this.getPage().setLocation("/logout");
-				MainUI.getOnlineUsers().remove(this.session.getAttribute("User"));
-				this.session = null;
+				MainUI.getOnlineUsers().remove(this.socialUser.getDbUser());
 			case "Admin":
 				this.getNavigator().navigateTo(AdminView.NAME);
 				break;
@@ -286,7 +271,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 					this.getNavigator().navigateTo(MessagesView.NAME);
 					break;
 				} else {
-					this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.userLdap.getUsername());
+					this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.socialUser.getUsername());
 					break;
 				}
 			}
@@ -308,10 +293,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	public void refreshImage() {
-		User changedUser = this.userService.findUserById(this.user.getId());
-		this.user.setImageName(changedUser.getImageName());
-		((Image) this.navigationBar.getComponent(0))
-				.setSource(new FileResource(ProfileImageHelper.loadUserImage(this.user.getImageName())));
+		this.socialUser = this.userUtils.getLoggedInUser();
+		((Image) this.navigationBar.getComponent(0)).setSource(
+				new FileResource(ProfileImageHelper.loadUserImage(this.socialUser.getDbUser().getImageName())));
 	}
 
 	private void nameSearchClickListener(Button.ClickEvent event) {
@@ -328,7 +312,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
 		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
-		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user);
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
 		this.lblMessages = new Label(
 				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
@@ -340,7 +324,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 				ContentMode.HTML);
 		lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
 
-		if (this.adminGroup.getListOfMembers().contains(this.userLdap.getId())) {
+		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
 			layout.addComponent(lblAdmin);
 		}
 		layout.addComponent(lblMain);
@@ -350,7 +334,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	public void refreshUnseenConversationNumber() {
-		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.user);
+		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
 		this.navigationBar.forEach(e -> {
 			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {

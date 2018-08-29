@@ -47,19 +47,14 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 
 	private VerticalLayout editorLayout;
 
-	@PostConstruct
-	public void init() {
+	@Override
+	public void enter(ViewChangeEvent event) {
 		this.uploadProfilePicture.setView(this);
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		this.upload = new Upload("Upload a new profile picture! (JPEG/PNG)", this.uploadProfilePicture);
 		this.upload.setImmediateMode(true);
 		this.upload.addSucceededListener(this.uploadProfilePicture);
 		this.addComponent(this.upload);
-	}
-
-	@Override
-	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

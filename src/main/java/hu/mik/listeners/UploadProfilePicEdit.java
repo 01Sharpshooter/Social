@@ -16,34 +16,32 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import com.vaadin.navigator.View;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.WrappedSession;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 
 import hu.mik.beans.User;
-import hu.mik.constants.SystemConstants;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.UserService;
 import hu.mik.utils.ProfileImageHelper;
+import hu.mik.utils.UserUtils;
 import hu.mik.views.PictureUploadView;
 
 @SuppressWarnings("serial")
-@Component
+@SpringComponent
 public class UploadProfilePicEdit implements Receiver, SucceededListener {
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserUtils userUtils;
 
-	private View view;
+	private PictureUploadView view;
 
 	private String mimeType;
-
-	private boolean upload = true;
 
 	private String fileName;
 
@@ -55,18 +53,11 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		String[] allowedTypes = UserConstants.ALLOWED_PICTURE_TYPES;
 		for (String type : allowedTypes) {
 			if (this.mimeType.equals(type)) {
-				this.upload = true;
-				break;
-
-			} else {
-				this.upload = false;
+				this.view.editImage(this.ops);
+				return;
 			}
 		}
-		if (this.upload) {
-			((PictureUploadView) this.view).editImage(this.ops);
-		} else {
-			((PictureUploadView) this.view).addComponent(new Label("Wrong file type!"));
-		}
+		this.view.addComponent(new Label("Wrong file type!"));
 	}
 
 	@Override
@@ -80,14 +71,12 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		return this.view;
 	}
 
-	public void setView(View view) {
+	public void setView(PictureUploadView view) {
 		this.view = view;
 	}
 
 	public void receiveImage(InputStream ins) {
-		WrappedSession session = VaadinService.getCurrentRequest().getWrappedSession();
-		String username = (String) session.getAttribute(SystemConstants.SESSION_ATTRIBUTE_LDAP_USER);
-		User user = this.userService.findUserByUsername(username);
+		User user = this.userUtils.getLoggedInUser().getDbUser();
 
 		String imageName = System.currentTimeMillis() + this.fileName;
 		File imageSave = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
@@ -113,8 +102,8 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 				fileToDel.delete();
 			}
 			user.setImageName(imageName);
-			this.userService.save(user);
-			((PictureUploadView) this.view).imageChange();
+			this.userUtils.getLoggedInUser().setDbUser(this.userService.save(user));
+			this.view.imageChange();
 
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
