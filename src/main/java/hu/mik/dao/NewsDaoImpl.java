@@ -50,12 +50,16 @@ public class NewsDaoImpl implements NewsDao {
 	}
 
 	@Override
-	public List<News> lastGivenNewsUser(int number, User user) {
+	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user){
 		List<News> list = new ArrayList<>();
-		list = this.em.createQuery("select n from News n where n.newsUser= :user order by n.time desc", News.class)
+		list = this.em.createQuery(
+				"SELECT n FROM News n"
+				+ " JOIN FETCH n.user u"
+				+ " WHERE n.user = :user"
+				+ " ORDER BY n.time DESC", News.class)
 				.setParameter("user", user)
-				.setFirstResult(0)
-				.setMaxResults(number - 1)
+				.setFirstResult(offset)
+				.setMaxResults(pageSize)
 				.getResultList();
 		return list;
 	}

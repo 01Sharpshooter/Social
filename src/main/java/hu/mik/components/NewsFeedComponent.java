@@ -19,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
@@ -103,6 +104,14 @@ public class NewsFeedComponent extends VerticalLayout {
 
 	private void newMessage(News sentNews) {
 		this.pagingPanel.addNews(sentNews);
+	}
+
+	public void firstLoad(User user) {
+		if (user != null) {
+			this.removeAllComponents(); // TODO do this better
+			this.addComponent(this.pagingPanel);
+		}
+		this.pagingPanel.firstLoad(user);
 	}
 
 }

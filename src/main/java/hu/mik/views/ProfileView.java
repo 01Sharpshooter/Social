@@ -1,6 +1,7 @@
 package hu.mik.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -16,11 +17,13 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.components.NewsFeedComponent;
 import hu.mik.constants.StringConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.Texts;
@@ -49,6 +52,8 @@ public class ProfileView extends VerticalLayout implements View {
 	private FriendshipService friendShipService;
 	@Autowired
 	private UserUtils userUtils;
+	@Autowired
+	private ApplicationContext appCtx;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -86,42 +91,52 @@ public class ProfileView extends VerticalLayout implements View {
 				this.header.addComponent(lblName);
 				this.header.addComponent(lblGroups);
 				this.header.addComponent(headerButtonList);
-				FormLayout form = new FormLayout();
-				form.addStyleName(ThemeConstants.BORDERED);
-				form.setMargin(false);
-				form.setId("profileBody");
-				form.setSizeFull();
-
+				TabSheet tabSheet = this.createTabSheet();
 				this.addComponent(this.header);
-				this.addComponent(form);
-
+				this.addComponent(tabSheet);
 				this.setComponentAlignment(this.header, Alignment.MIDDLE_CENTER);
+				this.setExpandRatio(tabSheet, 1f);
+			}
+		}
 
-				this.setExpandRatio(this.header, 20);
-				this.setExpandRatio(form, 80);
+	}
 
-				TextField tfName = new TextField("Name:",
-						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getFullName()));
-				TextField tfMobile = new TextField("Mobile:",
-						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMobile()));
-				TextField tfMail = new TextField("E-Mail:",
-						this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMail()));
+	private FormLayout createFormLayout() {
+		FormLayout form = new FormLayout();
+		form.addStyleName(ThemeConstants.BORDERED);
+		form.setMargin(false);
+		form.setId("profileBody");
+		form.setSizeFull();
 
-				form.addComponent(tfName);
-				form.addComponent(tfMobile);
-				form.addComponent(tfMail);
+		TextField tfName = new TextField("Name:",
+				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getFullName()));
+		TextField tfMobile = new TextField("Mobile:",
+				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMobile()));
+		TextField tfMail = new TextField("E-Mail:",
+				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMail()));
 
-				for (Component component : form) {
-					if (component.getClass().equals(TextField.class)) {
-						component.addStyleName(ThemeConstants.BLUE_TEXT);
-						if (!this.socialProfileUser.getUsername()
-								.equals(this.socialSessionUser.getLdapUser().getUsername())) {
-							component.setEnabled(false);
-						}
-					}
+		form.addComponent(tfName);
+		form.addComponent(tfMobile);
+		form.addComponent(tfMail);
+
+		for (Component component : form) {
+			if (component.getClass().equals(TextField.class)) {
+				component.addStyleName(ThemeConstants.BLUE_TEXT);
+				if (!this.socialProfileUser.getUsername().equals(this.socialSessionUser.getLdapUser().getUsername())) {
+					component.setEnabled(false);
 				}
 			}
 		}
+		return form;
+	}
+
+	private TabSheet createTabSheet() {
+		TabSheet tabSheet = new TabSheet();
+		NewsFeedComponent nfComponent = this.appCtx.getBean(NewsFeedComponent.class);
+		nfComponent.firstLoad(this.socialProfileUser.getDbUser());
+		tabSheet.addTab(this.createFormLayout(), "Personal information");
+		tabSheet.addTab(nfComponent, "News feed");
+		return tabSheet;
 
 	}
 

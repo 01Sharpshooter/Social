@@ -11,7 +11,7 @@ public interface NewsDao {
 
 	public List<News> getPagedNewsByLdapGroup(int offset, int pageSize, LdapGroup ldapGroup);
 
-	public List<News> lastGivenNewsUser(int number, User user);
+	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user);
 
 	public void saveNews(News news);
 
