@@ -2,6 +2,9 @@ package hu.mik.components;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapGroup;
@@ -11,24 +14,35 @@ import hu.mik.enums.ScrollDirection;
 import hu.mik.services.NewsService;
 
 @SuppressWarnings("serial")
+@Configurable(preConstruction = true)
 public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private LdapGroup ldapGroup;
 	private User user;
-
+	@Autowired
 	private NewsService newsService;
 
 	private VerticalLayout content;
 
 	public NewsPanelScrollable(LdapGroup ldapGroup) {
-		super(ScrollDirection.DOWN);
+		this();
 		this.ldapGroup = ldapGroup;
+	}
+
+	public NewsPanelScrollable(User user) {
+		this();
+		this.user = user;
+	}
+
+	public NewsPanelScrollable() {
+		super(ScrollDirection.DOWN);
+		System.err.println("panel:" + this.newsService);
 
 		this.content = new VerticalLayout();
 		this.content.setSizeFull();
 		this.content.setMargin(false);
 		this.setContent(this.content);
 
-		this.newsService = this.appCtx.getBean(NewsService.class);
+		this.loadNextPage();
 	}
 
 	@Override
@@ -62,11 +76,6 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 	public void addNews(News news) {
 		this.content.addComponent(NewsComponentConverter.convert(news), 0);
-	}
-
-	public void firstLoad(User user) {
-		this.user = user;
-		this.loadNextPage();
 	}
 
 }

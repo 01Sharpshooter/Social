@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -26,28 +25,41 @@ import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
-@SpringComponent
-@Scope("prototype")
+@Configurable(preConstruction = true)
 public class NewsFeedComponent extends VerticalLayout {
+
 	private SocialUserWrapper socialUser;
+	@Autowired
+	private UserUtils userUtils;
+	@Autowired
 	private NewsService newsService;
-	private NewsPanelScrollable pagingPanel;
+	@Autowired
 	private LdapService ldapService;
 
-	@Autowired
-	public NewsFeedComponent(UserUtils userUtils, NewsService newsService, LdapService ldapService) {
+	private NewsPanelScrollable pagingPanel;
+
+	public NewsFeedComponent(LdapGroup ldapGroup) {
+		this();
+		this.pagingPanel = new NewsPanelScrollable(ldapGroup);
+	}
+
+	public NewsFeedComponent(User user) {
+		this();
+		this.pagingPanel = new NewsPanelScrollable(user);
+	}
+
+	public NewsFeedComponent() {
 		super();
+		System.err.println(this.newsService);
+		this.socialUser = this.userUtils.getLoggedInUser();
+		this.pagingPanel = new NewsPanelScrollable();
 		this.setSizeFull();
-		this.ldapService = ldapService;
-		this.newsService = newsService;
-		this.socialUser = userUtils.getLoggedInUser();
 		this.createContent();
 	}
 
 	private void createContent() {
 		this.createFilterComponent();
 		this.createTextWriter();
-		this.pagingPanel = new NewsPanelScrollable(null);
 		this.addComponent(this.pagingPanel);
 		this.setExpandRatio(this.pagingPanel, 1f);
 	}
@@ -104,14 +116,6 @@ public class NewsFeedComponent extends VerticalLayout {
 
 	private void newMessage(News sentNews) {
 		this.pagingPanel.addNews(sentNews);
-	}
-
-	public void firstLoad(User user) {
-		if (user != null) {
-			this.removeAllComponents(); // TODO do this better
-			this.addComponent(this.pagingPanel);
-		}
-		this.pagingPanel.firstLoad(user);
 	}
 
 }

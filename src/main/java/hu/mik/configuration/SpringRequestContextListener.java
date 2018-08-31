@@ -1,4 +1,4 @@
-package hu.mik.listeners;
+package hu.mik.configuration;
 
 import javax.servlet.annotation.WebListener;
 

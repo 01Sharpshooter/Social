@@ -5,13 +5,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.context.annotation.EnableLoadTimeWeaving;
+import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
 @EnableAutoConfiguration
-@EnableWebMvc
 @ServletComponentScan
 @ComponentScan
 @SpringBootApplication
+@EnableLoadTimeWeaving(aspectjWeaving = AspectJWeaving.ENABLED)
+@EnableSpringConfigured
 public class KomolyabbApplication {
 
 	public static void main(String[] args) {
