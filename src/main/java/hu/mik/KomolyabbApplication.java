@@ -13,8 +13,6 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 @ServletComponentScan
 @ComponentScan
 @SpringBootApplication
-@EnableLoadTimeWeaving(aspectjWeaving = AspectJWeaving.ENABLED)
-@EnableSpringConfigured
 public class KomolyabbApplication {
 
 	public static void main(String[] args) {

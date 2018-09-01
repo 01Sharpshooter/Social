@@ -132,10 +132,12 @@ public class ProfileView extends VerticalLayout implements View {
 
 	private TabSheet createTabSheet() {
 		TabSheet tabSheet = new TabSheet();
-		NewsFeedComponent nfComponent = new NewsFeedComponent(this.socialProfileUser.getDbUser());
+		NewsFeedComponent nfComponent = this.appCtx.getBean(NewsFeedComponent.class);
+		nfComponent.firstLoad(this.socialProfileUser.getDbUser());
 		tabSheet.addTab(this.createFormLayout(), "Personal information");
 		tabSheet.addTab(nfComponent, "News feed");
 		return tabSheet;
+
 	}
 
 	private CssLayout createHeaderBtnList() {
