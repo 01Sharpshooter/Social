@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.context.annotation.Scope;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -27,19 +28,19 @@ import hu.mik.views.ProfileView;
 public class NewsComponentConverter {
 	private static User user;
 
-	public static VerticalLayout convert(News news) {
+	public static VerticalLayout convert(News news, boolean withDelete) {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.addStyleName(ThemeConstants.BORDERED);
 
-		createContent(news, layout);
+		createContent(news, layout, withDelete);
 		return layout;
 	}
 
-	private static void createContent(News news, VerticalLayout layout) {
-		createHeader(news, layout);
+	private static void createContent(News news, VerticalLayout layout, boolean withDelete) {
+		createHeader(news, layout, withDelete);
 		createMessageBlock(news, layout);
 		createDateBlock(news, layout);
 
@@ -60,13 +61,25 @@ public class NewsComponentConverter {
 		layout.addComponent(message);
 	}
 
-	private static void createHeader(News news, VerticalLayout layout) {
+	private static void createHeader(News news, VerticalLayout layout, boolean withDelete) {
 		HorizontalLayout header = new HorizontalLayout();
+		header.setWidth("100%");
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		user = news.getUser();
 		createImage(header);
 		createNameButton(header);
+		if (withDelete) {
+			createDeleteButton(header);
+		}
 		layout.addComponent(header);
+	}
+
+	private static void createDeleteButton(HorizontalLayout header) {
+		Button btnDelete = new Button(VaadinIcons.CROSSHAIRS);
+		header.addComponent(btnDelete);
+		header.setExpandRatio(btnDelete, 1f);
+		header.setComponentAlignment(btnDelete, Alignment.MIDDLE_RIGHT);
+
 	}
 
 	private static void createNameButton(HorizontalLayout header) {
@@ -77,14 +90,15 @@ public class NewsComponentConverter {
 		nameButton.addStyleName(ValoTheme.LABEL_H1);
 		nameButton.setId(user.getUsername());
 		header.addComponent(nameButton);
+		;
 	}
 
 	private static void createImage(HorizontalLayout header) {
 		Image image = new Image(null, new FileResource(ProfileImageHelper.loadUserImage(user.getImageName())));
-		image.setWidth("100%");
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 
 		header.addComponent(image);
+//		header.setExpandRatio(image, 1f);
 	}
 }

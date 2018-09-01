@@ -61,7 +61,7 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 	private void addConvertedComponents(List<News> pagedResultList) {
 		if (!pagedResultList.isEmpty()) {
-			pagedResultList.forEach(object -> this.content.addComponent(NewsComponentConverter.convert(object)));
+			pagedResultList.forEach(object -> this.content.addComponent(NewsComponentConverter.convert(object, true)));
 			this.offset += this.pageSize;
 		}
 	}
@@ -75,7 +75,7 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void addNews(News news) {
-		this.content.addComponent(NewsComponentConverter.convert(news), 0);
+		this.content.addComponent(NewsComponentConverter.convert(news, false), 0);
 	}
 
 }
