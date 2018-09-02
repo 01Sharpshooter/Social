@@ -12,6 +12,7 @@ import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.utils.ProfileImageHelper;
 
+@SuppressWarnings("serial")
 public class UserDiv extends CssLayout {
 	private SocialUserWrapper user;
 

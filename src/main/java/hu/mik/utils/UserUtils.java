@@ -28,7 +28,7 @@ public class UserUtils {
 	}
 
 	public SocialUserWrapper initSocialUser(String username) {
-		LdapUser ldapUser = this.ldapService.findUserByUsername(username);
+		LdapUser ldapUser = this.ldapService.findUserWithGroups(username);
 		if (ldapUser == null) {
 			return null;
 		}

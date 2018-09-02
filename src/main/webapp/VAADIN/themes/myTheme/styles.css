@@ -15341,7 +15341,7 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px #00b6cd;
 	border: 1px outset #00BFFF;
-	padding-bottom: 5px;
+	padding-bottom: 2px;
 }
 
 .myTheme #base #profileHeader .v-image {
@@ -15350,6 +15350,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #profileHeader .v-label {
 	text-align: center;
+	margin: 1px;
 }
 
 .myTheme #base #profileHeader .v-button {

@@ -286,12 +286,13 @@
 	  		border-radius:4px;
 	  		box-shadow:3px 3px 3px $blue_shadow;
 	  		border:1px outset $blue;
-	  		padding-bottom:5px;
+	  		padding-bottom: 2px;
 	  		.v-image{
 	  			height:150px;
 	  		}
 	  		.v-label{
 	  			text-align: center;
+	  			margin: 1px;
 	  		}
 	  		.v-button{
 	  			height:50%;

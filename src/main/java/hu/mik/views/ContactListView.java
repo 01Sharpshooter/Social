@@ -53,7 +53,6 @@ public class ContactListView extends Panel implements View {
 	private VerticalLayout base;
 	private SocialUserWrapper socialUser;
 	private List<FriendRequest> requests;
-	private List<LdapGroup> groups;
 	private ComboBox<LdapGroup> groupSelect;
 
 	@Override
@@ -65,7 +64,6 @@ public class ContactListView extends Panel implements View {
 		this.setCaption(this.socialUser.getDbUser().getUsername() + "'s " + "Friendlist:");
 
 		this.requests = this.friendRequestService.findAllByRequestedId(this.socialUser.getDbUser().getId());
-		this.groups = this.ldapService.findGroupsByUserId(this.socialUser.getLdapUser().getId());
 
 		this.friendshipService.findAllByUserId(this.socialUser.getDbUser().getId())
 				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
@@ -85,11 +83,11 @@ public class ContactListView extends Panel implements View {
 	}
 
 	private void createGroupComboBox() {
-		this.groupSelect = new ComboBox<>("Select a team:", this.groups);
+		this.groupSelect = new ComboBox<>("Select a team:", this.socialUser.getLdapUser().getLdapGroups());
 		this.groupSelect.setEmptySelectionAllowed(false);
 		this.groupSelect.addSelectionListener(this::groupSelectionListener);
-		if (this.groups.size() > 0) {
-			this.groupSelect.setSelectedItem(this.groups.get(0));
+		if (this.socialUser.getLdapUser().getLdapGroups().size() > 0) {
+			this.groupSelect.setSelectedItem(this.socialUser.getLdapUser().getLdapGroups().get(0));
 		}
 		this.groupSelect.setVisible(false);
 
@@ -102,8 +100,8 @@ public class ContactListView extends Panel implements View {
 		List<String> radioFixItems = new ArrayList<>();
 		radioFixItems.add("Friends(" + this.friendList.size() + ")");
 		radioFixItems.add("Requests(" + this.requests.size() + ")");
-		if (!this.groups.isEmpty()) {
-			radioFixItems.add("Teams(" + this.groups.size() + ")");
+		if (!this.socialUser.getLdapUser().getLdapGroups().isEmpty()) {
+			radioFixItems.add("Teams(" + this.socialUser.getLdapUser().getLdapGroups().size() + ")");
 		}
 		radioButtonGroup.setItems(radioFixItems);
 		radioButtonGroup.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);

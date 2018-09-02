@@ -19,8 +19,8 @@ public class MainView extends Panel implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		this.setSizeFull();
-		this.newsFeedComponent.firstLoad(null);
-		this.setContent(this.newsFeedComponent);
+		NewsFeedComponent newsFeedComponent = this.newsFeedComponent.init();
+		this.setContent(newsFeedComponent);
 	}
 
 }

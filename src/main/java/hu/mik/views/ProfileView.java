@@ -1,7 +1,6 @@
 package hu.mik.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -23,13 +22,12 @@ import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
-import hu.mik.components.NewsFeedComponent;
+import hu.mik.components.NewsPanelScrollable;
 import hu.mik.constants.StringConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.Texts;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
-import hu.mik.services.LdapService;
 import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
 
@@ -43,9 +41,6 @@ public class ProfileView extends VerticalLayout implements View {
 	private SocialUserWrapper socialProfileUser;
 	private CssLayout header;
 	private CssLayout headerButtonList;
-
-	@Autowired
-	private LdapService ldapService;
 	@Autowired
 	private FriendRequestService friendRequestService;
 	@Autowired
@@ -53,7 +48,7 @@ public class ProfileView extends VerticalLayout implements View {
 	@Autowired
 	private UserUtils userUtils;
 	@Autowired
-	private ApplicationContext appCtx;
+	private NewsPanelScrollable newsPanelScrollable;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -76,7 +71,7 @@ public class ProfileView extends VerticalLayout implements View {
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
 				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 				StringBuilder strGroups = new StringBuilder();
-				this.ldapService.findGroupsByUserId(this.socialProfileUser.getLdapUser().getId())
+				this.socialProfileUser.getLdapUser().getLdapGroups()
 						.forEach(group -> strGroups.append(group.getGroupName() + ", "));
 				Label lblGroups;
 				if (strGroups.length() != 0) {
@@ -96,6 +91,7 @@ public class ProfileView extends VerticalLayout implements View {
 				this.addComponent(tabSheet);
 				this.setComponentAlignment(this.header, Alignment.MIDDLE_CENTER);
 				this.setExpandRatio(tabSheet, 1f);
+				this.setSizeFull();
 			}
 		}
 
@@ -132,10 +128,9 @@ public class ProfileView extends VerticalLayout implements View {
 
 	private TabSheet createTabSheet() {
 		TabSheet tabSheet = new TabSheet();
-		NewsFeedComponent nfComponent = this.appCtx.getBean(NewsFeedComponent.class);
-		nfComponent.firstLoad(this.socialProfileUser.getDbUser());
 		tabSheet.addTab(this.createFormLayout(), "Personal information");
-		tabSheet.addTab(nfComponent, "News feed");
+		tabSheet.setSizeFull();
+		tabSheet.addTab(this.newsPanelScrollable.init(this.socialProfileUser.getDbUser()), "News feed");
 		return tabSheet;
 
 	}
@@ -173,6 +168,8 @@ public class ProfileView extends VerticalLayout implements View {
 
 			btnFriendRequest.addClickListener(this::friendRequestClickListener);
 
+		} else {
+			this.headerButtonList.setVisible(false);
 		}
 
 		return this.headerButtonList;

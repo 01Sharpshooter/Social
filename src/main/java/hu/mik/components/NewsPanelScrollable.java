@@ -2,33 +2,59 @@ package hu.mik.components;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.enums.ScrollDirection;
+import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
+import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
+@SpringComponent
+@Scope("prototype")
 public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private LdapGroup ldapGroup;
 	private User user;
 
-	private NewsService newsService;
-
 	private VerticalLayout content;
+	private NewsService newsService;
+	private LdapService ldapService;
+	private UserUtils userUtils;
 
-	public NewsPanelScrollable(LdapGroup ldapGroup) {
+	@Autowired
+	private NewsPanelScrollable(UserUtils userUtils, LdapService ldapService, NewsService newsService) {
 		super(ScrollDirection.DOWN);
-		this.ldapGroup = ldapGroup;
-
+		this.newsService = newsService;
 		this.content = new VerticalLayout();
-		this.content.setSizeFull();
 		this.content.setMargin(false);
 		this.setContent(this.content);
+		this.ldapService = ldapService;
+		this.userUtils = userUtils;
 
-		this.newsService = this.appCtx.getBean(NewsService.class);
+	}
+
+	public NewsPanelScrollable init() {
+		this.loadNextPage();
+		return this;
+	}
+
+	public NewsPanelScrollable init(LdapGroup ldapGroup) {
+		this.ldapGroup = ldapGroup;
+		this.loadNextPage();
+		return this;
+	}
+
+	public NewsPanelScrollable init(User user) {
+		this.user = user;
+		this.loadNextPage();
+		return this;
 	}
 
 	@Override
@@ -47,7 +73,10 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 	private void addConvertedComponents(List<News> pagedResultList) {
 		if (!pagedResultList.isEmpty()) {
-			pagedResultList.forEach(object -> this.content.addComponent(NewsComponentConverter.convert(object, true)));
+			pagedResultList.forEach(object -> {
+				String fullName = this.ldapService.findUserByUsername(object.getUser().getUsername()).getFullName();
+				this.content.addComponent(NewsComponentConverter.convert(object, true, fullName));
+			});
 			this.offset += this.pageSize;
 		}
 	}
@@ -61,12 +90,8 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void addNews(News news) {
-		this.content.addComponent(NewsComponentConverter.convert(news, false), 0);
-	}
-
-	public void firstLoad(User user) {
-		this.user = user;
-		this.loadNextPage();
+		this.content.addComponent(NewsComponentConverter.convert(news, false,
+				this.userUtils.getLoggedInUser().getLdapUser().getFullName()), 0);
 	}
 
 }

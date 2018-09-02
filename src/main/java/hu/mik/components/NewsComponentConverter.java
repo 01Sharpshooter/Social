@@ -19,28 +19,25 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.services.LdapService;
-import hu.mik.utils.ApplicationContextHolder;
 import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.ProfileView;
 
-@Scope(scopeName = "singleton")
 public class NewsComponentConverter {
 	private static User user;
 
-	public static VerticalLayout convert(News news, boolean withDelete) {
+	public static VerticalLayout convert(News news, boolean withDelete, String fullName) {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.addStyleName(ThemeConstants.BORDERED);
 
-		createContent(news, layout, withDelete);
+		createContent(news, layout, withDelete, fullName);
 		return layout;
 	}
 
-	private static void createContent(News news, VerticalLayout layout, boolean withDelete) {
-		createHeader(news, layout, withDelete);
+	private static void createContent(News news, VerticalLayout layout, boolean withDelete, String fullName) {
+		createHeader(news, layout, withDelete, fullName);
 		createMessageBlock(news, layout);
 		createDateBlock(news, layout);
 
@@ -61,13 +58,13 @@ public class NewsComponentConverter {
 		layout.addComponent(message);
 	}
 
-	private static void createHeader(News news, VerticalLayout layout, boolean withDelete) {
+	private static void createHeader(News news, VerticalLayout layout, boolean withDelete, String fullName) {
 		HorizontalLayout header = new HorizontalLayout();
 		header.setWidth("100%");
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		user = news.getUser();
 		createImage(header);
-		createNameButton(header);
+		createNameButton(header, fullName);
 		if (withDelete) {
 			createDeleteButton(header);
 		}
@@ -82,9 +79,8 @@ public class NewsComponentConverter {
 
 	}
 
-	private static void createNameButton(HorizontalLayout header) {
-		LdapService ldapService = ApplicationContextHolder.getApplicationContext().getBean(LdapService.class);
-		Button nameButton = new Button(ldapService.findUserByUsername(user.getUsername()).getFullName(),
+	private static void createNameButton(HorizontalLayout header, String fullName) {
+		Button nameButton = new Button(fullName,
 				e -> UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME + "/" + e.getButton().getId()));
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		nameButton.addStyleName(ValoTheme.LABEL_H1);

@@ -13,7 +13,7 @@ import hu.mik.dao.LdapRepositoryGroups;
 import hu.mik.dao.LdapRepositoryUser;
 
 @Service
-public class LdapServiceImpl implements LdapService{
+public class LdapServiceImpl implements LdapService {
 	@Autowired
 	private LdapRepositoryUser ldapRepositoryUsers;
 	@Autowired
@@ -21,33 +21,35 @@ public class LdapServiceImpl implements LdapService{
 
 	@Override
 	public LdapUser findUserByUsername(String username) {
-		return ldapRepositoryUsers.findByUsername(username);
+		return this.ldapRepositoryUsers.findByUsername(username);
 	}
-
 
 	@Override
 	public List<LdapUser> findByFullNameContaining(String fullName) {
-		return ldapRepositoryUsers.findByFullNameContaining(fullName);
+		return this.ldapRepositoryUsers.findByFullNameContaining(fullName);
 	}
-
 
 	@Override
 	public LdapGroup findGroupByGroupName(String groupName) {
-		return ldapRepositoryGroups.findByGroupName(groupName);
+		return this.ldapRepositoryGroups.findByGroupName(groupName);
 	}
-
 
 	@Override
 	public List<LdapGroup> findGroupsByUserId(Name memberId) {
-		return ldapRepositoryGroups.findByMember(memberId);
+		return this.ldapRepositoryGroups.findByMember(memberId);
 	}
-
 
 	@Override
 	public List<LdapUser> findAllUsers() {
-		return ldapRepositoryUsers.findAll();
+		return this.ldapRepositoryUsers.findAll();
 	}
 
+	@Override
+	public LdapUser findUserWithGroups(String username) {
+		LdapUser user = this.findUserByUsername(username);
+		user.setLdapGroups(this.findGroupsByUserId(user.getId()));
+		return user;
+	}
 
 //	@Override
 //	public LdapUser findUserById(Name name) {

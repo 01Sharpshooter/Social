@@ -3,8 +3,6 @@ package hu.mik.views;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.liveimageeditor.LiveImageEditor;
 import org.vaadin.liveimageeditor.LiveImageEditor.ImageReceiver;

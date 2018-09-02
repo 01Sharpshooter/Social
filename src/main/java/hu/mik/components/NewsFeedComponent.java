@@ -19,9 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.SocialUserWrapper;
-import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
 
@@ -32,33 +30,30 @@ public class NewsFeedComponent extends VerticalLayout {
 	private SocialUserWrapper socialUser;
 	private NewsService newsService;
 	private NewsPanelScrollable pagingPanel;
-	private LdapService ldapService;
 
 	@Autowired
-	public NewsFeedComponent(UserUtils userUtils, NewsService newsService, LdapService ldapService) {
+	private NewsFeedComponent(UserUtils userUtils, NewsService newsService, NewsPanelScrollable pagingPanel) {
 		super();
 		this.setSizeFull();
-		this.ldapService = ldapService;
 		this.newsService = newsService;
 		this.socialUser = userUtils.getLoggedInUser();
+		this.pagingPanel = pagingPanel;
+	}
+
+	public NewsFeedComponent init() {
 		this.createContent();
+		return this;
 	}
 
 	private void createContent() {
-		this.createFilterComponent();
+		this.createComboBox();
 		this.createTextWriter();
-		this.pagingPanel = new NewsPanelScrollable(null);
-		this.addComponent(this.pagingPanel);
+		this.addComponent(this.pagingPanel.init());
 		this.setExpandRatio(this.pagingPanel, 1f);
 	}
 
-	private void createFilterComponent() {
-		this.createComboBox();
-
-	}
-
 	private void createComboBox() {
-		List<LdapGroup> groupList = this.ldapService.findGroupsByUserId(this.socialUser.getLdapUser().getId());
+		List<LdapGroup> groupList = this.socialUser.getLdapUser().getLdapGroups();
 		ComboBox<LdapGroup> cbGroups = new ComboBox<>("Groups", groupList);
 		cbGroups.addValueChangeListener(e -> {
 			this.pagingPanel.changeLdapGroup(e.getValue());
@@ -104,14 +99,6 @@ public class NewsFeedComponent extends VerticalLayout {
 
 	private void newMessage(News sentNews) {
 		this.pagingPanel.addNews(sentNews);
-	}
-
-	public void firstLoad(User user) {
-		if (user != null) {
-			this.removeAllComponents(); // TODO do this better
-			this.addComponent(this.pagingPanel);
-		}
-		this.pagingPanel.firstLoad(user);
 	}
 
 }
