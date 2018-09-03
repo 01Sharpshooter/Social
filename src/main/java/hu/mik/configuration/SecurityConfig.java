@@ -1,15 +1,12 @@
 package hu.mik.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.encoding.LdapShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 
 import hu.mik.constants.LdapConstants;
 
@@ -46,12 +43,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.groupSearchBase(LdapConstants.OU_GROUPS).groupRoleAttribute("cn").groupSearchFilter("member={0}")
 				.contextSource().url("ldap://localhost:10389/").and().passwordCompare()
 				.passwordEncoder(new LdapShaPasswordEncoder()).passwordAttribute("userPassword");
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
-//		PasswordEncoder enc=new ShaPasswordEncoder();
-		return encoder;
 	}
 }
