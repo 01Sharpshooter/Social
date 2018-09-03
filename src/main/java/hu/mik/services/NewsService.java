@@ -13,4 +13,6 @@ public interface NewsService extends PageableService<News> {
 	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user);
 
 	public void saveNews(News news);
+
+	public void deleteNews(News news);
 }

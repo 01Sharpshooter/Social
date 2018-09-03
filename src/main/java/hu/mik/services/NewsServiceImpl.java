@@ -36,4 +36,10 @@ public class NewsServiceImpl implements NewsService {
 		return this.newsDao.getPagedNewsByLdapGroup(offset, pageSize, ldapGroup);
 	}
 
+	@Override
+	public void deleteNews(News news) {
+		this.newsDao.deleteNews(news);
+
+	}
+
 }

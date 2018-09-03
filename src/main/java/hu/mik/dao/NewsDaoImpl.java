@@ -69,5 +69,10 @@ public class NewsDaoImpl implements NewsDao {
 		this.em.persist(news);
 
 	}
+	@Override
+	public void deleteNews(News news) {
+		this.em.remove(this.em.getReference(News.class, news.getId()));
+
+	}
 
 }

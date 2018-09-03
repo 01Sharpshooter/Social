@@ -10,7 +10,9 @@ public enum Texts {
 	BTN_ACCEPT_REQUEST("Accept request"),
 	BTN_DECLINE_REQUEST("Decline request"),
 	BTN_REMOVE_FRIEND("Remove friend"),
-	BTN_CANCEL_REQUEST("Cancel request")
+	BTN_CANCEL_REQUEST("Cancel request"),
+	BTN_CONFIRM("Confirm"),
+	BTN_CANCEL("Cancel")
 	;
 	//@formatter:on
 

@@ -15,4 +15,6 @@ public interface NewsDao {
 
 	public void saveNews(News news);
 
+	public void deleteNews(News news);
+
 }

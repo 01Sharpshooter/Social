@@ -75,7 +75,9 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 		if (!pagedResultList.isEmpty()) {
 			pagedResultList.forEach(object -> {
 				String fullName = this.ldapService.findUserByUsername(object.getUser().getUsername()).getFullName();
-				this.content.addComponent(NewsComponentConverter.convert(object, true, fullName));
+				this.content.addComponent(
+						new NewsComponent(object, this.userUtils.getLoggedInUser().getDbUser().equals(object.getUser()),
+								fullName, this.newsService));
 			});
 			this.offset += this.pageSize;
 		}
@@ -90,8 +92,8 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void addNews(News news) {
-		this.content.addComponent(NewsComponentConverter.convert(news, false,
-				this.userUtils.getLoggedInUser().getLdapUser().getFullName()), 0);
+		this.content.addComponent(new NewsComponent(news, true,
+				this.userUtils.getLoggedInUser().getLdapUser().getFullName(), this.newsService), 0);
 	}
 
 }
