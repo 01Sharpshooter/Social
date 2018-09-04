@@ -15055,7 +15055,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base[width-range~="0-550px"] .responsiveFont {
-	font-size: 125%;
+	font-size: 1em;
 }
 
 .myTheme #base[width-range~="0-550px"] #navigationBar .v-label {
@@ -15122,7 +15122,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base[width-range~="551px-930px"] .responsiveFont {
-	font-size: 150%;
+	font-size: 1.2em;
 }
 
 .myTheme #base[width-range~="551px-930px"] #navigationBar .v-label:not(#username) .folding {
@@ -15276,7 +15276,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base .responsiveFont {
-	font-size: 200%;
+	font-size: 1.4em;
 }
 
 .myTheme #base #navigationBar {
