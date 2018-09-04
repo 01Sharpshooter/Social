@@ -22,10 +22,10 @@ import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
-import hu.mik.components.NewsPanelScrollable;
 import hu.mik.constants.StringConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.Texts;
+import hu.mik.factories.NewsPanelFactory;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.utils.ProfileImageHelper;
@@ -48,7 +48,7 @@ public class ProfileView extends VerticalLayout implements View {
 	@Autowired
 	private UserUtils userUtils;
 	@Autowired
-	private NewsPanelScrollable newsPanelScrollable;
+	private NewsPanelFactory newsPanelFactory;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
@@ -130,7 +130,7 @@ public class ProfileView extends VerticalLayout implements View {
 		TabSheet tabSheet = new TabSheet();
 		tabSheet.addTab(this.createFormLayout(), "Personal information");
 		tabSheet.setSizeFull();
-		tabSheet.addTab(this.newsPanelScrollable.init(this.socialProfileUser.getDbUser()), "News feed");
+		tabSheet.addTab(this.newsPanelFactory.getUserInstance(this.socialProfileUser.getDbUser()), "News feed");
 		return tabSheet;
 
 	}

@@ -2,10 +2,6 @@ package hu.mik.components;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapGroup;
@@ -17,8 +13,6 @@ import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
-@SpringComponent
-@Scope("prototype")
 public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private LdapGroup ldapGroup;
 	private User user;
@@ -28,8 +22,7 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private LdapService ldapService;
 	private UserUtils userUtils;
 
-	@Autowired
-	private NewsPanelScrollable(UserUtils userUtils, LdapService ldapService, NewsService newsService) {
+	public NewsPanelScrollable(UserUtils userUtils, LdapService ldapService, NewsService newsService) {
 		super(ScrollDirection.DOWN);
 		this.newsService = newsService;
 		this.content = new VerticalLayout();
@@ -37,7 +30,6 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 		this.setContent(this.content);
 		this.ldapService = ldapService;
 		this.userUtils = userUtils;
-
 	}
 
 	public NewsPanelScrollable init() {

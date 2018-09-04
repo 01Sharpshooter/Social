@@ -11,8 +11,8 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -20,6 +20,7 @@ import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.ThemeConstants;
+import hu.mik.factories.NewsPanelFactory;
 import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
 
@@ -29,15 +30,16 @@ import hu.mik.utils.UserUtils;
 public class NewsFeedComponent extends VerticalLayout {
 	private SocialUserWrapper socialUser;
 	private NewsService newsService;
-	private NewsPanelScrollable pagingPanel;
+	private NewsPanelFactory newsPanelFactory;
+	private TabSheet tsGroups;
 
 	@Autowired
-	private NewsFeedComponent(UserUtils userUtils, NewsService newsService, NewsPanelScrollable pagingPanel) {
+	private NewsFeedComponent(UserUtils userUtils, NewsService newsService, NewsPanelFactory pagingPanelFactory) {
 		super();
 		this.setSizeFull();
 		this.newsService = newsService;
 		this.socialUser = userUtils.getLoggedInUser();
-		this.pagingPanel = pagingPanel;
+		this.newsPanelFactory = pagingPanelFactory;
 	}
 
 	public NewsFeedComponent init() {
@@ -46,20 +48,19 @@ public class NewsFeedComponent extends VerticalLayout {
 	}
 
 	private void createContent() {
-		this.createComboBox();
 		this.createTextWriter();
-		this.addComponent(this.pagingPanel.init());
-		this.setExpandRatio(this.pagingPanel, 1f);
+		this.createTabSheet();
 	}
 
-	private void createComboBox() {
+	private void createTabSheet() {
 		List<LdapGroup> groupList = this.socialUser.getLdapUser().getLdapGroups();
-		ComboBox<LdapGroup> cbGroups = new ComboBox<>("Groups", groupList);
-		cbGroups.addValueChangeListener(e -> {
-			this.pagingPanel.changeLdapGroup(e.getValue());
-		});
-		this.addComponent(cbGroups);
-
+		this.tsGroups = new TabSheet();
+		this.tsGroups.addTab(this.newsPanelFactory.getDefaultInstance(), "All");
+		this.tsGroups.setSizeFull();
+		groupList.forEach(
+				group -> this.tsGroups.addTab(this.newsPanelFactory.getLdapGroupInstance(group), group.getGroupName()));
+		this.addComponent(this.tsGroups);
+		this.setExpandRatio(this.tsGroups, 1f);
 	}
 
 	public void createTextWriter() {
@@ -98,7 +99,7 @@ public class NewsFeedComponent extends VerticalLayout {
 	}
 
 	private void newMessage(News sentNews) {
-		this.pagingPanel.addNews(sentNews);
+		((NewsPanelScrollable) this.tsGroups.getSelectedTab()).addNews(sentNews);
 	}
 
 }
