@@ -10,22 +10,20 @@ import org.springframework.ldap.odm.annotations.Id;
 
 import hu.mik.constants.LdapConstants;
 
-@Entry(base=LdapConstants.OU_GROUPS, objectClasses={"top", "groupOfNames"})
-public class LdapGroup{
+@Entry(base = LdapConstants.OU_GROUPS, objectClasses = { "top", "groupOfNames" })
+public class LdapGroup {
 	@Id
 	private Name id;
-	
-	@Attribute(name="cn")
-	private String groupName;	
-	@Attribute(name="member")
+
+	@Attribute(name = "cn")
+	private String groupName;
+	@Attribute(name = "member")
 	private List<Name> listOfMembers;
-	@Attribute(name="member")
+	@Attribute(name = "member")
 	private Name member;
-	
-	
 
 	public Name getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(Name id) {
@@ -33,7 +31,7 @@ public class LdapGroup{
 	}
 
 	public String getGroupName() {
-		return groupName;
+		return this.groupName;
 	}
 
 	public void setGroupName(String groupName) {
@@ -41,20 +39,16 @@ public class LdapGroup{
 	}
 
 	public List<Name> getListOfMembers() {
-		return listOfMembers;
+		return this.listOfMembers;
 	}
 
 	public void setListOfMembers(List<Name> listOfMembers) {
 		this.listOfMembers = listOfMembers;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.groupName;
 	}
 
-
-
-	
-	
 }
