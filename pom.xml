@@ -53,12 +53,6 @@
 	        <groupId>org.springframework.data</groupId>
 	        <artifactId>spring-data-ldap</artifactId>
     	</dependency>
-		
-		<dependency>
-		   <groupId>de.steinwedel.vaadin.addon</groupId>
-		   <artifactId>messagebox</artifactId>
-		   <version>4.0.21</version>
-		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
@@ -131,24 +125,11 @@
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
-		
-		<dependency>
-			<artifactId>com.oracle</artifactId>
-			<groupId>ojdbc6</groupId>
-			<version>11.2.0.3.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/ojdbc6.jar</systemPath>
-		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.3</version>
+			<version>2.6</version>
 		</dependency>
-			<dependency>
-  				<groupId>org.vaadin.addons</groupId>
-				<artifactId>sizereporter</artifactId>
-   				<version>0.1.4</version>
-			</dependency>
 	</dependencies>
 	
 	
@@ -193,34 +174,33 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-		        <groupId>com.vaadin</groupId>
-		        <artifactId>vaadin-maven-plugin</artifactId>
-		        <configuration>
-					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/</hostedWebapp>
-					<noServer>true</noServer>
-<!-- 					Remove draftCompile when project is ready  -->
-					<draftCompile>true</draftCompile>
-					<compileReport>true</compileReport>
-					<style>OBF</style>
-					<style>DETAILED</style>
-					<strict>true</strict>
-				</configuration>
-		        <executions>
-		            <execution>
-		                <goals>
-		                    <goal>clean</goal>
-							<goal>resources</goal>
-							<goal>update-theme</goal>
-							<goal>update-widgetset</goal>
-							<goal>compile-theme</goal>
-							<goal>compile</goal>
-		                </goals>
-		            </execution>
-		        </executions>
-    		</plugin>
+<!-- 			<plugin> -->
+<!-- 		        <groupId>com.vaadin</groupId> -->
+<!-- 		        <artifactId>vaadin-maven-plugin</artifactId> -->
+<!-- 		        <configuration> -->
+<!-- 					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs> -->
+<!-- 					<webappDirectory>${basedir}/src/main/webapp/VAADIN/</webappDirectory> -->
+<!-- 					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/</hostedWebapp> -->
+<!-- 					<noServer>true</noServer> -->
+<!-- 					<draftCompile>true</draftCompile> -->
+<!-- 					<compileReport>true</compileReport> -->
+<!-- 					<style>OBF</style> -->
+<!-- 					<style>DETAILED</style> -->
+<!-- 					<strict>true</strict> -->
+<!-- 				</configuration> -->
+<!-- 		        <executions> -->
+<!-- 		            <execution> -->
+<!-- 		                <goals> -->
+<!-- 		                    <goal>clean</goal> -->
+<!-- 							<goal>resources</goal> -->
+<!-- 							<goal>update-theme</goal> -->
+<!-- 							<goal>update-widgetset</goal> -->
+<!-- 							<goal>compile-theme</goal> -->
+<!-- 							<goal>compile</goal> -->
+<!-- 		                </goals> -->
+<!-- 		            </execution> -->
+<!-- 		        </executions> -->
+<!--     		</plugin> -->
     		<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
 				<configuration>

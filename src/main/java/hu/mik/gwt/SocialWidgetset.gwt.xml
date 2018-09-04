@@ -8,7 +8,7 @@
 
     <inherits name="org.vaadin.risto.formsender.widgetset.FormSenderWidgetset" />
 
-    <inherits name="com.ejt.vaadin.sizereporter.WidgetSet" />
+    
     
     <inherits name="hu.mik.gwt.SocialWidgetset" />  
 </module>
