@@ -5,9 +5,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
 @EnableAutoConfiguration
 @ServletComponentScan

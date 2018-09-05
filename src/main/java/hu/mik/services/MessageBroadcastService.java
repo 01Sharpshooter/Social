@@ -1,6 +1,6 @@
 package hu.mik.services;
 
-import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,35 +14,31 @@ import hu.mik.listeners.NewMessageListener;
 public class MessageBroadcastService {
 	static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-	private static LinkedList<NewMessageListener> messageListeners = new LinkedList<NewMessageListener>();
-	private static LinkedList<Integer> userIDs = new LinkedList<>();
+	private static ConcurrentHashMap<Integer, NewMessageListener> userToListenerMap = new ConcurrentHashMap<>();
 
 	public static synchronized void register(NewMessageListener messageListener, Integer userId) {
-		if (!userIDs.contains(userId)) {
-			messageListeners.add(messageListener);
-			userIDs.add(userId);
+		if (!userToListenerMap.containsKey(userId)) {
+			userToListenerMap.put(userId, messageListener);
 		}
 	}
 
 	public static synchronized void unregister(NewMessageListener messageListener, Integer userId) {
-		if (userIDs.contains(userId)) {
-			messageListeners.remove(messageListener);
-			userIDs.remove(userId);
-		}
+		userToListenerMap.remove(userId);
+
 	}
 
 	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
 		executorService.execute(() -> {
-			if (userIDs.contains(message.getReceiver().getId())) {
-				messageListeners.get(userIDs.indexOf(message.getReceiver().getId())).receiveMessage(message, sender);
+			if (userToListenerMap.containsKey((message.getReceiver().getId()))) {
+				userToListenerMap.get(message.getReceiver().getId()).receiveMessage(message, sender);
 			}
 		});
 	}
 
 	public static synchronized void messageSeen(Integer senderId, Integer seenSourceId) {
 		executorService.execute(() -> {
-			if (userIDs.contains(senderId)) {
-				messageListeners.get(userIDs.indexOf(senderId)).messageSeen(seenSourceId);
+			if (userToListenerMap.containsKey(senderId)) {
+				userToListenerMap.get(senderId).messageSeen(seenSourceId);
 			}
 		});
 	}
