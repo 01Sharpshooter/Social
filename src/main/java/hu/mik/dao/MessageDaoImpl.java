@@ -113,8 +113,8 @@ public class MessageDaoImpl implements MessageDao {
 		return this.em.createQuery(
 				"SELECT mess FROM Message mess "
 				+ "JOIN FETCH mess.sender "
-				+ "JOIN FETCH mess.receiver WHERE mess IN("
-				+ "SELECT MAX(m) FROM Message m"
+				+ "JOIN FETCH mess.receiver WHERE mess.id IN("
+				+ "SELECT MAX(m.id) FROM Message m"
 				+ " WHERE(m.receiver = :user OR m.sender = :user)"
 				+ " GROUP BY (m.receiver+m.sender))"
 				+ " ORDER BY mess.id DESC"
@@ -132,7 +132,7 @@ public class MessageDaoImpl implements MessageDao {
 				+ " join fetch m.receiver where"
 				+ " (m.sender= :user1 and m.receiver= :user2)"
 				+ " or (m.sender= :user2 and m.receiver= :user1)"
-				+ " order by m.time desc",
+				+ " order by m.id desc",
 				Message.class)
 				.setParameter("user1", user1)
 				.setParameter("user2", user2)

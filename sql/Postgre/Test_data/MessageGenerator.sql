@@ -1,3 +1,11 @@
+UPDATE pg_index
+SET indisready=false
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_messages'
+);
+
 do $$
 declare
     v_sentence text;
@@ -15,3 +23,13 @@ begin
 		values (v_sender_id, v_receiver_id, v_sentence, CURRENT_TIMESTAMP, true);
     end loop;
 end $$;
+
+UPDATE pg_index
+SET indisready=true
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_messages'
+);
+
+REINDEX TABLE main.t_messages;

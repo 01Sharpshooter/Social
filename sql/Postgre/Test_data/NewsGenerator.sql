@@ -1,3 +1,11 @@
+UPDATE pg_index
+SET indisready=false
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_news'
+);
+
 do $$
 declare
     v_sentence text;
@@ -12,3 +20,13 @@ begin
         insert into main.T_NEWS(id, user_id, message, time) values (DEFAULT, v_current_user_id, v_sentence, CURRENT_TIMESTAMP);
     end loop;
 end $$;
+
+UPDATE pg_index
+SET indisready=true
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_news'
+);
+
+REINDEX TABLE main.t_news;
