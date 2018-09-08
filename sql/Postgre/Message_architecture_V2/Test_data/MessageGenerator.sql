@@ -1,3 +1,11 @@
+UPDATE pg_index
+SET indisready=false
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_messages'
+);
+
 do $$
 declare
 	v_sentence text;
@@ -25,8 +33,8 @@ begin
 		where (c.user1 = v_sender_id and c.user2=v_receiver_id) or
 		(c.user1 = v_receiver_id and c.user2=v_sender_id);
 
-		insert into main.t_messages(sender_id, conversation_id, message, time, seen) 
-		values (v_sender_id, v_conv_id, v_sentence, CURRENT_TIMESTAMP, true) returning id into v_last_message;
+		insert into main.t_messages(sender_id, conversation_id, message, time) 
+		values (v_sender_id, v_conv_id, v_sentence, CURRENT_TIMESTAMP) returning id into v_last_message;
 	end loop;
 	for v_last_message, v_conv_id in (
 		select max(m.id), m.conversation_id as mid from main.t_messages m
@@ -36,3 +44,13 @@ begin
 		where id = v_conv_id;
 	end loop;
 end $$;
+
+UPDATE pg_index
+SET indisready=true
+WHERE indrelid = (
+    SELECT oid
+    FROM pg_class
+    WHERE relname='main.t_messages'
+);
+
+REINDEX TABLE main.t_messages;
