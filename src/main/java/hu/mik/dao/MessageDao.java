@@ -2,6 +2,7 @@ package hu.mik.dao;
 
 import java.util.List;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
 
@@ -16,10 +17,10 @@ public interface MessageDao {
 
 	public List<Message> findLatestMessagesOfUser(int number, User user);
 
-	public int setAllPreviousSeen(User receiver, User sender);
+	public int setConversationSeen(Conversation conversation);
 
 	public Long getNumberOfUnseenConversations(User user);
 
-	public List<Message> findLatestConversationsOfUser(User user);
+	public List<Conversation> findLatestConversationsOfUser(User user);
 
 }

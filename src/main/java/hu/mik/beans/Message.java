@@ -20,17 +20,15 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "senderid", updatable = false)
+	@JoinColumn(name = "sender_id", updatable = false)
 	private User sender;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "receiverid", updatable = false)
-	private User receiver;
+	@JoinColumn(name = "conversation_id")
+	private Conversation conversation;
 	@Column(name = "message")
 	private String message;
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
-	@Column(name = "seen")
-	private boolean seen;
 
 	public Integer getId() {
 		return this.id;
@@ -48,12 +46,12 @@ public class Message {
 		this.sender = sender;
 	}
 
-	public User getReceiver() {
-		return this.receiver;
+	public Conversation getConversation() {
+		return this.conversation;
 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 	public String getMessage() {
@@ -72,18 +70,10 @@ public class Message {
 		this.time = time;
 	}
 
-	public boolean isSeen() {
-		return this.seen;
-	}
-
-	public void setSeen(boolean seen) {
-		this.seen = seen;
-	}
-
 	@Override
 	public String toString() {
-		return "Message [id=" + this.id + ", senderId=" + this.sender + ", receiverId=" + this.receiver + ", message="
-				+ this.message + ", time=" + this.time + ", seen=" + this.seen + "]";
+		return "Message [id=" + this.id + ", sender=" + this.sender + ", conversation=" + this.conversation
+				+ ", message=" + this.message + ", time=" + this.time + "]";
 	}
 
 }

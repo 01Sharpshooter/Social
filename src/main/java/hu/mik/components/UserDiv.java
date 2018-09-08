@@ -30,12 +30,12 @@ public class UserDiv extends CssLayout {
 				ContentMode.HTML);
 		if (lastMessage.getSender() == null) {
 			this.addLabelsToUserDiv(userDivLbl, null);
-		} else if (!lastMessage.isSeen() && !lastMessage.getSender().getId().equals(loggedId)) {
+		} else if (!lastMessage.getConversation().isSeen() && !lastMessage.getSender().getId().equals(loggedId)) {
 			this.addLabelsToUserDiv(userDivLbl, null);
 			this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
-		} else if (!lastMessage.isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
+		} else if (!lastMessage.getConversation().isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
 			this.addLabelsToUserDiv(userDivLbl, VaadinIcons.ANGLE_DOUBLE_RIGHT);
-		} else if (lastMessage.isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
+		} else if (lastMessage.getConversation().isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
 			this.addLabelsToUserDiv(userDivLbl, VaadinIcons.EYE);
 		} else {
 			this.addLabelsToUserDiv(userDivLbl, null);

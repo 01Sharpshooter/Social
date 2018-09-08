@@ -5,15 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
+import hu.mik.dao.ConversationDao;
 import hu.mik.dao.MessageDao;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 
 	@Autowired
-	MessageDao messageDao;
+	private MessageDao messageDao;
+	@Autowired
+	private ConversationDao conversationDao;
 
 	@Override
 	public List<Message> findAllByUsers(int number, User user1, User user2) {
@@ -23,7 +27,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public void saveMessage(Message message) {
 		this.messageDao.save(message);
-
+		this.conversationDao.saveConversation(message.getConversation());
 	}
 
 	@Override
@@ -37,8 +41,8 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public int setAllPreviousSeen(User receiver, User sender) {
-		return this.messageDao.setAllPreviousSeen(receiver, sender);
+	public int setConversationSeen(Conversation conversation) {
+		return this.messageDao.setConversationSeen(conversation);
 
 	}
 
@@ -48,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<Message> findLatestConversationsOfUser(User user) {
+	public List<Conversation> findLatestConversationsOfUser(User user) {
 		return this.messageDao.findLatestConversationsOfUser(user);
 	}
 

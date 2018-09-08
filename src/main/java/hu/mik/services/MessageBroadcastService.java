@@ -29,8 +29,10 @@ public class MessageBroadcastService {
 
 	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
 		executorService.execute(() -> {
-			if (userToListenerMap.containsKey((message.getReceiver().getId()))) {
-				userToListenerMap.get(message.getReceiver().getId()).receiveMessage(message, sender);
+			if (userToListenerMap
+					.containsKey((message.getConversation().getConversationPartner(sender.getDbUser()).getId()))) {
+				userToListenerMap.get(message.getConversation().getConversationPartner(sender.getDbUser()).getId())
+						.receiveMessage(message, sender);
 			}
 		});
 	}

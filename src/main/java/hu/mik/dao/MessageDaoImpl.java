@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
 
@@ -19,7 +20,7 @@ import hu.mik.beans.User;
 public class MessageDaoImpl implements MessageDao {
 
 	@PersistenceContext
-	EntityManager em;
+	private EntityManager em;
 
 	//@formatter:off
 
@@ -43,6 +44,8 @@ public class MessageDaoImpl implements MessageDao {
 
 	@Override
 	public void save(Message message) {
+		//message.getConversation().setLastMessage(message.getId());
+
 		this.em.persist(message);
 	}
 
@@ -81,14 +84,11 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public int setAllPreviousSeen(User receiver, User sender) {
+	public int setConversationSeen(Conversation conversation) {
 		return this.em.createQuery(
-				"UPDATE Message m SET seen = true"
-				+ " WHERE m.receiver = :receiver"
-				+ " AND m.sender = :sender"
-				+ " AND seen = false")
-		.setParameter("receiver", receiver)
-		.setParameter("sender", sender)
+				"UPDATE Conversation c SET seen = true"
+				+ " WHERE c = :conversation")
+		.setParameter("conversation", conversation)
 		.executeUpdate();
 
 	}
@@ -97,10 +97,12 @@ public class MessageDaoImpl implements MessageDao {
 	public Long getNumberOfUnseenConversations(User user) {
 		try {
 			return (Long) this.em.createQuery(
-					"SELECT COUNT(DISTINCT m.sender)"
-					+ " FROM Message m"
-					+ " WHERE m.receiver = :user"
-					+ " AND m.seen = false")
+					"SELECT COUNT(DISTINCT c.id)"
+					+ " FROM Conversation c"
+					+ " JOIN c.lastMessage m"
+					+ " WHERE (c.user1 = :user OR c.user2 = :user)"
+					+ " AND c.seen = false"
+					+ " AND m.sender != :user")
 			.setParameter("user", user)
 			.getSingleResult();
 		} catch (NoResultException e) {
@@ -109,16 +111,16 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public List<Message> findLatestConversationsOfUser(User user) {
+	public List<Conversation> findLatestConversationsOfUser(User user) {
 		return this.em.createQuery(
-				"SELECT mess FROM Message mess "
-				+ "JOIN FETCH mess.sender "
-				+ "JOIN FETCH mess.receiver WHERE mess.id IN("
-				+ "SELECT MAX(m.id) FROM Message m"
-				+ " WHERE(m.receiver = :user OR m.sender = :user)"
-				+ " GROUP BY (m.receiver+m.sender))"
-				+ " ORDER BY mess.id DESC"
-				, Message.class)
+				"SELECT c FROM Conversation c "
+				+ "JOIN FETCH c.lastMessage m "
+				+ "JOIN FETCH m.sender "
+				+ "JOIN FETCH c.user1 "
+				+ "JOIN FETCH c.user2 "
+				+ "WHERE (c.user1 = :user or c.user2 = :user) "
+				+ "ORDER BY m.id DESC"
+				, Conversation.class)
 				.setParameter("user", user)
 				.getResultList();
 //
@@ -129,9 +131,12 @@ public class MessageDaoImpl implements MessageDao {
 		List<Message> list=new ArrayList<>();
 		list=this.em.createQuery("select m from Message m"
 				+ " join fetch m.sender"
-				+ " join fetch m.receiver where"
-				+ " (m.sender= :user1 and m.receiver= :user2)"
-				+ " or (m.sender= :user2 and m.receiver= :user1)"
+				+ " join fetch m.conversation c"
+				+ " join fetch c.user1"
+				+ " join fetch c.user2"
+				+ " where"
+				+ " (c.user1 = :user1 and c.user2 = :user2)"
+				+ " or (c.user1 = :user2 and c.user2 = :user1)"
 				+ " order by m.id desc",
 				Message.class)
 				.setParameter("user1", user1)
