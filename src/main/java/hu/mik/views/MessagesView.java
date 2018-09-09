@@ -25,6 +25,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
@@ -32,9 +33,9 @@ import hu.mik.beans.User;
 import hu.mik.components.MessagesPanelScrollable;
 import hu.mik.components.UserDiv;
 import hu.mik.constants.ThemeConstants;
+import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
-import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
 import hu.mik.utils.UserUtils;
@@ -46,7 +47,7 @@ public class MessagesView extends CssLayout implements View {
 	public static final String NAME = "messages";
 
 	@Autowired
-	private MessageService messageService;
+	private ChatService messageService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -61,6 +62,8 @@ public class MessagesView extends CssLayout implements View {
 	private SocialUserWrapper sender;
 
 	private User receiver;
+
+	private Conversation conversation;
 
 	private TextField tfSearch;
 
@@ -104,19 +107,20 @@ public class MessagesView extends CssLayout implements View {
 					}
 				}
 
-				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
-						this.sender.getDbUser());
-				if (lastMessage == null) {
-					lastMessage = new Message();
-					lastMessage.setMessage("");
-					lastMessage.setSeen(false);
-				}
-				CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
-				this.userList.addComponent(newDiv, 0);
-				this.userListSelectionChange(newDiv);
-				this.fillChat((UserDiv) this.userList.getComponent(0));
+//				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
+//						this.sender.getDbUser());
+//				if (lastMessage == null) {
+//					lastMessage = new Message();
+//					lastMessage.setMessage("");
+				// lastMessage.setSeen(false);
+//			}
+//			CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
+//			this.userList.addComponent(newDiv, 0);
+//			this.userListSelectionChange(newDiv);
+//			this.fillChat((UserDiv) this.userList.getComponent(0));
 			}
 		}
+
 	}
 
 	private void createMessagesPanel() {
@@ -142,15 +146,18 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private List<UserDiv> fillUserList() {
-		List<Message> latestMessages = this.messageService.findLatestConversationsOfUser(this.sender.getDbUser());
+		List<Conversation> latestConversations = this.messageService
+				.findLatestConversationsOfUser(this.sender.getDbUser());
 		List<UserDiv> userDivs = new ArrayList<>();
 		UserDiv userDiv;
 
-		for (Message message : latestMessages) {
-			if (message.getReceiver().equals(this.sender.getDbUser())) {
-				userDiv = this.createUserDivFromDbUser(message.getSender(), message);
+		for (Conversation conversation : latestConversations) {
+			if (conversation.getLastMessage().getSender().equals(this.sender.getDbUser())) {
+				userDiv = this.createUserDivFromDbUser(conversation.getConversationPartner(this.sender.getDbUser()),
+						conversation.getLastMessage());
 			} else {
-				userDiv = this.createUserDivFromDbUser(message.getReceiver(), message);
+				userDiv = this.createUserDivFromDbUser(conversation.getLastMessage().getSender(),
+						conversation.getLastMessage());
 			}
 			this.userList.addComponent(userDiv);
 			userDivs.add(userDiv);
@@ -172,6 +179,11 @@ public class MessagesView extends CssLayout implements View {
 		SocialUserWrapper socialUser = new SocialUserWrapper(dbUser, ldapUser);
 		UserDiv userDiv = new UserDiv(socialUser, lastMessage, this.sender.getDbUser().getId());
 		userDiv.addLayoutClickListener(e -> {
+			if (lastMessage.getConversation() != null) {
+				this.conversation = lastMessage.getConversation();
+			} else {
+				this.conversation = new Conversation(this.sender.getDbUser(), dbUser);
+			}
 			this.fillChat((UserDiv) e.getComponent());
 		});
 		return userDiv;
@@ -219,12 +231,12 @@ public class MessagesView extends CssLayout implements View {
 	private void fillChat(UserDiv userDiv) {
 		this.textWriter.setEnabled(true);
 		this.receiver = userDiv.getUser().getDbUser();
-		if (this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver) != 0) {
+		if (this.messageService.setConversationSeen(this.conversation) != 0) {
 			((MainUI) this.getUI()).refreshUnseenConversationNumber();
 		}
 		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
-		this.messagesPanel.setConversationParticipants(this.sender, this.receiver);
+		this.messagesPanel.setLoggedUserAndConversation(this.sender, this.conversation);
 		this.messagesPanel.firstFill();
 		this.messagesPanel.scrollToBottom();
 		this.userListSelectionChange(userDiv);
@@ -237,7 +249,8 @@ public class MessagesView extends CssLayout implements View {
 
 		if (message.getMessage().length() != 0) {
 			message.setSender(this.sender.getDbUser());
-			message.setReceiver(this.receiver);
+			this.conversation.setLastMessage(message);
+			message.setConversation(this.conversation);
 			message.setTime(new Timestamp(new Date().getTime()));
 			this.messageService.saveMessage(message);
 			MessageBroadcastService.sendMessage(message, this.sender);
@@ -279,7 +292,7 @@ public class MessagesView extends CssLayout implements View {
 			newMessage.setDescription(this.getMessageDateDesc(new Date()));
 			this.messagesPanel.addReceivedMessage(newMessage);
 			this.messagesPanel.scrollToBottom();
-			this.messageService.setAllPreviousSeen(this.sender.getDbUser(), this.receiver);
+			this.messageService.setConversationSeen(this.conversation);
 			MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
 
 		} else {
@@ -325,7 +338,7 @@ public class MessagesView extends CssLayout implements View {
 			this.ldapService.findByFullNameContaining(event.getValue()).forEach(user -> {
 				Message message = new Message();
 				message.setMessage("");
-				message.setSeen(true);
+				// message.setSeen(true);
 				this.userList.addComponent(this.createUserDivFromLdap(user, message));
 			});
 		}

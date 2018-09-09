@@ -46,7 +46,7 @@ import hu.mik.constants.ThemeConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
-import hu.mik.services.MessageService;
+import hu.mik.services.ChatService;
 import hu.mik.services.UserService;
 import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
@@ -74,7 +74,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	@Autowired
 	private LdapService ldapService;
 	@Autowired
-	private MessageService messageService;
+	private ChatService messageService;
 	@Autowired
 	private UserUtils userUtils;
 
