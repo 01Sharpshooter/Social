@@ -36,6 +36,15 @@ CREATE INDEX t_messages_conversation_id_idx
     (conversation_id)
     TABLESPACE pg_default;
 
+-- Index: t_messages_id_conversation_id_idx
+
+-- DROP INDEX main.t_messages_id_conversation_id_idx;
+
+CREATE INDEX t_messages_id_conversation_id_idx
+    ON main.t_messages USING btree
+    (id, conversation_id)
+    TABLESPACE pg_default;
+
 -- Index: t_messages_sender_id_idx
 
 -- DROP INDEX main.t_messages_sender_id_idx;
