@@ -10,7 +10,7 @@ public interface MessageService {
 
 	public List<Message> findAllByUsers(int number, User user1, User user2);
 
-	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2);
+	public List<Message> findAllPagedByConversation(int offset, int pageSize, Conversation conversation);
 
 	public void saveMessage(Message message);
 

@@ -57,8 +57,8 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2) {
-		return this.messageDao.findAllPagedByUsers(offset, pageSize, user1, user2);
+	public List<Message> findAllPagedByConversation(int offset, int pageSize, Conversation conversation) {
+		return this.messageDao.findAllPagedByConversation(offset, pageSize, conversation);
 	}
 
 }

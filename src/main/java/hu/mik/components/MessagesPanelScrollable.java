@@ -9,9 +9,9 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
-import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.ScrollDirection;
 import hu.mik.services.MessageService;
@@ -26,7 +26,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	private List<Message> messagesList;
 
 	private SocialUserWrapper sender;
-	private User receiver;
+
+	private Conversation conversation;
 
 	private int scrollForLoaded = 40;
 
@@ -42,9 +43,9 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.messageService = this.appCtx.getBean(MessageService.class);
 	}
 
-	public void setConversationParticipants(SocialUserWrapper sender, User receiver) {
+	public void setSenderAndConversation(SocialUserWrapper sender, Conversation conversation) {
 		this.sender = sender;
-		this.receiver = receiver;
+		this.conversation = conversation;
 	}
 
 	@Override
@@ -53,8 +54,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	private void fillMessages() {
-		this.messagesList = this.messageService.findAllPagedByUsers(this.offset, this.pageSize, this.sender.getDbUser(),
-				this.receiver);
+		this.messagesList = this.messageService.findAllPagedByConversation(this.offset, this.pageSize,
+				this.conversation);
 		if (this.messagesList != null) {
 			if (!this.messagesList.isEmpty()) {
 				for (Message message : this.messagesList) {
@@ -69,8 +70,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 					}
 					newMessage.setWidth(this.getWidth() / 2, this.getWidthUnits());
 					newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
-					this.offset += this.pageSize;
 				}
+				this.offset = this.messagesList.get(this.messagesList.size() - 1).getId();
 				this.scrollAfterLoad();
 			}
 		}
@@ -78,7 +79,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	public void firstFill() {
 		this.content.removeAllComponents();
-		this.offset = 0;
+		this.offset = this.conversation.getLastMessage().getId() + 1;
 		this.fillMessages();
 		this.scrollToBottom();
 	}

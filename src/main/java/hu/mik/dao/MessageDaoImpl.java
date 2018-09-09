@@ -127,7 +127,7 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public List<Message> findAllPagedByUsers(int offset, int pageSize, User user1, User user2) {
+	public List<Message> findAllPagedByConversation(int offset, int pageSize, Conversation conversation) {
 		List<Message> list=new ArrayList<>();
 		list=this.em.createQuery("select m from Message m"
 				+ " join fetch m.sender"
@@ -135,13 +135,12 @@ public class MessageDaoImpl implements MessageDao {
 				+ " join fetch c.user1"
 				+ " join fetch c.user2"
 				+ " where"
-				+ " (c.user1 = :user1 and c.user2 = :user2)"
-				+ " or (c.user1 = :user2 and c.user2 = :user1)"
+				+ " m.conversation = :conversation"
+				+ " and m.id < :offset"
 				+ " order by m.id desc",
 				Message.class)
-				.setParameter("user1", user1)
-				.setParameter("user2", user2)
-				.setFirstResult(offset)
+				.setParameter("conversation", conversation)
+				.setParameter("offset", offset)
 				.setMaxResults(pageSize)
 				.getResultList();
 		return list;

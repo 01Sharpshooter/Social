@@ -235,7 +235,7 @@ public class MessagesView extends CssLayout implements View {
 		}
 		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
-		this.messagesPanel.setConversationParticipants(this.sender, this.receiver);
+		this.messagesPanel.setSenderAndConversation(this.sender, this.conversation);
 		this.messagesPanel.firstFill();
 		this.messagesPanel.scrollToBottom();
 		this.userListSelectionChange(userDiv);
