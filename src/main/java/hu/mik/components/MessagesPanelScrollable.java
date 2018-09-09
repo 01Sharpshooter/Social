@@ -25,7 +25,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	private List<Message> messagesList;
 
-	private SocialUserWrapper sender;
+	private SocialUserWrapper loggedUser;
 
 	private Conversation conversation;
 
@@ -43,8 +43,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.messageService = this.appCtx.getBean(ChatService.class);
 	}
 
-	public void setSenderAndConversation(SocialUserWrapper sender, Conversation conversation) {
-		this.sender = sender;
+	public void setLoggedUserAndConversation(SocialUserWrapper loggedUser, Conversation conversation) {
+		this.loggedUser = loggedUser;
 		this.conversation = conversation;
 	}
 
@@ -62,7 +62,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 					Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
 							ContentMode.HTML);
 					this.content.addComponent(newMessage, 0);
-					if (message.getSender().equals(this.sender.getDbUser())) {
+					if (message.getSender().equals(this.loggedUser.getDbUser())) {
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 					} else {
 						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
