@@ -33,9 +33,9 @@ import hu.mik.beans.User;
 import hu.mik.components.MessagesPanelScrollable;
 import hu.mik.components.UserDiv;
 import hu.mik.constants.ThemeConstants;
+import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
-import hu.mik.services.MessageService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
 import hu.mik.utils.UserUtils;
@@ -47,7 +47,7 @@ public class MessagesView extends CssLayout implements View {
 	public static final String NAME = "messages";
 
 	@Autowired
-	private MessageService messageService;
+	private ChatService messageService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -107,19 +107,20 @@ public class MessagesView extends CssLayout implements View {
 					}
 				}
 
-				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
-						this.sender.getDbUser());
-				if (lastMessage == null) {
-					lastMessage = new Message();
-					lastMessage.setMessage("");
-					// lastMessage.setSeen(false);
-				}
-				CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
-				this.userList.addComponent(newDiv, 0);
-				this.userListSelectionChange(newDiv);
-				this.fillChat((UserDiv) this.userList.getComponent(0));
+//				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
+//						this.sender.getDbUser());
+//				if (lastMessage == null) {
+//					lastMessage = new Message();
+//					lastMessage.setMessage("");
+				// lastMessage.setSeen(false);
+//			}
+//			CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
+//			this.userList.addComponent(newDiv, 0);
+//			this.userListSelectionChange(newDiv);
+//			this.fillChat((UserDiv) this.userList.getComponent(0));
 			}
 		}
+
 	}
 
 	private void createMessagesPanel() {

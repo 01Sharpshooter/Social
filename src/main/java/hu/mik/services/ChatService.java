@@ -6,17 +6,13 @@ import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.User;
 
-public interface MessageService {
-
-	public List<Message> findAllByUsers(int number, User user1, User user2);
+public interface ChatService {
 
 	public List<Message> findAllPagedByConversation(int offset, int pageSize, Conversation conversation);
 
 	public void saveMessage(Message message);
 
 	public List<Message> findLastestMessagesOfUser(int number, User user);
-
-	public Message findLastMessageOfUsers(User user1, User user2);
 
 	public int setConversationSeen(Conversation conversation);
 

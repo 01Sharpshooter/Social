@@ -12,17 +12,12 @@ import hu.mik.dao.ConversationDao;
 import hu.mik.dao.MessageDao;
 
 @Service
-public class MessageServiceImpl implements MessageService {
+public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
 	private ConversationDao conversationDao;
-
-	@Override
-	public List<Message> findAllByUsers(int number, User user1, User user2) {
-		return this.messageDao.findAllByUsers(number, user1, user2);
-	}
 
 	@Override
 	public void saveMessage(Message message) {
@@ -36,24 +31,19 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Message findLastMessageOfUsers(User user1, User user2) {
-		return this.messageDao.findLastMessageOfUsers(user1, user2);
-	}
-
-	@Override
 	public int setConversationSeen(Conversation conversation) {
-		return this.messageDao.setConversationSeen(conversation);
+		return this.conversationDao.setConversationSeen(conversation);
 
 	}
 
 	@Override
 	public Long getNumberOfUnseenConversations(User user) {
-		return this.messageDao.getNumberOfUnseenConversations(user);
+		return this.conversationDao.getNumberOfUnseenConversations(user);
 	}
 
 	@Override
 	public List<Conversation> findLatestConversationsOfUser(User user) {
-		return this.messageDao.findLatestConversationsOfUser(user);
+		return this.conversationDao.findLatestConversationsOfUser(user);
 	}
 
 	@Override

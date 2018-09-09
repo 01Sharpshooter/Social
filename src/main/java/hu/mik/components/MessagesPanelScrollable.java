@@ -14,14 +14,14 @@ import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.ScrollDirection;
-import hu.mik.services.MessageService;
+import hu.mik.services.ChatService;
 
 @SuppressWarnings("serial")
 public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	private VerticalLayout content;
 
-	private MessageService messageService;
+	private ChatService messageService;
 
 	private List<Message> messagesList;
 
@@ -40,7 +40,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setContent(this.content);
 
-		this.messageService = this.appCtx.getBean(MessageService.class);
+		this.messageService = this.appCtx.getBean(ChatService.class);
 	}
 
 	public void setSenderAndConversation(SocialUserWrapper sender, Conversation conversation) {
