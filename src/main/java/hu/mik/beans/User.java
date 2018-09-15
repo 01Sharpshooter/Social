@@ -18,6 +18,10 @@ public class User {
 	private String username;
 	@Column(name = "image")
 	private String imageName;
+	@Column(name = "full_name")
+	private String fullName;
+	@Column(name = "enabled")
+	private boolean enabled;
 
 	public Integer getId() {
 		return this.id;
@@ -43,10 +47,28 @@ public class User {
 		this.imageName = image;
 	}
 
+	public String getFullName() {
+		return this.fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (this.enabled ? 1231 : 1237);
+		result = prime * result + ((this.fullName == null) ? 0 : this.fullName.hashCode());
 		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
 		result = prime * result + ((this.imageName == null) ? 0 : this.imageName.hashCode());
 		result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
@@ -65,6 +87,16 @@ public class User {
 			return false;
 		}
 		User other = (User) obj;
+		if (this.enabled != other.enabled) {
+			return false;
+		}
+		if (this.fullName == null) {
+			if (other.fullName != null) {
+				return false;
+			}
+		} else if (!this.fullName.equals(other.fullName)) {
+			return false;
+		}
 		if (this.id == null) {
 			if (other.id != null) {
 				return false;
@@ -87,6 +119,12 @@ public class User {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + this.id + ", username=" + this.username + ", imageName=" + this.imageName + ", fullName="
+				+ this.fullName + ", enabled=" + this.enabled + "]";
 	}
 
 }

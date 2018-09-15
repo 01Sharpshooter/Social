@@ -35,9 +35,11 @@ public class ConversationDaoImpl implements ConversationDao {
 				"SELECT c FROM Conversation c "
 				+ "JOIN FETCH c.lastMessage m "
 				+ "JOIN FETCH m.sender "
-				+ "JOIN FETCH c.user1 "
-				+ "JOIN FETCH c.user2 "
-				+ "WHERE (c.user1 = :user or c.user2 = :user) "
+				+ "JOIN FETCH c.user1 u1 "
+				+ "JOIN FETCH c.user2 u2 "
+				+ "WHERE (u1 = :user or u2 = :user) "
+				+ "AND u1.enabled = true "
+				+ "AND u2.enabled = true "
 				+ "ORDER BY m.id DESC"
 				, Conversation.class)
 				.setParameter("user", user)

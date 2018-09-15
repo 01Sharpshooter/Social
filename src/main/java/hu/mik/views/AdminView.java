@@ -60,7 +60,7 @@ public class AdminView extends VerticalLayout implements View {
 		notFoundLbl.setVisible(false);
 		Button nameBtn = new Button("Search");
 		nameBtn.addClickListener(clickEvent -> {
-			List<User> usersWithName = this.userService.findAllLike(nameTf.getValue());
+			List<User> usersWithName = this.userService.findByFullNameContaining(nameTf.getValue());
 			if (usersWithName != null) {
 				this.grid.setDataProvider(new ListDataProvider<>(usersWithName));
 				notFoundLbl.setVisible(false);

@@ -5,7 +5,7 @@ import java.util.List;
 import hu.mik.beans.User;
 
 public interface UserService {
-	public User createDefaultUserWithUsername(String username);
+	public User registerDefaultUser(User user);
 
 	public boolean takenUserName(String username);
 
@@ -15,8 +15,10 @@ public interface UserService {
 
 	public List<User> listAll();
 
-	public List<User> findAllLike(String username);
+	public List<User> findByFullNameContaining(String username);
 
 	public User save(User user);
+
+	public void disable(User user);
 
 }

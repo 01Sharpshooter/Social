@@ -26,7 +26,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
 import hu.mik.beans.Conversation;
-import hu.mik.beans.LdapUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
@@ -98,7 +97,7 @@ public class MessagesView extends CssLayout implements View {
 			this.receiver = this.userService.findUserById(Integer.parseInt(parameters[0]));
 			if (this.receiver != null) {
 				for (Component userDiv : this.userList) {
-					if (this.receiver.equals(((UserDiv) userDiv).getUser().getDbUser())) {
+					if (this.receiver.equals(((UserDiv) userDiv).getUser())) {
 						this.userList.removeComponent(userDiv);
 						this.userList.addComponent(userDiv, 0);
 						this.userListSelectionChange(this.userList.getComponent(0));
@@ -166,18 +165,11 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private UserDiv createUserDivFromDbUser(User dbUser, Message lastMessage) {
-		LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
-		return this.createUserDiv(ldapUser, dbUser, lastMessage);
+		return this.createUserDiv(dbUser, lastMessage);
 	}
 
-	private UserDiv createUserDivFromLdap(LdapUser ldapUser, Message lastMessage) {
-		User dbUser = this.userService.findUserByUsername(ldapUser.getUsername());
-		return this.createUserDiv(ldapUser, dbUser, lastMessage);
-	}
-
-	private UserDiv createUserDiv(LdapUser ldapUser, User dbUser, Message lastMessage) {
-		SocialUserWrapper socialUser = new SocialUserWrapper(dbUser, ldapUser);
-		UserDiv userDiv = new UserDiv(socialUser, lastMessage, this.sender.getDbUser().getId());
+	private UserDiv createUserDiv(User dbUser, Message lastMessage) {
+		UserDiv userDiv = new UserDiv(dbUser, lastMessage, this.sender.getDbUser().getId());
 		userDiv.addLayoutClickListener(e -> {
 			if (lastMessage.getConversation() != null) {
 				this.conversation = lastMessage.getConversation();
@@ -230,7 +222,7 @@ public class MessagesView extends CssLayout implements View {
 
 	private void fillChat(UserDiv userDiv) {
 		this.textWriter.setEnabled(true);
-		this.receiver = userDiv.getUser().getDbUser();
+		this.receiver = userDiv.getUser();
 		if (this.messageService.setConversationSeen(this.conversation) != 0) {
 			((MainUI) this.getUI()).refreshUnseenConversationNumber();
 		}
@@ -268,7 +260,7 @@ public class MessagesView extends CssLayout implements View {
 			}
 
 			for (Component userDiv : this.userList) {
-				if (((UserDiv) userDiv).getUser().getDbUser().equals(this.receiver)) {
+				if (((UserDiv) userDiv).getUser().equals(this.receiver)) {
 					CssLayout div = (CssLayout) userDiv;
 					this.userList.removeComponent(userDiv);
 					this.changeUserDivMessage(div, message.getMessage());
@@ -303,7 +295,7 @@ public class MessagesView extends CssLayout implements View {
 		}
 		boolean exists = false;
 		for (Component userDiv : this.userList) {
-			if (((UserDiv) userDiv).getUser().getDbUser().equals(message.getSender())) {
+			if (((UserDiv) userDiv).getUser().equals(message.getSender())) {
 				this.userList.removeComponent(userDiv);
 				this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
 				((CssLayout) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
@@ -335,11 +327,11 @@ public class MessagesView extends CssLayout implements View {
 			this.fillUserList();
 		} else {
 			this.userList.removeAllComponents();
-			this.ldapService.findByFullNameContaining(event.getValue()).forEach(user -> {
+			this.userService.findByFullNameContaining(event.getValue()).forEach(user -> {
 				Message message = new Message();
 				message.setMessage("");
 				// message.setSeen(true);
-				this.userList.addComponent(this.createUserDivFromLdap(user, message));
+				this.userList.addComponent(this.createUserDivFromDbUser(user, message));
 			});
 		}
 	}
@@ -352,7 +344,7 @@ public class MessagesView extends CssLayout implements View {
 
 	public void messageSeen(Integer receiverId) {
 		for (Component c : this.userList) {
-			if (((UserDiv) c).getUser().getDbUser().getId().equals(receiverId)) {
+			if (((UserDiv) c).getUser().getId().equals(receiverId)) {
 				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
 						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
 			}

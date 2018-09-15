@@ -26,7 +26,7 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<News> getPagedNews(int offset, int pageSize) {
 		List<News> list = new ArrayList<>();
-		list = this.em.createQuery("select n from News n join fetch n.user order by n.id desc", News.class)
+		list = this.em.createQuery("select n from News n join fetch n.user u where u.enabled = true order by n.id desc", News.class)
 				.setFirstResult(offset)
 				.setMaxResults(pageSize)
 				.getResultList();
@@ -41,6 +41,7 @@ public class NewsDaoImpl implements NewsDao {
 				"SELECT n FROM News n"
 				+ " JOIN FETCH n.user u"
 				+ " WHERE u.username IN (:usernames)"
+				+ " AND u.enabled = true"
 				+ " ORDER BY n.id DESC", News.class)
 				.setParameter("usernames", usernames)
 				.setFirstResult(offset)

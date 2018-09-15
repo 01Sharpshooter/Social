@@ -16,12 +16,9 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 
 	@Override
-	public User createDefaultUserWithUsername(String username) {
-		User user = new User();
-		user.setUsername(username);
+	public User registerDefaultUser(User user) {
 		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
 		Role role = new Role();
-		role.setUsername(username);
 		role.setRole(UserConstants.DEFAULT_ROLE);
 		return this.userDao.save(user);
 
@@ -34,12 +31,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByUsername(String username) {
-		User user = this.userDao.findByUsername(username);
-		if (user != null) {
-			return user;
-		} else {
-			return this.createDefaultUserWithUsername(username);
-		}
+		return this.userDao.findByUsername(username);
+//		if (user != null) {
+//			return user;
+//		} else {
+//			return this.registerDefaultUser(username);
+//		}
 
 	}
 
@@ -55,13 +52,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findAllLike(String username) {
-		return this.userDao.findAllLike(username);
+	public List<User> findByFullNameContaining(String fullName) {
+		return this.userDao.findByFullNameContaining(fullName);
 	}
 
 	@Override
 	public User save(User user) {
 		return this.userDao.save(user);
+	}
+
+	@Override
+	public void disable(User user) {
+		this.userDao.disable(user);
+
 	}
 
 }
