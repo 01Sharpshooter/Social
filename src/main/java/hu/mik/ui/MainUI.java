@@ -44,9 +44,9 @@ import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.listeners.NewMessageListener;
+import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
-import hu.mik.services.ChatService;
 import hu.mik.services.UserService;
 import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
@@ -107,6 +107,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		workingSpace.setSizeFull();
 
 		MessageBroadcastService.register(this, this.socialUser.getDbUser().getId());
+		System.err.println(this.socialUser.getLdapUser().getId());
+		System.err.println(this.ldapService.findGroupsByUserId(this.socialUser.getLdapUser().getId()));
 
 //		this.setErrorHandler(new DefaultExceptionHandler(this));
 
@@ -324,9 +326,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 				ContentMode.HTML);
 		lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
 
-		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
-			layout.addComponent(lblAdmin);
-		}
+//		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
+//			layout.addComponent(lblAdmin);
+//		}
 		layout.addComponent(lblMain);
 		layout.addComponent(this.lblMessages);
 		layout.addComponent(lblContacts);

@@ -11,7 +11,7 @@ import org.springframework.ldap.odm.annotations.Transient;
 
 import hu.mik.constants.LdapConstants;
 
-@Entry(base = LdapConstants.OU_USERS, objectClasses = { "top", "inetOrgPerson", "person" })
+@Entry(base = LdapConstants.OU_USERS_FULL, objectClasses = { "top", "inetOrgPerson", "person", "organizationalPerson" })
 public class LdapUser {
 	@Id
 	private Name id;

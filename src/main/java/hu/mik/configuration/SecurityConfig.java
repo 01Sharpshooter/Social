@@ -40,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		  .usersByUsernameQuery("select username, passwd, enabled from t_user where username=?")
 //		  .authoritiesByUsernameQuery("select username, role from t_role where username=?");
 		auth.ldapAuthentication().userSearchBase(LdapConstants.OU_USERS).userSearchFilter("uid={0}")
-				.groupSearchBase(LdapConstants.OU_GROUPS).groupRoleAttribute("cn").groupSearchFilter("member={0}")
-				.contextSource().url("ldap://localhost:10389/").and().passwordCompare()
+				.groupSearchBase(LdapConstants.OU_GROUPS).groupSearchFilter("member={0}").contextSource()
+				.url("ldap://localhost:10389/" + LdapConstants.SEARCH_BASE).and().passwordCompare()
 				.passwordEncoder(new LdapShaPasswordEncoder()).passwordAttribute("userPassword");
 	}
 }

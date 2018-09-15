@@ -10,7 +10,7 @@ import org.springframework.ldap.odm.annotations.Id;
 
 import hu.mik.constants.LdapConstants;
 
-@Entry(base = LdapConstants.OU_GROUPS, objectClasses = { "top", "groupOfNames" })
+@Entry(base = LdapConstants.OU_GROUPS_FULL, objectClasses = { "top", "groupOfNames" })
 public class LdapGroup {
 	@Id
 	private Name id;

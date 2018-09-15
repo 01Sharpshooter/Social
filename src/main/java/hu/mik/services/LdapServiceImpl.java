@@ -41,7 +41,7 @@ public class LdapServiceImpl implements LdapService {
 
 	@Override
 	public List<LdapUser> findAllUsers() {
-		return this.ldapRepositoryUsers.findAll();
+		return this.ldapRepositoryUsers.findByFullNameContaining(" "); // findAll is bugged, it doesn't check entry base
 	}
 
 	@Override
