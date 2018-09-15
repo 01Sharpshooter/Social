@@ -69,18 +69,17 @@ public class UserListLayout extends CssLayout {
 
 		if (userListDb != null) {
 			for (User dbUser : userListDb) {
-				LdapUser ldapUser = this.ldapService.findUserByUsername(dbUser.getUsername());
 				Image image = new Image(null,
 						new FileResource(ProfileImageHelper.loadUserImage(dbUser.getImageName())));
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName = new Label(ldapUser.getFullName());
+				Label lblName = new Label(dbUser.getFullName());
 				HorizontalLayout userDiv = new HorizontalLayout();
 				userDiv.setHeight("60px");
 				userDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 				userDiv.addComponent(image);
 				userDiv.addComponent(lblName);
-				userDiv.setId(ldapUser.getUsername());
+				userDiv.setId(dbUser.getUsername());
 				userDiv.addStyleName(ThemeConstants.BORDERED);
 				userDiv.addLayoutClickListener(this::layoutClickListener);
 				this.addComponent(userDiv);

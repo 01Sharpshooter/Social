@@ -38,11 +38,11 @@ public class UserListView extends Panel implements View {
 
 	}
 
-	private void fill(String username) {
+	private void fill(String fullName) {
 		CssLayout layout = new CssLayout();
 
 		List<LdapUser> userListLdap = new ArrayList<>();
-		userListLdap = this.ldapService.findByFullNameContaining(username);
+		userListLdap = this.ldapService.findByFullNameContaining(fullName);
 
 		if (userListLdap != null) {
 			layout = this.userListLayout.createUserListLayoutFromLdap(userListLdap);

@@ -27,7 +27,7 @@ public class NewsComponent extends VerticalLayout {
 	private News news;
 	private NewsService newsService;
 
-	public NewsComponent(News news, boolean withDelete, String fullName, NewsService newsService) {
+	public NewsComponent(News news, boolean withDelete, NewsService newsService) {
 		this.setSpacing(true);
 		this.setMargin(true);
 		this.setSizeFull();
@@ -35,11 +35,11 @@ public class NewsComponent extends VerticalLayout {
 		this.newsService = newsService;
 		this.addStyleName(ThemeConstants.BORDERED);
 
-		this.createContent(withDelete, fullName);
+		this.createContent(withDelete);
 	}
 
-	private void createContent(boolean withDelete, String fullName) {
-		this.createHeader(withDelete, fullName);
+	private void createContent(boolean withDelete) {
+		this.createHeader(withDelete);
 		this.createMessageBlock(this.news);
 		this.createDateBlock(this.news);
 
@@ -60,13 +60,13 @@ public class NewsComponent extends VerticalLayout {
 		this.addComponent(message);
 	}
 
-	private void createHeader(boolean withDelete, String fullName) {
+	private void createHeader(boolean withDelete) {
 		HorizontalLayout header = new HorizontalLayout();
 		header.setWidth("100%");
 		header.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		this.user = this.news.getUser();
 		this.createImage(header);
-		this.createNameButton(header, fullName, withDelete);
+		this.createNameButton(header, withDelete);
 		if (withDelete) {
 			this.createDeleteButton(header);
 		}
@@ -92,8 +92,8 @@ public class NewsComponent extends VerticalLayout {
 
 	}
 
-	private void createNameButton(HorizontalLayout header, String fullName, boolean withDelete) {
-		Button nameButton = new Button(fullName,
+	private void createNameButton(HorizontalLayout header, boolean withDelete) {
+		Button nameButton = new Button(this.news.getUser().getFullName(),
 				e -> UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME + "/" + e.getButton().getId()));
 		nameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		nameButton.addStyleName(ValoTheme.LABEL_H1);

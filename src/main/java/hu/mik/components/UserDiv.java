@@ -8,25 +8,24 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 
 import hu.mik.beans.Message;
-import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.utils.ProfileImageHelper;
 
 @SuppressWarnings("serial")
 public class UserDiv extends CssLayout {
-	private SocialUserWrapper user;
+	private User user;
 
-	public UserDiv(SocialUserWrapper user, Message lastMessage, Integer loggedId) {
+	public UserDiv(User user, Message lastMessage, Integer loggedId) {
 		super();
 		this.user = user;
 
-		Image image = new Image(null,
-				new FileResource(ProfileImageHelper.loadUserImage(user.getDbUser().getImageName())));
+		Image image = new Image(null, new FileResource(ProfileImageHelper.loadUserImage(user.getImageName())));
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.addComponent(image);
 //		this.addLayoutClickListener(this::userDivClickListener);
 		Label userDivLbl = new Label(
-				user.getLdapUser().getFullName() + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
+				user.getFullName() + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
 				ContentMode.HTML);
 		if (lastMessage.getSender() == null) {
 			this.addLabelsToUserDiv(userDivLbl, null);
@@ -51,11 +50,11 @@ public class UserDiv extends CssLayout {
 		}
 	}
 
-	public SocialUserWrapper getUser() {
+	public User getUser() {
 		return this.user;
 	}
 
-	public void setUser(SocialUserWrapper user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
