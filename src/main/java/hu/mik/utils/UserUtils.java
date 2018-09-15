@@ -34,7 +34,9 @@ public class UserUtils {
 		}
 		User user = this.userService.findUserByUsername(username);
 		if (user == null) {
-			user = this.userService.createDefaultUserWithUsername(username);
+			user = new User();
+			user.setUsername(username);
+			user = this.userService.registerDefaultUser(user);
 		}
 		SocialUserWrapper socialUser = new SocialUserWrapper(user, ldapUser);
 		return socialUser;
