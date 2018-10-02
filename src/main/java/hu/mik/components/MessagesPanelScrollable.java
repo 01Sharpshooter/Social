@@ -79,7 +79,9 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	public void firstFill() {
 		this.content.removeAllComponents();
-		this.offset = this.conversation.getLastMessage().getId() + 1;
+		if (this.conversation.getLastMessage() != null) {
+			this.offset = this.conversation.getLastMessage().getId() + 1;
+		}
 		this.fillMessages();
 		this.scrollToBottom();
 	}

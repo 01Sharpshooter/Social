@@ -14,9 +14,13 @@ public interface ChatService {
 
 	public List<Message> findLastestMessagesOfUser(int number, User user);
 
-	public int setConversationSeen(Conversation conversation);
+	public int setConversationSeen(Conversation conversation, User user);
 
 	public Long getNumberOfUnseenConversations(User user);
 
 	public List<Conversation> findLatestConversationsOfUser(User user);
+
+	public Conversation saveConversation(Conversation conversation);
+
+	public Conversation findOrCreateConversationWithUser(Integer userId);
 }

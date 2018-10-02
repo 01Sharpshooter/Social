@@ -28,13 +28,13 @@ public class MessageBroadcastService {
 	}
 
 	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
-		executorService.execute(() -> {
-			if (userToListenerMap
-					.containsKey((message.getConversation().getConversationPartner(sender.getDbUser()).getId()))) {
-				userToListenerMap.get(message.getConversation().getConversationPartner(sender.getDbUser()).getId())
-						.receiveMessage(message, sender);
-			}
-		});
+//		executorService.execute(() -> {
+//			if (userToListenerMap
+//					.containsKey((message.getConversation().getConversationPartner(sender.getDbUser()).getId()))) {
+//				userToListenerMap.get(message.getConversation().getConversationPartner(sender.getDbUser()).getId())
+//						.receiveMessage(message, sender);
+//			}
+//		});
 	}
 
 	public static synchronized void messageSeen(Integer senderId, Integer seenSourceId) {

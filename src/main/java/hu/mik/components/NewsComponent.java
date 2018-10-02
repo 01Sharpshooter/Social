@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -18,7 +17,6 @@ import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.NewsService;
-import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.ProfileView;
 
 @SuppressWarnings("serial")
@@ -105,7 +103,7 @@ public class NewsComponent extends VerticalLayout {
 	}
 
 	private void createImage(HorizontalLayout header) {
-		Image image = new Image(null, new FileResource(ProfileImageHelper.loadUserImage(this.user.getImageName())));
+		Image image = this.user.getVaadinImage();
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 

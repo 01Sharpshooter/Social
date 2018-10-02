@@ -43,12 +43,12 @@ import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.ThemeConstants;
+import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
-import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
@@ -107,8 +107,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		workingSpace.setSizeFull();
 
 		MessageBroadcastService.register(this, this.socialUser.getDbUser().getId());
-		System.err.println(this.socialUser.getLdapUser().getId());
-		System.err.println(this.ldapService.findGroupsByUserId(this.socialUser.getLdapUser().getId()));
 
 //		this.setErrorHandler(new DefaultExceptionHandler(this));
 
@@ -178,7 +176,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		if (event.getViewName().equals(MessagesView.NAME)) {
 			this.messageView = (MessagesView) event.getNewView();
 		} else if (event.getOldView() instanceof MessagesView) {
-			this.messageView.setReceiver(null);
+//			this.messageView.setReceiver(null);
 		}
 		return true;
 	}
@@ -217,8 +215,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.navigationBar = new CssLayout();
 		this.navigationBar.setWidth("100%");
 		this.navigationBar.addLayoutClickListener(this::naviBarClickListener);
-		this.naviBarImage = new Image(null,
-				new FileResource(ProfileImageHelper.loadUserImage(this.socialUser.getDbUser().getImageName())));
+		this.naviBarImage = this.socialUser.getDbUser().getVaadinImage();
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		this.naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
@@ -296,8 +293,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	public void refreshImage() {
 		this.socialUser = this.userUtils.getLoggedInUser();
-		((Image) this.navigationBar.getComponent(0)).setSource(
-				new FileResource(ProfileImageHelper.loadUserImage(this.socialUser.getDbUser().getImageName())));
+		((Image) this.navigationBar.getComponent(0)).setSource(new FileResource(
+				new File(UserConstants.PROFILE_PICTURE_LOCATION + this.socialUser.getDbUser().getImageName())));
 	}
 
 	private void nameSearchClickListener(Button.ClickEvent event) {

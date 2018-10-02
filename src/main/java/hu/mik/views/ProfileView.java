@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FileResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
@@ -28,7 +27,6 @@ import hu.mik.enums.Texts;
 import hu.mik.factories.NewsPanelFactory;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
-import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
@@ -64,8 +62,7 @@ public class ProfileView extends VerticalLayout implements View {
 				this.header = new CssLayout();
 				CssLayout headerButtonList = this.createHeaderBtnList();
 
-				Image image = new Image(null, new FileResource(
-						ProfileImageHelper.loadUserImage(this.socialProfileUser.getDbUser().getImageName())));
+				Image image = this.socialProfileUser.getDbUser().getVaadinImage();
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(this.socialProfileUser.getLdapUser().getFullName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);

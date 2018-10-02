@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.spring.annotation.SpringView;
@@ -25,7 +24,6 @@ import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.UserService;
-import hu.mik.utils.ProfileImageHelper;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -69,8 +67,7 @@ public class RequestsView extends Panel implements View {
 		for (FriendRequest request : requests) {
 			i++;
 			User requestUser = this.userService.findUserById(request.getRequestorId());
-			Image image = new Image(null,
-					new FileResource(ProfileImageHelper.loadUserImage(requestUser.getImageName())));
+			Image image = requestUser.getVaadinImage();
 			image.setHeight("100%");
 			image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 			Button nameButton = new Button(requestUser.getUsername(), this::userNameListener);

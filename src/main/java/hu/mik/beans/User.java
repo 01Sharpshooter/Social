@@ -1,11 +1,21 @@
 package hu.mik.beans;
 
+import java.io.File;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.vaadin.server.FileResource;
+import com.vaadin.ui.Image;
+
+import hu.mik.constants.UserConstants;
 
 @Entity
 @Table(name = "t_user")
@@ -22,6 +32,11 @@ public class User {
 	private String fullName;
 	@Column(name = "enabled")
 	private boolean enabled;
+	@OneToMany(mappedBy = "user")
+	private Set<ConversationUser> conversationUserSet;
+
+	@Transient
+	private Image image;
 
 	public Integer getId() {
 		return this.id;
@@ -61,6 +76,18 @@ public class User {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Image getVaadinImage() {
+		File file = new File(UserConstants.PROFILE_PICTURE_LOCATION + this.imageName);
+//		if (this.image == null /* || !this.image.getSource().equals(new FileResource(file)) */) { // TODO caching issues
+		if (!file.exists()) {
+			file = new File(UserConstants.PROFILE_PICTURE_LOCATION + UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
+		}
+		this.image = new Image(null, new FileResource(file));
+//		}
+		return this.image;
+
 	}
 
 	@Override

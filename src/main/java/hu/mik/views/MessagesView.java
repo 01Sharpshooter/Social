@@ -2,7 +2,6 @@ package hu.mik.views;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,14 +25,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
 import hu.mik.beans.Conversation;
+import hu.mik.beans.ConversationUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
+import hu.mik.components.ConversationDiv;
 import hu.mik.components.MessagesPanelScrollable;
-import hu.mik.components.UserDiv;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.ChatService;
-import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
@@ -46,30 +45,26 @@ public class MessagesView extends CssLayout implements View {
 	public static final String NAME = "messages";
 
 	@Autowired
-	private ChatService messageService;
+	private ChatService chatService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private LdapService ldapService;
 	@Autowired
 	private UserUtils userUtils;
 
 	private MessagesPanelScrollable messagesPanel;
-	private CssLayout userList;
+	private CssLayout conversationListLayout;
 	private HorizontalLayout textWriter;
 
-	private SocialUserWrapper sender;
+	private SocialUserWrapper loggedUser;
 
-	private User receiver;
-
-	private Conversation conversation;
+	private ConversationDiv selectedConversationDiv;
 
 	private TextField tfSearch;
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
-			this.sender = this.userUtils.getLoggedInUser();
+			this.loggedUser = this.userUtils.getLoggedInUser();
 			this.addStyleName(ThemeConstants.BORDERED);
 			this.setSizeFull();
 			this.createContent(event);
@@ -90,36 +85,36 @@ public class MessagesView extends CssLayout implements View {
 
 		this.createChat();
 
-		this.fillUserList();
+		this.fillConversationList();
 
+		this.addConversationByURLParam(event);
+
+	}
+
+	private void addConversationByURLParam(ViewChangeEvent event) {
 		String parameters[] = event.getParameters().split("/");
 		if (parameters.length > 0 && !parameters[0].isEmpty()) {
-			this.receiver = this.userService.findUserById(Integer.parseInt(parameters[0]));
-			if (this.receiver != null) {
-				for (Component userDiv : this.userList) {
-					if (this.receiver.equals(((UserDiv) userDiv).getUser())) {
-						this.userList.removeComponent(userDiv);
-						this.userList.addComponent(userDiv, 0);
-						this.userListSelectionChange(this.userList.getComponent(0));
-						this.fillChat((UserDiv) this.userList.getComponent(0));
-						return;
-					}
-				}
+			Conversation conversation = this.chatService
+					.findOrCreateConversationWithUser(Integer.parseInt(parameters[0]));
+			ConversationDiv convDiv = this.createConversationDiv(conversation);
+			this.removeConversationDivIfExists(convDiv);
+			this.conversationListLayout.addComponent(convDiv, 0);
+			this.conversationListSelectionChange(convDiv);
+		}
+	}
 
-//				Message lastMessage = this.messageService.findLastMessageOfUsers(this.receiver,
-//						this.sender.getDbUser());
-//				if (lastMessage == null) {
-//					lastMessage = new Message();
-//					lastMessage.setMessage("");
-				// lastMessage.setSeen(false);
-//			}
-//			CssLayout newDiv = this.createUserDivFromDbUser(this.receiver, lastMessage);
-//			this.userList.addComponent(newDiv, 0);
-//			this.userListSelectionChange(newDiv);
-//			this.fillChat((UserDiv) this.userList.getComponent(0));
+	private void removeConversationDivIfExists(ConversationDiv convDiv) {
+		ConversationDiv divToDelete = null;
+		// Basic equals does not seem to work..
+		for (Component c : this.conversationListLayout) {
+			if (((ConversationDiv) c).getConversation().getId().equals(convDiv.getConversation().getId())) {
+				divToDelete = (ConversationDiv) c;
+				break;
 			}
 		}
-
+		if (divToDelete != null) {
+			this.conversationListLayout.removeComponent(divToDelete);
+		}
 	}
 
 	private void createMessagesPanel() {
@@ -127,10 +122,10 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void createUserList() {
-		this.userList = new CssLayout();
-		this.userList.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
-		this.userList.setId("latestMessagesLayout");
-		this.addComponent(this.userList);
+		this.conversationListLayout = new CssLayout();
+		this.conversationListLayout.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
+		this.conversationListLayout.setId("latestMessagesLayout");
+		this.addComponent(this.conversationListLayout);
 	}
 
 	private void createTextFieldSearch() {
@@ -144,50 +139,22 @@ public class MessagesView extends CssLayout implements View {
 		this.setSizeFull();
 	}
 
-	private List<UserDiv> fillUserList() {
-		List<Conversation> latestConversations = this.messageService
-				.findLatestConversationsOfUser(this.sender.getDbUser());
-		List<UserDiv> userDivs = new ArrayList<>();
-		UserDiv userDiv;
+	private void fillConversationList() {
+		List<Conversation> latestConversation = this.chatService
+				.findLatestConversationsOfUser(this.loggedUser.getDbUser());
+		ConversationDiv conversationDiv;
 
-		for (Conversation conversation : latestConversations) {
-			if (conversation.getLastMessage().getSender().equals(this.sender.getDbUser())) {
-				userDiv = this.createUserDivFromDbUser(conversation.getConversationPartner(this.sender.getDbUser()),
-						conversation.getLastMessage());
-			} else {
-				userDiv = this.createUserDivFromDbUser(conversation.getLastMessage().getSender(),
-						conversation.getLastMessage());
-			}
-			this.userList.addComponent(userDiv);
-			userDivs.add(userDiv);
+		for (Conversation conversation : latestConversation) {
+			conversationDiv = this.createConversationDiv(conversation);
+			this.conversationListLayout.addComponent(conversationDiv);
 		}
-		return userDivs;
 	}
 
-	private UserDiv createUserDivFromDbUser(User dbUser, Message lastMessage) {
-		return this.createUserDiv(dbUser, lastMessage);
-	}
-
-	private UserDiv createUserDiv(User dbUser, Message lastMessage) {
-		UserDiv userDiv = new UserDiv(dbUser, lastMessage, this.sender.getDbUser().getId());
+	private ConversationDiv createConversationDiv(Conversation conversation) {
+		ConversationDiv userDiv = new ConversationDiv(conversation, this.loggedUser.getDbUser());
 		userDiv.addLayoutClickListener(e -> {
-			if (lastMessage.getConversation() != null) {
-				this.conversation = lastMessage.getConversation();
-			} else {
-				this.conversation = new Conversation(this.sender.getDbUser(), dbUser);
-			}
-			this.fillChat((UserDiv) e.getComponent());
+			this.conversationListSelectionChange(userDiv);
 		});
-		return userDiv;
-	}
-
-	private CssLayout changeUserDivMessage(CssLayout userDiv, String lastMessage) {
-		String name;
-		String[] stringArray = ((Label) userDiv.getComponent(1)).getValue().split("<");
-		name = stringArray[0];
-		userDiv.removeComponent(userDiv.getComponent(1));
-		Label lblName = new Label(name + "</br><span id=\"message\">" + lastMessage + "</span>", ContentMode.HTML);
-		userDiv.addComponent(lblName, 1);
 		return userDiv;
 	}
 
@@ -220,118 +187,135 @@ public class MessagesView extends CssLayout implements View {
 		this.textWriter.setEnabled(false);
 	}
 
-	private void fillChat(UserDiv userDiv) {
-		this.textWriter.setEnabled(true);
-		this.receiver = userDiv.getUser();
-		if (this.messageService.setConversationSeen(this.conversation) != 0) {
-			((MainUI) this.getUI()).refreshUnseenConversationNumber();
+	private void fillChat() {
+		this.messagesPanel.setLoggedUserAndConversation(this.loggedUser,
+				this.selectedConversationDiv.getConversation());
+		if (this.selectedConversationDiv.getConversation().getId() != null) {
+			if (this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
+					this.loggedUser.getDbUser()) != 0) {
+				((MainUI) this.getUI()).refreshUnseenConversationNumber();
+			}
+//		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
+			this.messagesPanel.firstFill();
+			this.messagesPanel.scrollToBottom();
 		}
-		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
-		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
-		this.messagesPanel.setLoggedUserAndConversation(this.sender, this.conversation);
-		this.messagesPanel.firstFill();
-		this.messagesPanel.scrollToBottom();
-		this.userListSelectionChange(userDiv);
-
 	}
 
 	private void sendMessage(String messageText) {
-		Message message = new Message();
-		message.setMessage(messageText);
-
-		if (message.getMessage().length() != 0) {
-			message.setSender(this.sender.getDbUser());
-			this.conversation.setLastMessage(message);
-			message.setConversation(this.conversation);
-			message.setTime(new Timestamp(new Date().getTime()));
-			this.messageService.saveMessage(message);
-			MessageBroadcastService.sendMessage(message, this.sender);
-			Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
-					ContentMode.HTML);
-			newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
-			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
-			this.messagesPanel.addMessage(newMessage);
+		if (!messageText.isEmpty()) {
+			Message message = this.initAndSaveMessageToConversation(messageText);
+			MessageBroadcastService.sendMessage(message, this.loggedUser);
+			this.addNewMessageLabelToChatPanel(message);
 			this.messagesPanel.scrollToBottom();
 
-			if (!this.tfSearch.isEmpty()) {
-				this.tfSearch.clear();
-				return;
-			}
+//			if (!this.tfSearch.isEmpty()) {
+//				this.tfSearch.clear();
+//				return;
+//			}
 
-			for (Component userDiv : this.userList) {
-				if (((UserDiv) userDiv).getUser().equals(this.receiver)) {
-					CssLayout div = (CssLayout) userDiv;
-					this.userList.removeComponent(userDiv);
-					this.changeUserDivMessage(div, message.getMessage());
-					div.replaceComponent(div.getComponent(2),
-							new Label(VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml(), ContentMode.HTML));
-					this.userList.addComponent(userDiv, 0);
-					this.userListSelectionChange(userDiv);
-					break;
-				}
-			}
+			this.moveConversationToTopOfList(message);
+
 		}
 
 	}
 
-	public void receiveMessage(Message message) {
-		if (message.getSender().equals(this.receiver)) {
-			Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
-					ContentMode.HTML);
-			newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-			newMessage.setDescription(this.getMessageDateDesc(new Date()));
-			this.messagesPanel.addReceivedMessage(newMessage);
-			this.messagesPanel.scrollToBottom();
-			this.messageService.setConversationSeen(this.conversation);
-			MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
+	private void moveConversationToTopOfList(Message message) {
+		this.conversationListLayout.removeComponent(this.selectedConversationDiv);
+		this.selectedConversationDiv.changeLastMessage(message);
+		this.selectedConversationDiv.replaceComponent(this.selectedConversationDiv.getComponent(2),
+				new Label(VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml(), ContentMode.HTML));
+		this.conversationListLayout.addComponent(this.selectedConversationDiv, 0);
+	}
 
-		} else {
-			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
-			Notification notification = Notification.show(this.sender.getLdapUser().getFullName(), message.getMessage(),
-					Notification.Type.TRAY_NOTIFICATION);
-			notification.setIcon(VaadinIcons.COMMENT);
+	private Message initAndSaveMessageToConversation(String messageText) {
+		Message message = new Message();
+		message.setMessage(messageText);
+		message.setSender(this.loggedUser.getDbUser());
+		message.setConversation(this.selectedConversationDiv.getConversation());
+		message.setTime(new Timestamp(new Date().getTime()));
+		for (ConversationUser cu : this.selectedConversationDiv.getConversation().getConversationUsers()) {
+			System.err.println("!!! " + cu.getConversation());
+			if (!cu.getUser().equals(this.loggedUser.getDbUser())) {
+				cu.setSeen(false);
+			} else {
+				cu.setSeen(true);
+			}
 		}
+		this.selectedConversationDiv.getConversation().setLastMessage(message);
+		this.selectedConversationDiv
+				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+		return message;
+	}
+
+	private void addNewMessageLabelToChatPanel(Message message) {
+		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
+		newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
+		newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
+		newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
+		this.messagesPanel.addMessage(newMessage);
+	}
+
+	public void receiveMessage(Message message) {
+//		if (message.getSender().equals(this.receiver)) {
+		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
+		newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
+		newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
+		newMessage.setDescription(this.getMessageDateDesc(new Date()));
+		this.messagesPanel.addReceivedMessage(newMessage);
+		this.messagesPanel.scrollToBottom();
+		this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
+				this.loggedUser.getDbUser());
+//			MessageBroadcastService.messageSeen(this.receiver.getId(), this.loggedUser.getDbUser().getId());
+
+//		} else {
+		((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
+		Notification notification = Notification.show(this.loggedUser.getLdapUser().getFullName(), message.getMessage(),
+				Notification.Type.TRAY_NOTIFICATION);
+		notification.setIcon(VaadinIcons.COMMENT);
+//		}
 		boolean exists = false;
-		for (Component userDiv : this.userList) {
-			if (((UserDiv) userDiv).getUser().equals(message.getSender())) {
-				this.userList.removeComponent(userDiv);
-				this.changeUserDivMessage((CssLayout) userDiv, message.getMessage());
-				((CssLayout) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
-				this.userList.addComponent(userDiv, 0);
-				if (!message.getSender().equals(this.receiver)) {
-					userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
-				}
+		for (Component userDiv : this.conversationListLayout) {
+			if (((ConversationDiv) userDiv).getConversation().equals(message.getConversation())) {
+				this.conversationListLayout.removeComponent(userDiv);
+				((ConversationDiv) userDiv).changeLastMessage(message);
+				((ConversationDiv) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
+				this.conversationListLayout.addComponent(userDiv, 0);
+//				if (!message.getSender().equals(this.receiver)) {
+				userDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+//				}
 				exists = true;
 				break;
 			}
 		}
 		if (!exists) {
 			User user = this.userService.findUserById(message.getSender().getId());
-			CssLayout newDiv = this.createUserDivFromDbUser(user, message);
-			newDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
-			this.userList.addComponent(newDiv, 0);
+//			CssLayout newDiv = this.createUserDivFromDbUser(user, message);
+//			newDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+//			this.userList.addComponent(newDiv, 0);
 		}
 	}
 
-	private void userListSelectionChange(Component userDiv) {
-		this.userList.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
+	private void conversationListSelectionChange(ConversationDiv userDiv) {
+		this.selectedConversationDiv = userDiv;
+		this.textWriter.setEnabled(true);
+		this.fillChat();
+		this.conversationListLayout.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
+		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		userDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
 	}
 
 	private void searchValueChangeListener(ValueChangeEvent<String> event) {
 		if (event.getValue().equals("")) {
-			this.userList.removeAllComponents();
-			this.userList.setSizeUndefined();
-			this.fillUserList();
+			this.conversationListLayout.removeAllComponents();
+			this.conversationListLayout.setSizeUndefined();
+			this.fillConversationList();
 		} else {
-			this.userList.removeAllComponents();
+			this.conversationListLayout.removeAllComponents();
 			this.userService.findByFullNameContaining(event.getValue()).forEach(user -> {
 				Message message = new Message();
 				message.setMessage("");
 				// message.setSeen(true);
-				this.userList.addComponent(this.createUserDivFromDbUser(user, message));
+//				this.userList.addComponent(this.createUserDivFromDbUser(user, message));
 			});
 		}
 	}
@@ -343,20 +327,12 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	public void messageSeen(Integer receiverId) {
-		for (Component c : this.userList) {
-			if (((UserDiv) c).getUser().getId().equals(receiverId)) {
-				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
-						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
-			}
-		}
-	}
-
-	public User getReceiver() {
-		return this.receiver;
-	}
-
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+//		for (Component c : this.userList) {
+//			if (((UserDiv) c).getUser().getId().equals(receiverId)) {
+//				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
+//						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
+//			}
+//		}
 	}
 
 }

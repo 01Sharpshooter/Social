@@ -49,8 +49,6 @@ public class MessageDaoImpl implements MessageDao {
 		list=this.em.createQuery("select m from Message m"
 				+ " join fetch m.sender"
 				+ " join fetch m.conversation c"
-				+ " join fetch c.user1"
-				+ " join fetch c.user2"
 				+ " where"
 				+ " m.conversation = :conversation"
 				+ " and m.id < :offset"

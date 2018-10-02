@@ -27,7 +27,6 @@ import com.vaadin.ui.Upload.SucceededListener;
 import hu.mik.beans.User;
 import hu.mik.constants.UserConstants;
 import hu.mik.services.UserService;
-import hu.mik.utils.ProfileImageHelper;
 import hu.mik.utils.UserUtils;
 import hu.mik.views.PictureUploadView;
 
@@ -98,7 +97,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			ops.close();
 
 			if (!user.getImageName().equals("user.png")) {
-				File fileToDel = ProfileImageHelper.loadUserImage(user.getImageName());
+				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
 				fileToDel.delete();
 			}
 			user.setImageName(imageName);

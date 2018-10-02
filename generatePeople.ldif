@@ -1,0 +1,2900 @@
+version: 1
+
+dn: cn=Fay Annab,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Fay Annab
+sn: Annab
+description: This is Fay Annab's description
+facsimileTelephoneNumber: +1 510 157-4527
+l: Milpitas
+ou: Administrative
+postalAddress: Administrative$Milpitas
+telephoneNumber: +1 510 554-8655
+title: Junior Administrative Stooge
+userPassword: Password1
+uid: AnnabF
+givenName: Fay
+mail: AnnabF@ns-mail3.com
+carLicense: JX9V8P
+departmentNumber: 7041
+employeeType: Employee
+homePhone: +1 510 247-2649
+initials: F. A.
+mobile: +1 510 770-8464
+pager: +1 510 586-6212
+roomNumber: 8804
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com 
+
+dn: cn=Deedee Keehan,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Deedee Keehan
+sn: Keehan
+description: This is Deedee Keehan's description
+facsimileTelephoneNumber: +1 408 931-8938
+l: Redwood Shores
+ou: Product Testing
+postalAddress: Product Testing$Redwood Shores
+telephoneNumber: +1 408 754-1407
+title: Chief Product Testing Vice President
+userPassword: Password1
+uid: KeehanD
+givenName: Deedee
+mail: KeehanD@ns-mail5.com
+carLicense: YE910S
+departmentNumber: 8362
+employeeType: Employee
+homePhone: +1 408 917-1893
+initials: D. K.
+mobile: +1 408 949-7451
+pager: +1 408 343-1368
+roomNumber: 9939
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com
+manager: cn=Rosemarie Tohama,ou=users,dc=social, dc=com 
+
+dn: cn=Bhupinder Whisenhunt,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Bhupinder Whisenhunt
+sn: Whisenhunt
+description: This is Bhupinder Whisenhunt's description
+facsimileTelephoneNumber: +1 213 272-7703
+l: Menlo Park
+ou: Human Resources
+postalAddress: Human Resources$Menlo Park
+telephoneNumber: +1 213 719-4304
+title: Master Human Resources Fellow
+userPassword: Password1
+uid: WhisenhB
+givenName: Bhupinder
+mail: WhisenhB@ns-mail5.com
+carLicense: FUNUIU
+departmentNumber: 6652
+employeeType: Normal
+homePhone: +1 213 408-1802
+initials: B. W.
+mobile: +1 213 423-1075
+pager: +1 213 433-6339
+roomNumber: 8598
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com 
+
+dn: cn=Sabrina Hotlist,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sabrina Hotlist
+sn: Hotlist
+description: This is Sabrina Hotlist's description
+facsimileTelephoneNumber: +1 818 838-4690
+l: Santa Clara
+ou: Administrative
+postalAddress: Administrative$Santa Clara
+telephoneNumber: +1 818 753-8695
+title: Junior Administrative Admin
+userPassword: Password1
+uid: HotlistS
+givenName: Sabrina
+mail: HotlistS@ns-mail6.com
+carLicense: V92D5E
+departmentNumber: 2908
+employeeType: Employee
+homePhone: +1 818 379-4748
+initials: S. H.
+mobile: +1 818 420-4773
+pager: +1 818 555-1085
+roomNumber: 9420
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com 
+
+dn: cn=Fifine Seagle,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Fifine Seagle
+sn: Seagle
+description: This is Fifine Seagle's description
+facsimileTelephoneNumber: +1 206 976-9258
+l: Redmond
+ou: Administrative
+postalAddress: Administrative$Redmond
+telephoneNumber: +1 206 138-2449
+title: Chief Administrative Manager
+userPassword: Password1
+uid: SeagleF
+givenName: Fifine
+mail: SeagleF@ns-mail5.com
+carLicense: DUXPS9
+departmentNumber: 2943
+employeeType: Normal
+homePhone: +1 206 723-8632
+initials: F. S.
+mobile: +1 206 124-8266
+pager: +1 206 116-6431
+roomNumber: 8569
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com 
+
+dn: cn=Crin Colston,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Crin Colston
+sn: Colston
+description: This is Crin Colston's description
+facsimileTelephoneNumber: +1 510 627-8327
+l: San Mateo
+ou: Administrative
+postalAddress: Administrative$San Mateo
+telephoneNumber: +1 510 975-3179
+title: Associate Administrative President
+userPassword: Password1
+uid: ColstonC
+givenName: Crin
+mail: ColstonC@ns-mail7.com
+carLicense: ADT6O5
+departmentNumber: 7156
+employeeType: Contract
+homePhone: +1 510 250-2618
+initials: C. C.
+mobile: +1 510 581-2952
+pager: +1 510 482-5059
+roomNumber: 8040
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com
+manager: cn=Florina Molani,ou=users,dc=social, dc=com 
+
+dn: cn=Shara Muenstermann,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Shara Muenstermann
+sn: Muenstermann
+description: This is Shara Muenstermann's description
+facsimileTelephoneNumber: +1 804 864-4629
+l: San Jose
+ou: Human Resources
+postalAddress: Human Resources$San Jose
+telephoneNumber: +1 804 945-5900
+title: Master Human Resources Evangelist
+userPassword: Password1
+uid: MuensteS
+givenName: Shara
+mail: MuensteS@ns-mail2.com
+carLicense: 6ASI7J
+departmentNumber: 5182
+employeeType: Employee
+homePhone: +1 804 264-2057
+initials: S. M.
+mobile: +1 804 314-8684
+pager: +1 804 270-2973
+roomNumber: 8536
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com 
+
+dn: cn=Camila Jolicoeur,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Camila Jolicoeur
+sn: Jolicoeur
+description: This is Camila Jolicoeur's description
+facsimileTelephoneNumber: +1 213 464-9578
+l: Milpitas
+ou: Peons
+postalAddress: Peons$Milpitas
+telephoneNumber: +1 213 891-5232
+title: Chief Peons Technician
+userPassword: Password1
+uid: JolicoeC
+givenName: Camila
+mail: JolicoeC@ns-mail7.com
+carLicense: 7DUQH1
+departmentNumber: 2860
+employeeType: Normal
+homePhone: +1 213 659-4993
+initials: C. J.
+mobile: +1 213 352-1893
+pager: +1 213 740-5854
+roomNumber: 8336
+secretary: cn=Courtney Zarate,ou=users,dc=social, dc=com
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com 
+
+dn: cn=Bcspatch Gundry,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Bcspatch Gundry
+sn: Gundry
+description: This is Bcspatch Gundry's description
+facsimileTelephoneNumber: +1 415 254-8054
+l: Cambridge
+ou: Management
+postalAddress: Management$Cambridge
+telephoneNumber: +1 415 621-6551
+title: Chief Management Dictator
+userPassword: Password1
+uid: GundryB
+givenName: Bcspatch
+mail: GundryB@ns-mail5.com
+carLicense: XTXOLE
+departmentNumber: 3090
+employeeType: Employee
+homePhone: +1 415 429-2348
+initials: B. G.
+mobile: +1 415 993-2602
+pager: +1 415 993-4479
+roomNumber: 8165
+manager: cn=Problems Coyle,ou=users,dc=social, dc=com 
+
+dn: cn=Anders Klapper,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Anders Klapper
+sn: Klapper
+description: This is Anders Klapper's description
+facsimileTelephoneNumber: +1 213 913-8329
+l: San Jose
+ou: Peons
+postalAddress: Peons$San Jose
+telephoneNumber: +1 213 589-2107
+title: Master Peons Punk
+userPassword: Password1
+uid: KlapperA
+givenName: Anders
+mail: KlapperA@ns-mail5.com
+carLicense: 7GWJX7
+departmentNumber: 2546
+employeeType: Normal
+homePhone: +1 213 125-6480
+initials: A. K.
+mobile: +1 213 392-1606
+pager: +1 213 209-4673
+roomNumber: 9040
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Rene Gelling,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Rene Gelling
+sn: Gelling
+description: This is Rene Gelling's description
+facsimileTelephoneNumber: +1 213 711-7573
+l: Palo Alto
+ou: Janitorial
+postalAddress: Janitorial$Palo Alto
+telephoneNumber: +1 213 561-1950
+title: Master Janitorial Vice President
+userPassword: Password1
+uid: GellingR
+givenName: Rene
+mail: GellingR@ns-mail9.com
+carLicense: 3345YJ
+departmentNumber: 2745
+employeeType: Contract
+homePhone: +1 213 991-7081
+initials: R. G.
+mobile: +1 213 558-6303
+pager: +1 213 555-5590
+roomNumber: 8186
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Methi Soules,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Methi Soules
+sn: Soules
+description: This is Methi Soules's description
+facsimileTelephoneNumber: +1 510 369-3351
+l: Alameda
+ou: Product Development
+postalAddress: Product Development$Alameda
+telephoneNumber: +1 510 891-9689
+title: Chief Product Development Stooge
+userPassword: Password1
+uid: SoulesM
+givenName: Methi
+mail: SoulesM@ns-mail3.com
+carLicense: RGRWV2
+departmentNumber: 8426
+employeeType: Contract
+homePhone: +1 510 754-4399
+initials: M. S.
+mobile: +1 510 716-7487
+pager: +1 510 981-8327
+roomNumber: 8440
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Brian Weidinger,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Brian Weidinger
+sn: Weidinger
+description: This is Brian Weidinger's description
+facsimileTelephoneNumber: +1 415 469-4281
+l: Orem
+ou: Management
+postalAddress: Management$Orem
+telephoneNumber: +1 415 491-1364
+title: Associate Management Assistant
+userPassword: Password1
+uid: WeidingB
+givenName: Brian
+mail: WeidingB@ns-mail2.com
+carLicense: P75K1V
+departmentNumber: 6708
+employeeType: Employee
+homePhone: +1 415 438-1405
+initials: B. W.
+mobile: +1 415 686-1804
+pager: +1 415 780-9417
+roomNumber: 8060
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Corrianne Lassig,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Corrianne Lassig
+sn: Lassig
+description: This is Corrianne Lassig's description
+facsimileTelephoneNumber: +1 510 661-9512
+l: Redmond
+ou: Administrative
+postalAddress: Administrative$Redmond
+telephoneNumber: +1 510 976-4956
+title: Junior Administrative Director
+userPassword: Password1
+uid: LassigC
+givenName: Corrianne
+mail: LassigC@ns-mail7.com
+carLicense: 873EHJ
+departmentNumber: 3955
+employeeType: Employee
+homePhone: +1 510 124-8198
+initials: C. L.
+mobile: +1 510 448-1408
+pager: +1 510 622-7144
+roomNumber: 9527
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Berton Montgomery,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Berton Montgomery
+sn: Montgomery
+description: This is Berton Montgomery's description
+facsimileTelephoneNumber: +1 818 491-7367
+l: Fremont
+ou: Payroll
+postalAddress: Payroll$Fremont
+telephoneNumber: +1 818 374-1401
+title: Master Payroll Madonna
+userPassword: Password1
+uid: MontgomB
+givenName: Berton
+mail: MontgomB@ns-mail6.com
+carLicense: KJHJHK
+departmentNumber: 2366
+employeeType: Contract
+homePhone: +1 818 604-1739
+initials: B. M.
+mobile: +1 818 579-6220
+pager: +1 818 794-9316
+roomNumber: 9349
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Kaylil Bennison,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kaylil Bennison
+sn: Bennison
+description: This is Kaylil Bennison's description
+facsimileTelephoneNumber: +1 206 213-6276
+l: Menlo Park
+ou: Janitorial
+postalAddress: Janitorial$Menlo Park
+telephoneNumber: +1 206 688-1360
+title: Supreme Janitorial Director
+userPassword: Password1
+uid: BennisoK
+givenName: Kaylil
+mail: BennisoK@ns-mail4.com
+carLicense: T232V8
+departmentNumber: 9094
+employeeType: Contract
+homePhone: +1 206 210-4457
+initials: K. B.
+mobile: +1 206 950-2474
+pager: +1 206 942-2353
+roomNumber: 9172
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Kerrin Bundschuh,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kerrin Bundschuh
+sn: Bundschuh
+description: This is Kerrin Bundschuh's description
+facsimileTelephoneNumber: +1 213 356-1453
+l: Milpitas
+ou: Human Resources
+postalAddress: Human Resources$Milpitas
+telephoneNumber: +1 213 266-5518
+title: Junior Human Resources Evangelist
+userPassword: Password1
+uid: BundschK
+givenName: Kerrin
+mail: BundschK@ns-mail7.com
+carLicense: O2T8RR
+departmentNumber: 1243
+employeeType: Contract
+homePhone: +1 213 946-5231
+initials: K. B.
+mobile: +1 213 607-3360
+pager: +1 213 695-2931
+roomNumber: 8557
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Zahara Busby,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Zahara Busby
+sn: Busby
+description: This is Zahara Busby's description
+facsimileTelephoneNumber: +1 415 474-3129
+l: Redwood Shores
+ou: Management
+postalAddress: Management$Redwood Shores
+telephoneNumber: +1 415 428-7088
+title: Supreme Management Punk
+userPassword: Password1
+uid: BusbyZ
+givenName: Zahara
+mail: BusbyZ@ns-mail7.com
+carLicense: 62BYO0
+departmentNumber: 3813
+employeeType: Contract
+homePhone: +1 415 686-8112
+initials: Z. B.
+mobile: +1 415 468-8148
+pager: +1 415 308-3892
+roomNumber: 8171
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Thuy Kenworthy,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Thuy Kenworthy
+sn: Kenworthy
+description: This is Thuy Kenworthy's description
+facsimileTelephoneNumber: +1 213 832-9897
+l: San Mateo
+ou: Janitorial
+postalAddress: Janitorial$San Mateo
+telephoneNumber: +1 213 607-6800
+title: Associate Janitorial Engineer
+userPassword: Password1
+uid: KenwortT
+givenName: Thuy
+mail: KenwortT@ns-mail2.com
+carLicense: UONSDY
+departmentNumber: 3484
+employeeType: Normal
+homePhone: +1 213 790-1902
+initials: T. K.
+mobile: +1 213 607-8150
+pager: +1 213 859-5719
+roomNumber: 8513
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Mohan Fiegel,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Mohan Fiegel
+sn: Fiegel
+description: This is Mohan Fiegel's description
+facsimileTelephoneNumber: +1 510 530-8385
+l: Sunnyvale
+ou: Management
+postalAddress: Management$Sunnyvale
+telephoneNumber: +1 510 604-6831
+title: Master Management Punk
+userPassword: Password1
+uid: FiegelM
+givenName: Mohan
+mail: FiegelM@ns-mail3.com
+carLicense: E6CEX1
+departmentNumber: 5417
+employeeType: Contract
+homePhone: +1 510 127-5813
+initials: M. F.
+mobile: +1 510 499-6468
+pager: +1 510 524-9725
+roomNumber: 8829
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Manon Epplett,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Manon Epplett
+sn: Epplett
+description: This is Manon Epplett's description
+facsimileTelephoneNumber: +1 213 879-8297
+l: Alameda
+ou: Management
+postalAddress: Management$Alameda
+telephoneNumber: +1 213 222-6013
+title: Associate Management Artist
+userPassword: Password1
+uid: EpplettM
+givenName: Manon
+mail: EpplettM@ns-mail6.com
+carLicense: H6SJ75
+departmentNumber: 8107
+employeeType: Normal
+homePhone: +1 213 372-1657
+initials: M. E.
+mobile: +1 213 904-5273
+pager: +1 213 189-5796
+roomNumber: 8519
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Thierry Digiacomo,ou=users,dc=social, dc=com 
+
+dn: cn=Vanda Capozzi,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Vanda Capozzi
+sn: Capozzi
+description: This is Vanda Capozzi's description
+facsimileTelephoneNumber: +1 206 547-1944
+l: Fremont
+ou: Administrative
+postalAddress: Administrative$Fremont
+telephoneNumber: +1 206 334-7505
+title: Associate Administrative Czar
+userPassword: Password1
+uid: CapozziV
+givenName: Vanda
+mail: CapozziV@ns-mail5.com
+carLicense: 3R2IYF
+departmentNumber: 3721
+employeeType: Normal
+homePhone: +1 206 499-5243
+initials: V. C.
+mobile: +1 206 680-2069
+pager: +1 206 435-8890
+roomNumber: 9322
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Joellen Weston-Dawkes,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Joellen Weston-Dawkes
+sn: Weston-Dawkes
+description: This is Joellen Weston-Dawkes's description
+facsimileTelephoneNumber: +1 510 512-1479
+l: Cupertino
+ou: Payroll
+postalAddress: Payroll$Cupertino
+telephoneNumber: +1 510 134-8122
+title: Associate Payroll Writer
+userPassword: Password1
+uid: Weston-J
+givenName: Joellen
+mail: Weston-J@ns-mail6.com
+carLicense: X3P6H0
+departmentNumber: 2794
+employeeType: Employee
+homePhone: +1 510 695-6719
+initials: J. W.
+mobile: +1 510 526-4137
+pager: +1 510 914-2044
+roomNumber: 8525
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Kippie Cogwell,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kippie Cogwell
+sn: Cogwell
+description: This is Kippie Cogwell's description
+facsimileTelephoneNumber: +1 804 256-5843
+l: San Jose
+ou: Management
+postalAddress: Management$San Jose
+telephoneNumber: +1 804 235-9972
+title: Chief Management Punk
+userPassword: Password1
+uid: CogwellK
+givenName: Kippie
+mail: CogwellK@ns-mail8.com
+carLicense: O7JH5H
+departmentNumber: 8737
+employeeType: Employee
+homePhone: +1 804 577-7887
+initials: K. C.
+mobile: +1 804 659-3322
+pager: +1 804 576-8339
+roomNumber: 8378
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Coila McKibbin,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Coila McKibbin
+sn: McKibbin
+description: This is Coila McKibbin's description
+facsimileTelephoneNumber: +1 510 388-9051
+l: Menlo Park
+ou: Management
+postalAddress: Management$Menlo Park
+telephoneNumber: +1 510 551-7615
+title: Associate Management Director
+userPassword: Password1
+uid: McKibbiC
+givenName: Coila
+mail: McKibbiC@ns-mail6.com
+carLicense: 9PKSMB
+departmentNumber: 8970
+employeeType: Normal
+homePhone: +1 510 307-1568
+initials: C. M.
+mobile: +1 510 416-7412
+pager: +1 510 323-9216
+roomNumber: 9705
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Masood Saatcioglu,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Masood Saatcioglu
+sn: Saatcioglu
+description: This is Masood Saatcioglu's description
+facsimileTelephoneNumber: +1 415 717-9290
+l: Redwood Shores
+ou: Payroll
+postalAddress: Payroll$Redwood Shores
+telephoneNumber: +1 415 149-8799
+title: Associate Payroll Dictator
+userPassword: Password1
+uid: SaatcioM
+givenName: Masood
+mail: SaatcioM@ns-mail7.com
+carLicense: VTPCGE
+departmentNumber: 6166
+employeeType: Employee
+homePhone: +1 415 682-1439
+initials: M. S.
+mobile: +1 415 664-7418
+pager: +1 415 214-2658
+roomNumber: 8710
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Jeanie Trussler,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Jeanie Trussler
+sn: Trussler
+description: This is Jeanie Trussler's description
+facsimileTelephoneNumber: +1 408 981-4614
+l: Alameda
+ou: Payroll
+postalAddress: Payroll$Alameda
+telephoneNumber: +1 408 630-3188
+title: Supreme Payroll Visionary
+userPassword: Password1
+uid: TrussleJ
+givenName: Jeanie
+mail: TrussleJ@ns-mail5.com
+carLicense: 7FBYJ3
+departmentNumber: 7356
+employeeType: Contract
+homePhone: +1 408 300-3488
+initials: J. T.
+mobile: +1 408 574-1648
+pager: +1 408 384-8985
+roomNumber: 8813
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Margie Toolset,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Margie Toolset
+sn: Toolset
+description: This is Margie Toolset's description
+facsimileTelephoneNumber: +1 206 859-2999
+l: Milpitas
+ou: Janitorial
+postalAddress: Janitorial$Milpitas
+telephoneNumber: +1 206 446-5395
+title: Junior Janitorial Figurehead
+userPassword: Password1
+uid: ToolsetM
+givenName: Margie
+mail: ToolsetM@ns-mail4.com
+carLicense: P7BR0F
+departmentNumber: 4673
+employeeType: Contract
+homePhone: +1 206 355-8148
+initials: M. T.
+mobile: +1 206 255-2957
+pager: +1 206 606-2555
+roomNumber: 9429
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Jaclin Gregoire,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Jaclin Gregoire
+sn: Gregoire
+description: This is Jaclin Gregoire's description
+facsimileTelephoneNumber: +1 213 840-1701
+l: Redmond
+ou: Janitorial
+postalAddress: Janitorial$Redmond
+telephoneNumber: +1 213 776-4043
+title: Supreme Janitorial Punk
+userPassword: Password1
+uid: GregoirJ
+givenName: Jaclin
+mail: GregoirJ@ns-mail3.com
+carLicense: 5X33PO
+departmentNumber: 2509
+employeeType: Employee
+homePhone: +1 213 220-1515
+initials: J. G.
+mobile: +1 213 810-9934
+pager: +1 213 651-3726
+roomNumber: 8802
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Thierry Digiacomo,ou=users,dc=social, dc=com 
+
+dn: cn=Mariesara Lachambre,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Mariesara Lachambre
+sn: Lachambre
+description: This is Mariesara Lachambre's description
+facsimileTelephoneNumber: +1 408 604-9242
+l: San Jose
+ou: Administrative
+postalAddress: Administrative$San Jose
+telephoneNumber: +1 408 679-7839
+title: Master Administrative Evangelist
+userPassword: Password1
+uid: LachambM
+givenName: Mariesara
+mail: LachambM@ns-mail6.com
+carLicense: QKBVOQ
+departmentNumber: 1721
+employeeType: Contract
+homePhone: +1 408 571-4038
+initials: M. L.
+mobile: +1 408 574-1440
+pager: +1 408 215-1362
+roomNumber: 8237
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Leona Talevi,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Leona Talevi
+sn: Talevi
+description: This is Leona Talevi's description
+facsimileTelephoneNumber: +1 408 367-3259
+l: Redmond
+ou: Peons
+postalAddress: Peons$Redmond
+telephoneNumber: +1 408 465-9094
+title: Chief Peons Mascot
+userPassword: Password1
+uid: TaleviL
+givenName: Leona
+mail: TaleviL@ns-mail5.com
+carLicense: U72ILH
+departmentNumber: 9674
+employeeType: Contract
+homePhone: +1 408 334-9861
+initials: L. T.
+mobile: +1 408 649-7145
+pager: +1 408 777-1287
+roomNumber: 9512
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Kay MacDonell,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kay MacDonell
+sn: MacDonell
+description: This is Kay MacDonell's description
+facsimileTelephoneNumber: +1 206 408-2210
+l: Sunnyvale
+ou: Janitorial
+postalAddress: Janitorial$Sunnyvale
+telephoneNumber: +1 206 762-5468
+title: Master Janitorial Evangelist
+userPassword: Password1
+uid: MacDoneK
+givenName: Kay
+mail: MacDoneK@ns-mail4.com
+carLicense: A3DMTQ
+departmentNumber: 7970
+employeeType: Normal
+homePhone: +1 206 215-1377
+initials: K. M.
+mobile: +1 206 384-6313
+pager: +1 206 351-9492
+roomNumber: 9809
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Nadia McConkey,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Nadia McConkey
+sn: McConkey
+description: This is Nadia McConkey's description
+facsimileTelephoneNumber: +1 408 471-5537
+l: Alameda
+ou: Product Testing
+postalAddress: Product Testing$Alameda
+telephoneNumber: +1 408 619-1065
+title: Junior Product Testing Assistant
+userPassword: Password1
+uid: McConkeN
+givenName: Nadia
+mail: McConkeN@ns-mail3.com
+carLicense: GMCRPL
+departmentNumber: 1172
+employeeType: Employee
+homePhone: +1 408 881-9053
+initials: N. M.
+mobile: +1 408 552-1561
+pager: +1 408 801-6744
+roomNumber: 9215
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Ilda Hilder,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ilda Hilder
+sn: Hilder
+description: This is Ilda Hilder's description
+facsimileTelephoneNumber: +1 510 731-2965
+l: San Mateo
+ou: Product Development
+postalAddress: Product Development$San Mateo
+telephoneNumber: +1 510 135-6989
+title: Chief Product Development Artist
+userPassword: Password1
+uid: HilderI
+givenName: Ilda
+mail: HilderI@ns-mail7.com
+carLicense: EBFVKB
+departmentNumber: 8668
+employeeType: Contract
+homePhone: +1 510 698-6955
+initials: I. H.
+mobile: +1 510 920-7366
+pager: +1 510 601-6456
+roomNumber: 9248
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Cortland McKeegan,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Cortland McKeegan
+sn: McKeegan
+description: This is Cortland McKeegan's description
+facsimileTelephoneNumber: +1 206 189-6995
+l: Cambridge
+ou: Administrative
+postalAddress: Administrative$Cambridge
+telephoneNumber: +1 206 787-5567
+title: Junior Administrative Czar
+userPassword: Password1
+uid: McKeegaC
+givenName: Cortland
+mail: McKeegaC@ns-mail5.com
+carLicense: WXF5J8
+departmentNumber: 5701
+employeeType: Contract
+homePhone: +1 206 444-8913
+initials: C. M.
+mobile: +1 206 882-9388
+pager: +1 206 642-8621
+roomNumber: 9669
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Yoke-Kee Thevenart,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Yoke-Kee Thevenart
+sn: Thevenart
+description: This is Yoke-Kee Thevenart's description
+facsimileTelephoneNumber: +1 408 883-5514
+l: Milpitas
+ou: Janitorial
+postalAddress: Janitorial$Milpitas
+telephoneNumber: +1 408 738-6800
+title: Master Janitorial Grunt
+userPassword: Password1
+uid: ThevenaY
+givenName: Yoke-Kee
+mail: ThevenaY@ns-mail6.com
+carLicense: V0BGWN
+departmentNumber: 7255
+employeeType: Normal
+homePhone: +1 408 367-4063
+initials: Y. T.
+mobile: +1 408 248-2748
+pager: +1 408 437-1314
+roomNumber: 9481
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Thierry Digiacomo,ou=users,dc=social, dc=com 
+
+dn: cn=Kati Gurevitch,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kati Gurevitch
+sn: Gurevitch
+description: This is Kati Gurevitch's description
+facsimileTelephoneNumber: +1 206 879-7776
+l: Milpitas
+ou: Peons
+postalAddress: Peons$Milpitas
+telephoneNumber: +1 206 697-2468
+title: Associate Peons Artist
+userPassword: Password1
+uid: GurevitK
+givenName: Kati
+mail: GurevitK@ns-mail8.com
+carLicense: W2CQJ2
+departmentNumber: 5447
+employeeType: Contract
+homePhone: +1 206 629-3431
+initials: K. G.
+mobile: +1 206 295-5835
+pager: +1 206 794-2772
+roomNumber: 9306
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Viera Huret,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Viera Huret
+sn: Huret
+description: This is Viera Huret's description
+facsimileTelephoneNumber: +1 818 905-9857
+l: Santa Clara
+ou: Human Resources
+postalAddress: Human Resources$Santa Clara
+telephoneNumber: +1 818 840-9432
+title: Chief Human Resources Admin
+userPassword: Password1
+uid: HuretV
+givenName: Viera
+mail: HuretV@ns-mail6.com
+carLicense: 3F3V4Q
+departmentNumber: 1226
+employeeType: Contract
+homePhone: +1 818 250-7241
+initials: V. H.
+mobile: +1 818 263-1498
+pager: +1 818 499-3721
+roomNumber: 9941
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Ardeen Wyllie,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ardeen Wyllie
+sn: Wyllie
+description: This is Ardeen Wyllie's description
+facsimileTelephoneNumber: +1 818 697-4785
+l: Redwood Shores
+ou: Payroll
+postalAddress: Payroll$Redwood Shores
+telephoneNumber: +1 818 798-7140
+title: Master Payroll Janitor
+userPassword: Password1
+uid: WyllieA
+givenName: Ardeen
+mail: WyllieA@ns-mail4.com
+carLicense: LE5ABQ
+departmentNumber: 9838
+employeeType: Employee
+homePhone: +1 818 385-1731
+initials: A. W.
+mobile: +1 818 332-6217
+pager: +1 818 246-8054
+roomNumber: 9658
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Loria Platt,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Loria Platt
+sn: Platt
+description: This is Loria Platt's description
+facsimileTelephoneNumber: +1 206 281-4941
+l: San Mateo
+ou: Administrative
+postalAddress: Administrative$San Mateo
+telephoneNumber: +1 206 468-7430
+title: Associate Administrative Madonna
+userPassword: Password1
+uid: PlattL
+givenName: Loria
+mail: PlattL@ns-mail3.com
+carLicense: TX7R2B
+departmentNumber: 5757
+employeeType: Contract
+homePhone: +1 206 324-1121
+initials: L. P.
+mobile: +1 206 364-9181
+pager: +1 206 783-8731
+roomNumber: 9299
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Dorry Scheduling,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Dorry Scheduling
+sn: Scheduling
+description: This is Dorry Scheduling's description
+facsimileTelephoneNumber: +1 804 860-1180
+l: Redwood Shores
+ou: Product Development
+postalAddress: Product Development$Redwood Shores
+telephoneNumber: +1 804 682-7449
+title: Master Product Development Figurehead
+userPassword: Password1
+uid: SchedulD
+givenName: Dorry
+mail: SchedulD@ns-mail3.com
+carLicense: USMAJ6
+departmentNumber: 7883
+employeeType: Employee
+homePhone: +1 804 757-2462
+initials: D. S.
+mobile: +1 804 517-9667
+pager: +1 804 529-7316
+roomNumber: 9984
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Lark Wigle,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Lark Wigle
+sn: Wigle
+description: This is Lark Wigle's description
+facsimileTelephoneNumber: +1 206 576-6551
+l: Alameda
+ou: Product Development
+postalAddress: Product Development$Alameda
+telephoneNumber: +1 206 305-5070
+title: Supreme Product Development Vice President
+userPassword: Password1
+uid: WigleL
+givenName: Lark
+mail: WigleL@ns-mail7.com
+carLicense: 8X1QOK
+departmentNumber: 2117
+employeeType: Normal
+homePhone: +1 206 550-5144
+initials: L. W.
+mobile: +1 206 529-2378
+pager: +1 206 971-7763
+roomNumber: 9756
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Shiva Coldwell,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Shiva Coldwell
+sn: Coldwell
+description: This is Shiva Coldwell's description
+facsimileTelephoneNumber: +1 804 438-6297
+l: San Mateo
+ou: Management
+postalAddress: Management$San Mateo
+telephoneNumber: +1 804 886-8768
+title: Junior Management Assistant
+userPassword: Password1
+uid: ColdwelS
+givenName: Shiva
+mail: ColdwelS@ns-mail2.com
+carLicense: HABW36
+departmentNumber: 2829
+employeeType: Normal
+homePhone: +1 804 147-8384
+initials: S. C.
+mobile: +1 804 631-3510
+pager: +1 804 138-4349
+roomNumber: 8429
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Natala Furlin,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Natala Furlin
+sn: Furlin
+description: This is Natala Furlin's description
+facsimileTelephoneNumber: +1 818 599-8955
+l: San Francisco
+ou: Product Testing
+postalAddress: Product Testing$San Francisco
+telephoneNumber: +1 818 478-7457
+title: Junior Product Testing Admin
+userPassword: Password1
+uid: FurlinN
+givenName: Natala
+mail: FurlinN@ns-mail5.com
+carLicense: 9TSXBL
+departmentNumber: 5666
+employeeType: Normal
+homePhone: +1 818 765-5502
+initials: N. F.
+mobile: +1 818 732-9757
+pager: +1 818 201-2982
+roomNumber: 9747
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Laure Basinger,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Laure Basinger
+sn: Basinger
+description: This is Laure Basinger's description
+facsimileTelephoneNumber: +1 213 108-4923
+l: Sunnyvale
+ou: Human Resources
+postalAddress: Human Resources$Sunnyvale
+telephoneNumber: +1 213 401-9663
+title: Chief Human Resources Consultant
+userPassword: Password1
+uid: BasingeL
+givenName: Laure
+mail: BasingeL@ns-mail2.com
+carLicense: OA6F0P
+departmentNumber: 9956
+employeeType: Contract
+homePhone: +1 213 668-5756
+initials: L. B.
+mobile: +1 213 345-9250
+pager: +1 213 571-7913
+roomNumber: 9141
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Harlene Knio,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Harlene Knio
+sn: Knio
+description: This is Harlene Knio's description
+facsimileTelephoneNumber: +1 415 125-8218
+l: Sunnyvale
+ou: Human Resources
+postalAddress: Human Resources$Sunnyvale
+telephoneNumber: +1 415 913-9428
+title: Master Human Resources Director
+userPassword: Password1
+uid: KnioH
+givenName: Harlene
+mail: KnioH@ns-mail2.com
+carLicense: YQW198
+departmentNumber: 3587
+employeeType: Contract
+homePhone: +1 415 275-1633
+initials: H. K.
+mobile: +1 415 487-3968
+pager: +1 415 445-6285
+roomNumber: 8732
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Koren Kay,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Koren Kay
+sn: Kay
+description: This is Koren Kay's description
+facsimileTelephoneNumber: +1 408 625-3693
+l: Fremont
+ou: Product Testing
+postalAddress: Product Testing$Fremont
+telephoneNumber: +1 408 623-6490
+title: Chief Product Testing Sales Rep
+userPassword: Password1
+uid: KayK
+givenName: Koren
+mail: KayK@ns-mail7.com
+carLicense: T9LX0D
+departmentNumber: 1534
+employeeType: Employee
+homePhone: +1 408 125-5733
+initials: K. K.
+mobile: +1 408 824-8419
+pager: +1 408 799-9262
+roomNumber: 9036
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Jana Baker-Gregory,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Jana Baker-Gregory
+sn: Baker-Gregory
+description: This is Jana Baker-Gregory's description
+facsimileTelephoneNumber: +1 206 807-4276
+l: Fremont
+ou: Product Development
+postalAddress: Product Development$Fremont
+telephoneNumber: +1 206 277-1151
+title: Chief Product Development Dictator
+userPassword: Password1
+uid: Baker-GJ
+givenName: Jana
+mail: Baker-GJ@ns-mail3.com
+carLicense: B9R7E3
+departmentNumber: 5932
+employeeType: Employee
+homePhone: +1 206 471-4914
+initials: J. B.
+mobile: +1 206 661-9811
+pager: +1 206 100-9220
+roomNumber: 8516
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 
+
+dn: cn=Grier Moser,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Grier Moser
+sn: Moser
+description: This is Grier Moser's description
+facsimileTelephoneNumber: +1 213 511-3833
+l: Armonk
+ou: Product Development
+postalAddress: Product Development$Armonk
+telephoneNumber: +1 213 476-9722
+title: Associate Product Development Vice President
+userPassword: Password1
+uid: MoserG
+givenName: Grier
+mail: MoserG@ns-mail5.com
+carLicense: 9Y3HOI
+departmentNumber: 5873
+employeeType: Contract
+homePhone: +1 213 283-2633
+initials: G. M.
+mobile: +1 213 797-1785
+pager: +1 213 131-2437
+roomNumber: 8628
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Wen-Kai Hanneman,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Wen-Kai Hanneman
+sn: Hanneman
+description: This is Wen-Kai Hanneman's description
+facsimileTelephoneNumber: +1 213 391-1344
+l: Cambridge
+ou: Product Development
+postalAddress: Product Development$Cambridge
+telephoneNumber: +1 213 904-8595
+title: Associate Product Development Engineer
+userPassword: Password1
+uid: HannemaW
+givenName: Wen-Kai
+mail: HannemaW@ns-mail9.com
+carLicense: YBC54K
+departmentNumber: 5683
+employeeType: Contract
+homePhone: +1 213 669-5807
+initials: W. H.
+mobile: +1 213 994-6367
+pager: +1 213 271-4082
+roomNumber: 9637
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Brittani Freyermuth,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Brittani Freyermuth
+sn: Freyermuth
+description: This is Brittani Freyermuth's description
+facsimileTelephoneNumber: +1 213 919-7077
+l: San Jose
+ou: Product Development
+postalAddress: Product Development$San Jose
+telephoneNumber: +1 213 143-4735
+title: Supreme Product Development Grunt
+userPassword: Password1
+uid: FreyermB
+givenName: Brittani
+mail: FreyermB@ns-mail2.com
+carLicense: 85FLAJ
+departmentNumber: 7776
+employeeType: Contract
+homePhone: +1 213 147-8626
+initials: B. F.
+mobile: +1 213 827-1460
+pager: +1 213 649-5905
+roomNumber: 8493
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Madlin Donaldson,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Madlin Donaldson
+sn: Donaldson
+description: This is Madlin Donaldson's description
+facsimileTelephoneNumber: +1 415 828-8472
+l: San Jose
+ou: Product Development
+postalAddress: Product Development$San Jose
+telephoneNumber: +1 415 255-3336
+title: Associate Product Development Director
+userPassword: Password1
+uid: DonaldsM
+givenName: Madlin
+mail: DonaldsM@ns-mail3.com
+carLicense: NL3JES
+departmentNumber: 9090
+employeeType: Contract
+homePhone: +1 415 925-3557
+initials: M. D.
+mobile: +1 415 766-1112
+pager: +1 415 786-7321
+roomNumber: 8181
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Florenza Dorais,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Florenza Dorais
+sn: Dorais
+description: This is Florenza Dorais's description
+facsimileTelephoneNumber: +1 206 366-8782
+l: San Mateo
+ou: Management
+postalAddress: Management$San Mateo
+telephoneNumber: +1 206 889-3122
+title: Junior Management Punk
+userPassword: Password1
+uid: DoraisF
+givenName: Florenza
+mail: DoraisF@ns-mail7.com
+carLicense: UC4WQA
+departmentNumber: 5137
+employeeType: Normal
+homePhone: +1 206 330-8741
+initials: F. D.
+mobile: +1 206 132-2708
+pager: +1 206 654-2440
+roomNumber: 8447
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Terza Zantiris,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Terza Zantiris
+sn: Zantiris
+description: This is Terza Zantiris's description
+facsimileTelephoneNumber: +1 510 911-2803
+l: Cambridge
+ou: Peons
+postalAddress: Peons$Cambridge
+telephoneNumber: +1 510 351-8218
+title: Master Peons Czar
+userPassword: Password1
+uid: ZantiriT
+givenName: Terza
+mail: ZantiriT@ns-mail5.com
+carLicense: O068GT
+departmentNumber: 9891
+employeeType: Normal
+homePhone: +1 510 323-8947
+initials: T. Z.
+mobile: +1 510 321-1062
+pager: +1 510 711-9562
+roomNumber: 9972
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Sophia Bierbrier,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sophia Bierbrier
+sn: Bierbrier
+description: This is Sophia Bierbrier's description
+facsimileTelephoneNumber: +1 213 459-7702
+l: Armonk
+ou: Administrative
+postalAddress: Administrative$Armonk
+telephoneNumber: +1 213 490-6904
+title: Chief Administrative Manager
+userPassword: Password1
+uid: BierbriS
+givenName: Sophia
+mail: BierbriS@ns-mail4.com
+carLicense: YWJSMW
+departmentNumber: 7779
+employeeType: Employee
+homePhone: +1 213 541-7054
+initials: S. B.
+mobile: +1 213 488-5467
+pager: +1 213 490-6886
+roomNumber: 8476
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Clareta Homayoon,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Clareta Homayoon
+sn: Homayoon
+description: This is Clareta Homayoon's description
+facsimileTelephoneNumber: +1 408 575-9316
+l: Orem
+ou: Janitorial
+postalAddress: Janitorial$Orem
+telephoneNumber: +1 408 808-6998
+title: Master Janitorial Pinhead
+userPassword: Password1
+uid: HomayooC
+givenName: Clareta
+mail: HomayooC@ns-mail7.com
+carLicense: 10C38J
+departmentNumber: 3766
+employeeType: Contract
+homePhone: +1 408 108-7803
+initials: C. H.
+mobile: +1 408 450-1473
+pager: +1 408 503-1231
+roomNumber: 8395
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Nady Kalwa,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Nady Kalwa
+sn: Kalwa
+description: This is Nady Kalwa's description
+facsimileTelephoneNumber: +1 415 396-6086
+l: San Mateo
+ou: Administrative
+postalAddress: Administrative$San Mateo
+telephoneNumber: +1 415 784-3493
+title: Master Administrative Mascot
+userPassword: Password1
+uid: KalwaN
+givenName: Nady
+mail: KalwaN@ns-mail6.com
+carLicense: 1NMJS1
+departmentNumber: 3268
+employeeType: Contract
+homePhone: +1 415 600-7951
+initials: N. K.
+mobile: +1 415 795-7317
+pager: +1 415 921-3731
+roomNumber: 9205
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Delle Loa,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Delle Loa
+sn: Loa
+description: This is Delle Loa's description
+facsimileTelephoneNumber: +1 206 155-7201
+l: Palo Alto
+ou: Product Development
+postalAddress: Product Development$Palo Alto
+telephoneNumber: +1 206 182-8344
+title: Chief Product Development Manager
+userPassword: Password1
+uid: LoaD
+givenName: Delle
+mail: LoaD@ns-mail5.com
+carLicense: I18XEW
+departmentNumber: 8575
+employeeType: Employee
+homePhone: +1 206 679-3896
+initials: D. L.
+mobile: +1 206 666-7125
+pager: +1 206 392-7910
+roomNumber: 9419
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Ved Hazelrig,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ved Hazelrig
+sn: Hazelrig
+description: This is Ved Hazelrig's description
+facsimileTelephoneNumber: +1 206 404-4299
+l: Redwood Shores
+ou: Administrative
+postalAddress: Administrative$Redwood Shores
+telephoneNumber: +1 206 756-9455
+title: Associate Administrative Janitor
+userPassword: Password1
+uid: HazelriV
+givenName: Ved
+mail: HazelriV@ns-mail4.com
+carLicense: 9MC5OC
+departmentNumber: 9694
+employeeType: Normal
+homePhone: +1 206 989-3935
+initials: V. H.
+mobile: +1 206 827-1804
+pager: +1 206 939-6865
+roomNumber: 9791
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Jashvant Papiez,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Jashvant Papiez
+sn: Papiez
+description: This is Jashvant Papiez's description
+facsimileTelephoneNumber: +1 408 688-2473
+l: Palo Alto
+ou: Product Development
+postalAddress: Product Development$Palo Alto
+telephoneNumber: +1 408 704-8573
+title: Master Product Development Janitor
+userPassword: Password1
+uid: PapiezJ
+givenName: Jashvant
+mail: PapiezJ@ns-mail4.com
+carLicense: 8UE327
+departmentNumber: 8295
+employeeType: Normal
+homePhone: +1 408 150-2183
+initials: J. P.
+mobile: +1 408 838-5482
+pager: +1 408 356-1661
+roomNumber: 9042
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Delle Suthers,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Delle Suthers
+sn: Suthers
+description: This is Delle Suthers's description
+facsimileTelephoneNumber: +1 206 793-3927
+l: Alameda
+ou: Administrative
+postalAddress: Administrative$Alameda
+telephoneNumber: +1 206 514-4052
+title: Master Administrative Technician
+userPassword: Password1
+uid: SuthersD
+givenName: Delle
+mail: SuthersD@ns-mail7.com
+carLicense: 5FW9S6
+departmentNumber: 3305
+employeeType: Employee
+homePhone: +1 206 821-4420
+initials: D. S.
+mobile: +1 206 565-1420
+pager: +1 206 989-1877
+roomNumber: 8129
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Ramona Eisen,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ramona Eisen
+sn: Eisen
+description: This is Ramona Eisen's description
+facsimileTelephoneNumber: +1 804 852-9763
+l: Redwood Shores
+ou: Human Resources
+postalAddress: Human Resources$Redwood Shores
+telephoneNumber: +1 804 652-6098
+title: Junior Human Resources Evangelist
+userPassword: Password1
+uid: EisenR
+givenName: Ramona
+mail: EisenR@ns-mail7.com
+carLicense: 76D19D
+departmentNumber: 4027
+employeeType: Normal
+homePhone: +1 804 271-3140
+initials: R. E.
+mobile: +1 804 607-2007
+pager: +1 804 978-5022
+roomNumber: 8617
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Thierry Digiacomo,ou=users,dc=social, dc=com 
+
+dn: cn=Mathilde Akens,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Mathilde Akens
+sn: Akens
+description: This is Mathilde Akens's description
+facsimileTelephoneNumber: +1 818 307-7501
+l: Redwood Shores
+ou: Payroll
+postalAddress: Payroll$Redwood Shores
+telephoneNumber: +1 818 294-4424
+title: Junior Payroll Czar
+userPassword: Password1
+uid: AkensM
+givenName: Mathilde
+mail: AkensM@ns-mail2.com
+carLicense: TP5OGC
+departmentNumber: 2158
+employeeType: Normal
+homePhone: +1 818 889-7277
+initials: M. A.
+mobile: +1 818 859-1212
+pager: +1 818 266-3498
+roomNumber: 9819
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Tatum Riddall,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Tatum Riddall
+sn: Riddall
+description: This is Tatum Riddall's description
+facsimileTelephoneNumber: +1 804 895-9777
+l: Milpitas
+ou: Product Development
+postalAddress: Product Development$Milpitas
+telephoneNumber: +1 804 298-6141
+title: Chief Product Development Dictator
+userPassword: Password1
+uid: RiddallT
+givenName: Tatum
+mail: RiddallT@ns-mail8.com
+carLicense: OFE6A0
+departmentNumber: 6393
+employeeType: Contract
+homePhone: +1 804 275-7492
+initials: T. R.
+mobile: +1 804 284-7796
+pager: +1 804 374-8370
+roomNumber: 8841
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Shana Grasman,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Shana Grasman
+sn: Grasman
+description: This is Shana Grasman's description
+facsimileTelephoneNumber: +1 415 215-9241
+l: Milpitas
+ou: Janitorial
+postalAddress: Janitorial$Milpitas
+telephoneNumber: +1 415 778-6629
+title: Supreme Janitorial Admin
+userPassword: Password1
+uid: GrasmanS
+givenName: Shana
+mail: GrasmanS@ns-mail9.com
+carLicense: ETO9KS
+departmentNumber: 1708
+employeeType: Contract
+homePhone: +1 415 807-7626
+initials: S. G.
+mobile: +1 415 492-6083
+pager: +1 415 350-1764
+roomNumber: 8539
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Eugene Jacobson,ou=users,dc=social, dc=com 
+
+dn: cn=Sarine Taggart,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sarine Taggart
+sn: Taggart
+description: This is Sarine Taggart's description
+facsimileTelephoneNumber: +1 408 286-9494
+l: Redmond
+ou: Product Testing
+postalAddress: Product Testing$Redmond
+telephoneNumber: +1 408 330-5292
+title: Associate Product Testing Czar
+userPassword: Password1
+uid: TaggartS
+givenName: Sarine
+mail: TaggartS@ns-mail6.com
+carLicense: QF9JQS
+departmentNumber: 5287
+employeeType: Contract
+homePhone: +1 408 139-3526
+initials: S. T.
+mobile: +1 408 778-7771
+pager: +1 408 445-6497
+roomNumber: 9694
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Rianon Janke,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Rianon Janke
+sn: Janke
+description: This is Rianon Janke's description
+facsimileTelephoneNumber: +1 213 688-8080
+l: San Francisco
+ou: Human Resources
+postalAddress: Human Resources$San Francisco
+telephoneNumber: +1 213 775-7317
+title: Junior Human Resources Czar
+userPassword: Password1
+uid: JankeR
+givenName: Rianon
+mail: JankeR@ns-mail4.com
+carLicense: FCIQG6
+departmentNumber: 3490
+employeeType: Employee
+homePhone: +1 213 811-2804
+initials: R. J.
+mobile: +1 213 399-8366
+pager: +1 213 833-2526
+roomNumber: 9574
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Venkataraman Hanel,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Venkataraman Hanel
+sn: Hanel
+description: This is Venkataraman Hanel's description
+facsimileTelephoneNumber: +1 213 990-6532
+l: Alameda
+ou: Administrative
+postalAddress: Administrative$Alameda
+telephoneNumber: +1 213 985-8373
+title: Chief Administrative Punk
+userPassword: Password1
+uid: HanelV
+givenName: Venkataraman
+mail: HanelV@ns-mail6.com
+carLicense: G0UKRN
+departmentNumber: 1484
+employeeType: Normal
+homePhone: +1 213 354-5807
+initials: V. H.
+mobile: +1 213 819-9713
+pager: +1 213 401-8760
+roomNumber: 9942
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Tresa Shantz,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Tresa Shantz
+sn: Shantz
+description: This is Tresa Shantz's description
+facsimileTelephoneNumber: +1 818 949-4508
+l: Cambridge
+ou: Human Resources
+postalAddress: Human Resources$Cambridge
+telephoneNumber: +1 818 504-6649
+title: Associate Human Resources Mascot
+userPassword: Password1
+uid: ShantzT
+givenName: Tresa
+mail: ShantzT@ns-mail3.com
+carLicense: 38G1BY
+departmentNumber: 4771
+employeeType: Contract
+homePhone: +1 818 948-6648
+initials: T. S.
+mobile: +1 818 876-9006
+pager: +1 818 848-5895
+roomNumber: 8084
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Vo Gulis,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Vo Gulis
+sn: Gulis
+description: This is Vo Gulis's description
+facsimileTelephoneNumber: +1 804 426-1681
+l: Cupertino
+ou: Human Resources
+postalAddress: Human Resources$Cupertino
+telephoneNumber: +1 804 761-1248
+title: Chief Human Resources Fellow
+userPassword: Password1
+uid: GulisV
+givenName: Vo
+mail: GulisV@ns-mail6.com
+carLicense: 2UMDAX
+departmentNumber: 1768
+employeeType: Contract
+homePhone: +1 804 497-7524
+initials: V. G.
+mobile: +1 804 561-4279
+pager: +1 804 708-2141
+roomNumber: 8390
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Leigha Emig,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Leigha Emig
+sn: Emig
+description: This is Leigha Emig's description
+facsimileTelephoneNumber: +1 818 298-7666
+l: Alameda
+ou: Peons
+postalAddress: Peons$Alameda
+telephoneNumber: +1 818 189-7042
+title: Associate Peons Manager
+userPassword: Password1
+uid: EmigL
+givenName: Leigha
+mail: EmigL@ns-mail9.com
+carLicense: H3SX3Q
+departmentNumber: 2854
+employeeType: Normal
+homePhone: +1 818 849-1341
+initials: L. E.
+mobile: +1 818 302-1384
+pager: +1 818 271-2361
+roomNumber: 8868
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Carma Askins,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Carma Askins
+sn: Askins
+description: This is Carma Askins's description
+facsimileTelephoneNumber: +1 415 352-9669
+l: Santa Clara
+ou: Management
+postalAddress: Management$Santa Clara
+telephoneNumber: +1 415 148-5003
+title: Associate Management Figurehead
+userPassword: Password1
+uid: AskinsC
+givenName: Carma
+mail: AskinsC@ns-mail4.com
+carLicense: V2HW54
+departmentNumber: 5286
+employeeType: Normal
+homePhone: +1 415 554-4949
+initials: C. A.
+mobile: +1 415 275-9443
+pager: +1 415 735-4070
+roomNumber: 8179
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Yu-Hung Risler,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Yu-Hung Risler
+sn: Risler
+description: This is Yu-Hung Risler's description
+facsimileTelephoneNumber: +1 415 485-8937
+l: San Jose
+ou: Product Testing
+postalAddress: Product Testing$San Jose
+telephoneNumber: +1 415 912-6839
+title: Chief Product Testing Director
+userPassword: Password1
+uid: RislerY
+givenName: Yu-Hung
+mail: RislerY@ns-mail2.com
+carLicense: SX7U7I
+departmentNumber: 4549
+employeeType: Employee
+homePhone: +1 415 705-6423
+initials: Y. R.
+mobile: +1 415 727-9836
+pager: +1 415 103-8276
+roomNumber: 9068
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Robert Xpmbuilder,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Robert Xpmbuilder
+sn: Xpmbuilder
+description: This is Robert Xpmbuilder's description
+facsimileTelephoneNumber: +1 818 920-3015
+l: Redmond
+ou: Payroll
+postalAddress: Payroll$Redmond
+telephoneNumber: +1 818 165-1289
+title: Chief Payroll Manager
+userPassword: Password1
+uid: XpmbuilR
+givenName: Robert
+mail: XpmbuilR@ns-mail8.com
+carLicense: 4YFOEU
+departmentNumber: 2820
+employeeType: Contract
+homePhone: +1 818 905-7347
+initials: R. X.
+mobile: +1 818 974-7317
+pager: +1 818 426-4606
+roomNumber: 8370
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Nang Hooks,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Nang Hooks
+sn: Hooks
+description: This is Nang Hooks's description
+facsimileTelephoneNumber: +1 206 246-5289
+l: Alameda
+ou: Payroll
+postalAddress: Payroll$Alameda
+telephoneNumber: +1 206 527-4337
+title: Junior Payroll Grunt
+userPassword: Password1
+uid: HooksN
+givenName: Nang
+mail: HooksN@ns-mail3.com
+carLicense: 82KOPV
+departmentNumber: 8025
+employeeType: Contract
+homePhone: +1 206 537-3849
+initials: N. H.
+mobile: +1 206 373-7863
+pager: +1 206 540-5420
+roomNumber: 8229
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Jacklyn Bierman,ou=users,dc=social, dc=com 
+
+dn: cn=Cooney Willison,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Cooney Willison
+sn: Willison
+description: This is Cooney Willison's description
+facsimileTelephoneNumber: +1 213 509-2062
+l: Menlo Park
+ou: Product Testing
+postalAddress: Product Testing$Menlo Park
+telephoneNumber: +1 213 781-1755
+title: Junior Product Testing President
+userPassword: Password1
+uid: WillisoC
+givenName: Cooney
+mail: WillisoC@ns-mail4.com
+carLicense: 864S88
+departmentNumber: 4987
+employeeType: Employee
+homePhone: +1 213 335-5746
+initials: C. W.
+mobile: +1 213 814-2045
+pager: +1 213 205-5585
+roomNumber: 9621
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Ven Zanet,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ven Zanet
+sn: Zanet
+description: This is Ven Zanet's description
+facsimileTelephoneNumber: +1 510 160-5218
+l: Alameda
+ou: Product Development
+postalAddress: Product Development$Alameda
+telephoneNumber: +1 510 792-7752
+title: Chief Product Development Mascot
+userPassword: Password1
+uid: ZanetV
+givenName: Ven
+mail: ZanetV@ns-mail5.com
+carLicense: PGKKNL
+departmentNumber: 4496
+employeeType: Contract
+homePhone: +1 510 858-3184
+initials: V. Z.
+mobile: +1 510 351-8516
+pager: +1 510 137-1164
+roomNumber: 9667
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Thierry Digiacomo,ou=users,dc=social, dc=com 
+
+dn: cn=Sibilla Torrell,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sibilla Torrell
+sn: Torrell
+description: This is Sibilla Torrell's description
+facsimileTelephoneNumber: +1 213 597-3233
+l: Redwood Shores
+ou: Administrative
+postalAddress: Administrative$Redwood Shores
+telephoneNumber: +1 213 393-4731
+title: Chief Administrative Assistant
+userPassword: Password1
+uid: TorrellS
+givenName: Sibilla
+mail: TorrellS@ns-mail4.com
+carLicense: B2TV7E
+departmentNumber: 3853
+employeeType: Normal
+homePhone: +1 213 668-1592
+initials: S. T.
+mobile: +1 213 267-4671
+pager: +1 213 279-6628
+roomNumber: 8701
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Drusi Seroka,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Drusi Seroka
+sn: Seroka
+description: This is Drusi Seroka's description
+facsimileTelephoneNumber: +1 804 449-1617
+l: Redmond
+ou: Administrative
+postalAddress: Administrative$Redmond
+telephoneNumber: +1 804 333-6406
+title: Supreme Administrative Stooge
+userPassword: Password1
+uid: SerokaD
+givenName: Drusi
+mail: SerokaD@ns-mail2.com
+carLicense: 9C1XHA
+departmentNumber: 4406
+employeeType: Employee
+homePhone: +1 804 644-6712
+initials: D. S.
+mobile: +1 804 146-2785
+pager: +1 804 916-9873
+roomNumber: 8132
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Evelina Langlais,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Evelina Langlais
+sn: Langlais
+description: This is Evelina Langlais's description
+facsimileTelephoneNumber: +1 415 891-4384
+l: Redmond
+ou: Janitorial
+postalAddress: Janitorial$Redmond
+telephoneNumber: +1 415 561-5853
+title: Supreme Janitorial Evangelist
+userPassword: Password1
+uid: LanglaiE
+givenName: Evelina
+mail: LanglaiE@ns-mail5.com
+carLicense: F8S7W7
+departmentNumber: 1065
+employeeType: Contract
+homePhone: +1 415 373-1922
+initials: E. L.
+mobile: +1 415 338-4451
+pager: +1 415 536-4056
+roomNumber: 8508
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Pauli Marquart,ou=users,dc=social, dc=com 
+
+dn: cn=Emili Childerhose,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Emili Childerhose
+sn: Childerhose
+description: This is Emili Childerhose's description
+facsimileTelephoneNumber: +1 804 795-2753
+l: Armonk
+ou: Product Testing
+postalAddress: Product Testing$Armonk
+telephoneNumber: +1 804 910-6500
+title: Chief Product Testing Assistant
+userPassword: Password1
+uid: ChilderE
+givenName: Emili
+mail: ChilderE@ns-mail9.com
+carLicense: JKXU7Y
+departmentNumber: 8364
+employeeType: Employee
+homePhone: +1 804 109-5488
+initials: E. C.
+mobile: +1 804 135-7138
+pager: +1 804 678-7002
+roomNumber: 9220
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Nevein France,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Nevein France
+sn: France
+description: This is Nevein France's description
+facsimileTelephoneNumber: +1 213 371-5849
+l: Redwood Shores
+ou: Product Development
+postalAddress: Product Development$Redwood Shores
+telephoneNumber: +1 213 905-6816
+title: Junior Product Development Engineer
+userPassword: Password1
+uid: FranceN
+givenName: Nevein
+mail: FranceN@ns-mail3.com
+carLicense: IUNMPV
+departmentNumber: 9566
+employeeType: Employee
+homePhone: +1 213 188-1009
+initials: N. F.
+mobile: +1 213 497-7697
+pager: +1 213 307-5870
+roomNumber: 8880
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Jaine Oswald,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Jaine Oswald
+sn: Oswald
+description: This is Jaine Oswald's description
+facsimileTelephoneNumber: +1 206 156-2166
+l: Cupertino
+ou: Product Testing
+postalAddress: Product Testing$Cupertino
+telephoneNumber: +1 206 916-2677
+title: Supreme Product Testing Assistant
+userPassword: Password1
+uid: OswaldJ
+givenName: Jaine
+mail: OswaldJ@ns-mail4.com
+carLicense: 3EBLDX
+departmentNumber: 4783
+employeeType: Employee
+homePhone: +1 206 717-5052
+initials: J. O.
+mobile: +1 206 430-1747
+pager: +1 206 656-8236
+roomNumber: 8717
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Ethelin Ismail,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ethelin Ismail
+sn: Ismail
+description: This is Ethelin Ismail's description
+facsimileTelephoneNumber: +1 213 662-3651
+l: Redwood Shores
+ou: Peons
+postalAddress: Peons$Redwood Shores
+telephoneNumber: +1 213 146-9675
+title: Chief Peons Sales Rep
+userPassword: Password1
+uid: IsmailE
+givenName: Ethelin
+mail: IsmailE@ns-mail3.com
+carLicense: ICTICV
+departmentNumber: 9686
+employeeType: Contract
+homePhone: +1 213 262-9336
+initials: E. I.
+mobile: +1 213 896-9465
+pager: +1 213 603-3818
+roomNumber: 8307
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Courtenay Wigle,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Courtenay Wigle
+sn: Wigle
+description: This is Courtenay Wigle's description
+facsimileTelephoneNumber: +1 415 380-9170
+l: Cambridge
+ou: Payroll
+postalAddress: Payroll$Cambridge
+telephoneNumber: +1 415 833-8875
+title: Junior Payroll Technician
+userPassword: Password1
+uid: WigleC
+givenName: Courtenay
+mail: WigleC@ns-mail6.com
+carLicense: NN0WH2
+departmentNumber: 1453
+employeeType: Contract
+homePhone: +1 415 269-2682
+initials: C. W.
+mobile: +1 415 181-8270
+pager: +1 415 363-9861
+roomNumber: 9226
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Reggi Sanh,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Reggi Sanh
+sn: Sanh
+description: This is Reggi Sanh's description
+facsimileTelephoneNumber: +1 415 601-1893
+l: San Mateo
+ou: Janitorial
+postalAddress: Janitorial$San Mateo
+telephoneNumber: +1 415 246-2765
+title: Master Janitorial Architect
+userPassword: Password1
+uid: SanhR
+givenName: Reggi
+mail: SanhR@ns-mail9.com
+carLicense: X6U0BN
+departmentNumber: 2135
+employeeType: Employee
+homePhone: +1 415 608-5717
+initials: R. S.
+mobile: +1 415 232-8287
+pager: +1 415 527-3861
+roomNumber: 8482
+manager: cn=Carri Pankhurst,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Murray Taharuddin,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Murray Taharuddin
+sn: Taharuddin
+description: This is Murray Taharuddin's description
+facsimileTelephoneNumber: +1 408 125-6225
+l: San Jose
+ou: Peons
+postalAddress: Peons$San Jose
+telephoneNumber: +1 408 880-6674
+title: Supreme Peons Visionary
+userPassword: Password1
+uid: TaharudM
+givenName: Murray
+mail: TaharudM@ns-mail9.com
+carLicense: VGDX5O
+departmentNumber: 5585
+employeeType: Contract
+homePhone: +1 408 519-3123
+initials: M. T.
+mobile: +1 408 569-5620
+pager: +1 408 449-4448
+roomNumber: 9130
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Sorin Ivey,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sorin Ivey
+sn: Ivey
+description: This is Sorin Ivey's description
+facsimileTelephoneNumber: +1 818 355-1787
+l: Menlo Park
+ou: Management
+postalAddress: Management$Menlo Park
+telephoneNumber: +1 818 324-7815
+title: Associate Management Visionary
+userPassword: Password1
+uid: IveyS
+givenName: Sorin
+mail: IveyS@ns-mail5.com
+carLicense: IDEF06
+departmentNumber: 5926
+employeeType: Employee
+homePhone: +1 818 161-6938
+initials: S. I.
+mobile: +1 818 537-9656
+pager: +1 818 193-7714
+roomNumber: 8714
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Sue Mc Ginn,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sue Mc Ginn
+sn: Mc Ginn
+description: This is Sue Mc Ginn's description
+facsimileTelephoneNumber: +1 510 321-6290
+l: San Mateo
+ou: Peons
+postalAddress: Peons$San Mateo
+telephoneNumber: +1 510 221-9808
+title: Supreme Peons Grunt
+userPassword: Password1
+uid: Mc GinnS
+givenName: Sue
+mail: Mc GinnS@ns-mail5.com
+carLicense: ODD7YI
+departmentNumber: 3677
+employeeType: Employee
+homePhone: +1 510 689-7230
+initials: S. M.
+mobile: +1 510 609-5005
+pager: +1 510 645-8134
+roomNumber: 9063
+manager: cn=Rene Uppal,ou=users,dc=social, dc=com
+secretary: cn=Deedee Keehan,ou=users,dc=social, dc=com 
+
+dn: cn=Linda Wroblewski,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Linda Wroblewski
+sn: Wroblewski
+description: This is Linda Wroblewski's description
+facsimileTelephoneNumber: +1 804 237-1851
+l: San Mateo
+ou: Peons
+postalAddress: Peons$San Mateo
+telephoneNumber: +1 804 608-2829
+title: Master Peons Manager
+userPassword: Password1
+uid: WroblewL
+givenName: Linda
+mail: WroblewL@ns-mail7.com
+carLicense: WHBMSY
+departmentNumber: 2481
+employeeType: Contract
+homePhone: +1 804 776-6577
+initials: L. W.
+mobile: +1 804 925-2801
+pager: +1 804 617-1546
+roomNumber: 8313
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Sedat Hodgens,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Sedat Hodgens
+sn: Hodgens
+description: This is Sedat Hodgens's description
+facsimileTelephoneNumber: +1 213 361-6785
+l: Santa Clara
+ou: Payroll
+postalAddress: Payroll$Santa Clara
+telephoneNumber: +1 213 812-4197
+title: Associate Payroll Mascot
+userPassword: Password1
+uid: HodgensS
+givenName: Sedat
+mail: HodgensS@ns-mail5.com
+carLicense: 2VYQWB
+departmentNumber: 5738
+employeeType: Normal
+homePhone: +1 213 533-8389
+initials: S. H.
+mobile: +1 213 406-3951
+pager: +1 213 542-6635
+roomNumber: 9289
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Damon Mathur,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Damon Mathur
+sn: Mathur
+description: This is Damon Mathur's description
+facsimileTelephoneNumber: +1 818 145-8878
+l: Fremont
+ou: Product Development
+postalAddress: Product Development$Fremont
+telephoneNumber: +1 818 256-3587
+title: Chief Product Development Stooge
+userPassword: Password1
+uid: MathurD
+givenName: Damon
+mail: MathurD@ns-mail4.com
+carLicense: XOH9LX
+departmentNumber: 9325
+employeeType: Employee
+homePhone: +1 818 242-3642
+initials: D. M.
+mobile: +1 818 552-5962
+pager: +1 818 135-7222
+roomNumber: 8440
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Code Lafever,ou=users,dc=social, dc=com 
+
+dn: cn=Babbette Jarchow,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Babbette Jarchow
+sn: Jarchow
+description: This is Babbette Jarchow's description
+facsimileTelephoneNumber: +1 510 297-3078
+l: Orem
+ou: Product Development
+postalAddress: Product Development$Orem
+telephoneNumber: +1 510 691-2762
+title: Associate Product Development Figurehead
+userPassword: Password1
+uid: JarchowB
+givenName: Babbette
+mail: JarchowB@ns-mail8.com
+carLicense: RV4A37
+departmentNumber: 8054
+employeeType: Employee
+homePhone: +1 510 575-7434
+initials: B. J.
+mobile: +1 510 160-1522
+pager: +1 510 352-7953
+roomNumber: 9697
+manager: cn=Fay Annab,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Christalle Baughan,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Christalle Baughan
+sn: Baughan
+description: This is Christalle Baughan's description
+facsimileTelephoneNumber: +1 213 828-4993
+l: Alameda
+ou: Administrative
+postalAddress: Administrative$Alameda
+telephoneNumber: +1 213 850-5237
+title: Supreme Administrative Czar
+userPassword: Password1
+uid: BaughanC
+givenName: Christalle
+mail: BaughanC@ns-mail5.com
+carLicense: 7DGV2F
+departmentNumber: 8829
+employeeType: Normal
+homePhone: +1 213 553-6268
+initials: C. B.
+mobile: +1 213 324-9846
+pager: +1 213 231-9331
+roomNumber: 9488
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Suzann Pewitt,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Suzann Pewitt
+sn: Pewitt
+description: This is Suzann Pewitt's description
+facsimileTelephoneNumber: +1 510 338-3743
+l: San Francisco
+ou: Administrative
+postalAddress: Administrative$San Francisco
+telephoneNumber: +1 510 192-5837
+title: Master Administrative Dictator
+userPassword: Password1
+uid: PewittS
+givenName: Suzann
+mail: PewittS@ns-mail8.com
+carLicense: MAJ8HX
+departmentNumber: 3917
+employeeType: Employee
+homePhone: +1 510 577-3248
+initials: S. P.
+mobile: +1 510 957-6334
+pager: +1 510 259-3028
+roomNumber: 8284
+manager: cn=Kirsteni Licandro,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Celestia Burnett,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Celestia Burnett
+sn: Burnett
+description: This is Celestia Burnett's description
+facsimileTelephoneNumber: +1 510 486-9586
+l: San Francisco
+ou: Human Resources
+postalAddress: Human Resources$San Francisco
+telephoneNumber: +1 510 463-8004
+title: Junior Human Resources Sales Rep
+userPassword: Password1
+uid: BurnettC
+givenName: Celestia
+mail: BurnettC@ns-mail4.com
+carLicense: S4XOS4
+departmentNumber: 5537
+employeeType: Contract
+homePhone: +1 510 580-8448
+initials: C. B.
+mobile: +1 510 729-9779
+pager: +1 510 452-3281
+roomNumber: 9649
+manager: cn=Emmalynne Botyrius,ou=users,dc=social, dc=com
+secretary: cn=Henriette Galligan,ou=users,dc=social, dc=com 
+
+dn: cn=Ethelind Stocker,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ethelind Stocker
+sn: Stocker
+description: This is Ethelind Stocker's description
+facsimileTelephoneNumber: +1 408 683-7685
+l: Armonk
+ou: Management
+postalAddress: Management$Armonk
+telephoneNumber: +1 408 363-7493
+title: Chief Management Director
+userPassword: Password1
+uid: StockerE
+givenName: Ethelind
+mail: StockerE@ns-mail5.com
+carLicense: 3INSUC
+departmentNumber: 9248
+employeeType: Contract
+homePhone: +1 408 205-6479
+initials: E. S.
+mobile: +1 408 749-4231
+pager: +1 408 813-3828
+roomNumber: 8327
+manager: cn=Nam-Kiet Remon,ou=users,dc=social, dc=com
+secretary: cn=Clerissa Linback,ou=users,dc=social, dc=com 
+
+dn: cn=Fawnia Bugajski,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Fawnia Bugajski
+sn: Bugajski
+description: This is Fawnia Bugajski's description
+facsimileTelephoneNumber: +1 415 288-4259
+l: Orem
+ou: Product Development
+postalAddress: Product Development$Orem
+telephoneNumber: +1 415 395-4593
+title: Master Product Development Artist
+userPassword: Password1
+uid: BugajskF
+givenName: Fawnia
+mail: BugajskF@ns-mail8.com
+carLicense: O706MI
+departmentNumber: 4036
+employeeType: Contract
+homePhone: +1 415 805-9492
+initials: F. B.
+mobile: +1 415 314-9405
+pager: +1 415 547-6557
+roomNumber: 9362
+manager: cn=Florina Molani,ou=users,dc=social, dc=com
+secretary: cn=Dianna Dadkhah,ou=users,dc=social, dc=com 
+
+dn: cn=Melessa Weldon,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Melessa Weldon
+sn: Weldon
+description: This is Melessa Weldon's description
+facsimileTelephoneNumber: +1 804 156-3337
+l: Redmond
+ou: Administrative
+postalAddress: Administrative$Redmond
+telephoneNumber: +1 804 744-1276
+title: Supreme Administrative President
+userPassword: Password1
+uid: WeldonM
+givenName: Melessa
+mail: WeldonM@ns-mail9.com
+carLicense: VDSLLH
+departmentNumber: 8896
+employeeType: Contract
+homePhone: +1 804 636-6192
+initials: M. W.
+mobile: +1 804 147-5674
+pager: +1 804 993-1746
+roomNumber: 9081
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Chunmeng Gavin,ou=users,dc=social, dc=com 
+
+dn: cn=Roxie Driver,ou=users,dc=social, dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Roxie Driver
+sn: Driver
+description: This is Roxie Driver's description
+facsimileTelephoneNumber: +1 213 914-8533
+l: San Francisco
+ou: Janitorial
+postalAddress: Janitorial$San Francisco
+telephoneNumber: +1 213 797-4713
+title: Junior Janitorial Artist
+userPassword: Password1
+uid: DriverR
+givenName: Roxie
+mail: DriverR@ns-mail7.com
+carLicense: TR8UH0
+departmentNumber: 1750
+employeeType: Employee
+homePhone: +1 213 906-2359
+initials: R. D.
+mobile: +1 213 943-6967
+pager: +1 213 392-3061
+roomNumber: 9725
+manager: cn=Hatti Leckie,ou=users,dc=social, dc=com
+secretary: cn=Dorey Trink,ou=users,dc=social, dc=com 

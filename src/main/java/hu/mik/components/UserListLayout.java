@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
-import com.vaadin.server.FileResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -21,7 +20,6 @@ import hu.mik.constants.ThemeConstants;
 import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
-import hu.mik.utils.ProfileImageHelper;
 import hu.mik.views.ProfileView;
 
 @Component
@@ -41,9 +39,8 @@ public class UserListLayout extends CssLayout {
 
 		if (userListLdap != null) {
 			for (LdapUser user : userListLdap) {
-				User DbUser = this.userService.findUserByUsername(user.getUsername());
-				Image image = new Image(null,
-						new FileResource(ProfileImageHelper.loadUserImage(DbUser.getImageName())));
+				User dbUser = this.userService.findUserByUsername(user.getUsername());
+				Image image = dbUser.getVaadinImage();
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(user.getFullName());
@@ -69,8 +66,7 @@ public class UserListLayout extends CssLayout {
 
 		if (userListDb != null) {
 			for (User dbUser : userListDb) {
-				Image image = new Image(null,
-						new FileResource(ProfileImageHelper.loadUserImage(dbUser.getImageName())));
+				Image image = dbUser.getVaadinImage();
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(dbUser.getFullName());
