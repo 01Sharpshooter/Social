@@ -6,8 +6,7 @@ import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Service;
 
-import hu.mik.beans.Message;
-import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.Conversation;
 import hu.mik.listeners.NewMessageListener;
 
 @Service
@@ -27,14 +26,12 @@ public class MessageBroadcastService {
 
 	}
 
-	public static synchronized void sendMessage(Message message, SocialUserWrapper sender) {
-//		executorService.execute(() -> {
-//			if (userToListenerMap
-//					.containsKey((message.getConversation().getConversationPartner(sender.getDbUser()).getId()))) {
-//				userToListenerMap.get(message.getConversation().getConversationPartner(sender.getDbUser()).getId())
-//						.receiveMessage(message, sender);
-//			}
-//		});
+	public static synchronized void sendMessage(Conversation conversation) {
+		executorService.execute(() -> {
+			conversation.getConversationUsers().stream()
+					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
+					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).receiveMessage(conversation));
+		});
 	}
 
 	public static synchronized void messageSeen(Integer senderId, Integer seenSourceId) {

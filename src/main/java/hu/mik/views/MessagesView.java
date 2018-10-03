@@ -204,8 +204,8 @@ public class MessagesView extends CssLayout implements View {
 	private void sendMessage(String messageText) {
 		if (!messageText.isEmpty()) {
 			Message message = this.initAndSaveMessageToConversation(messageText);
-			MessageBroadcastService.sendMessage(message, this.loggedUser);
-			this.addNewMessageLabelToChatPanel(message);
+			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
+//			this.addNewMessageLabelToChatPanel(message);
 			this.messagesPanel.scrollToBottom();
 
 //			if (!this.tfSearch.isEmpty()) {
@@ -247,21 +247,9 @@ public class MessagesView extends CssLayout implements View {
 		return message;
 	}
 
-	private void addNewMessageLabelToChatPanel(Message message) {
-		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
-		newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
-		newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-		newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
-		this.messagesPanel.addMessage(newMessage);
-	}
-
-	public void receiveMessage(Message message) {
+	public void receiveMessage(Conversation conversation) {
 //		if (message.getSender().equals(this.receiver)) {
-		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
-		newMessage.setWidth(this.messagesPanel.getWidth() / 2, this.messagesPanel.getWidthUnits());
-		newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-		newMessage.setDescription(this.getMessageDateDesc(new Date()));
-		this.messagesPanel.addReceivedMessage(newMessage);
+		this.messagesPanel.addMessage(conversation.getLastMessage(), true);
 		this.messagesPanel.scrollToBottom();
 		this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
 				this.loggedUser.getDbUser());
@@ -269,15 +257,15 @@ public class MessagesView extends CssLayout implements View {
 
 //		} else {
 		((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
-		Notification notification = Notification.show(this.loggedUser.getLdapUser().getFullName(), message.getMessage(),
-				Notification.Type.TRAY_NOTIFICATION);
+		Notification notification = Notification.show(this.loggedUser.getLdapUser().getFullName(),
+				conversation.getLastMessage().getMessage(), Notification.Type.TRAY_NOTIFICATION);
 		notification.setIcon(VaadinIcons.COMMENT);
 //		}
 		boolean exists = false;
 		for (Component userDiv : this.conversationListLayout) {
-			if (((ConversationDiv) userDiv).getConversation().equals(message.getConversation())) {
+			if (((ConversationDiv) userDiv).getConversation().equals(conversation)) {
 				this.conversationListLayout.removeComponent(userDiv);
-				((ConversationDiv) userDiv).changeLastMessage(message);
+				((ConversationDiv) userDiv).changeLastMessage(conversation.getLastMessage());
 				((ConversationDiv) userDiv).replaceComponent(((CssLayout) userDiv).getComponent(2), new Label());
 				this.conversationListLayout.addComponent(userDiv, 0);
 //				if (!message.getSender().equals(this.receiver)) {
@@ -288,7 +276,7 @@ public class MessagesView extends CssLayout implements View {
 			}
 		}
 		if (!exists) {
-			User user = this.userService.findUserById(message.getSender().getId());
+			User user = this.userService.findUserById(conversation.getLastMessage().getSender().getId());
 //			CssLayout newDiv = this.createUserDivFromDbUser(user, message);
 //			newDiv.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 //			this.userList.addComponent(newDiv, 0);

@@ -1,10 +1,9 @@
 package hu.mik.listeners;
 
-import hu.mik.beans.Message;
-import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.Conversation;
 
 public interface NewMessageListener {
-	public void receiveMessage(Message message, SocialUserWrapper sender);
+	public void receiveMessage(Conversation conversation);
 
 	public void messageSeen(Integer receiverId);
 }

@@ -37,8 +37,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import hu.mik.beans.Conversation;
 import hu.mik.beans.LdapGroup;
-import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.beans.User;
 import hu.mik.constants.LdapConstants;
@@ -190,10 +190,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	@Override
-	public void receiveMessage(Message message, SocialUserWrapper sender) {
+	public void receiveMessage(Conversation conversation) {
 		this.access(() -> {
 			if (this.messageView != null) {
-				this.messageView.receiveMessage(message);
+				this.messageView.receiveMessage(conversation);
 			} else {
 				this.refreshUnseenConversationNumber();
 			}

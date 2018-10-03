@@ -59,17 +59,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		if (this.messagesList != null) {
 			if (!this.messagesList.isEmpty()) {
 				for (Message message : this.messagesList) {
-					Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>",
-							ContentMode.HTML);
-					this.content.addComponent(newMessage, 0);
-					if (message.getSender().equals(this.loggedUser.getDbUser())) {
-						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
-					} else {
-						newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-						this.content.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
-					}
-					newMessage.setWidth(this.getWidth() / 2, this.getWidthUnits());
-					newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
+					this.addMessage(message, false);
 				}
 				this.offset = this.messagesList.get(this.messagesList.size() - 1).getId();
 				this.scrollAfterLoad();
@@ -92,14 +82,24 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	}
 
-	public void addMessage(Label message) {
-		this.content.addComponent(message);
-		this.scrollToBottom();
-	}
+	public void addMessage(Message message, boolean isBottomMessage) {
+		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
 
-	public void addReceivedMessage(Label message) {
-		this.addMessage(message);
-		this.content.setComponentAlignment(message, Alignment.MIDDLE_LEFT);
+		if (isBottomMessage) {
+			this.content.addComponent(newMessage);
+		} else {
+			this.content.addComponent(newMessage, 0);
+		}
+
+		if (message.getSender().equals(this.loggedUser.getDbUser())) {
+			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
+		} else {
+			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
+			this.content.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
+		}
+		newMessage.setWidth(this.getWidth() / 2, this.getWidthUnits());
+		newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
+		this.scrollToBottom();
 	}
 
 	public void scrollAfterLoad() {
