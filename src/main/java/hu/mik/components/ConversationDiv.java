@@ -94,27 +94,29 @@ public class ConversationDiv extends CssLayout {
 
 	}
 
-	public void changeLastMessage(Message lastMessage) {
+	public void refresh() {
 		String name;
 		String[] stringArray = ((Label) this.getComponent(1)).getValue().split("<");
 		name = stringArray[0];
 		this.removeComponent(this.getComponent(1));
-		Label lblName = new Label(name + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
+		Label lblName = new Label(
+				name + "</br><span id=\"message\">" + this.conversation.getLastMessage().getMessage() + "</span>",
 				ContentMode.HTML);
 		this.addComponent(lblName, 1);
 		if (this.conversation.getConversationUserCount() > 2) {
-			this.changeConversationImage(lastMessage);
+			this.changeConversationImage();
 		}
 		this.getComponent(0).addStyleName(ThemeConstants.BORDERED_IMAGE);
 	}
 
-	private void changeConversationImage(Message lastMessage) {
+	private void changeConversationImage() {
 		Image image;
-		if (this.userImageCache.containsKey(lastMessage.getSender().getId())) {
-			image = this.userImageCache.get(lastMessage.getSender().getId());
+		Integer userId = this.conversation.getLastMessage().getSender().getId();
+		if (this.userImageCache.containsKey(userId)) {
+			image = this.userImageCache.get(userId);
 		} else {
-			image = lastMessage.getSender().getVaadinImage();
-			this.userImageCache.put(lastMessage.getSender().getId(), image);
+			image = this.conversation.getLastMessage().getSender().getVaadinImage();
+			this.userImageCache.put(userId, image);
 		}
 
 		this.replaceComponent(this.getComponent(0), image);

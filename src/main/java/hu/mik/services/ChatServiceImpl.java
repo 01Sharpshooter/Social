@@ -13,7 +13,6 @@ import hu.mik.beans.User;
 import hu.mik.dao.ConversationDao;
 import hu.mik.dao.MessageDao;
 import hu.mik.dao.UserDao;
-import hu.mik.utils.UserUtils;
 
 @Service
 @Transactional
@@ -23,8 +22,6 @@ public class ChatServiceImpl implements ChatService {
 	private MessageDao messageDao;
 	@Autowired
 	private ConversationDao conversationDao;
-	@Autowired
-	private UserUtils userUtils;
 	@Autowired
 	private UserDao userDao;
 
@@ -52,7 +49,6 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public List<Conversation> findLatestConversationsOfUser(User user) {
-		System.err.println(this.conversationDao.findLatestConversationsOfUser(user));
 		return this.conversationDao.findLatestConversationsOfUser(user);
 	}
 
@@ -68,14 +64,12 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public Conversation findOrCreateConversationWithUser(Integer userId) {
-		Conversation conversation = this.conversationDao
-				.findConversationOfUsers(this.userUtils.getLoggedInUser().getDbUser(), userId);
+	public Conversation findOrCreateConversationWithUser(Integer userId, User loggedUser) {
+		Conversation conversation = this.conversationDao.findConversationOfUsers(loggedUser, userId);
 		if (conversation == null) {
 			conversation = new Conversation();
 			User partner = this.userDao.findById(userId); // TODO mi van, ha nem talál?
-			ConversationUser conversationUser = new ConversationUser(conversation,
-					this.userUtils.getLoggedInUser().getDbUser());
+			ConversationUser conversationUser = new ConversationUser(conversation, loggedUser);
 			ConversationUser conversationPartner = new ConversationUser(conversation, partner);
 			conversation.addConversationUser(conversationUser);
 			conversation.addConversationUser(conversationPartner);

@@ -197,16 +197,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 			} else {
 				this.refreshUnseenConversationNumber();
 			}
-			// TODO Notification image and click
-//			notification.setIcon(new FileResource(
-//					new File(UserConstants.PROFILE_PICTURE_LOCATION + sender.getDbUser().getImageName())));
-//			notification.setStyleName("notificationSmallIcon");
-//			notification.setDelayMsec(Notification.DELAY_FOREVER);
-//			notification.addCloseListener(e -> {
-//				if (e.isUserOriginated()) {
-//					this.getNavigator().navigateTo(MessagesView.NAME + "/" + sender.getDbUser().getId());
-//				}
-//			});
 		});
 
 	}

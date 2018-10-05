@@ -22,5 +22,5 @@ public interface ChatService {
 
 	public Conversation saveConversation(Conversation conversation);
 
-	public Conversation findOrCreateConversationWithUser(Integer userId);
+	public Conversation findOrCreateConversationWithUser(Integer userId, User loggedUser);
 }
