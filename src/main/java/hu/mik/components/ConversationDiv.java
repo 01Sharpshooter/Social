@@ -2,10 +2,14 @@ package hu.mik.components;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -21,105 +25,118 @@ public class ConversationDiv extends CssLayout {
 	private String conversationName;
 	private Conversation conversation;
 	private ConversationUser loggedConvUser;
+	private ConversationUser conversationPartner;
 
 	private Map<Integer, Image> userImageCache;
+	private User loggedUser;
 
 	public ConversationDiv(Conversation conversation, User loggedUser) {
 		super();
 		this.conversation = conversation;
-		this.loggedConvUser = conversation.getConversationUsers().stream().filter(cu -> cu.getUser().equals(loggedUser))
-				.findFirst().get();
-
+		this.loggedUser = loggedUser;
 		this.userImageCache = new HashMap<>();
 
-		this.setConversationLook(conversation);
-		Message lastMessage = conversation.getLastMessage();
-		if (lastMessage != null) {
-			Label userDivLbl = new Label(
-					this.conversationName + "</br><span id=\"message\">" + lastMessage.getMessage() + "</span>",
-					ContentMode.HTML);
-			if (conversation.getLastMessage().getSender() == null) {
-				this.addLabelsToUserDiv(userDivLbl, null);
-			} else if (!this.loggedConvUser.isSeen()) {
-				this.addLabelsToUserDiv(userDivLbl, null);
-				this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
-			}
-//			else if (!conversation.isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
-//			this.addLabelsToUserDiv(userDivLbl, VaadinIcons.ANGLE_DOUBLE_RIGHT);
-//		} else if (conversation.isSeen() && lastMessage.getSender().getId().equals(loggedId)) {
-//			this.addLabelsToUserDiv(userDivLbl, VaadinIcons.EYE);
-//		}
+		this.refresh();
+	}
 
-			else {
-				this.addLabelsToUserDiv(userDivLbl, null); // TODO
-			}
-		} else {
-			this.addLabelsToUserDiv(new Label(this.conversationName), null);
+	private void refreshConversationUsers() {
+		Supplier<Stream<ConversationUser>> streamSupplier = () -> this.conversation.getConversationUsers().stream();
+		Predicate<? super ConversationUser> predicate = cu -> cu.getUser().equals(this.loggedUser);
+
+		this.loggedConvUser = streamSupplier.get().filter(predicate).findFirst().get();
+
+		if (this.conversation.getConversationUserCount() == 2) {
+			this.conversationPartner = streamSupplier.get().filter(predicate.negate()).findFirst().get();
 		}
 	}
 
-	private void addLabelsToUserDiv(Label userDivLbl, VaadinIcons icon) {
-		this.addComponent(userDivLbl);
-		if (icon != null) {
-			this.addComponent(new Label(icon.getHtml(), ContentMode.HTML));
+	private void refreshIcon() {
+		Message lastMessage = this.conversation.getLastMessage();
+		Label icon;
+		if (lastMessage == null || this.conversation.getConversationUserCount() != 2
+				|| !lastMessage.getSender().equals(this.loggedConvUser.getUser())) {
+			icon = new Label();
 		} else {
-			this.addComponent(new Label());
+			if (this.conversationPartner.isSeen()) {
+				icon = new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML);
+			} else {
+				icon = new Label(VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml(), ContentMode.HTML);
+			}
 		}
+		this.addComponentToIndex(icon, 2);
 	}
 
-	private void setConversationLook(Conversation conversation) {
-		Image image;
-		// @formatter:off
-		if (conversation.getConversationUserCount() == 2) {
-			ConversationUser convUser =
-					conversation.getConversationUsers()
-					.stream()
-					.filter(cu -> !cu.equals(this.loggedConvUser))
-					.findFirst()
-					.get();
-			// @formatter:on
-			image = convUser.getUser().getVaadinImage();
-			this.conversationName = convUser.getUser().getFullName();
+	private void setConversationName() {
+		if (this.conversation.getConversationUserCount() == 2) {
+			this.conversationName = this.conversationPartner.getUser().getFullName();
 		} else {
-			image = conversation.getLastMessage().getSender().getVaadinImage();
-			this.conversationName = conversation.getConversationUsers().stream()
+			this.conversationName = this.conversation.getConversationUsers().stream()
 					.filter(cu -> !cu.equals(this.loggedConvUser)).map(cu -> cu.getUser().getFullName())
 					.collect(Collectors.joining(", "));
 		}
-		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		this.setDescription(conversation.getConversationUsers().stream().filter(cu -> !cu.equals(this.loggedConvUser))
-				.map(cu -> cu.getUser().getFullName()).collect(Collectors.joining(", ")));
-
-		this.addComponent(image);
+		this.setDescription(this.conversationName);
 
 	}
 
 	public void refresh() {
-		String name;
-		String[] stringArray = ((Label) this.getComponent(1)).getValue().split("<");
-		name = stringArray[0];
-		this.removeComponent(this.getComponent(1));
-		Label lblName = new Label(
-				name + "</br><span id=\"message\">" + this.conversation.getLastMessage().getMessage() + "</span>",
-				ContentMode.HTML);
-		this.addComponent(lblName, 1);
-		if (this.conversation.getConversationUserCount() > 2) {
-			this.changeConversationImage();
-		}
-		this.getComponent(0).addStyleName(ThemeConstants.BORDERED_IMAGE);
+		this.refreshConversationUsers();
+		this.refreshConversationImage();
+		this.setConversationName();
+		this.refreshDivLabel();
+		this.refreshIcon();
 	}
 
-	private void changeConversationImage() {
-		Image image;
-		Integer userId = this.conversation.getLastMessage().getSender().getId();
-		if (this.userImageCache.containsKey(userId)) {
-			image = this.userImageCache.get(userId);
+	private void refreshDivLabel() {
+		Label divLabel;
+		if (this.conversation.getLastMessage() != null) {
+			divLabel = new Label(this.conversationName + "</br><span id=\"message\">"
+					+ this.conversation.getLastMessage().getMessage() + "</span>", ContentMode.HTML);
+
+			this.addStyleToLabel(divLabel);
 		} else {
-			image = this.conversation.getLastMessage().getSender().getVaadinImage();
-			this.userImageCache.put(userId, image);
+			divLabel = new Label(this.conversationName);
+		}
+		this.addComponentToIndex(divLabel, 1);
+	}
+
+	private void addStyleToLabel(Label divLabel) {
+		if (!this.loggedConvUser.isSeen()) {
+			this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
+		} else {
+			this.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
+		}
+	}
+
+	private void refreshConversationImage() {
+		Image image;
+		if (this.conversation.getConversationUserCount() == 2) {
+			image = this.getUserImage(this.conversationPartner.getUser());
+		} else {
+			image = this.getUserImage(this.conversation.getLastMessage().getSender());
 		}
 
-		this.replaceComponent(this.getComponent(0), image);
+		this.addComponentToIndex(image, 0);
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
+	}
+
+	private Image getUserImage(User user) {
+		Image image;
+		if (this.userImageCache.containsKey(user.getId())) {
+			image = this.userImageCache.get(user.getId());
+		} else {
+			image = user.getVaadinImage();
+			this.userImageCache.put(user.getId(), image);
+		}
+		return image;
+	}
+
+	private void addComponentToIndex(Component component, int index) {
+		try {
+			this.removeComponent(this.getComponent(index));
+			this.addComponent(component, index);
+		} catch (IndexOutOfBoundsException e) {
+			this.addComponent(component);
+		}
 	}
 
 	public Conversation getConversation() {

@@ -201,21 +201,13 @@ public class MessagesView extends CssLayout implements View {
 		if (!messageText.isEmpty()) {
 			this.initAndSaveMessageToConversation(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
-//			this.addNewMessageLabelToChatPanel(message);
 			this.messagesPanel.scrollToBottom();
-
-//			if (!this.tfSearch.isEmpty()) {
-//				this.tfSearch.clear();
-//				return;
-//			}
-
-			this.moveConversationToTopOfList(this.selectedConversationDiv);
 
 		}
 
 	}
 
-	private void moveConversationToTopOfList(ConversationDiv conversationDiv) {
+	private void refreshAndMoveConversationDiv(ConversationDiv conversationDiv) {
 		this.conversationListLayout.removeComponent(conversationDiv);
 		conversationDiv.refresh();
 //		conversationDiv.replaceComponent(conversationDiv.getComponent(2),
@@ -244,7 +236,7 @@ public class MessagesView extends CssLayout implements View {
 
 	public void receiveMessage(Conversation conversation) {
 		if (this.selectedConversationDiv != null
-				&& this.selectedConversationDiv.getConversation().equals(conversation)) {
+				&& this.selectedConversationDiv.getConversation().getId().equals(conversation.getId())) {
 			this.messagesPanel.addMessage(conversation.getLastMessage(), true);
 			this.messagesPanel.scrollToBottom();
 			this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
@@ -256,9 +248,9 @@ public class MessagesView extends CssLayout implements View {
 //		MessageBroadcastService.messageSeen(this.receiver.getId(), this.loggedUser.getDbUser().getId());
 
 		for (Component userDiv : this.conversationListLayout) {
-			if (((ConversationDiv) userDiv).getConversation().equals(conversation)) {
+			if (((ConversationDiv) userDiv).getConversation().getId().equals(conversation.getId())) {
 				((ConversationDiv) userDiv).setConversation(conversation);
-				this.moveConversationToTopOfList((ConversationDiv) userDiv);
+				this.refreshAndMoveConversationDiv((ConversationDiv) userDiv);
 				return;
 			}
 		}
