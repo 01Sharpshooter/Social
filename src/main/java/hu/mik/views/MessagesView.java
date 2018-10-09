@@ -201,7 +201,6 @@ public class MessagesView extends CssLayout implements View {
 		if (!messageText.isEmpty()) {
 			this.initAndSaveMessageToConversation(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
-			this.messagesPanel.scrollToBottom();
 
 		}
 
@@ -210,12 +209,10 @@ public class MessagesView extends CssLayout implements View {
 	private void refreshAndMoveConversationDiv(ConversationDiv conversationDiv) {
 		this.conversationListLayout.removeComponent(conversationDiv);
 		conversationDiv.refresh();
-//		conversationDiv.replaceComponent(conversationDiv.getComponent(2),
-//				new Label(VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml(), ContentMode.HTML));
 		this.conversationListLayout.addComponent(conversationDiv, 0);
 	}
 
-	private Message initAndSaveMessageToConversation(String messageText) {
+	private void initAndSaveMessageToConversation(String messageText) {
 		Message message = new Message();
 		message.setMessage(messageText);
 		message.setSender(this.loggedUser.getDbUser());
@@ -231,7 +228,6 @@ public class MessagesView extends CssLayout implements View {
 		this.selectedConversationDiv.getConversation().setLastMessage(message);
 		this.selectedConversationDiv
 				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
-		return message;
 	}
 
 	public void receiveMessage(Conversation conversation) {
@@ -239,18 +235,16 @@ public class MessagesView extends CssLayout implements View {
 				&& this.selectedConversationDiv.getConversation().getId().equals(conversation.getId())) {
 			this.messagesPanel.addMessage(conversation.getLastMessage(), true);
 			this.messagesPanel.scrollToBottom();
-			this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
-					this.loggedUser.getDbUser());
-		} else if (!this.loggedUser.getDbUser().equals(conversation.getLastMessage().getSender())) {
+			this.setConversationSeenByUser(conversation);
+		} else if (!this.loggedUser.getDbUser().getId().equals(conversation.getLastMessage().getSender().getId())) {
 			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
 			this.showNewMessageNotification(conversation);
 		}
-//		MessageBroadcastService.messageSeen(this.receiver.getId(), this.loggedUser.getDbUser().getId());
 
-		for (Component userDiv : this.conversationListLayout) {
-			if (((ConversationDiv) userDiv).getConversation().getId().equals(conversation.getId())) {
-				((ConversationDiv) userDiv).setConversation(conversation);
-				this.refreshAndMoveConversationDiv((ConversationDiv) userDiv);
+		for (Component convDiv : this.conversationListLayout) {
+			if (((ConversationDiv) convDiv).getConversation().getId().equals(conversation.getId())) {
+				((ConversationDiv) convDiv).setConversation(conversation);
+				this.refreshAndMoveConversationDiv((ConversationDiv) convDiv);
 				return;
 			}
 		}
@@ -259,19 +253,26 @@ public class MessagesView extends CssLayout implements View {
 		this.conversationListLayout.addComponent(this.createConversationDiv(newConv), 0);
 	}
 
+	private void setConversationSeenByUser(Conversation conversation) {
+		conversation.getConversationUsers().stream()
+				.filter(cu -> cu.getUser().getId().equals(this.loggedUser.getDbUser().getId())).findFirst().get()
+				.setSeen(true);
+		MessageBroadcastService.messageSeen(conversation);
+	}
+
 	private void showNewMessageNotification(Conversation conversation) {
 		Notification notification = Notification.show(conversation.getLastMessage().getSender().getFullName(),
 				conversation.getLastMessage().getMessage(), Notification.Type.TRAY_NOTIFICATION);
 		notification.setIcon(VaadinIcons.COMMENT);
 	}
 
-	private void conversationListSelectionChange(ConversationDiv userDiv) {
-		this.selectedConversationDiv = userDiv;
+	private void conversationListSelectionChange(ConversationDiv conversationDiv) {
+		this.selectedConversationDiv = conversationDiv;
 		this.textWriter.setEnabled(true);
 		this.fillChat();
 		this.conversationListLayout.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
-		userDiv.removeStyleName(ThemeConstants.UNSEEN_MESSAGE);
-		userDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
+		conversationDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
+		this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
 	}
 
 	private void searchValueChangeListener(ValueChangeEvent<String> event) {
@@ -290,13 +291,14 @@ public class MessagesView extends CssLayout implements View {
 		}
 	}
 
-	public void messageSeen(Integer receiverId) {
-//		for (Component c : this.userList) {
-//			if (((UserDiv) c).getUser().getId().equals(receiverId)) {
-//				((CssLayout) c).replaceComponent(((CssLayout) c).getComponent(2),
-//						new Label(VaadinIcons.EYE.getHtml(), ContentMode.HTML));
-//			}
-//		}
+	public void messageSeen(Conversation conversation) {
+		for (Component c : this.conversationListLayout) {
+			if (((ConversationDiv) c).getConversation().getId().equals(conversation.getId())) {
+				((ConversationDiv) c).setConversation(conversation);
+				((ConversationDiv) c).refresh();
+				break;
+			}
+		}
 	}
 
 }

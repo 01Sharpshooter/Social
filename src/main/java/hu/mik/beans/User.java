@@ -94,10 +94,7 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (this.enabled ? 1231 : 1237);
-		result = prime * result + ((this.fullName == null) ? 0 : this.fullName.hashCode());
 		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-		result = prime * result + ((this.imageName == null) ? 0 : this.imageName.hashCode());
 		result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
 		return result;
 	}
@@ -114,28 +111,11 @@ public class User {
 			return false;
 		}
 		User other = (User) obj;
-		if (this.enabled != other.enabled) {
-			return false;
-		}
-		if (this.fullName == null) {
-			if (other.fullName != null) {
-				return false;
-			}
-		} else if (!this.fullName.equals(other.fullName)) {
-			return false;
-		}
 		if (this.id == null) {
 			if (other.id != null) {
 				return false;
 			}
 		} else if (!this.id.equals(other.id)) {
-			return false;
-		}
-		if (this.imageName == null) {
-			if (other.imageName != null) {
-				return false;
-			}
-		} else if (!this.imageName.equals(other.imageName)) {
 			return false;
 		}
 		if (this.username == null) {

@@ -34,11 +34,12 @@ public class MessageBroadcastService {
 		});
 	}
 
-	public static synchronized void messageSeen(Integer senderId, Integer seenSourceId) {
+	public static synchronized void messageSeen(Conversation conversation) {
 		executorService.execute(() -> {
-			if (userToListenerMap.containsKey(senderId)) {
-				userToListenerMap.get(senderId).messageSeen(seenSourceId);
-			}
+			conversation.getConversationUsers().stream()
+//					.filter(cu -> !cu.getUser().getId().equals(conversation.getLastMessage().getSender().getId()))
+					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
+					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).messageSeen(conversation));
 		});
 	}
 

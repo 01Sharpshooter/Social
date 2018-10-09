@@ -341,10 +341,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	@Override
-	public void messageSeen(Integer receiverId) {
+	public void messageSeen(Conversation conversation) {
 		this.access(() -> {
 			if (this.messageView != null) {
-				this.messageView.messageSeen(receiverId);
+				this.messageView.messageSeen(conversation);
 			}
 		});
 

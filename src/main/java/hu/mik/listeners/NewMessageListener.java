@@ -5,5 +5,5 @@ import hu.mik.beans.Conversation;
 public interface NewMessageListener {
 	public void receiveMessage(Conversation conversation);
 
-	public void messageSeen(Integer receiverId);
+	public void messageSeen(Conversation conversation);
 }

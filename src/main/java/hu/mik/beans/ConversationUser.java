@@ -121,4 +121,10 @@ public class ConversationUser {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "ConversationUser [id=" + this.id + ", conversation=" + this.conversation + ", user=" + this.user
+				+ ", seen=" + this.seen + "]";
+	}
+
 }

@@ -41,7 +41,7 @@ public class ConversationDiv extends CssLayout {
 
 	private void refreshConversationUsers() {
 		Supplier<Stream<ConversationUser>> streamSupplier = () -> this.conversation.getConversationUsers().stream();
-		Predicate<? super ConversationUser> predicate = cu -> cu.getUser().equals(this.loggedUser);
+		Predicate<? super ConversationUser> predicate = cu -> cu.getUser().getId().equals(this.loggedUser.getId());
 
 		this.loggedConvUser = streamSupplier.get().filter(predicate).findFirst().get();
 
@@ -54,7 +54,7 @@ public class ConversationDiv extends CssLayout {
 		Message lastMessage = this.conversation.getLastMessage();
 		Label icon;
 		if (lastMessage == null || this.conversation.getConversationUserCount() != 2
-				|| !lastMessage.getSender().equals(this.loggedConvUser.getUser())) {
+				|| !lastMessage.getSender().getId().equals(this.loggedConvUser.getUser().getId())) {
 			icon = new Label();
 		} else {
 			if (this.conversationPartner.isSeen()) {
@@ -79,6 +79,7 @@ public class ConversationDiv extends CssLayout {
 	}
 
 	public void refresh() {
+		System.err.println("REFRESHING DIV");
 		this.refreshConversationUsers();
 		this.refreshConversationImage();
 		this.setConversationName();
@@ -100,6 +101,7 @@ public class ConversationDiv extends CssLayout {
 	}
 
 	private void addStyleToLabel(Label divLabel) {
+		System.err.println(this.loggedConvUser.getUser().getFullName() + ": " + this.loggedConvUser.isSeen());
 		if (!this.loggedConvUser.isSeen()) {
 			this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		} else {
