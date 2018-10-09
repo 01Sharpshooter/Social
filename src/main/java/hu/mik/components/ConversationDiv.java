@@ -79,7 +79,6 @@ public class ConversationDiv extends CssLayout {
 	}
 
 	public void refresh() {
-		System.err.println("REFRESHING DIV");
 		this.refreshConversationUsers();
 		this.refreshConversationImage();
 		this.setConversationName();
@@ -101,7 +100,6 @@ public class ConversationDiv extends CssLayout {
 	}
 
 	private void addStyleToLabel(Label divLabel) {
-		System.err.println(this.loggedConvUser.getUser().getFullName() + ": " + this.loggedConvUser.isSeen());
 		if (!this.loggedConvUser.isSeen()) {
 			this.addStyleName(ThemeConstants.UNSEEN_MESSAGE);
 		} else {

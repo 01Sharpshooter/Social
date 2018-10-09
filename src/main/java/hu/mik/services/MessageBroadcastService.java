@@ -29,6 +29,7 @@ public class MessageBroadcastService {
 	public static synchronized void sendMessage(Conversation conversation) {
 		executorService.execute(() -> {
 			conversation.getConversationUsers().stream()
+					.filter(cu -> !cu.getUser().getId().equals(conversation.getLastMessage().getSender().getId()))
 					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
 					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).receiveMessage(conversation));
 		});
@@ -37,7 +38,6 @@ public class MessageBroadcastService {
 	public static synchronized void messageSeen(Conversation conversation) {
 		executorService.execute(() -> {
 			conversation.getConversationUsers().stream()
-//					.filter(cu -> !cu.getUser().getId().equals(conversation.getLastMessage().getSender().getId()))
 					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
 					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).messageSeen(conversation));
 		});

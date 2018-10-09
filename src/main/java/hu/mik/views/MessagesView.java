@@ -10,6 +10,7 @@ import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
@@ -66,6 +67,12 @@ public class MessagesView extends CssLayout implements View {
 			this.createContent(event);
 		}
 
+	}
+
+	@Override
+	public void beforeLeave(ViewBeforeLeaveEvent event) {
+		View.super.beforeLeave(event);
+		this.selectedConversationDiv = null;
 	}
 
 	private void createContent(ViewChangeEvent event) {
@@ -191,7 +198,6 @@ public class MessagesView extends CssLayout implements View {
 					this.loggedUser.getDbUser()) != 0) {
 				((MainUI) this.getUI()).refreshUnseenConversationNumber();
 			}
-//		MessageBroadcastService.messageSeen(this.receiver.getId(), this.sender.getDbUser().getId());
 			this.messagesPanel.firstFill();
 			this.messagesPanel.scrollToBottom();
 		}
@@ -201,7 +207,7 @@ public class MessagesView extends CssLayout implements View {
 		if (!messageText.isEmpty()) {
 			this.initAndSaveMessageToConversation(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
-
+			this.selectedConversationDiv.refresh();
 		}
 
 	}
@@ -228,13 +234,13 @@ public class MessagesView extends CssLayout implements View {
 		this.selectedConversationDiv.getConversation().setLastMessage(message);
 		this.selectedConversationDiv
 				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+		this.addMessageLabelToPanel(message);
 	}
 
 	public void receiveMessage(Conversation conversation) {
 		if (this.selectedConversationDiv != null
 				&& this.selectedConversationDiv.getConversation().getId().equals(conversation.getId())) {
-			this.messagesPanel.addMessage(conversation.getLastMessage(), true);
-			this.messagesPanel.scrollToBottom();
+			this.addMessageLabelToPanel(conversation.getLastMessage());
 			this.setConversationSeenByUser(conversation);
 		} else if (!this.loggedUser.getDbUser().getId().equals(conversation.getLastMessage().getSender().getId())) {
 			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
@@ -251,6 +257,11 @@ public class MessagesView extends CssLayout implements View {
 		Conversation newConv = this.chatService.findOrCreateConversationWithUser(
 				conversation.getLastMessage().getSender().getId(), this.loggedUser.getDbUser());
 		this.conversationListLayout.addComponent(this.createConversationDiv(newConv), 0);
+	}
+
+	private void addMessageLabelToPanel(Message lastMessage) {
+		this.messagesPanel.addMessage(lastMessage, true);
+		this.messagesPanel.scrollToBottom();
 	}
 
 	private void setConversationSeenByUser(Conversation conversation) {
@@ -285,8 +296,6 @@ public class MessagesView extends CssLayout implements View {
 			this.userService.findByFullNameContaining(event.getValue()).forEach(user -> {
 				Message message = new Message();
 				message.setMessage("");
-				// message.setSeen(true);
-//				this.userList.addComponent(this.createUserDivFromDbUser(user, message));
 			});
 		}
 	}
