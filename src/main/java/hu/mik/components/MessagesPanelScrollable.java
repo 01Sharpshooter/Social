@@ -2,16 +2,21 @@ package hu.mik.components;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.ScrollDirection;
 import hu.mik.services.ChatService;
@@ -31,6 +36,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	private int scrollForLoaded = 40;
 
+	private Map<Integer, Image> userImageCache;
+
 	public MessagesPanelScrollable() {
 		super(ScrollDirection.UP);
 		this.content = new VerticalLayout();
@@ -41,6 +48,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.setContent(this.content);
 
 		this.messageService = this.appCtx.getBean(ChatService.class);
+		this.userImageCache = new HashMap<>();
 	}
 
 	public void setLoggedUserAndConversation(SocialUserWrapper loggedUser, Conversation conversation) {
@@ -84,21 +92,24 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	public void addMessage(Message message, boolean isBottomMessage) {
 		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
+		newMessage.setWidth("90%");
+		CssLayout messageZone = new CssLayout();
 
 		if (isBottomMessage) {
-			this.content.addComponent(newMessage);
+			this.content.addComponent(messageZone);
 		} else {
-			this.content.addComponent(newMessage, 0);
+			this.content.addComponent(messageZone, 0);
 		}
 
 		if (message.getSender().equals(this.loggedUser.getDbUser())) {
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
+			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 		} else {
-			newMessage.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-			this.content.setComponentAlignment(newMessage, Alignment.MIDDLE_LEFT);
+			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
+			messageZone.addComponent(message.getSender().getVaadinImage());
+			this.content.setComponentAlignment(messageZone, Alignment.MIDDLE_LEFT);
 		}
-		newMessage.setWidth(this.getWidth() / 2, this.getWidthUnits());
-		newMessage.setDescription(this.getMessageDateDesc(message.getTime()));
+		messageZone.addComponent(newMessage);
+		messageZone.setDescription(this.getMessageDateDesc(message.getTime()));
 		this.scrollToBottom();
 	}
 
@@ -112,6 +123,18 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			break;
 		}
 		this.setScrollTop(this.pageSize * this.scrollForLoaded);
+	}
+
+	// TODO check vaadin cache
+	private Image getUserImage(User user) {
+		Image image;
+		if (this.userImageCache.containsKey(user.getId())) {
+			image = this.userImageCache.get(user.getId());
+		} else {
+			image = user.getVaadinImage();
+			this.userImageCache.put(user.getId(), image);
+		}
+		return image;
 	}
 
 }
