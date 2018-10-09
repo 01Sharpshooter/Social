@@ -109,7 +109,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			this.content.setComponentAlignment(messageZone, Alignment.MIDDLE_LEFT);
 		}
 		messageZone.addComponent(newMessage);
-		messageZone.setDescription(this.getMessageDateDesc(message.getTime()));
+		messageZone
+				.setDescription(message.getSender().getFullName() + ", " + this.getMessageDateDesc(message.getTime()));
 		this.scrollToBottom();
 	}
 
