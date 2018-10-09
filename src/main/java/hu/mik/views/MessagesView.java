@@ -207,7 +207,7 @@ public class MessagesView extends CssLayout implements View {
 		if (!messageText.isEmpty()) {
 			this.initAndSaveMessageToConversation(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
-			this.selectedConversationDiv.refresh();
+			this.refreshAndMoveConversationDiv(this.selectedConversationDiv);
 		}
 
 	}
@@ -268,7 +268,8 @@ public class MessagesView extends CssLayout implements View {
 		conversation.getConversationUsers().stream()
 				.filter(cu -> cu.getUser().getId().equals(this.loggedUser.getDbUser().getId())).findFirst().get()
 				.setSeen(true);
-		MessageBroadcastService.messageSeen(conversation);
+		this.selectedConversationDiv.setConversation(this.chatService.saveConversation(conversation));
+		MessageBroadcastService.messageSeen(this.selectedConversationDiv.getConversation());
 	}
 
 	private void showNewMessageNotification(Conversation conversation) {
@@ -284,6 +285,7 @@ public class MessagesView extends CssLayout implements View {
 		this.conversationListLayout.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
 		conversationDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
 		this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
+		this.messagesPanel.scrollToBottom();
 	}
 
 	private void searchValueChangeListener(ValueChangeEvent<String> event) {
