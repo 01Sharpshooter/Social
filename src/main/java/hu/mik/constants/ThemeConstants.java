@@ -55,4 +55,10 @@ public class ThemeConstants {
 	public static final String UNSEEN_MESSAGE = "unseenMessage";
 
 	public static final String JUSTIFIED_LABEL = "justifiedLabel";
+
+	public static final String SHOW_DROPDOWN = "show-dropdown";
+
+	public static final String NAVI_ITEM_LIST = "navi-item-list";
+	public static final String NAVI_PERSON = "navi-person";
+	public static final String NAVI_SEARCH_FIELD = "navi-search-field";
 }

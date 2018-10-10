@@ -87,7 +87,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private TextField nameSearchTf;
 	private CssLayout navigationBar;
 	private CssLayout dropDownMenu;
-	private boolean menuIconFlag = false;
+	private boolean dropDownShown = false;
 	private LdapGroup adminGroup;
 	private Label lblMessages;
 
@@ -203,8 +203,41 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	public void createNaviBar() {
 		this.navigationBar = new CssLayout();
-		this.navigationBar.setWidth("100%");
 		this.navigationBar.addLayoutClickListener(this::naviBarClickListener);
+		this.navigationBar.setId("navigationBar");
+		this.createNaviBarPerson();
+		this.createNaviBarLabelList(this.navigationBar);
+		this.createNaviSearchField();
+		this.createNaviMenuIcon();
+		this.base.addComponent(this.navigationBar);
+		this.base.setExpandRatio(this.navigationBar, 10);
+	}
+
+	private void createNaviMenuIcon() {
+		Image naviMenuIcon = new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON)));
+		naviMenuIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
+		naviMenuIcon.setId("menuIcon");
+		naviMenuIcon.addClickListener(e -> this.changeDropDownVisibility());
+		this.navigationBar.addComponent(naviMenuIcon);
+	}
+
+	private void createNaviSearchField() {
+		CssLayout naviSearchField = new CssLayout();
+		naviSearchField.addStyleName(ThemeConstants.NAVI_SEARCH_FIELD);
+		this.nameSearchTf = new TextField();
+		this.nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
+		this.nameSearchTf.setPlaceholder("Search for a user...");
+		Button namesearchButton = new Button("Search", this::nameSearchClickListener);
+		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
+		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
+		naviSearchField.addComponents(this.nameSearchTf, namesearchButton);
+		this.navigationBar.addComponent(naviSearchField);
+
+	}
+
+	private void createNaviBarPerson() {
+		CssLayout naviPerson = new CssLayout();
+		naviPerson.addStyleName(ThemeConstants.NAVI_PERSON);
 		this.naviBarImage = this.socialUser.getDbUser().getVaadinImage();
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
@@ -214,24 +247,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		Label name = new Label();
 		name.setValue(this.socialUser.getLdapUser().getFullName());
 		name.setId("username");
-		this.navigationBar.addComponent(name);
-		Image naviBarIcon = new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON)));
-		naviBarIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
-		naviBarIcon.setId("menuIcon");
-		naviBarIcon.addClickListener(this::menuIconClickListener);
-		this.navigationBar.addComponent(naviBarIcon);
-		this.createNaviBarLabelList(this.navigationBar);
-		this.nameSearchTf = new TextField();
-		this.nameSearchTf.setStyleName(ValoTheme.BUTTON_SMALL);
-		this.nameSearchTf.setPlaceholder("Search for a user...");
-		Button namesearchButton = new Button("Search", this::nameSearchClickListener);
-		namesearchButton.setStyleName(ValoTheme.BUTTON_SMALL);
-		namesearchButton.addStyleName(ThemeConstants.BLUE_TEXT);
-		this.navigationBar.addComponent(namesearchButton);
-		this.navigationBar.addComponent(this.nameSearchTf);
-		this.navigationBar.setId("navigationBar");
-		this.base.addComponent(this.navigationBar);
-		this.base.setExpandRatio(this.navigationBar, 10);
+		naviPerson.addComponents(this.naviBarImage, name);
+		this.navigationBar.addComponent(naviPerson);
 	}
 
 	private void naviBarClickListener(LayoutClickEvent event) {
@@ -272,13 +289,13 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.getNavigator().navigateTo(PictureUploadView.NAME);
 	}
 
-	private void menuIconClickListener(com.vaadin.event.MouseEvents.ClickEvent event) {
-		this.changeDropDownVisibility();
-	}
-
 	private void changeDropDownVisibility() {
-		this.menuIconFlag = !this.menuIconFlag;
-		this.dropDownMenu.setVisible(this.menuIconFlag);
+		if (!this.dropDownShown) {
+			this.navigationBar.addStyleName(ThemeConstants.SHOW_DROPDOWN);
+		} else {
+			this.navigationBar.removeStyleName(ThemeConstants.SHOW_DROPDOWN);
+		}
+		this.dropDownShown = !this.dropDownShown;
 	}
 
 	public void refreshImage() {
@@ -296,6 +313,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	private void createNaviBarLabelList(AbstractLayout layout) {
+		CssLayout naviItemList = new CssLayout();
 		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
 				ContentMode.HTML);
 		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
@@ -316,10 +334,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 //		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
 //			layout.addComponent(lblAdmin);
 //		}
-		layout.addComponent(lblMain);
-		layout.addComponent(this.lblMessages);
-		layout.addComponent(lblContacts);
-		layout.addComponent(lblLogout);
+		naviItemList.addComponents(lblMain, this.lblMessages, lblContacts, lblLogout);
+		naviItemList.addStyleName(ThemeConstants.NAVI_ITEM_LIST);
+		layout.addComponent(naviItemList);
 	}
 
 	public void refreshUnseenConversationNumber() {

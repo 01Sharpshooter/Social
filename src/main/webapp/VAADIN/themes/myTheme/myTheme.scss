@@ -12,6 +12,7 @@
   	
 
 	#base[width-range~="0-550px"]{
+		height:auto;
 		.manyUserLayout{
 			.v-horizontallayout{
 				width:100%;
@@ -21,18 +22,28 @@
 			font-size: 1.0em;
 		}
 		#navigationBar{
-	  		.v-label{
-	  			display:none;
+			flex-direction: column;
+			align-items:normal;
+			transition: all 1s;
+	  		.navi-item-list{
+	  			display: none;
+	  			flex-direction: column;
+	  			order:1;
 	  		}
-	  		#menuIcon{
-	  			display: block;
-	  		}
-			.v-textfield{
-				float:right;
-				margin-top:15px;
-				width:110px;
-				font-size:10px;
+	  		.navi-search-field{
+	  			margin-left:unset;
+				display: none;
+    			align-self: baseline;
+    			padding-bottom: 5px;
+    			padding-top: 5px;
 			}
+	  		#menuIcon{
+	  			align-self: flex-end;
+			    display: initial;
+			    position: absolute;
+			    cursor: pointer;
+			    height: 50px;
+	  		}
 		}	
 		#radioTeamSelect{
 			font-size:12px;
@@ -281,52 +292,73 @@
 			font-size: 1.4em;
 		}
 		#navigationBar{
-			text-align: left;		
+			text-align: left;	
+			display: flex;
+			align-items: center;	
 			background: darkslategrey;
 			float:left;
-			font-size: 18px;
-			padding-left:10px;
-			width:100%;
-			height:60px;
-			overflow: hidden;
-			margin:10px auto;
+			padding:10px;
+			width: 100%;
 			border-radius:15px;
 			position:relative;
 			box-shadow: 2px 3px 10px black;
-			z-index:3;
-			.v-label{			
-				padding-left:10px;
-				padding-top:20px;
-				padding-bottom:20px;			
-	    		text-align: center;
-	    		height: 100%;
+			.navi-person{
+				display:flex;
+				align-items: center;
+				.navigationBarIcon:hover{
+					border: 4px solid $green;
+					border-radius: 100%;
+				}
+				.navigationBarIcon{
+					height:50px;
+				}
+				#username{
+					color:white;
+					padding-right: 20px;
+					padding-left: 5px;
+				}
+				#username:hover{
+					color:$green;
+				}	
 			}
-			.v-label:not(#username){
-				color:$green;
-				padding-right:10px;
-				border-style: solid;
-	    		border-color: white;
-	    		border-top:none;
-	    		border-bottom:none;
-	    		border-right:1px;
-	    		border-width: 1px;
+			.navi-item-list{
+				display: flex;
+				flex-direction: row;				
+				.v-label{			
+					padding-left:10px;
+					display: flex;		
+		    		align-items: center;
+		    		height: 100%;
+				}
+				.v-label{
+					color:$green;
+					padding-right:10px;
+					border-style: solid;
+		    		border-color: white;
+		    		border-top:none;
+		    		border-bottom:none;
+		    		border-right:none;
+		    		border-width: 1px;
+				}
+				.v-label:hover{
+					font-size:18px;
+					color:white;
+					background-color: $green;	
+				}
 			}
-			.v-label:hover:not(#username){
-				font-size:20px;
-				padding-top:18px;
-				color:white;
-				background-color: $green;	
+			.navi-search-field{
+				margin-left:auto;
+				.v-button{
+					margin-right:10px
+				}
+				.v-textfield{
+					margin-left:auto;
+					width:150px;
+				}
 			}
-			.v-button{
-				float:right;
-				margin-top:15px;
-				margin-right:10px
-			}
-			.v-textfield{
-				float:right;
-				margin-top:15px;
-				width:150px;
-			}
+			#menuIcon{
+	  			display:none;
+	  		}
 		}
 		
 		#profileHeader{
@@ -356,27 +388,6 @@
 			}
 		}
 	}
-	
-	.navigationBarIcon:hover{
-		border: 4px solid $green;
-		border-radius: 100%;
-	}
-	.navigationBarIcon{
-		height:50px;
-		margin-top:5px;
-	}
-	#menuIcon{
-		float:right;
-		display: none;
-		margin-right: 10px;
-	}
-	#username{
-		color:white;
-		padding-right: 20px;
-	}
-	#username:hover{
-		color:$green;
-	}
 	.hoverGreenLayouts{
 		.v-layout:hover{
 			border: 1px solid $green;
@@ -391,27 +402,6 @@
 		background-color: $green;	
 	}
 	
-	#dropDownMenu{
-		position:absolute;
-		background-color:$grey;
-		width:220px;
-		height:60%;
-		z-index:2;
-		right:10px;
-		top:112px;
-		padding-top:10px;
-		border-top-color:$grey;
-		.v-label{
-			width:100%;
-			height:15%;
-			border-bottom: 1px solid;
-			border-bottom-color: $green;
-			color: white;
-		}
-		.v-label:hover{
-			background-color: $green;
-		}
-	}	
 
   	#viewDisplay{
   		.v-panel{
@@ -520,7 +510,19 @@
 	.justifiedLabel {
 		text-align: justify;	
 	}
-  
+
+	.hidden {
+		display:none;
+	}  
+
+	.show-dropdown{
+		.navi-item-list{
+			display: flex !important;
+		}
+		.navi-search-field{
+			display: flex !important;
+		}
+	}
 
 
 }
