@@ -15113,8 +15113,21 @@ div.v-layout.v-horizontal.v-widget {
 	width: 80%;
 }
 
+.myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .v-verticallayout {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
 .myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .v-button {
 	font-size: 12px;
+}
+
+.myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .chatMessageSent {
+	max-width: 80%;
+}
+
+.myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .chatMessageReceived {
+	max-width: 80%;
 }
 
 .myTheme #base[width-range~="551px-930px"] .manyUserLayout .v-horizontallayout {
@@ -15270,25 +15283,26 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #messageBase #chatLayout .chatMessageSent {
 	text-align: left;
 	line-height: 1.2;
-	width: 50%;
+	max-width: 50%;
 	color: black;
-	border: 1px solid #00BFFF;
+	border: 1px solid #00b6cd;
 	background-color: #00BFFF;
 	border-radius: 4px;
 	box-shadow: 1px 1px 1px #00b6cd;
 }
 
-.myTheme #base #messageBase #chatLayout .chatMessageSent #messageSpan {
+.myTheme #base #messageBase #chatLayout .chatMessageSent .v-label {
+	white-space: normal;
 	padding-right: 1px;
 	padding-left: 5px;
-	padding-bottom: 2px;
-	padding-top: 0px;
+	padding-bottom: 5px;
+	padding-top: 5px;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageReceived {
 	text-align: left;
 	line-height: 1.2;
-	width: 50%;
+	max-width: 50%;
 	color: black;
 	background-color: #eaf2ff;
 	border-radius: 4px;
@@ -15303,11 +15317,12 @@ div.v-layout.v-horizontal.v-widget {
 	height: 30px;
 }
 
-.myTheme #base #messageBase #chatLayout .chatMessageReceived #messageSpan {
+.myTheme #base #messageBase #chatLayout .chatMessageReceived .v-label {
+	white-space: normal;
 	padding-left: 1px;
 	padding-right: 5px;
-	padding-bottom: 2px;
-	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-top: 5px;
 }
 
 .myTheme #base .manyUserLayout {

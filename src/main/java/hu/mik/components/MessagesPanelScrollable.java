@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
@@ -91,8 +90,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void addMessage(Message message, boolean isBottomMessage) {
-		Label newMessage = new Label("<span id=\"messageSpan\">" + message.getMessage() + "</span>", ContentMode.HTML);
-		newMessage.setWidth("90%");
+		Label newMessage = new Label(message.getMessage());
 		CssLayout messageZone = new CssLayout();
 
 		if (isBottomMessage) {
