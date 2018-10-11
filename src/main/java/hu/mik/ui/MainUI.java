@@ -86,7 +86,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private VerticalLayout base;
 	private TextField nameSearchTf;
 	private CssLayout navigationBar;
-	private CssLayout dropDownMenu;
 	private boolean dropDownShown = false;
 	private LdapGroup adminGroup;
 	private Label lblMessages;
@@ -122,7 +121,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 		this.createTitleComponent();
 		this.createNaviBar();
-		this.createDropDownMenu();
 		this.createViewDisplay();
 		this.base.setId("base");
 
@@ -152,20 +150,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 			this.viewDisplay.setContent((Component) view);
 		}
 
-	}
-
-	private void createDropDownMenu() {
-		this.dropDownMenu = new CssLayout();
-		this.dropDownMenu.setId("dropDownMenu");
-		this.dropDownMenu.addStyleName(ThemeConstants.BORDERED_GREEN);
-		Label lblProfile = new Label(VaadinIcons.USER.getHtml() + " Profile", ContentMode.HTML);
-		lblProfile.addStyleName(ThemeConstants.ICON_WHITE);
-		this.dropDownMenu.addComponent(lblProfile);
-		this.createNaviBarLabelList(this.dropDownMenu);
-		this.dropDownMenu.setVisible(false);
-		this.dropDownMenu.addLayoutClickListener(this::naviBarClickListener);
-		this.base.addComponent(this.dropDownMenu);
-		this.base.setExpandRatio(this.dropDownMenu, 1);
 	}
 
 	public static List<User> getOnlineUsers() {
@@ -252,11 +236,9 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	private void naviBarClickListener(LayoutClickEvent event) {
-		if (event.getComponent().equals(this.dropDownMenu) && event.getClickedComponent() != null) {
-			this.changeDropDownVisibility();
-		}
 		if (event.getClickedComponent() != null && event.getClickedComponent().getClass().equals(Label.class)) {
 			Label lblClicked = (Label) event.getClickedComponent();
+			this.changeDropDownVisibility();
 			String label = lblClicked.getValue().replaceFirst("<span.*</span><", "<").replaceFirst("<.?span>", "")
 					.replaceFirst("<span.*>", "");
 			switch (label) {
@@ -342,13 +324,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	public void refreshUnseenConversationNumber() {
 		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
 		this.navigationBar.forEach(e -> {
-			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
-			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
-				((Label) e).setValue(
-						VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>");
-			}
-		});
-		this.dropDownMenu.forEach(e -> {
 			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
 				((Label) e).setValue(

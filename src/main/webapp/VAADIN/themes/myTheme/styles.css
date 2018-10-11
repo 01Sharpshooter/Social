@@ -15065,7 +15065,8 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base[width-range~="0-550px"] #navigationBar {
 	flex-direction: column;
 	align-items: normal;
-	transition: all 1s;
+	max-height: 80px;
+	transition: max-height 0.5s;
 }
 
 .myTheme #base[width-range~="0-550px"] #navigationBar .navi-item-list {
@@ -15587,6 +15588,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .hidden {
 	display: none;
+}
+
+.myTheme .show-dropdown {
+	max-height: 250px !important;
 }
 
 .myTheme .show-dropdown .navi-item-list {
