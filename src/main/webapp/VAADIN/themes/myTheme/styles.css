@@ -15064,8 +15064,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base[width-range~="0-550px"] #navigationBar {
 	flex-direction: column;
+	padding: 5px;
 	align-items: normal;
 	max-height: 80px;
+	height: auto;
 	transition: max-height 0.5s;
 }
 
@@ -15073,6 +15075,10 @@ div.v-layout.v-horizontal.v-widget {
 	display: none;
 	flex-direction: column;
 	order: 1;
+}
+
+.myTheme #base[width-range~="0-550px"] #navigationBar .navi-item-list .v-label {
+	flex-direction: row;
 }
 
 .myTheme #base[width-range~="0-550px"] #navigationBar .navi-search-field {
@@ -15197,7 +15203,7 @@ div.v-layout.v-horizontal.v-widget {
 	margin: 5px auto;
 	font-family: arial;
 	min-width: 240px;
-	background: aliceblue;
+	background: lightseagreen;
 }
 
 .myTheme #base .unseenMessage {
@@ -15361,9 +15367,10 @@ div.v-layout.v-horizontal.v-widget {
 	align-items: center;
 	background: darkslategrey;
 	float: left;
-	padding: 10px;
+	padding-left: 10px;
 	width: 100%;
-	border-radius: 15px;
+	height: 100%;
+	border-radius: 15px 15px 0px 0px;
 	position: relative;
 	box-shadow: 2px 3px 10px black;
 }
@@ -15371,10 +15378,11 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #navigationBar .navi-person {
 	display: flex;
 	align-items: center;
+	height: 100%;
 }
 
 .myTheme #base #navigationBar .navi-person .navigationBarIcon:hover {
-	border: 4px solid #00FF00;
+	border: 4px solid deepskyblue;
 	border-radius: 100%;
 }
 
@@ -15389,36 +15397,32 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #navigationBar .navi-person #username:hover {
-	color: #00FF00;
+	color: deepskyblue;
 }
 
 .myTheme #base #navigationBar .navi-item-list {
 	display: flex;
 	flex-direction: row;
+	height: 100%;
+	border-left: 1px solid darkgray;
 }
 
 .myTheme #base #navigationBar .navi-item-list .v-label {
 	padding-left: 10px;
 	display: flex;
+	flex-direction: column;
+	padding-top: 5px;
 	align-items: center;
 	height: 100%;
-}
-
-.myTheme #base #navigationBar .navi-item-list .v-label {
-	color: #00FF00;
+	color: aliceblue;
 	padding-right: 10px;
-	border-style: solid;
-	border-color: white;
-	border-top: none;
-	border-bottom: none;
-	border-right: none;
-	border-width: 1px;
+	border-right: 1px solid darkgray;
 }
 
 .myTheme #base #navigationBar .navi-item-list .v-label:hover {
-	font-size: 18px;
+	font-size: 17px;
 	color: white;
-	background-color: #00FF00;
+	background: deepskyblue;
 }
 
 .myTheme #base #navigationBar .navi-search-field {
@@ -15436,6 +15440,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #navigationBar #menuIcon {
 	display: none;
+}
+
+.myTheme #base #navigationBar .folding {
+	margin-left: 0px !important;
 }
 
 .myTheme #base #profileHeader {

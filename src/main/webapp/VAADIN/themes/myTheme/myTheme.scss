@@ -23,13 +23,18 @@
 		}
 		#navigationBar{
 			flex-direction: column;
+			padding:5px;
 			align-items:normal;
 			max-height:80px;
+			height: auto;
 			transition: max-height 0.5s;
 	  		.navi-item-list{
 	  			display: none;
 	  			flex-direction: column;
 	  			order:1;
+	  			.v-label{
+	  				flex-direction: row;	
+	  			}
 	  		}
 	  		.navi-search-field{
 	  			margin-left:unset;
@@ -149,7 +154,7 @@
 		margin: 5px auto;
 		font-family: arial;
 		min-width: 240px;
-		background: aliceblue;
+		background: lightseagreen;
 		
 		.unseenMessage{
 			font-weight: bold;
@@ -298,16 +303,19 @@
 			align-items: center;	
 			background: darkslategrey;
 			float:left;
-			padding:10px;
+			padding-left:10px;
 			width: 100%;
-			border-radius:15px;
+			height: 100%;
+			border-radius:15px 15px 0px 0px;
 			position:relative;
 			box-shadow: 2px 3px 10px black;
 			.navi-person{
 				display:flex;
 				align-items: center;
+				//border-right: 2px solid aliceblue;
+				height: 100%;
 				.navigationBarIcon:hover{
-					border: 4px solid $green;
+					border: 4px solid deepskyblue;
 					border-radius: 100%;
 				}
 				.navigationBarIcon{
@@ -319,32 +327,30 @@
 					padding-left: 5px;
 				}
 				#username:hover{
-					color:$green;
+					color:deepskyblue;
 				}	
 			}
 			.navi-item-list{
 				display: flex;
-				flex-direction: row;				
+				flex-direction: row;	
+				height: 100%;	
+				border-left: 1px solid darkgray;	
 				.v-label{			
 					padding-left:10px;
-					display: flex;		
+					display: flex;	
+					flex-direction:column;
+					padding-top: 5px;	
 		    		align-items: center;
 		    		height: 100%;
-				}
-				.v-label{
-					color:$green;
+					color:aliceblue;
 					padding-right:10px;
-					border-style: solid;
-		    		border-color: white;
-		    		border-top:none;
-		    		border-bottom:none;
-		    		border-right:none;
-		    		border-width: 1px;
+					border-right: 1px solid darkgray;
 				}
 				.v-label:hover{
-					font-size:18px;
+					font-size:17px;
 					color:white;
-					background-color: $green;	
+					//border-bottom: 3px solid deepskyblue;	
+					background: deepskyblue;
 				}
 			}
 			.navi-search-field{
@@ -359,6 +365,10 @@
 			}
 			#menuIcon{
 	  			display:none;
+	  		}
+	  	
+	  		.folding{
+	  			margin-left: 0px !important;
 	  		}
 		}
 		
