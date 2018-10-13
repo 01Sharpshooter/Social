@@ -15179,23 +15179,11 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout {
-	width: 10%;
-}
-
-.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout {
-	text-align: center;
-}
-
-.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout .v-label {
-	display: none;
-}
-
-.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout .v-csslayout .v-image {
-	height: 100%;
+	width: 30%;
 }
 
 .myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout {
-	width: 90%;
+	width: 70%;
 }
 
 .myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout .v-button {
@@ -15240,7 +15228,6 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase {
-	padding-bottom: 10px;
 	padding-right: 10px;
 }
 
@@ -15431,7 +15418,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #navigationBar .navi-item-list .v-label:hover {
 	font-size: 17px;
 	color: white;
-	background: deepskyblue;
+	background: cornflowerblue;
 }
 
 .myTheme #base #navigationBar .navi-search-field {
@@ -15502,6 +15489,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #viewDisplay {
 	border-top: 1px solid lightgray !important;
+	box-shadow: 1px 2px 10px lightgrey;
 }
 
 .myTheme #sideMenu {
@@ -15514,8 +15502,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .bordered {
 	border: 1px solid cornflowerblue;
-	border-radius: 12px;
-	box-shadow: 2px 2px 2px #00b6cd;
 }
 
 .myTheme .borderedImage {
@@ -15534,9 +15520,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .borderedGreen {
-	border: 1px solid #00FF00;
-	border-radius: 10px;
-	box-shadow: 2px 2px 2px #00FF00;
+	border: 2px solid #00FF00 !important;
 }
 
 .myTheme .workingSpace {

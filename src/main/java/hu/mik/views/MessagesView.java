@@ -62,7 +62,6 @@ public class MessagesView extends CssLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
 			this.loggedUser = this.userUtils.getLoggedInUser();
-			this.addStyleName(ThemeConstants.BORDERED);
 			this.setSizeFull();
 			this.createContent(event);
 		}

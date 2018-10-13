@@ -134,19 +134,11 @@
 		}
 		#messageBase{
 			#latestMessagesLayout{
-				width: 10%;
-				.v-csslayout{				
-					text-align:center;
-					.v-label{
-						display:none;
-					}
-					.v-image{
-						height:100%;
-					}
-				}
+				width: 30%;		
+
 			}
 			#chatLayout{
-				width:90%;
+				width:70%;
 				.v-button{
 					font-size:12px;
 				}
@@ -196,8 +188,7 @@
 			//border-color: $blue;
 		}
 		
-		#messageBase{
-			padding-bottom: 10px;
+		#messageBase{		
 			padding-right: 10px;
 			
 			.v-textfield{
@@ -365,7 +356,7 @@
 					font-size:17px;
 					color:white;
 					//border-bottom: 3px solid deepskyblue;	
-					background: deepskyblue;
+					background: $blue;
 				}
 			}
 			.navi-search-field{
@@ -431,6 +422,7 @@
 
   	#viewDisplay{
   		border-top: 1px solid lightgray !important;
+  		box-shadow: 1px 2px 10px lightgrey;
   		.v-panel{
   			//border: 1px solid;
     		//border-radius: 5px;
@@ -447,8 +439,6 @@
   	
     .bordered{
   		border:1px solid $blue;
-  		border-radius:12px;
-  		box-shadow:2px 2px 2px $blue_shadow;
   	}
   
   	.borderedImage{
@@ -467,9 +457,7 @@
   	}
   	
   	.borderedGreen{
-  		border: 1px solid $green;
-  		border-radius:10px;
-  		box-shadow:2px 2px 2px $green;
+  		border: 2px solid $green !important;
   	}
   	
   	.workingSpace{
