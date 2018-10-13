@@ -61,4 +61,6 @@ public class ThemeConstants {
 	public static final String NAVI_ITEM_LIST = "navi-item-list";
 	public static final String NAVI_PERSON = "navi-person";
 	public static final String NAVI_SEARCH_FIELD = "navi-search-field";
+
+	public static final String NEWS_BOX = "news-box";
 }

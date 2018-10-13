@@ -31,7 +31,7 @@ public class NewsComponent extends VerticalLayout {
 		this.setSizeFull();
 		this.news = news;
 		this.newsService = newsService;
-		this.addStyleName(ThemeConstants.BORDERED);
+		this.addStyleName(ThemeConstants.NEWS_BOX);
 
 		this.createContent(withDelete);
 	}

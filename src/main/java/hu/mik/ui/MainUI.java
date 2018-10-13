@@ -119,7 +119,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 		Responsive.makeResponsive(this.base);
 
-		this.createTitleComponent();
+		// this.createTitleComponent();
 		this.createNaviBar();
 		this.createViewDisplay();
 		this.base.setId("base");
@@ -296,22 +296,22 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	private void createNaviBarLabelList(AbstractLayout layout) {
 		CssLayout naviItemList = new CssLayout();
-		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
-				ContentMode.HTML);
-		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
+//		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
+//				ContentMode.HTML);
+//		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
-		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
+//		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
 		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
 		this.lblMessages = new Label(
 				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
-		this.lblMessages.addStyleName(ThemeConstants.ICON_WHITE);
+//		this.lblMessages.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblContacts = new Label(VaadinIcons.USERS.getHtml() + "<span class=\"folding\">Contacts</span>",
 				ContentMode.HTML);
-		lblContacts.addStyleName(ThemeConstants.ICON_WHITE);
+//		lblContacts.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblLogout = new Label(VaadinIcons.EXIT.getHtml() + "<span class=\"folding\">Logout</span>",
 				ContentMode.HTML);
-		lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
+		// lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
 
 //		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
 //			layout.addComponent(lblAdmin);

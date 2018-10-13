@@ -15158,6 +15158,10 @@ div.v-layout.v-horizontal.v-widget {
 	width: 50%;
 }
 
+.myTheme #base[width-range~="551px-930px"] .v-icon {
+	display: flex !important;
+}
+
 .myTheme #base[width-range~="551px-930px"] .responsiveFont {
 	font-size: 1.2em;
 }
@@ -15199,11 +15203,9 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base {
-	padding: 10px;
-	margin: 5px auto;
 	font-family: arial;
-	min-width: 240px;
-	background: lightseagreen;
+	min-width: 300px;
+	background: white;
 }
 
 .myTheme #base .unseenMessage {
@@ -15212,6 +15214,16 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base .unseenMessage #message {
 	color: black !important;
+}
+
+.myTheme #base .v-tabsheet-tabcontainer {
+	margin-bottom: 7px;
+}
+
+.myTheme #base .news-box {
+	border-left: 2px solid lightgray;
+	background: white;
+	box-shadow: 3px 1px 10px lightgray;
 }
 
 .myTheme #base .notificationSmallIcon .v-icon {
@@ -15225,11 +15237,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base .scrollablePanel {
 	margin-left: -37px;
-}
-
-.myTheme #base .v-textfield {
-	border: 1px solid;
-	border-color: #00BFFF;
 }
 
 .myTheme #base #messageBase {
@@ -15258,7 +15265,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: left;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	color: #00BFFF;
+	color: cornflowerblue;
 	overflow: hidden;
 }
 
@@ -15301,7 +15308,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #messageBase #chatLayout .v-panel {
 	border-top-left-radius: 0px;
 	margin-bottom: 10px;
-	border-color: #00BFFF;
+	border-color: cornflowerblue;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageSent {
@@ -15310,7 +15317,7 @@ div.v-layout.v-horizontal.v-widget {
 	max-width: 50%;
 	color: black;
 	border: 1px solid #00b6cd;
-	background-color: #00BFFF;
+	background-color: cornflowerblue;
 	border-radius: 4px;
 	box-shadow: 1px 1px 1px #00b6cd;
 }
@@ -15331,7 +15338,7 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #eaf2ff;
 	border-radius: 4px;
 	box-shadow: 1px 1px 1px #00b6cd;
-	border: 1px solid #00BFFF;
+	border: 1px solid cornflowerblue;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageReceived .v-image {
@@ -15365,14 +15372,18 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: left;
 	display: flex;
 	align-items: center;
-	background: darkslategrey;
+	background: white;
 	float: left;
+	border-bottom: 1px solid lightgray;
 	padding-left: 10px;
 	width: 100%;
 	height: 100%;
-	border-radius: 15px 15px 0px 0px;
 	position: relative;
-	box-shadow: 2px 3px 10px black;
+	box-shadow: 2px 3px 10px lightgray;
+}
+
+.myTheme #base #navigationBar .v-icon {
+	display: none;
 }
 
 .myTheme #base #navigationBar .navi-person {
@@ -15382,7 +15393,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #navigationBar .navi-person .navigationBarIcon:hover {
-	border: 4px solid deepskyblue;
+	border: 2px solid deepskyblue;
 	border-radius: 100%;
 }
 
@@ -15391,9 +15402,9 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #navigationBar .navi-person #username {
-	color: white;
 	padding-right: 20px;
 	padding-left: 5px;
+	color: cornflowerblue;
 }
 
 .myTheme #base #navigationBar .navi-person #username:hover {
@@ -15404,19 +15415,17 @@ div.v-layout.v-horizontal.v-widget {
 	display: flex;
 	flex-direction: row;
 	height: 100%;
-	border-left: 1px solid darkgray;
 }
 
 .myTheme #base #navigationBar .navi-item-list .v-label {
 	padding-left: 10px;
 	display: flex;
-	flex-direction: column;
-	padding-top: 5px;
+	flex-direction: row;
 	align-items: center;
 	height: 100%;
-	color: aliceblue;
+	color: black;
 	padding-right: 10px;
-	border-right: 1px solid darkgray;
+	transition: all 0.5s;
 }
 
 .myTheme #base #navigationBar .navi-item-list .v-label:hover {
@@ -15449,11 +15458,11 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #profileHeader {
 	text-align: center;
 	width: 100%;
-	border: 2px solid #00BFFF;
+	border: 2px solid cornflowerblue;
 	background-color: #eaf2ff;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px #00b6cd;
-	border: 1px outset #00BFFF;
+	border: 1px outset cornflowerblue;
 	padding-bottom: 2px;
 }
 
@@ -15491,10 +15500,8 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #00FF00;
 }
 
-.myTheme #viewDisplay .v-panel {
-	border: 1px solid;
-	border-radius: 5px;
-	border-color: cadetblue;
+.myTheme #viewDisplay {
+	border-top: 1px solid lightgray !important;
 }
 
 .myTheme #sideMenu {
@@ -15506,22 +15513,22 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .bordered {
-	border: 1px solid #00BFFF;
+	border: 1px solid cornflowerblue;
 	border-radius: 12px;
 	box-shadow: 2px 2px 2px #00b6cd;
 }
 
 .myTheme .borderedImage {
-	border: 2px solid #00BFFF;
+	border: 1px solid cornflowerblue;
 	border-radius: 200px;
 }
 
 .myTheme .blueText {
-	color: #00BFFF;
+	color: cornflowerblue;
 }
 
 .myTheme .thickBordered {
-	border: 2px solid #00BFFF;
+	border: 2px solid cornflowerblue;
 	border-radius: 10px;
 	box-shadow: -2px -2px 20px -2px #00b6cd;
 }
@@ -15533,22 +15540,22 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .workingSpace {
-	background-color: #00BFFF;
-	border: 2px solid #00BFFF;
+	background-color: cornflowerblue;
+	border: 2px solid cornflowerblue;
 	border-radius: 10px;
 	box-shadow: -2px -2px 20px -2px #00b6cd;
 }
 
 .myTheme .sideMenu {
-	background-color: #00BFFF;
-	border: 1px outset #00BFFF;
+	background-color: cornflowerblue;
+	border: 1px outset cornflowerblue;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px #00b6cd;
 }
 
 .myTheme .sideHeader {
 	background-color: #696969;
-	border: 4px solid #00BFFF;
+	border: 4px solid cornflowerblue;
 	border-style: inset;
 }
 
@@ -15557,7 +15564,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .blueTextH1 {
-	color: #00BFFF;
+	color: cornflowerblue;
 	display: block;
 	font-size: 2em;
 	margin-top: 0.67em;
@@ -15568,7 +15575,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme .blueTextH3 {
-	color: #00BFFF;
+	color: cornflowerblue;
 	display: block;
 	font-size: 1.17em;
 	margin-top: 1em;
