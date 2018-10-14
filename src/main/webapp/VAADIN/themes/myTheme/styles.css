@@ -15379,7 +15379,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: left;
 	display: flex;
 	align-items: center;
-	background: white;
+	background: #f7f7f7;
 	float: left;
 	border-bottom: 1px solid lightgray;
 	padding-left: 10px;
