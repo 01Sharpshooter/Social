@@ -159,9 +159,11 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private boolean viewChangeListener(ViewChangeEvent event) {
 		if (event.getViewName().equals(MessagesView.NAME)) {
 			this.messageView = (MessagesView) event.getNewView();
-		} else if (event.getOldView() instanceof MessagesView) {
-//			this.messageView.setReceiver(null);
 		}
+
+		this.navigationBar.removeStyleName(ThemeConstants.SHOW_DROPDOWN);
+		this.dropDownShown = false;
+
 		return true;
 	}
 

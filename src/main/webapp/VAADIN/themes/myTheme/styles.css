@@ -15117,24 +15117,28 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 80%;
 }
 
+.myTheme #base[width-range~="0-550px"] #messageBase {
+	display: flex;
+	flex-direction: column;
+}
+
+.myTheme #base[width-range~="0-550px"] #messageBase #btn-show-conv {
+	display: unset !important;
+}
+
 .myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout {
-	width: 60px;
+	display: none;
+	max-width: unset;
+	overflow: unset;
 }
 
 .myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout .v-csslayout {
+	display: flex;
 	text-align: center;
-}
-
-.myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout .v-csslayout .v-label {
-	display: none;
 }
 
 .myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout .v-csslayout .v-image {
 	height: 100%;
-}
-
-.myTheme #base[width-range~="0-550px"] #messageBase #chatLayout {
-	width: 80%;
 }
 
 .myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .v-verticallayout {
@@ -15152,6 +15156,20 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .chatMessageReceived {
 	max-width: 80%;
+}
+
+.myTheme #base[width-range~="0-550px"] .show-conversations {
+	flex-direction: column-reverse !important;
+}
+
+.myTheme #base[width-range~="0-550px"] .show-conversations #latestMessagesLayout {
+	height: 100% !important;
+	display: unset !important;
+	max-width: unset !important;
+}
+
+.myTheme #base[width-range~="0-550px"] .show-conversations #chatLayout {
+	display: none;
 }
 
 .myTheme #base[width-range~="551px-930px"] .manyUserLayout .v-horizontallayout {
@@ -15228,7 +15246,11 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase {
-	padding-right: 10px;
+	display: flex;
+}
+
+.myTheme #base #messageBase #btn-show-conv {
+	display: none;
 }
 
 .myTheme #base #messageBase .v-textfield {
@@ -15237,8 +15259,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase #latestMessagesLayout {
-	width: 20%;
-	height: 85%;
+	max-width: 350px;
 	border-color: gray;
 	overflow: auto;
 }
@@ -15288,8 +15309,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase #chatLayout {
-	width: 80%;
 	height: 70%;
+	width: 99%;
 }
 
 .myTheme #base #messageBase #chatLayout .v-panel {

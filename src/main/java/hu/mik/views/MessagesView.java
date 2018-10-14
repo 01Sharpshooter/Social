@@ -21,6 +21,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.Conversation;
 import hu.mik.beans.ConversationUser;
@@ -58,6 +59,8 @@ public class MessagesView extends CssLayout implements View {
 
 	private TextField tfSearch;
 
+	private Button btnShowConvs;
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
@@ -77,9 +80,9 @@ public class MessagesView extends CssLayout implements View {
 	private void createContent(ViewChangeEvent event) {
 		this.createBase();
 
-		this.createTextFieldSearch();
+//		this.createTextFieldSearch();
 
-		this.createUserList();
+		this.createConversationList();
 
 		this.createTextWriter();
 
@@ -90,6 +93,10 @@ public class MessagesView extends CssLayout implements View {
 		this.fillConversationList();
 
 		this.addConversationByURLParam(event);
+
+		if (this.selectedConversationDiv == null) {
+			this.showOrHideConversations();
+		}
 
 	}
 
@@ -123,11 +130,31 @@ public class MessagesView extends CssLayout implements View {
 		this.messagesPanel = new MessagesPanelScrollable();
 	}
 
-	private void createUserList() {
+	private void createConversationList() {
+		this.btnShowConvs = new Button(VaadinIcons.ANGLE_DOUBLE_DOWN);
+		this.btnShowConvs.addClickListener(e -> this.showOrHideConversations());
+		this.btnShowConvs.setId("btn-show-conv");
+		this.btnShowConvs.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		this.addComponent(this.btnShowConvs);
 		this.conversationListLayout = new CssLayout();
 		this.conversationListLayout.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.conversationListLayout.setId("latestMessagesLayout");
 		this.addComponent(this.conversationListLayout);
+	}
+
+	private void showOrHideConversations() {
+		if (this.btnShowConvs.getIcon().equals(VaadinIcons.ANGLE_DOUBLE_DOWN)) {
+			this.addStyleName(ThemeConstants.SHOW_CONVERSATIONS);
+			this.btnShowConvs.setIcon(VaadinIcons.ANGLE_DOUBLE_UP);
+		} else {
+			this.hideConversations();
+		}
+	}
+
+	private void hideConversations() {
+		this.removeStyleName(ThemeConstants.SHOW_CONVERSATIONS);
+		this.btnShowConvs.setIcon(VaadinIcons.ANGLE_DOUBLE_DOWN);
+
 	}
 
 	private void createTextFieldSearch() {
@@ -171,7 +198,6 @@ public class MessagesView extends CssLayout implements View {
 	private void createTextWriter() {
 		this.textWriter = new HorizontalLayout();
 		TextField textField = new TextField();
-		textField.setWidth("100%");
 
 		Button sendButton = new Button("Send", e -> {
 			this.sendMessage(textField.getValue());
@@ -183,8 +209,7 @@ public class MessagesView extends CssLayout implements View {
 
 		this.textWriter.addComponent(textField);
 		this.textWriter.addComponent(sendButton);
-		this.textWriter.setExpandRatio(textField, 7);
-		this.textWriter.setExpandRatio(sendButton, 3);
+		this.textWriter.setExpandRatio(textField, 1);
 		this.textWriter.setSizeFull();
 		this.textWriter.setEnabled(false);
 	}
@@ -285,6 +310,7 @@ public class MessagesView extends CssLayout implements View {
 		conversationDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
 		this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
 		this.messagesPanel.scrollToBottom();
+		this.hideConversations();
 	}
 
 	private void searchValueChangeListener(ValueChangeEvent<String> event) {
