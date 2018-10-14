@@ -105,4 +105,15 @@ public class UserDaoImplement implements UserDao {
 
 	}
 
+	@Override
+	public List<User> findAllByUsernames(List<String> usernames) {
+		//@formatter:off
+		return this.em.createQuery(
+				"SELECT u FROM User u"
+				+ " WHERE u.username IN(:usernames)"
+				+ " AND u.enabled = true", User.class)
+		.setParameter("usernames", usernames)
+		.getResultList();
+	}
+
 }

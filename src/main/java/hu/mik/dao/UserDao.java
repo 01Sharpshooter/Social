@@ -20,5 +20,7 @@ public interface UserDao {
 
 	public List<User> findByFullNameContaining(String username);
 
+	public List<User> findAllByUsernames(List<String> usernames);
+
 	public void disable(User user);
 }

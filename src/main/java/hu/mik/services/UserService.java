@@ -21,4 +21,6 @@ public interface UserService {
 
 	public void disable(User user);
 
+	public List<User> findAllByUsernames(List<String> usernames);
+
 }

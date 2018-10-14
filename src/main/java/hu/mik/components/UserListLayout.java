@@ -1,6 +1,7 @@
 package hu.mik.components;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -36,11 +37,12 @@ public class UserListLayout extends CssLayout {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
 		this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.setWidth("100%");
-
 		if (userListLdap != null) {
-			for (LdapUser user : userListLdap) {
-				User dbUser = this.userService.findUserByUsername(user.getUsername());
-				Image image = dbUser.getVaadinImage();
+			List<String> usernames = userListLdap.stream().map(lu -> lu.getUsername()).collect(Collectors.toList());
+			List<User> userList = this.userService.findAllByUsernames(usernames);
+
+			for (User user : userList) {
+				Image image = user.getVaadinImage();
 				image.setHeight("100%");
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 				Label lblName = new Label(user.getFullName());
