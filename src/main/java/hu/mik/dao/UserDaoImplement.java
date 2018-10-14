@@ -88,9 +88,9 @@ public class UserDaoImplement implements UserDao {
 	@Override
 	public List<User> findByFullNameContaining(String fullName) {
 		List<User> list = new ArrayList<>();
-		list = this.em
-				.createQuery("SELECT u FROM User u where UPPER(u.fullName) LIKE CONCAT('%',:username,'%')", User.class)
-				.setParameter("username", fullName.toUpperCase()).getResultList();
+		list = this.em.createQuery(
+				"SELECT u FROM User u where UPPER(u.fullName) LIKE CONCAT('%',:username,'%') AND u.enabled = true",
+				User.class).setParameter("username", fullName.toUpperCase()).getResultList();
 		if (list.isEmpty()) {
 			return null;
 		} else {

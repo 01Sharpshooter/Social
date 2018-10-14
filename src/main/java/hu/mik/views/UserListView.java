@@ -12,9 +12,8 @@ import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Panel;
 
-import hu.mik.beans.LdapUser;
+import hu.mik.beans.User;
 import hu.mik.components.UserListLayout;
-import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 
 @SuppressWarnings("serial")
@@ -25,8 +24,6 @@ public class UserListView extends Panel implements View {
 
 	@Autowired
 	UserService userService;
-	@Autowired
-	LdapService ldapService;
 	@Autowired
 	UserListLayout userListLayout;
 
@@ -41,11 +38,11 @@ public class UserListView extends Panel implements View {
 	private void fill(String fullName) {
 		CssLayout layout = new CssLayout();
 
-		List<LdapUser> userListLdap = new ArrayList<>();
-		userListLdap = this.ldapService.findByFullNameContaining(fullName);
+		List<User> userList = new ArrayList<>();
+		userList = this.userService.findByFullNameContaining(fullName);
 
-		if (userListLdap != null) {
-			layout = this.userListLayout.createUserListLayoutFromLdap(userListLdap);
+		if (userList != null) {
+			layout = this.userListLayout.createUserListLayoutFromDb(userList);
 		}
 		this.setContent(layout);
 	}
