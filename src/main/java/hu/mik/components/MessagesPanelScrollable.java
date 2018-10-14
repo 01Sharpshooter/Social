@@ -42,7 +42,8 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.content = new VerticalLayout();
 		this.content.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 		this.content.setSizeFull();
-		this.pageSize = 20;
+		this.content.setMargin(false);
+		this.pageSize = 30;
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setContent(this.content);
 

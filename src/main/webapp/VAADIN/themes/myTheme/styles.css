@@ -15141,11 +15141,6 @@ div.v-layout.v-horizontal.v-widget {
 	height: 100%;
 }
 
-.myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .v-verticallayout {
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
 .myTheme #base[width-range~="0-550px"] #messageBase #chatLayout .v-button {
 	font-size: 12px;
 }
@@ -15176,16 +15171,16 @@ div.v-layout.v-horizontal.v-widget {
 	width: 50%;
 }
 
-.myTheme #base[width-range~="551px-930px"] .v-icon {
-	display: flex !important;
-}
-
 .myTheme #base[width-range~="551px-930px"] .responsiveFont {
-	font-size: 1.2em;
+	font-size: 1.1em;
 }
 
 .myTheme #base[width-range~="551px-930px"] #navigationBar .v-label:not(#username) .folding {
 	display: none;
+}
+
+.myTheme #base[width-range~="551px-930px"] #navigationBar .v-icon {
+	display: flex !important;
 }
 
 .myTheme #base[width-range~="551px-930px"] #profileHeader .v-image {
@@ -15230,6 +15225,11 @@ div.v-layout.v-horizontal.v-widget {
 	border-left: 2px solid lightgray;
 	background: white;
 	box-shadow: 3px 1px 10px lightgray;
+	padding: 15px;
+}
+
+.myTheme #base .news-box .news-date {
+	font-size: 0.8em;
 }
 
 .myTheme #base .notificationSmallIcon .v-icon {
@@ -15313,10 +15313,10 @@ div.v-layout.v-horizontal.v-widget {
 	width: 99%;
 }
 
-.myTheme #base #messageBase #chatLayout .v-panel {
-	border-top-left-radius: 0px;
+.myTheme #base #messageBase #chatLayout .v-scrollable-panel {
 	margin-bottom: 10px;
 	border-color: cornflowerblue;
+	padding: 10px;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageSent {
@@ -15327,7 +15327,6 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #00b6cd;
 	background-color: cornflowerblue;
 	border-radius: 4px;
-	box-shadow: 1px 1px 1px #00b6cd;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageSent .v-label {
@@ -15343,10 +15342,6 @@ div.v-layout.v-horizontal.v-widget {
 	line-height: 1.2;
 	max-width: 50%;
 	color: black;
-	background-color: #eaf2ff;
-	border-radius: 4px;
-	box-shadow: 1px 1px 1px #00b6cd;
-	border: 1px solid cornflowerblue;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageReceived .v-image {
@@ -15360,8 +15355,12 @@ div.v-layout.v-horizontal.v-widget {
 	white-space: normal;
 	padding-left: 1px;
 	padding-right: 5px;
-	padding-bottom: 0px;
+	padding-bottom: 5px;
 	padding-top: 5px;
+	background-color: #eaf2ff;
+	border-radius: 4px;
+	box-shadow: 1px 1px 1px #00b6cd;
+	border: 1px solid cornflowerblue;
 }
 
 .myTheme #base .manyUserLayout {
@@ -15373,7 +15372,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base .responsiveFont {
-	font-size: 1.4em;
+	font-size: 1.2em;
 }
 
 .myTheme #base #navigationBar {

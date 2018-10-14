@@ -27,8 +27,9 @@ public class NewsComponent extends VerticalLayout {
 
 	public NewsComponent(News news, boolean withDelete, NewsService newsService) {
 		this.setSpacing(true);
-		this.setMargin(true);
-		this.setSizeFull();
+		this.setMargin(false);
+		this.setHeight("100%");
+		this.setWidth("99%");
 		this.news = news;
 		this.newsService = newsService;
 		this.addStyleName(ThemeConstants.NEWS_BOX);
@@ -47,6 +48,7 @@ public class NewsComponent extends VerticalLayout {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateString = df.format(news.getTime());
 		Label date = new Label(dateString);
+		date.addStyleName(ThemeConstants.NEWS_DATE);
 		this.addComponent(date);
 	}
 

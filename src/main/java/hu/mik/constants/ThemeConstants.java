@@ -63,6 +63,7 @@ public class ThemeConstants {
 	public static final String NAVI_SEARCH_FIELD = "navi-search-field";
 
 	public static final String NEWS_BOX = "news-box";
+	public static final String NEWS_DATE = "news-date";
 
 	public static final String SHOW_CONVERSATIONS = "show-conversations";
 }

@@ -308,7 +308,9 @@ public class MessagesView extends CssLayout implements View {
 		this.fillChat();
 		this.conversationListLayout.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
 		conversationDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
-		this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
+		if (this.selectedConversationDiv.getConversation().getId() != null) {
+			this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
+		}
 		this.messagesPanel.scrollToBottom();
 		this.hideConversations();
 	}

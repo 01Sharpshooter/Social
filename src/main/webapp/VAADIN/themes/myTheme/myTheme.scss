@@ -93,10 +93,6 @@
 				}
 			}
 			#chatLayout{
-				.v-verticallayout{
-					padding-left: 15px;
-					padding-right: 15px;
-				}
 				.v-button{
 					font-size:12px;
 				}
@@ -126,11 +122,8 @@
 				width:50%;
 			}
 		}
-		.v-icon{
-			display: flex !important;
-		}
 		.responsiveFont{
-			font-size: 1.2em;
+			font-size: 1.1em;
 		}
 		#navigationBar {
   			.v-label:not(#username){
@@ -138,6 +131,9 @@
   					display:none;
   				}
 	  		}
+	  		.v-icon{
+				display: flex !important;
+			}
 		}
 		#profileHeader{
 			.v-image{
@@ -183,6 +179,10 @@
 		 	border-left: 2px solid lightgray;
     		background: white;
     		box-shadow: 3px 1px 10px lightgray;
+    		padding: 15px;
+    		.news-date{
+    			font-size: 0.8em;
+    		}
 		}
 		
 		.notificationSmallIcon{
@@ -261,10 +261,10 @@
 			#chatLayout{
 				height:70%;
 				width: 99%;
-				.v-panel{
-					border-top-left-radius: 0px;
+				.v-scrollable-panel{
 					margin-bottom: 10px;
 					border-color: $blue;
+					padding: 10px;
 				}
 			  	.chatMessageSent{  		
 			  		text-align: left;
@@ -274,7 +274,6 @@
 			  		border: 1px solid $blue_shadow;
 			  		background-color: $blue;
 			  		border-radius:4px;
-			  		box-shadow:1px 1px 1px $blue_shadow;
 			  		.v-label{
 						white-space:normal;
 			  			padding-right: 1px;
@@ -289,10 +288,6 @@
 			  		line-height:1.2;
 			  		max-width:50%;
 			  		color: black;
-			  		background-color: $light-blue;
-			  		border-radius:4px;
-			  		box-shadow:1px 1px 1px $blue_shadow;
-			  		border: 1px solid $blue;
 			  		.v-image{
 			  			border: 1px solid $blue_shadow;
 			  			border-radius: 200px;
@@ -303,8 +298,12 @@
 			  			white-space:normal;
 			  			padding-left:1px;
 			  			padding-right: 5px;
-			  			padding-bottom:0px;
+			  			padding-bottom:5px;
 			  			padding-top:5px;
+			  			background-color: $light-blue;
+			  			border-radius:4px;
+			  			box-shadow:1px 1px 1px $blue_shadow;
+			  			border: 1px solid $blue;
 			  		}
 			  	}
 			}	
@@ -318,7 +317,7 @@
 		}
 		
 		.responsiveFont{
-			font-size: 1.4em;
+			font-size: 1.2em;
 		}
 		#navigationBar{
 			text-align: left;	
