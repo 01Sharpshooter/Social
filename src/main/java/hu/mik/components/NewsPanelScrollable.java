@@ -27,6 +27,7 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 		this.newsService = newsService;
 		this.content = new VerticalLayout();
 		this.content.setMargin(false);
+		this.setSizeFull();
 		this.setContent(this.content);
 		this.ldapService = ldapService;
 		this.userUtils = userUtils;

@@ -55,6 +55,7 @@ public class MessagesView extends CssLayout implements View {
 
 	private MessagesPanelScrollable messagesPanel;
 	private CssLayout conversationListLayout;
+	private CssLayout chatHeader;
 	private HorizontalLayout textWriter;
 
 	private SocialUserWrapper loggedUser;
@@ -95,11 +96,7 @@ public class MessagesView extends CssLayout implements View {
 
 		this.createConversationList();
 
-		this.createTextWriter();
-
-		this.createMessagesPanel();
-
-		this.createChat();
+		this.createChatLayout();
 
 		this.fillConversationList();
 
@@ -198,28 +195,39 @@ public class MessagesView extends CssLayout implements View {
 		return userDiv;
 	}
 
-	private void createChat() {
-		CssLayout chat = new CssLayout();
+	private void createChatLayout() {
+		CssLayout chatLayout = new CssLayout();
+		this.createChatHeader();
+		this.createMessagesPanel();
+		this.createTextWriter();
+		chatLayout.addComponent(this.chatHeader);
+		chatLayout.addComponent(this.messagesPanel);
+		chatLayout.addComponent(this.textWriter);
+		chatLayout.setId("chatLayout");
+		this.addComponent(chatLayout);
+	}
+
+	private void createChatHeader() {
+		this.chatHeader = new CssLayout();
+		this.createConversationNameLabel();
+		this.createBtnAddMember();
+	}
+
+	private void createConversationNameLabel() {
 		this.conversationName = new Label();
 		this.conversationName.addStyleName(ThemeConstants.CHAT_CONVERSATION_NAME);
 		this.conversationName.setVisible(false);
-		this.createBtnAddMember();
-		chat.addComponent(this.conversationName);
-		chat.addComponent(this.btnAddMember);
-		chat.addComponent(this.messagesPanel);
-		chat.addComponent(this.textWriter);
-		chat.setId("chatLayout");
-		this.addComponent(chat);
+		this.chatHeader.addComponent(this.conversationName);
 	}
 
-	private Button createBtnAddMember() {
+	private void createBtnAddMember() {
 		this.btnAddMember = new Button("+ Add member");
 		this.btnAddMember.setStyleName(ValoTheme.BUTTON_LINK);
 		this.btnAddMember.setVisible(false);
 
 		this.btnAddMember.addClickListener(e -> this.addMemberBtnClick());
 
-		return this.btnAddMember;
+		this.chatHeader.addComponent(this.btnAddMember);
 	}
 
 	private void addMemberBtnClick() {
@@ -258,7 +266,7 @@ public class MessagesView extends CssLayout implements View {
 		this.textWriter.addComponent(textField);
 		this.textWriter.addComponent(sendButton);
 		this.textWriter.setExpandRatio(textField, 1);
-		this.textWriter.setSizeFull();
+		this.textWriter.setWidth("100%");
 		this.textWriter.setEnabled(false);
 	}
 

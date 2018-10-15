@@ -21,7 +21,6 @@ public abstract class AbstractScrollablePanel extends ScrollablePanel {
 		this.scrollDirection = scrollDirection;
 		this.appCtx = ApplicationContextHolder.getApplicationContext();
 		this.addScrollListener(this::scrollListener);
-		this.setSizeFull();
 	}
 
 	private void scrollListener(ScrollEvent e) {

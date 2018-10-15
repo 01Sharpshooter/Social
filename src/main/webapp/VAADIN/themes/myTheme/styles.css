@@ -15313,11 +15313,13 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase #chatLayout {
-	height: 70%;
+	height: 100%;
 	width: 99%;
+	overflow: auto;
 }
 
 .myTheme #base #messageBase #chatLayout .v-scrollable-panel {
+	height: 70%;
 	margin-bottom: 10px;
 	border-color: cornflowerblue;
 	border-left: 0px;
