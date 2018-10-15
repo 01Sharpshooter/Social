@@ -201,6 +201,7 @@ public class MessagesView extends CssLayout implements View {
 	private void createChat() {
 		CssLayout chat = new CssLayout();
 		this.conversationName = new Label();
+		this.conversationName.addStyleName(ThemeConstants.CHAT_CONVERSATION_NAME);
 		this.conversationName.setVisible(false);
 		this.createBtnAddMember();
 		chat.addComponent(this.conversationName);

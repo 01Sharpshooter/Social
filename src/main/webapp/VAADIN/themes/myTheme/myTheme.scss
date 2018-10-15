@@ -275,9 +275,12 @@
 					display:flex;
 				}
 				
-				.v-label{
+				.chat-conversation-name{
 					padding-top: 7px;
-					padding-left: 2px
+					padding-left: 2px;
+					overflow:hidden;
+					text-overflow: ellipsis;
+					max-width:60%;
 				}
 			  	.chatMessageSent{  		
 			  		text-align: left;
