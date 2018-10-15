@@ -147,4 +147,12 @@ public class ConversationDiv extends CssLayout {
 		this.conversation = conversation;
 	}
 
+	public String getConversationName() {
+		return this.conversationName;
+	}
+
+	public void setConversationName(String conversationName) {
+		this.conversationName = conversationName;
+	}
+
 }

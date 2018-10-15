@@ -15123,6 +15123,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base[width-range~="0-550px"] #messageBase #btn-show-conv {
+	background: #f7f7f7;
+	border-bottom: 1px solid lightgray;
 	display: unset !important;
 }
 
@@ -15262,6 +15264,8 @@ div.v-layout.v-horizontal.v-widget {
 	max-width: 350px;
 	border-color: gray;
 	overflow: auto;
+	background: #f7f7f7;
+	border-right: 1px solid lightgray;
 }
 
 .myTheme #base #messageBase #latestMessagesLayout .v-csslayout {
@@ -15269,7 +15273,7 @@ div.v-layout.v-horizontal.v-widget {
 	height: 55px;
 	padding-left: 10px;
 	padding-right: 10px;
-	border-top: 1px solid;
+	border-bottom: 1px solid lightgray;
 	text-align: left;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -15316,7 +15320,17 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #messageBase #chatLayout .v-scrollable-panel {
 	margin-bottom: 10px;
 	border-color: cornflowerblue;
+	border-left: 0px;
 	padding: 10px;
+}
+
+.myTheme #base #messageBase #chatLayout .v-tooltip {
+	display: flex;
+}
+
+.myTheme #base #messageBase #chatLayout .v-label {
+	padding-top: 7px;
+	padding-left: 2px;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageSent {
@@ -15619,4 +15633,24 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .show-dropdown .navi-search-field {
 	display: flex !important;
+}
+
+.myTheme .add-member-to-conv-window {
+	height: 100%;
+	background: #efefef;
+}
+
+.myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout {
+	height: 100% !important;
+	overflow: auto !important;
+}
+
+.myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout .v-button {
+	border: 0px;
+	background: darkgray;
+	border-radius: 200px !important;
+}
+
+.myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout .v-filterselect {
+	border-radius: 200px !important;
 }

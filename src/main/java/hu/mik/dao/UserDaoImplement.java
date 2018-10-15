@@ -68,7 +68,7 @@ public class UserDaoImplement implements UserDao {
 	@Override
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
-		list = this.em.createQuery("SELECT u FROM User u", User.class).getResultList();
+		list = this.em.createQuery("SELECT u FROM User u WHERE u.enabled = true", User.class).getResultList();
 		return list;
 
 	}

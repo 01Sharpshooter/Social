@@ -76,6 +76,8 @@
 			display: flex;
 			flex-direction: column;
 			#btn-show-conv{
+				background: #f7f7f7;
+				border-bottom: 1px solid lightgray;
 				display:unset !important;
 			}
 			#latestMessagesLayout{
@@ -220,12 +222,14 @@
 				max-width: 350px;
 				border-color: gray;
 				overflow: auto;
+				background: #f7f7f7;
+				border-right: 1px solid lightgray;
 				.v-csslayout{	
 					width:100%;
 					height:55px;
 					padding-left: 10px;	
 					padding-right: 10px;			
-					border-top: 1px solid;	
+					border-bottom: 1px solid lightgray;
 					text-align:left;
 					padding-top:2px;
 					padding-bottom:2px;
@@ -264,7 +268,16 @@
 				.v-scrollable-panel{
 					margin-bottom: 10px;
 					border-color: $blue;
+					border-left: 0px;
 					padding: 10px;
+				}
+				.v-tooltip{
+					display:flex;
+				}
+				
+				.v-label{
+					padding-top: 7px;
+					padding-left: 2px
 				}
 			  	.chatMessageSent{  		
 			  		text-align: left;
@@ -557,6 +570,23 @@
 		.navi-search-field{
 			display: flex !important;
 		}
+	}
+
+	.add-member-to-conv-window{
+		height: 100%;
+		background: #efefef;
+		.add-member-to-conv-window-member-layout{
+			height:100% !important;
+			overflow:auto !important;
+			.v-button{
+				border: 0px;
+				background: darkgray;
+				border-radius: 200px !important;	
+			}
+			.v-filterselect{
+				border-radius: 200px !important;	
+			}
+		}			
 	}
 
 

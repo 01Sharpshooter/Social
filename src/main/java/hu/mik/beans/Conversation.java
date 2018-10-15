@@ -2,7 +2,9 @@ package hu.mik.beans;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,6 +40,26 @@ public class Conversation {
 		this.conversationUsers = new HashSet<>(Arrays.asList(convUsers));
 	}
 
+	public void addConversationUser(ConversationUser conversationUser) {
+		this.conversationUsers.add(conversationUser);
+	}
+
+	public void addConversationUsers(List<ConversationUser> lstConversationUser) {
+		lstConversationUser.forEach(cu -> this.conversationUsers.add(cu));
+	}
+
+	public List<Integer> getlistOfUserIds() {
+		return this.conversationUsers.stream().map(cu -> cu.getUser().getId()).collect(Collectors.toList());
+	}
+
+	public List<User> getlistOfUsers() {
+		return this.conversationUsers.stream().map(cu -> cu.getUser()).collect(Collectors.toList());
+	}
+
+	public int getConversationUserCount() {
+		return this.conversationUsers.size();
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
@@ -60,14 +82,6 @@ public class Conversation {
 
 	public void setConversationUsers(Set<ConversationUser> conversationUsers) {
 		this.conversationUsers = conversationUsers;
-	}
-
-	public void addConversationUser(ConversationUser conversationUser) {
-		this.conversationUsers.add(conversationUser);
-	}
-
-	public int getConversationUserCount() {
-		return this.conversationUsers.size();
 	}
 
 	@Override

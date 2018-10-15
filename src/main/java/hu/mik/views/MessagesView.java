@@ -3,6 +3,7 @@ package hu.mik.views;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +19,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -27,6 +29,7 @@ import hu.mik.beans.Conversation;
 import hu.mik.beans.ConversationUser;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.beans.User;
 import hu.mik.components.ConversationDiv;
 import hu.mik.components.MessagesPanelScrollable;
 import hu.mik.constants.ThemeConstants;
@@ -35,6 +38,7 @@ import hu.mik.services.MessageBroadcastService;
 import hu.mik.services.UserService;
 import hu.mik.ui.MainUI;
 import hu.mik.utils.UserUtils;
+import hu.mik.windows.AddMemberToConvWindow;
 
 @SuppressWarnings("serial")
 @ViewScope
@@ -61,9 +65,16 @@ public class MessagesView extends CssLayout implements View {
 
 	private Button btnShowConvs;
 
+	private Label conversationName;
+
+	private List<User> choosableUsers;
+
+	private Button btnAddMember;
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
+			this.choosableUsers = this.userService.listAll();
 			this.loggedUser = this.userUtils.getLoggedInUser();
 			this.setSizeFull();
 			this.createContent(event);
@@ -189,10 +200,46 @@ public class MessagesView extends CssLayout implements View {
 
 	private void createChat() {
 		CssLayout chat = new CssLayout();
+		this.conversationName = new Label();
+		this.conversationName.setVisible(false);
+		this.createBtnAddMember();
+		chat.addComponent(this.conversationName);
+		chat.addComponent(this.btnAddMember);
 		chat.addComponent(this.messagesPanel);
 		chat.addComponent(this.textWriter);
 		chat.setId("chatLayout");
 		this.addComponent(chat);
+	}
+
+	private Button createBtnAddMember() {
+		this.btnAddMember = new Button("+ Add member");
+		this.btnAddMember.setStyleName(ValoTheme.BUTTON_LINK);
+		this.btnAddMember.setVisible(false);
+
+		this.btnAddMember.addClickListener(e -> this.addMemberBtnClick());
+
+		return this.btnAddMember;
+	}
+
+	private void addMemberBtnClick() {
+		if (this.selectedConversationDiv != null) {
+			//@formatter:off
+			List<User> choosableUsers = this.choosableUsers
+					.stream()
+					.filter(user -> !this.selectedConversationDiv.getConversation().getlistOfUserIds().contains(user.getId()))
+					.collect(Collectors.toList());
+			//@formatter:on
+			UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::addMembersToConversation));
+		}
+	}
+
+	public void addMembersToConversation(List<User> usersToAdd) {
+		usersToAdd.forEach(user -> this.selectedConversationDiv.getConversation()
+				.addConversationUser(new ConversationUser(this.selectedConversationDiv.getConversation(), user)));
+		this.selectedConversationDiv
+				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+		this.selectedConversationDiv.refresh();
+		this.conversationName.setValue(this.selectedConversationDiv.getConversationName());
 	}
 
 	private void createTextWriter() {
@@ -305,6 +352,8 @@ public class MessagesView extends CssLayout implements View {
 	private void conversationListSelectionChange(ConversationDiv conversationDiv) {
 		this.selectedConversationDiv = conversationDiv;
 		this.textWriter.setEnabled(true);
+		this.conversationName.setValue(this.selectedConversationDiv.getConversationName());
+		this.conversationName.setVisible(true);
 		this.fillChat();
 		this.conversationListLayout.forEach(userDivr -> userDivr.removeStyleName(ThemeConstants.BORDERED_GREEN));
 		conversationDiv.addStyleName(ThemeConstants.BORDERED_GREEN);
@@ -312,6 +361,7 @@ public class MessagesView extends CssLayout implements View {
 			this.setConversationSeenByUser(this.selectedConversationDiv.getConversation());
 		}
 		this.messagesPanel.scrollToBottom();
+		this.btnAddMember.setVisible(true);
 		this.hideConversations();
 	}
 
