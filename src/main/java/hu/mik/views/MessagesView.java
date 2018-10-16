@@ -72,6 +72,8 @@ public class MessagesView extends CssLayout implements View {
 
 	private Button btnAddMember;
 
+	private boolean convNameFullyShown;
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
@@ -209,13 +211,24 @@ public class MessagesView extends CssLayout implements View {
 
 	private void createChatHeader() {
 		this.chatHeader = new CssLayout();
+		this.chatHeader.setWidth("100%");
+		this.chatHeader.addLayoutClickListener(e -> this.switchConversationNameShowMode());
+		this.chatHeader.addStyleName(ThemeConstants.CHAT_CONVERSATION_HEADER);
 		this.createConversationNameLabel();
 		this.createBtnAddMember();
 	}
 
+	private void switchConversationNameShowMode() {
+		if (this.convNameFullyShown) {
+			this.chatHeader.removeStyleName(ThemeConstants.SHOW_FULL_CONVERSATION_NAME);
+		} else {
+			this.chatHeader.addStyleName(ThemeConstants.SHOW_FULL_CONVERSATION_NAME);
+		}
+		this.convNameFullyShown = !this.convNameFullyShown;
+	}
+
 	private void createConversationNameLabel() {
 		this.conversationName = new Label();
-		this.conversationName.addStyleName(ThemeConstants.CHAT_CONVERSATION_NAME);
 		this.conversationName.setVisible(false);
 		this.chatHeader.addComponent(this.conversationName);
 	}

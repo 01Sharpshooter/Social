@@ -15330,7 +15330,11 @@ div.v-layout.v-horizontal.v-widget {
 	display: flex;
 }
 
-.myTheme #base #messageBase #chatLayout .chat-conversation-name {
+.myTheme #base #messageBase #chatLayout .chat-conversation-header {
+	background: #f7f7f7;
+}
+
+.myTheme #base #messageBase #chatLayout .chat-conversation-header .v-label {
 	padding-top: 7px;
 	padding-left: 2px;
 	overflow: hidden;
@@ -15658,4 +15662,19 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout .v-filterselect {
 	border-radius: 200px !important;
+}
+
+.myTheme .show-full-conversation-name {
+	z-index: 1;
+	background: #f7f7f7;
+	opacity: 0.95;
+	position: absolute;
+	border-bottom: darkgray;
+	box-shadow: 1px 1px 10px lightgray;
+}
+
+.myTheme .show-full-conversation-name .v-label {
+	font-weight: bold;
+	white-space: normal;
+	max-width: 50% !important;
 }

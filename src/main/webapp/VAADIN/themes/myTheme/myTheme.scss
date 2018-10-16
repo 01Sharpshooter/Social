@@ -277,12 +277,15 @@
 					display:flex;
 				}
 				
-				.chat-conversation-name{
-					padding-top: 7px;
-					padding-left: 2px;
-					overflow:hidden;
-					text-overflow: ellipsis;
-					max-width:60%;
+				.chat-conversation-header{
+					background: #f7f7f7;
+					.v-label{
+						padding-top: 7px;
+						padding-left: 2px;
+						overflow:hidden;
+						text-overflow: ellipsis;
+						max-width:60%;
+					}
 				}
 			  	.chatMessageSent{  		
 			  		text-align: left;
@@ -592,6 +595,20 @@
 				border-radius: 200px !important;	
 			}
 		}			
+	}
+
+	.show-full-conversation-name{
+		z-index: 1;
+		background: #f7f7f7;
+		opacity: 0.95;
+		position:absolute;
+		border-bottom: darkgray;
+		box-shadow: 1px 1px 10px lightgray;
+		.v-label{
+			font-weight: bold;
+			white-space:normal;
+			max-width:50% !important;
+		}
 	}
 
 

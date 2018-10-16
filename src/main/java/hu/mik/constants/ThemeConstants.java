@@ -66,7 +66,8 @@ public class ThemeConstants {
 	public static final String NEWS_DATE = "news-date";
 
 	public static final String SHOW_CONVERSATIONS = "show-conversations";
-	public static final String CHAT_CONVERSATION_NAME = "chat-conversation-name";
+	public static final String CHAT_CONVERSATION_HEADER = "chat-conversation-header";
+	public static final String SHOW_FULL_CONVERSATION_NAME = "show-full-conversation-name";
 
 	public static final String ADD_MEMBER_TO_CONV_WINDOW = "add-member-to-conv-window";
 	public static final String ADD_MEMBER_TO_CONV_WINDOW_MEMBER_LAYOUT = "add-member-to-conv-window-member-layout";
