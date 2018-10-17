@@ -71,4 +71,7 @@ public class ThemeConstants {
 
 	public static final String ADD_MEMBER_TO_CONV_WINDOW = "add-member-to-conv-window";
 	public static final String ADD_MEMBER_TO_CONV_WINDOW_MEMBER_LAYOUT = "add-member-to-conv-window-member-layout";
+
+	public static final String MARGIN_TOP = "margin-top";
+	public static final String MARGIN_BOTTOM = "margin-bottom";
 }

@@ -33,7 +33,6 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	private int scrollForLoaded = 40;
 
 	private Image previousImage;
-
 	private Integer previousSenderId;
 
 	public MessagesPanelScrollable() {
@@ -102,6 +101,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		} else {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
 			this.addImageIfNecessary(message, messageZone, isBottomMessage);
+			this.addMarginIfNecessary(message, isBottomMessage, messageZone);
 			this.content.setComponentAlignment(messageZone, Alignment.MIDDLE_LEFT);
 		}
 		messageZone.addComponent(newMessage);
@@ -109,6 +109,16 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 				.setDescription(message.getSender().getFullName() + ", " + this.getMessageDateDesc(message.getTime()));
 		this.previousSenderId = message.getSender().getId();
 		this.scrollToBottom();
+	}
+
+	private void addMarginIfNecessary(Message message, boolean isBottomMessage, CssLayout messageZone) {
+		if (this.previousSenderId != null && !this.previousSenderId.equals(message.getSender().getId())) {
+			if (isBottomMessage) {
+				messageZone.addStyleName(ThemeConstants.MARGIN_TOP);
+			} else {
+				messageZone.addStyleName(ThemeConstants.MARGIN_BOTTOM);
+			}
+		}
 	}
 
 	private void addImageIfNecessary(Message message, CssLayout messageZone, boolean isBottomMessage) {

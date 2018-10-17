@@ -15680,3 +15680,11 @@ div.v-layout.v-horizontal.v-widget {
 	white-space: normal;
 	max-width: 50% !important;
 }
+
+.myTheme .margin-top {
+	margin-top: 15px !important;
+}
+
+.myTheme .margin-bottom {
+	margin-bottom: 15px !important;
+}
