@@ -2,9 +2,7 @@ package hu.mik.components;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
@@ -15,7 +13,6 @@ import com.vaadin.ui.VerticalLayout;
 import hu.mik.beans.Conversation;
 import hu.mik.beans.Message;
 import hu.mik.beans.SocialUserWrapper;
-import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.ScrollDirection;
 import hu.mik.services.ChatService;
@@ -35,7 +32,9 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 
 	private int scrollForLoaded = 40;
 
-	private Map<Integer, Image> userImageCache;
+	private Image previousImage;
+
+	private Integer previousSenderId;
 
 	public MessagesPanelScrollable() {
 		super(ScrollDirection.UP);
@@ -48,7 +47,6 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.setContent(this.content);
 
 		this.messageService = this.appCtx.getBean(ChatService.class);
-		this.userImageCache = new HashMap<>();
 	}
 
 	public void setLoggedUserAndConversation(SocialUserWrapper loggedUser, Conversation conversation) {
@@ -104,12 +102,19 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 		} else {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-			messageZone.addComponent(message.getSender().getVaadinImage());
+			if (this.previousSenderId == null || !this.previousSenderId.equals(message.getSender().getId())) {
+				Image image = message.getSender().getVaadinImage();
+				messageZone.addComponent(image);
+				this.previousImage = image;
+			} else {
+				messageZone.addComponent(this.previousImage);
+			}
 			this.content.setComponentAlignment(messageZone, Alignment.MIDDLE_LEFT);
 		}
 		messageZone.addComponent(newMessage);
 		messageZone
 				.setDescription(message.getSender().getFullName() + ", " + this.getMessageDateDesc(message.getTime()));
+		this.previousSenderId = message.getSender().getId();
 		this.scrollToBottom();
 	}
 
@@ -123,18 +128,6 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			break;
 		}
 		this.setScrollTop(this.pageSize * this.scrollForLoaded);
-	}
-
-	// TODO check vaadin cache
-	private Image getUserImage(User user) {
-		Image image;
-		if (this.userImageCache.containsKey(user.getId())) {
-			image = this.userImageCache.get(user.getId());
-		} else {
-			image = user.getVaadinImage();
-			this.userImageCache.put(user.getId(), image);
-		}
-		return image;
 	}
 
 }
