@@ -42,6 +42,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.content.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 		this.content.setSizeFull();
 		this.content.setMargin(false);
+		this.content.setSpacing(false);
 		this.pageSize = 30;
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setContent(this.content);
@@ -62,14 +63,12 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	private void fillMessages() {
 		this.messagesList = this.messageService.findAllPagedByConversation(this.offset, this.pageSize,
 				this.conversation);
-		if (this.messagesList != null) {
-			if (!this.messagesList.isEmpty()) {
-				for (Message message : this.messagesList) {
-					this.addMessage(message, false);
-				}
-				this.offset = this.messagesList.get(this.messagesList.size() - 1).getId();
-				this.scrollAfterLoad();
+		if (this.messagesList != null && !this.messagesList.isEmpty()) {
+			for (Message message : this.messagesList) {
+				this.addMessage(message, false);
 			}
+			this.offset = this.messagesList.get(this.messagesList.size() - 1).getId();
+			this.scrollAfterLoad();
 		}
 	}
 
@@ -102,13 +101,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 		} else {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
-			if (this.previousSenderId == null || !this.previousSenderId.equals(message.getSender().getId())) {
-				Image image = message.getSender().getVaadinImage();
-				messageZone.addComponent(image);
-				this.previousImage = image;
-			} else {
-				messageZone.addComponent(this.previousImage);
-			}
+			this.addImageIfNecessary(message, messageZone, isBottomMessage);
 			this.content.setComponentAlignment(messageZone, Alignment.MIDDLE_LEFT);
 		}
 		messageZone.addComponent(newMessage);
@@ -116,6 +109,16 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 				.setDescription(message.getSender().getFullName() + ", " + this.getMessageDateDesc(message.getTime()));
 		this.previousSenderId = message.getSender().getId();
 		this.scrollToBottom();
+	}
+
+	private void addImageIfNecessary(Message message, CssLayout messageZone, boolean isBottomMessage) {
+		if (this.previousSenderId == null || !this.previousSenderId.equals(message.getSender().getId())) {
+			Image image = message.getSender().getVaadinImage();
+			messageZone.addComponent(image);
+			this.previousImage = image;
+		} else if (isBottomMessage) {
+			messageZone.addComponent(this.previousImage);
+		}
 	}
 
 	public void scrollAfterLoad() {

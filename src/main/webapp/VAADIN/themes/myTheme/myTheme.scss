@@ -291,6 +291,7 @@
 			  		text-align: left;
 			  		line-height:1.2;
 			  		max-width:50%;
+			  		margin-top: 3px;
 			  		color:black;
 			  		border: 1px solid $blue_shadow;
 			  		background-color: $blue;
@@ -308,11 +309,12 @@
 			  		text-align: left;
 			  		line-height:1.2;
 			  		max-width:50%;
+			  		margin-top: 3px;
 			  		color: black;
 			  		.v-image{
 			  			border: 1px solid $blue_shadow;
 			  			border-radius: 200px;
-			  			margin-right: 10px;
+			  			margin-right: -30px;
 			  			height:30px;
 			  		}
 			  		.v-label{
@@ -321,9 +323,9 @@
 			  			padding-right: 5px;
 			  			padding-bottom:5px;
 			  			padding-top:5px;
+			  			margin-left: 35px;
 			  			background-color: $light-blue;
 			  			border-radius:4px;
-			  			box-shadow:1px 1px 1px $blue_shadow;
 			  			border: 1px solid $blue;
 			  		}
 			  	}
