@@ -91,6 +91,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private Label lblMessages;
 
 	private SecurityContext securityContext = SecurityContextHolder.getContext();
+	private CssLayout naviPerson;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -222,8 +223,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	private void createNaviBarPerson() {
-		CssLayout naviPerson = new CssLayout();
-		naviPerson.addStyleName(ThemeConstants.NAVI_PERSON);
+		this.naviPerson = new CssLayout();
+		this.naviPerson.addStyleName(ThemeConstants.NAVI_PERSON);
 		this.naviBarImage = this.socialUser.getDbUser().getVaadinImage();
 		this.naviBarImage.setId("profilePicture");
 		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
@@ -233,8 +234,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		Label name = new Label();
 		name.setValue(this.socialUser.getLdapUser().getFullName());
 		name.setId("username");
-		naviPerson.addComponents(this.naviBarImage, name);
-		this.navigationBar.addComponent(naviPerson);
+		this.naviPerson.addComponents(this.naviBarImage, name);
+		this.navigationBar.addComponent(this.naviPerson);
 	}
 
 	private void naviBarClickListener(LayoutClickEvent event) {
@@ -284,7 +285,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	public void refreshImage() {
 		this.socialUser = this.userUtils.getLoggedInUser();
-		((Image) this.navigationBar.getComponent(0)).setSource(new FileResource(
+		((Image) this.naviPerson.getComponent(0)).setSource(new FileResource(
 				new File(UserConstants.PROFILE_PICTURE_LOCATION + this.socialUser.getDbUser().getImageName())));
 	}
 
