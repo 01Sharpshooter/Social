@@ -1,5 +1,7 @@
 package hu.mik.listeners;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -85,7 +87,8 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName("jpeg").next();
 			ImageWriteParam writerParam = writer.getDefaultWriteParam();
 			writerParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-			writerParam.setCompressionQuality(0.1f);
+			writerParam.setCompressionQuality(0.5f);
+			bufferedImage = this.resizeImage(bufferedImage);
 
 			FileOutputStream ops = new FileOutputStream(imageSave);
 			ImageOutputStream imageOS = ImageIO.createImageOutputStream(ops);
@@ -97,7 +100,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			ops.close();
 
 			if (!user.getImageName().equals("user.png")) {
-				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
+				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName());
 				fileToDel.delete();
 			}
 			user.setImageName(imageName);
@@ -107,5 +110,14 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	private BufferedImage resizeImage(BufferedImage bufferedImage) {
+		BufferedImage resizedImg = new BufferedImage(300, 300, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = resizedImg.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(bufferedImage, 0, 0, 300, 300, null);
+		g2.dispose();
+		return resizedImg;
 	}
 }
