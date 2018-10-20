@@ -92,6 +92,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	private SecurityContext securityContext = SecurityContextHolder.getContext();
 	private CssLayout naviPerson;
+	private CssLayout naviItemList;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -134,15 +135,6 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.viewDisplay.setId("viewDisplay");
 		this.base.addComponent(this.viewDisplay);
 		this.base.setExpandRatio(this.viewDisplay, 85);
-	}
-
-	private void createTitleComponent() {
-		Label title = new Label("Social");
-		title.setSizeFull();
-		title.addStyleName(ThemeConstants.RESPONSIVE_FONT);
-		title.addStyleName("h1");
-		this.base.addComponent(title);
-		this.base.setExpandRatio(title, 5);
 	}
 
 	@Override
@@ -298,7 +290,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	private void createNaviBarLabelList(AbstractLayout layout) {
-		CssLayout naviItemList = new CssLayout();
+		this.naviItemList = new CssLayout();
 //		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
 //				ContentMode.HTML);
 //		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
@@ -319,15 +311,14 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 //		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
 //			layout.addComponent(lblAdmin);
 //		}
-		naviItemList.addComponents(lblMain, this.lblMessages, lblContacts, lblLogout);
-		naviItemList.addStyleName(ThemeConstants.NAVI_ITEM_LIST);
-		layout.addComponent(naviItemList);
+		this.naviItemList.addComponents(lblMain, this.lblMessages, lblContacts, lblLogout);
+		this.naviItemList.addStyleName(ThemeConstants.NAVI_ITEM_LIST);
+		layout.addComponent(this.naviItemList);
 	}
 
 	public void refreshUnseenConversationNumber() {
 		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
-		this.navigationBar.forEach(e -> {
-			// Vaadin magic - lbl equals changes from method to method //TODO BREAK
+		this.naviItemList.forEach(e -> {
 			if (e instanceof Label && ((Label) e).getValue().equals(this.lblMessages.getValue())) {
 				((Label) e).setValue(
 						VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>");
