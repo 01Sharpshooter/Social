@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -62,8 +61,6 @@ public class MessagesView extends CssLayout implements View {
 
 	private ConversationDiv selectedConversationDiv;
 
-	private TextField tfSearch;
-
 	private Button btnShowConvs;
 
 	private Label conversationName;
@@ -93,8 +90,6 @@ public class MessagesView extends CssLayout implements View {
 
 	private void createContent(ViewChangeEvent event) {
 		this.createBase();
-
-//		this.createTextFieldSearch();
 
 		this.createConversationList();
 
@@ -146,10 +141,14 @@ public class MessagesView extends CssLayout implements View {
 		this.btnShowConvs.setId("btn-show-conv");
 		this.btnShowConvs.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		this.addComponent(this.btnShowConvs);
+		CssLayout leftLayout = new CssLayout();
+		leftLayout.addStyleName(ThemeConstants.CHAT_LEFT_LAYOUT);
+		leftLayout.addComponent(this.createAddConversationBtn());
 		this.conversationListLayout = new CssLayout();
 		this.conversationListLayout.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.conversationListLayout.setId("latestMessagesLayout");
-		this.addComponent(this.conversationListLayout);
+		leftLayout.addComponent(this.conversationListLayout);
+		this.addComponent(leftLayout);
 	}
 
 	private void showOrHideConversations() {
@@ -167,12 +166,6 @@ public class MessagesView extends CssLayout implements View {
 
 	}
 
-	private void createTextFieldSearch() {
-		this.tfSearch = new TextField("Search:");
-		this.tfSearch.addValueChangeListener(this::searchValueChangeListener);
-		this.addComponent(this.tfSearch);
-	}
-
 	private void createBase() {
 		this.setId("messageBase");
 		this.setSizeFull();
@@ -187,6 +180,14 @@ public class MessagesView extends CssLayout implements View {
 			conversationDiv = this.createConversationDiv(conversation);
 			this.conversationListLayout.addComponent(conversationDiv);
 		}
+	}
+
+	private Button createAddConversationBtn() {
+		Button btnAdd = new Button(VaadinIcons.PLUS);
+		btnAdd.setWidth("100%");
+		btnAdd.setHeight("55px");
+		return btnAdd;
+
 	}
 
 	private ConversationDiv createConversationDiv(Conversation conversation) {
@@ -255,7 +256,7 @@ public class MessagesView extends CssLayout implements View {
 		}
 	}
 
-	public void addMembersToConversation(List<User> usersToAdd) {
+	public void addMembersToConversation(List<User> usersToAdd, String messageText) {
 		usersToAdd.forEach(user -> this.selectedConversationDiv.getConversation()
 				.addConversationUser(new ConversationUser(this.selectedConversationDiv.getConversation(), user)));
 		this.selectedConversationDiv
@@ -267,6 +268,7 @@ public class MessagesView extends CssLayout implements View {
 	private void createTextWriter() {
 		this.textWriter = new HorizontalLayout();
 		TextField textField = new TextField();
+		textField.setPlaceholder("Send a message...");
 
 		Button sendButton = new Button("Send", e -> {
 			this.sendMessage(textField.getValue());
@@ -385,20 +387,6 @@ public class MessagesView extends CssLayout implements View {
 		this.messagesPanel.scrollToBottom();
 		this.btnAddMember.setVisible(true);
 		this.hideConversations();
-	}
-
-	private void searchValueChangeListener(ValueChangeEvent<String> event) {
-		if (event.getValue().equals("")) {
-			this.conversationListLayout.removeAllComponents();
-			this.conversationListLayout.setSizeUndefined();
-			this.fillConversationList();
-		} else {
-			this.conversationListLayout.removeAllComponents();
-			this.userService.findByFullNameContaining(event.getValue()).forEach(user -> {
-				Message message = new Message();
-				message.setMessage("");
-			});
-		}
 	}
 
 	public void messageSeen(Conversation conversation) {

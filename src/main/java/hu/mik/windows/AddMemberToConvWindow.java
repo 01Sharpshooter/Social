@@ -13,6 +13,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -30,6 +31,7 @@ public class AddMemberToConvWindow extends Window {
 	private ComboBox<User> cbUsers;
 	private SaveAction saveAction;
 	private CssLayout memberLayout;
+	private TextArea textArea;
 
 	public AddMemberToConvWindow(List<User> choosableUsers, SaveAction saveAction) {
 		super();
@@ -50,8 +52,17 @@ public class AddMemberToConvWindow extends Window {
 		this.content = new VerticalLayout();
 		this.content.setSizeFull();
 		this.createMemberLayout();
+		this.createTextArea();
 		this.createActionLayout();
 		this.setContent(this.content);
+	}
+
+	private void createTextArea() {
+		this.textArea = new TextArea();
+		this.textArea.setWidth("100%");
+		this.textArea.setHeight("100px");
+		this.content.addComponent(this.textArea);
+
 	}
 
 	private void createMemberLayout() {
@@ -83,7 +94,7 @@ public class AddMemberToConvWindow extends Window {
 	}
 
 	private void save() {
-		this.saveAction.save(this.chosenUsers);
+		this.saveAction.save(this.chosenUsers, this.textArea.getValue());
 		this.close();
 	}
 
@@ -129,7 +140,7 @@ public class AddMemberToConvWindow extends Window {
 
 	@FunctionalInterface
 	public interface SaveAction {
-		public void save(List<User> users);
+		public void save(List<User> users, String messageText);
 	}
 
 }

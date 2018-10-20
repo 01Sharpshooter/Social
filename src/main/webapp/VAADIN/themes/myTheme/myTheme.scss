@@ -80,12 +80,10 @@
 				border-bottom: 1px solid lightgray;
 				display:unset !important;
 			}
-			#latestMessagesLayout{
+			.chat-left-layout{
 				display:none;
 				max-width:unset;
-				overflow:unset;
-				.v-csslayout{	
-					display:flex;			
+				.v-csslayout{				
 					text-align:center;
 					.v-label{
 					}
@@ -108,7 +106,7 @@
 		}
 		.show-conversations{
 			flex-direction: column-reverse !important;
-			#latestMessagesLayout{
+			.chat-left-layout{
 				height: 100% !important;
 				display:unset !important;
 				max-width:unset !important;
@@ -148,9 +146,8 @@
 			}
 		}
 		#messageBase{
-			#latestMessagesLayout{
-				width: 30%;		
-
+			.chat-left-layout{
+				width: 35%;
 			}
 			#chatLayout{
 				width:70%;
@@ -164,7 +161,7 @@
 		font-family: arial;
 		min-width: 300px;
 		background: white;
-		
+				
 		.unseenMessage{
 			font-weight: bold;
 			#message {
@@ -209,7 +206,6 @@
 		
 		#messageBase{		
 			display: flex;
-			
 			#btn-show-conv{
 			 	display: none;	
 			}
@@ -218,49 +214,56 @@
 				width:100%;
  				margin-bottom: 10px;
 			}
-			#latestMessagesLayout{
-				max-width: 350px;
-				border-color: gray;
-				overflow: auto;
+			.chat-left-layout{	
+				border-right: 1px solid lightgray;	
+				max-width: 350px;	
 				background: #f7f7f7;
-				border-right: 1px solid lightgray;
-				.v-csslayout{	
-					width:100%;
-					height:55px;
-					padding-left: 10px;	
-					padding-right: 10px;			
-					border-bottom: 1px solid lightgray;
-					text-align:left;
-					padding-top:2px;
-					padding-bottom:2px;
-					color: $blue;	
-					overflow:hidden;
-					.v-label{
-						width: 65%;
-						padding-left: 5px;
-						text-overflow: ellipsis;
-						overflow: hidden;
-						white-space: nowrap;
-					}
-					.v-label:last-child{
-						width: 15%;
-						padding-left:0px;
-						text-align: right;
-					}
-					#message{
-						font-size: 12px;
-						color: graytext;
-					}
-					.v-image{
-						height:80%;
-					}
-					.v-icon{
-						font-size: 30px;
-					}
+				.v-button{
+					max-height:20%;	
 				}
-				.v-csslayout:last-child{
-					border-bottom: 1px solid;
-				}							
+				#latestMessagesLayout{
+					border-color: gray;
+					overflow: auto;
+					width:100%;
+					height:80%;
+					.v-csslayout{	
+						width:100%;
+						height:55px;
+						padding-left: 10px;	
+						padding-right: 10px;			
+						border-bottom: 1px solid lightgray;
+						text-align:left;
+						padding-top:2px;
+						padding-bottom:2px;
+						color: $blue;	
+						overflow:hidden;
+						.v-label{
+							width: 65%;
+							padding-left: 5px;
+							text-overflow: ellipsis;
+							overflow: hidden;
+							white-space: nowrap;
+						}
+						.v-label:last-child{
+							width: 15%;
+							padding-left:0px;
+							text-align: right;
+						}
+						#message{
+							font-size: 12px;
+							color: graytext;
+						}
+						.v-image{
+							height:80%;
+						}
+						.v-icon{
+							font-size: 30px;
+						}
+					}
+					.v-csslayout:last-child{
+						border-bottom: 1px solid;
+					}							
+				}
 			}
 			#chatLayout{
 				height:100%;
@@ -268,10 +271,13 @@
 				overflow:auto;
 				.v-scrollable-panel{
 					height:70%;
+					width:100%;
 					margin-bottom: 10px;
 					border-color: $blue;
 					border-left: 0px;
-					padding: 10px;
+					.v-verticallayout{
+						padding: 10px;
+					}
 				}
 				.v-tooltip{
 					display:flex;
@@ -279,6 +285,7 @@
 				
 				.chat-conversation-header{
 					background: #f7f7f7;
+					cursor: pointer;
 					.v-label{
 						padding-top: 7px;
 						padding-left: 2px;
@@ -298,10 +305,7 @@
 			  		border-radius:4px;
 			  		.v-label{
 						white-space:normal;
-			  			padding-right: 1px;
-			  			padding-left: 5px;
-			  			padding-bottom:5px;
-			  			padding-top:5px;
+			  			padding:5px;
 			  		}
 			  	}
 			  	
@@ -319,10 +323,7 @@
 			  		}
 			  		.v-label{
 			  			white-space:normal;
-			  			padding-left:1px;
-			  			padding-right: 5px;
-			  			padding-bottom:5px;
-			  			padding-top:5px;
+			  			padding:5px;
 			  			margin-left: 35px;
 			  			background-color: $light-blue;
 			  			border-radius:4px;

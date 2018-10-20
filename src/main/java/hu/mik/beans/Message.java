@@ -30,6 +30,17 @@ public class Message {
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
 
+	public Message() {
+		super();
+	}
+
+	public Message(User sender, Conversation conversation, String message) {
+		super();
+		this.sender = sender;
+		this.conversation = conversation;
+		this.message = message;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}

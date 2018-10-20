@@ -43,6 +43,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.content.setMargin(false);
 		this.content.setSpacing(false);
 		this.pageSize = 30;
+		this.setWidthUndefined();
 		this.addStyleName(ThemeConstants.BORDERED);
 		this.setContent(this.content);
 

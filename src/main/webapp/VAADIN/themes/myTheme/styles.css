@@ -15128,18 +15128,16 @@ div.v-layout.v-horizontal.v-widget {
 	display: unset !important;
 }
 
-.myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout {
+.myTheme #base[width-range~="0-550px"] #messageBase .chat-left-layout {
 	display: none;
 	max-width: unset;
-	overflow: unset;
 }
 
-.myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout .v-csslayout {
-	display: flex;
+.myTheme #base[width-range~="0-550px"] #messageBase .chat-left-layout .v-csslayout {
 	text-align: center;
 }
 
-.myTheme #base[width-range~="0-550px"] #messageBase #latestMessagesLayout .v-csslayout .v-image {
+.myTheme #base[width-range~="0-550px"] #messageBase .chat-left-layout .v-csslayout .v-image {
 	height: 100%;
 }
 
@@ -15159,7 +15157,7 @@ div.v-layout.v-horizontal.v-widget {
 	flex-direction: column-reverse !important;
 }
 
-.myTheme #base[width-range~="0-550px"] .show-conversations #latestMessagesLayout {
+.myTheme #base[width-range~="0-550px"] .show-conversations .chat-left-layout {
 	height: 100% !important;
 	display: unset !important;
 	max-width: unset !important;
@@ -15193,8 +15191,8 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100%;
 }
 
-.myTheme #base[width-range~="551px-930px"] #messageBase #latestMessagesLayout {
-	width: 30%;
+.myTheme #base[width-range~="551px-930px"] #messageBase .chat-left-layout {
+	width: 35%;
 }
 
 .myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout {
@@ -15260,15 +15258,24 @@ div.v-layout.v-horizontal.v-widget {
 	margin-bottom: 10px;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout {
-	max-width: 350px;
-	border-color: gray;
-	overflow: auto;
-	background: #f7f7f7;
+.myTheme #base #messageBase .chat-left-layout {
 	border-right: 1px solid lightgray;
+	max-width: 350px;
+	background: #f7f7f7;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout {
+.myTheme #base #messageBase .chat-left-layout .v-button {
+	max-height: 20%;
+}
+
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout {
+	border-color: gray;
+	overflow: auto;
+	width: 100%;
+	height: 80%;
+}
+
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout {
 	width: 100%;
 	height: 55px;
 	padding-left: 10px;
@@ -15281,7 +15288,7 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout .v-label {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout .v-label {
 	width: 65%;
 	padding-left: 5px;
 	text-overflow: ellipsis;
@@ -15289,26 +15296,26 @@ div.v-layout.v-horizontal.v-widget {
 	white-space: nowrap;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout .v-label:last-child {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout .v-label:last-child {
 	width: 15%;
 	padding-left: 0px;
 	text-align: right;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout #message {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout #message {
 	font-size: 12px;
 	color: graytext;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout .v-image {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout .v-image {
 	height: 80%;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout .v-icon {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout .v-icon {
 	font-size: 30px;
 }
 
-.myTheme #base #messageBase #latestMessagesLayout .v-csslayout:last-child {
+.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout:last-child {
 	border-bottom: 1px solid;
 }
 
@@ -15320,9 +15327,13 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase #chatLayout .v-scrollable-panel {
 	height: 70%;
+	width: 100%;
 	margin-bottom: 10px;
 	border-color: cornflowerblue;
 	border-left: 0px;
+}
+
+.myTheme #base #messageBase #chatLayout .v-scrollable-panel .v-verticallayout {
 	padding: 10px;
 }
 
@@ -15332,6 +15343,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase #chatLayout .chat-conversation-header {
 	background: #f7f7f7;
+	cursor: pointer;
 }
 
 .myTheme #base #messageBase #chatLayout .chat-conversation-header .v-label {
@@ -15355,10 +15367,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase #chatLayout .chatMessageSent .v-label {
 	white-space: normal;
-	padding-right: 1px;
-	padding-left: 5px;
-	padding-bottom: 5px;
-	padding-top: 5px;
+	padding: 5px;
 }
 
 .myTheme #base #messageBase #chatLayout .chatMessageReceived {
@@ -15378,10 +15387,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase #chatLayout .chatMessageReceived .v-label {
 	white-space: normal;
-	padding-left: 1px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-top: 5px;
+	padding: 5px;
 	margin-left: 35px;
 	background-color: #eaf2ff;
 	border-radius: 4px;
