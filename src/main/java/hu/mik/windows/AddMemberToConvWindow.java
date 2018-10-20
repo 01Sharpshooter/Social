@@ -61,6 +61,7 @@ public class AddMemberToConvWindow extends Window {
 		this.textArea = new TextArea();
 		this.textArea.setWidth("100%");
 		this.textArea.setHeight("100px");
+		this.textArea.setPlaceholder("Send a message directly...");
 		this.content.addComponent(this.textArea);
 
 	}
@@ -106,6 +107,7 @@ public class AddMemberToConvWindow extends Window {
 				user -> new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
 		this.cbUsers.setItemCaptionGenerator(user -> user.getFullName());
 		this.cbUsers.addSelectionListener(e -> this.userSelectionListener());
+		this.cbUsers.setPlaceholder("User to add...");
 		this.memberLayout.addComponent(this.cbUsers);
 	}
 

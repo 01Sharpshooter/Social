@@ -15261,6 +15261,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme #base #messageBase .chat-left-layout {
 	border-right: 1px solid lightgray;
 	max-width: 350px;
+	width: 35%;
 	background: #f7f7f7;
 }
 
@@ -15276,6 +15277,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout {
+	cursor: pointer;
 	width: 100%;
 	height: 55px;
 	padding-left: 10px;
@@ -15313,10 +15315,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout .v-icon {
 	font-size: 30px;
-}
-
-.myTheme #base #messageBase .chat-left-layout #latestMessagesLayout .v-csslayout:last-child {
-	border-bottom: 1px solid;
 }
 
 .myTheme #base #messageBase #chatLayout {
@@ -15400,6 +15398,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base .manyUserLayout .v-horizontallayout {
 	width: 25%;
+	cursor: pointer;
 }
 
 .myTheme #base .responsiveFont {
@@ -15437,12 +15436,14 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #navigationBar .navi-person .navigationBarIcon {
 	height: 50px;
+	cursor: pointer;
 }
 
 .myTheme #base #navigationBar .navi-person #username {
 	padding-right: 20px;
 	padding-left: 5px;
 	color: cornflowerblue;
+	cursor: pointer;
 }
 
 .myTheme #base #navigationBar .navi-person #username:hover {
@@ -15457,6 +15458,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #navigationBar .navi-item-list .v-label {
 	padding-left: 10px;
+	cursor: pointer;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
