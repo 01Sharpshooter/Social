@@ -119,7 +119,6 @@ public class MessagesView extends CssLayout implements View {
 
 	private void removeConversationDivIfExists(ConversationDiv convDiv) {
 		ConversationDiv divToDelete = null;
-		// Basic equals does not seem to work..
 		for (Component c : this.conversationListLayout) {
 			if (((ConversationDiv) c).getConversation().getId().equals(convDiv.getConversation().getId())) {
 				divToDelete = (ConversationDiv) c;
@@ -143,7 +142,7 @@ public class MessagesView extends CssLayout implements View {
 		this.addComponent(this.btnShowConvs);
 		CssLayout leftLayout = new CssLayout();
 		leftLayout.addStyleName(ThemeConstants.CHAT_LEFT_LAYOUT);
-		leftLayout.addComponent(this.createAddConversationBtn());
+		leftLayout.addComponent(this.createBtnNewConversation());
 		this.conversationListLayout = new CssLayout();
 		this.conversationListLayout.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.conversationListLayout.setId("latestMessagesLayout");
@@ -182,12 +181,41 @@ public class MessagesView extends CssLayout implements View {
 		}
 	}
 
-	private Button createAddConversationBtn() {
-		Button btnAdd = new Button(VaadinIcons.PLUS);
-		btnAdd.setWidth("100%");
-		btnAdd.setHeight("55px");
-		return btnAdd;
+	private Button createBtnNewConversation() {
+		Button btnNew = new Button(VaadinIcons.PLUS);
+		btnNew.setWidth("100%");
+		btnNew.setHeight("55px");
+		btnNew.addClickListener(e -> this.btnNewConversationClick());
+		return btnNew;
 
+	}
+
+	private void btnNewConversationClick() {
+		//@formatter:off
+		List<User> choosableUsers = this.choosableUsers
+				.stream()
+				.filter(user -> !user.getId().equals(this.loggedUser.getDbUser().getId()))
+				.collect(Collectors.toList());
+		//@formatter:on
+		UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::createNewConversation));
+	}
+
+	public void createNewConversation(List<User> usersToAdd, String messageText) {
+		Conversation conversation = new Conversation();
+		if (!messageText.isEmpty()) {
+			Message message = this.convertStringToMessage(messageText);
+			message.setConversation(conversation);
+			conversation.setLastMessage(message);
+		}
+		usersToAdd.forEach(user -> conversation.addConversationUser(new ConversationUser(conversation, user)));
+		conversation.addConversationUser(new ConversationUser(conversation, this.loggedUser.getDbUser()));
+		this.selectedConversationDiv = this.createConversationDiv(conversation);
+		this.conversationListLayout.addComponent(this.selectedConversationDiv, 0);
+
+		this.selectedConversationDiv
+				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+		MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
+		this.conversationListSelectionChange(this.selectedConversationDiv);
 	}
 
 	private ConversationDiv createConversationDiv(Conversation conversation) {
@@ -300,7 +328,7 @@ public class MessagesView extends CssLayout implements View {
 
 	private void sendMessage(String messageText) {
 		if (!messageText.isEmpty()) {
-			this.initAndSaveMessageToConversation(messageText);
+			this.initMessageToSend(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
 			this.refreshAndMoveConversationDiv(this.selectedConversationDiv);
 		}
@@ -313,12 +341,17 @@ public class MessagesView extends CssLayout implements View {
 		this.conversationListLayout.addComponent(conversationDiv, 0);
 	}
 
-	private void initAndSaveMessageToConversation(String messageText) {
-		Message message = new Message();
-		message.setMessage(messageText);
-		message.setSender(this.loggedUser.getDbUser());
+	private void initMessageToSend(String messageText) {
+		Message message = this.convertStringToMessage(messageText);
+		this.setSeenFalseForEverybody();
 		message.setConversation(this.selectedConversationDiv.getConversation());
-		message.setTime(new Timestamp(new Date().getTime()));
+		this.selectedConversationDiv.getConversation().setLastMessage(message);
+		this.selectedConversationDiv
+				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+		this.addMessageLabelToPanel(message);
+	}
+
+	private void setSeenFalseForEverybody() {
 		for (ConversationUser cu : this.selectedConversationDiv.getConversation().getConversationUsers()) {
 			if (!cu.getUser().equals(this.loggedUser.getDbUser())) {
 				cu.setSeen(false);
@@ -326,10 +359,14 @@ public class MessagesView extends CssLayout implements View {
 				cu.setSeen(true);
 			}
 		}
-		this.selectedConversationDiv.getConversation().setLastMessage(message);
-		this.selectedConversationDiv
-				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
-		this.addMessageLabelToPanel(message);
+	}
+
+	private Message convertStringToMessage(String messageText) {
+		Message message = new Message();
+		message.setMessage(messageText.trim());
+		message.setSender(this.loggedUser.getDbUser());
+		message.setTime(new Timestamp(new Date().getTime()));
+		return message;
 	}
 
 	public void receiveMessage(Conversation conversation) {
