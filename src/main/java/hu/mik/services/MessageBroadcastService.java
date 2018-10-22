@@ -35,11 +35,11 @@ public class MessageBroadcastService {
 		});
 	}
 
-	public static synchronized void messageSeen(Conversation conversation) {
+	public static synchronized void refreshConversationForEveryMember(Conversation conversation) {
 		executorService.execute(() -> {
 			conversation.getConversationUsers().stream()
 					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
-					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).messageSeen(conversation));
+					.forEach(cu -> userToListenerMap.get(cu.getUser().getId()).refreshConversation(conversation));
 		});
 	}
 

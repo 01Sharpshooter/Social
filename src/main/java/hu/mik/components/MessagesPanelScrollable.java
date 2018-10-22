@@ -35,8 +35,9 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	private Image previousImage;
 	private Integer previousSenderId;
 
-	public MessagesPanelScrollable() {
+	public MessagesPanelScrollable(SocialUserWrapper loggedUser) {
 		super(ScrollDirection.UP);
+		this.loggedUser = loggedUser;
 		this.content = new VerticalLayout();
 		this.content.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 		this.content.setSizeFull();
@@ -48,11 +49,6 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 		this.setContent(this.content);
 
 		this.messageService = this.appCtx.getBean(ChatService.class);
-	}
-
-	public void setLoggedUserAndConversation(SocialUserWrapper loggedUser, Conversation conversation) {
-		this.loggedUser = loggedUser;
-		this.conversation = conversation;
 	}
 
 	@Override
@@ -142,6 +138,14 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			break;
 		}
 		this.setScrollTop(this.pageSize * this.scrollForLoaded);
+	}
+
+	public Conversation getConversation() {
+		return this.conversation;
+	}
+
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 }

@@ -131,7 +131,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void createMessagesPanel() {
-		this.messagesPanel = new MessagesPanelScrollable();
+		this.messagesPanel = new MessagesPanelScrollable(this.loggedUser);
 	}
 
 	private void createConversationList() {
@@ -197,7 +197,7 @@ public class MessagesView extends CssLayout implements View {
 				.filter(user -> !user.getId().equals(this.loggedUser.getDbUser().getId()))
 				.collect(Collectors.toList());
 		//@formatter:on
-		UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::createNewConversation));
+		UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::createNewConversation, true));
 	}
 
 	public void createNewConversation(List<User> usersToAdd, String messageText) {
@@ -211,10 +211,13 @@ public class MessagesView extends CssLayout implements View {
 		conversation.addConversationUser(new ConversationUser(conversation, this.loggedUser.getDbUser()));
 		this.selectedConversationDiv = this.createConversationDiv(conversation);
 		this.conversationListLayout.addComponent(this.selectedConversationDiv, 0);
-
-		this.selectedConversationDiv
-				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
-		MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
+		if (messageText.isEmpty()) {
+			this.selectedConversationDiv
+					.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+			MessageBroadcastService.refreshConversationForEveryMember(this.selectedConversationDiv.getConversation());
+		} else {
+			this.sendMessage(messageText);
+		}
 		this.conversationListSelectionChange(this.selectedConversationDiv);
 	}
 
@@ -280,16 +283,20 @@ public class MessagesView extends CssLayout implements View {
 					.filter(user -> !this.selectedConversationDiv.getConversation().getlistOfUserIds().contains(user.getId()))
 					.collect(Collectors.toList());
 			//@formatter:on
-			UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::addMembersToConversation));
+			UI.getCurrent().addWindow(new AddMemberToConvWindow(choosableUsers, this::addMembersToConversation, false));
 		}
 	}
 
 	public void addMembersToConversation(List<User> usersToAdd, String messageText) {
 		usersToAdd.forEach(user -> this.selectedConversationDiv.getConversation()
 				.addConversationUser(new ConversationUser(this.selectedConversationDiv.getConversation(), user)));
-		this.selectedConversationDiv
-				.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
-		this.selectedConversationDiv.refresh();
+		if (messageText.isEmpty()) {
+			this.selectedConversationDiv
+					.setConversation(this.chatService.saveConversation(this.selectedConversationDiv.getConversation()));
+			MessageBroadcastService.refreshConversationForEveryMember(this.selectedConversationDiv.getConversation());
+		} else {
+			this.sendMessage(messageText);
+		}
 		this.conversationName.setValue(this.selectedConversationDiv.getConversationName());
 	}
 
@@ -314,8 +321,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private void fillChat() {
-		this.messagesPanel.setLoggedUserAndConversation(this.loggedUser,
-				this.selectedConversationDiv.getConversation());
+		this.messagesPanel.setConversation(this.selectedConversationDiv.getConversation());
 		if (this.selectedConversationDiv.getConversation().getId() != null) {
 			if (this.chatService.setConversationSeen(this.selectedConversationDiv.getConversation(),
 					this.loggedUser.getDbUser()) != 0) {
@@ -330,14 +336,14 @@ public class MessagesView extends CssLayout implements View {
 		if (!messageText.isEmpty()) {
 			this.initMessageToSend(messageText);
 			MessageBroadcastService.sendMessage(this.selectedConversationDiv.getConversation());
-			this.refreshAndMoveConversationDiv(this.selectedConversationDiv);
+			this.moveConversationDivToTop(this.selectedConversationDiv);
+			this.selectedConversationDiv.refresh();
 		}
 
 	}
 
-	private void refreshAndMoveConversationDiv(ConversationDiv conversationDiv) {
+	private void moveConversationDivToTop(ConversationDiv conversationDiv) {
 		this.conversationListLayout.removeComponent(conversationDiv);
-		conversationDiv.refresh();
 		this.conversationListLayout.addComponent(conversationDiv, 0);
 	}
 
@@ -378,17 +384,7 @@ public class MessagesView extends CssLayout implements View {
 			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
 			this.showNewMessageNotification(conversation);
 		}
-
-		for (Component convDiv : this.conversationListLayout) {
-			if (((ConversationDiv) convDiv).getConversation().getId().equals(conversation.getId())) {
-				((ConversationDiv) convDiv).setConversation(conversation);
-				this.refreshAndMoveConversationDiv((ConversationDiv) convDiv);
-				return;
-			}
-		}
-		Conversation newConv = this.chatService.findOrCreateConversationWithUser(
-				conversation.getLastMessage().getSender().getId(), this.loggedUser.getDbUser());
-		this.conversationListLayout.addComponent(this.createConversationDiv(newConv), 0);
+		this.refreshOrCreateConversation(conversation, true);
 	}
 
 	private void addMessageLabelToPanel(Message lastMessage) {
@@ -401,7 +397,7 @@ public class MessagesView extends CssLayout implements View {
 				.filter(cu -> cu.getUser().getId().equals(this.loggedUser.getDbUser().getId())).findFirst().get()
 				.setSeen(true);
 		this.selectedConversationDiv.setConversation(this.chatService.saveConversation(conversation));
-		MessageBroadcastService.messageSeen(this.selectedConversationDiv.getConversation());
+		MessageBroadcastService.refreshConversationForEveryMember(this.selectedConversationDiv.getConversation());
 	}
 
 	private void showNewMessageNotification(Conversation conversation) {
@@ -426,14 +422,24 @@ public class MessagesView extends CssLayout implements View {
 		this.hideConversations();
 	}
 
-	public void messageSeen(Conversation conversation) {
+	public void refreshOrCreateConversation(Conversation conversation, boolean moveToTop) {
+		ConversationDiv conversationDiv;
 		for (Component c : this.conversationListLayout) {
 			if (((ConversationDiv) c).getConversation().getId().equals(conversation.getId())) {
-				((ConversationDiv) c).setConversation(conversation);
-				((ConversationDiv) c).refresh();
-				break;
+				conversationDiv = (ConversationDiv) c;
+				conversationDiv.setConversation(conversation);
+				conversationDiv.refresh();
+				if (moveToTop) {
+					this.moveConversationDivToTop(conversationDiv);
+				}
+				return;
 			}
 		}
+
+		Conversation newConv = this.chatService.findOrCreateConversationWithUser(
+				conversation.getLastMessage().getSender().getId(), this.loggedUser.getDbUser());
+		conversationDiv = this.createConversationDiv(newConv);
+		this.conversationListLayout.addComponent(conversationDiv, 0);
 	}
 
 }

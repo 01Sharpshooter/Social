@@ -7,6 +7,7 @@ import java.util.List;
 import com.vaadin.annotations.Theme;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,11 +33,13 @@ public class AddMemberToConvWindow extends Window {
 	private SaveAction saveAction;
 	private CssLayout memberLayout;
 	private TextArea textArea;
+	private boolean validateTextArea;
 
-	public AddMemberToConvWindow(List<User> choosableUsers, SaveAction saveAction) {
+	public AddMemberToConvWindow(List<User> choosableUsers, SaveAction saveAction, boolean validateTextArea) {
 		super();
 		this.saveAction = saveAction;
 		this.choosableUsers = choosableUsers;
+		this.validateTextArea = validateTextArea;
 		this.setWidth("80%");
 		this.setHeight("80%");
 		this.setStyleName(ThemeConstants.ADD_MEMBER_TO_CONV_WINDOW);
@@ -59,9 +62,13 @@ public class AddMemberToConvWindow extends Window {
 
 	private void createTextArea() {
 		this.textArea = new TextArea();
+		this.textArea.setCaption("Write some words to the people joining this conversation");
 		this.textArea.setWidth("100%");
 		this.textArea.setHeight("100px");
-		this.textArea.setPlaceholder("Send a message directly...");
+		this.textArea.setPlaceholder("Message to be sent...");
+		if (this.validateTextArea) {
+			this.textArea.setRequiredIndicatorVisible(true);
+		}
 		this.content.addComponent(this.textArea);
 
 	}
@@ -95,6 +102,10 @@ public class AddMemberToConvWindow extends Window {
 	}
 
 	private void save() {
+		if (this.validateTextArea && this.textArea.getValue().trim().isEmpty()) {
+			this.textArea.setComponentError(new UserError("Write some words before confirming changes, please."));
+			return;
+		}
 		this.saveAction.save(this.chosenUsers, this.textArea.getValue());
 		this.close();
 	}

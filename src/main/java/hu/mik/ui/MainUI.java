@@ -327,10 +327,10 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	}
 
 	@Override
-	public void messageSeen(Conversation conversation) {
+	public void refreshConversation(Conversation conversation) {
 		this.access(() -> {
 			if (this.messageView != null) {
-				this.messageView.messageSeen(conversation);
+				this.messageView.refreshOrCreateConversation(conversation, false);
 			}
 		});
 
