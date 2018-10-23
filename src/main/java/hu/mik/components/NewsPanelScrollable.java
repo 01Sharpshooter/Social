@@ -8,7 +8,6 @@ import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
 import hu.mik.enums.ScrollDirection;
-import hu.mik.services.LdapService;
 import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
 
@@ -19,17 +18,15 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 	private VerticalLayout content;
 	private NewsService newsService;
-	private LdapService ldapService;
 	private UserUtils userUtils;
 
-	public NewsPanelScrollable(UserUtils userUtils, LdapService ldapService, NewsService newsService) {
+	public NewsPanelScrollable(UserUtils userUtils, NewsService newsService) {
 		super(ScrollDirection.DOWN);
 		this.newsService = newsService;
 		this.content = new VerticalLayout();
 		this.content.setMargin(false);
 		this.setSizeFull();
 		this.setContent(this.content);
-		this.ldapService = ldapService;
 		this.userUtils = userUtils;
 	}
 
