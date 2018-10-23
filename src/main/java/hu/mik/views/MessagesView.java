@@ -188,7 +188,7 @@ public class MessagesView extends CssLayout implements View {
 	}
 
 	private Button createBtnNewConversation() {
-		Button btnNew = new Button(VaadinIcons.PLUS);
+		Button btnNew = new Button("New conversation", VaadinIcons.PLUS);
 		btnNew.setWidth("100%");
 		btnNew.setHeight("55px");
 		btnNew.addClickListener(e -> this.btnNewConversationClick());

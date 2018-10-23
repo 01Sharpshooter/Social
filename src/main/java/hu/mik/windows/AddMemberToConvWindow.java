@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.UserError;
@@ -97,6 +98,7 @@ public class AddMemberToConvWindow extends Window {
 		Button btnSave = new Button(Texts.BTN_CONFIRM.getText());
 		btnSave.setIcon(VaadinIcons.CHECK);
 		btnSave.addClickListener(e -> this.save());
+		btnSave.setClickShortcut(KeyCode.ENTER);
 		return btnSave;
 
 	}
