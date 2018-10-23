@@ -57,8 +57,8 @@ public class UserDaoImplement implements UserDao {
 	public User findByUsername(String username) {
 		User user;
 		try {
-			user = this.em.createQuery("SELECT u FROM User u where u.username= :username", User.class)
-					.setParameter("username", username).getSingleResult();
+			user = this.em.createQuery("SELECT u FROM User u where LOWER(u.username) = :username", User.class)
+					.setParameter("username", username.toLowerCase()).getSingleResult();
 		} catch (Exception e) {
 			user = null;
 		}
