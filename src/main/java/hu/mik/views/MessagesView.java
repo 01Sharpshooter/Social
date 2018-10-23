@@ -438,11 +438,9 @@ public class MessagesView extends CssLayout implements View {
 				return;
 			}
 		}
-
-		Conversation newConv = this.chatService.findOrCreateConversationWithUser(
-				conversation.getLastMessage().getSender().getId(), this.loggedUser.getDbUser());
-		conversationDiv = this.createConversationDiv(newConv);
+		conversationDiv = this.createConversationDiv(conversation);
 		this.conversationListLayout.addComponent(conversationDiv, 0);
+
 	}
 
 }
