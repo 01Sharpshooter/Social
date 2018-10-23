@@ -115,9 +115,9 @@ public class ProfileView extends VerticalLayout implements View {
 		for (Component component : form) {
 			if (component.getClass().equals(TextField.class)) {
 				component.addStyleName(ThemeConstants.BLUE_TEXT);
-				if (!this.socialProfileUser.getUsername().equals(this.socialSessionUser.getLdapUser().getUsername())) {
-					component.setEnabled(false);
-				}
+
+				component.setEnabled(false);
+
 			}
 		}
 		return form;
