@@ -36,6 +36,11 @@ public class Conversation {
 		this.conversationUsers = new HashSet<>();
 	}
 
+	public boolean seenByUser(Integer userId) {
+		return this.conversationUsers.stream().filter(cu -> cu.getUser().getId().equals(userId)).findFirst().get()
+				.isSeen();
+	}
+
 	public Conversation(ConversationUser... convUsers) {
 		this.conversationUsers = new HashSet<>(Arrays.asList(convUsers));
 	}

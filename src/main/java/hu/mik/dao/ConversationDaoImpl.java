@@ -26,7 +26,6 @@ public class ConversationDaoImpl implements ConversationDao {
 			this.em.persist(conversation.getLastMessage());
 			conversation.getConversationUsers().forEach(conversationUser -> this.em.persist(conversationUser));
 		} else {
-			System.err.println("merge");
 			conversation = this.em.merge(conversation);
 		}
 		return conversation;
