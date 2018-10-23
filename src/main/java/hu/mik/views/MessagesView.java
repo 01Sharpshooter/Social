@@ -19,7 +19,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
@@ -377,9 +376,6 @@ public class MessagesView extends CssLayout implements View {
 				&& this.selectedConversationDiv.getConversation().getId().equals(conversation.getId())) {
 			this.addMessageLabelToPanel(conversation.getLastMessage());
 			this.setConversationSeenByUser(conversation);
-		} else if (!this.loggedUser.getDbUser().getId().equals(conversation.getLastMessage().getSender().getId())) {
-			((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
-			this.showNewMessageNotification(conversation);
 		}
 		this.refreshOrCreateConversation(conversation, true);
 	}
@@ -396,12 +392,6 @@ public class MessagesView extends CssLayout implements View {
 		this.selectedConversationDiv.setConversation(this.chatService.saveConversation(conversation));
 		((MainUI) UI.getCurrent()).refreshUnseenConversationNumber();
 		MessageBroadcastService.refreshConversationForEveryMember(this.selectedConversationDiv.getConversation());
-	}
-
-	private void showNewMessageNotification(Conversation conversation) {
-		Notification notification = Notification.show(conversation.getLastMessage().getSender().getFullName(),
-				conversation.getLastMessage().getMessage(), Notification.Type.TRAY_NOTIFICATION);
-		notification.setIcon(VaadinIcons.COMMENT);
 	}
 
 	private void conversationListSelectionChange(ConversationDiv conversationDiv) {

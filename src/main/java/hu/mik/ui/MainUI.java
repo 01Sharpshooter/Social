@@ -31,6 +31,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -171,13 +172,19 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	@Override
 	public void receiveMessage(Conversation conversation) {
 		this.access(() -> {
-			if (this.messageView != null) {
+			if (this.messageView != null && this.getNavigator().getCurrentView().equals(this.messageView)) {
 				this.messageView.receiveMessage(conversation);
 			} else {
 				this.refreshUnseenConversationNumber();
+				this.showNewMessageNotification(conversation);
 			}
 		});
+	}
 
+	private void showNewMessageNotification(Conversation conversation) {
+		Notification notification = Notification.show(conversation.getLastMessage().getSender().getFullName(),
+				conversation.getLastMessage().getMessage(), Notification.Type.TRAY_NOTIFICATION);
+		notification.setIcon(VaadinIcons.COMMENT);
 	}
 
 	public void createNaviBar() {
