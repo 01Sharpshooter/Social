@@ -115,7 +115,6 @@ public class ProfileView extends VerticalLayout implements View {
 		for (Component component : form) {
 			if (component.getClass().equals(TextField.class)) {
 				component.addStyleName(ThemeConstants.BLUE_TEXT);
-
 				component.setEnabled(false);
 
 			}

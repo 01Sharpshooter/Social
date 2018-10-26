@@ -324,7 +324,6 @@ public class MessagesView extends CssLayout implements View {
 		this.messagesPanel.setConversation(this.selectedConversationDiv.getConversation());
 		if (this.selectedConversationDiv.getConversation().getId() != null) {
 			this.messagesPanel.firstFill();
-			this.messagesPanel.scrollToBottom();
 		}
 	}
 
