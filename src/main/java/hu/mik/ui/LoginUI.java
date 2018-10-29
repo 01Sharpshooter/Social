@@ -1,5 +1,6 @@
 package hu.mik.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.risto.formsender.FormSender;
 import org.vaadin.risto.formsender.widgetset.client.shared.Method;
 
@@ -8,6 +9,7 @@ import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
@@ -21,6 +23,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.constants.ThemeConstants;
+import hu.mik.utils.UserUtils;
+import hu.mik.views.DefaultView;
 
 @SuppressWarnings("serial")
 @Theme(ThemeConstants.UI_THEME)
@@ -28,9 +32,16 @@ import hu.mik.constants.ThemeConstants;
 @Viewport("width=device-width,initial-scale=1")
 @Widgetset("hu.mik.gwt.SocialWidgetset")
 public class LoginUI extends UI {
+	@Autowired
+	UserUtils userUtils;
 
 	@Override
 	protected void init(VaadinRequest request) {
+		if (this.userUtils.getLoggedInUser() != null) {
+			this.getPage().setLocation("/main#!home");
+			return;
+		}
+		this.getNavigator().addViewChangeListener(e -> this.viewChange(e));
 		this.getPage().setTitle("Login");
 		final VerticalLayout layout = new VerticalLayout();
 		Label title = new Label("Login");
@@ -52,7 +63,7 @@ public class LoginUI extends UI {
 		layout.addComponent(nameTF);
 
 		PasswordField pwTF = new PasswordField("Password");
-		pwTF.setIcon(VaadinIcons.PASSWORD);
+		pwTF.setIcon(VaadinIcons.KEY);
 		pwTF.setRequiredIndicatorVisible(true);
 		layout.addComponent(pwTF);
 
@@ -95,6 +106,13 @@ public class LoginUI extends UI {
 //			register.addClickListener(event->getPage().setLocation("/registration"));
 //			layout.addComponent(register);
 
+	}
+
+	private boolean viewChange(ViewChangeEvent e) {
+		if (!e.getViewName().equals(DefaultView.NAME)) {
+			return false;
+		}
+		return true;
 	}
 
 	private boolean IsvalidName(String userName) {
