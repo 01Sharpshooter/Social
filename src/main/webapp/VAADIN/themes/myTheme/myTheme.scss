@@ -57,7 +57,7 @@
 		}
 		#profileHeader{
 			.v-image{
-				height:100px;
+				height:75px;
 			}
 			.v-button{
 				font-size: 12px;
@@ -65,11 +65,29 @@
 			    padding-right: 10px;
 			    height: 30px;
 			}
+			.v-label{
+				font-size: 0.8em;
+			}
 		}	
 		#profileBody{
-			.v-textfield{
-				width:100%;
-				font-size:80%;
+			overflow:auto;
+			padding-top: 0px;
+			.v-formlayout-row{
+				display:flex;
+				flex-direction: column;
+				.v-formlayout-captioncell{
+					padding-top:0px;
+					.v-caption{
+						font-size: 0.8em;
+					}
+				}
+				.v-formlayout-errorcell{
+					padding-top:0px;
+				}
+				.v-formlayout-contentcell{
+					padding-top:0px;
+					font-size: 0.9em;
+				}
 			}
 		}
 		#messageBase{
@@ -404,10 +422,17 @@
 		    		height: 100%;
 					color:black;
 					padding-right:10px;
-					transition: all 0.5s;
+					transition: all 0.2s;
 					//border-right: 1px solid darkgray;
 				}
 				.v-label:hover{
+					font-size:17px;
+					color:white;
+					//border-bottom: 3px solid deepskyblue;	
+					background: $blue;
+				}
+			
+				.navi-item-active{
 					font-size:17px;
 					color:white;
 					//border-bottom: 3px solid deepskyblue;	
@@ -439,7 +464,7 @@
 	  		border: 2px solid $blue;
 	  		background-color: $light-blue;
 	  		border-radius:4px;
-	  		box-shadow:3px 3px 3px $blue_shadow;
+	  		box-shadow:1px 1px 2px $blue;
 	  		border:1px outset $blue;
 	  		padding-bottom: 2px;
 	  		.v-image{
@@ -452,9 +477,16 @@
 	  		.v-button{
 	  			height:50%;
 	  		}
+	  		.v-button:first-child{
+	  			border:1px solid $blue;
+	  			background: $blue;
+	  			box-shadow: unset;
+	  			color: white;
+	  		}
 	  	}
 	  	#profileBody{
 	  		padding:10px;
+	  		border-left: 1px solid $blue;
 			.v-textfield{
 				width:50%;
 			}

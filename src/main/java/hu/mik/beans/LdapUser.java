@@ -26,6 +26,12 @@ public class LdapUser {
 	private String mobile;
 	@Attribute(name = "mail")
 	private String mail;
+	@Attribute(name = "roomNumber")
+	private String roomNumber;
+	@Attribute(name = "title")
+	private String title;
+	@Attribute(name = "departmentNumber")
+	private String departmentNumber;
 	@Transient
 	private List<LdapGroup> ldapGroups;
 
@@ -83,6 +89,30 @@ public class LdapUser {
 
 	public void setLdapGroups(List<LdapGroup> ldapGroups) {
 		this.ldapGroups = ldapGroups;
+	}
+
+	public String getRoomNumber() {
+		return this.roomNumber;
+	}
+
+	public void setRoomNumber(String room) {
+		this.roomNumber = room;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDepartmentNumber() {
+		return this.departmentNumber;
+	}
+
+	public void setDepartmentNumber(String departmentNumber) {
+		this.departmentNumber = departmentNumber;
 	}
 
 }

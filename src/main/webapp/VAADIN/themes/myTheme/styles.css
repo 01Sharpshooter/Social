@@ -15102,7 +15102,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base[width-range~="0-550px"] #profileHeader .v-image {
-	height: 100px;
+	height: 75px;
 }
 
 .myTheme #base[width-range~="0-550px"] #profileHeader .v-button {
@@ -15112,9 +15112,35 @@ div.v-layout.v-horizontal.v-widget {
 	height: 30px;
 }
 
-.myTheme #base[width-range~="0-550px"] #profileBody .v-textfield {
-	width: 100%;
-	font-size: 80%;
+.myTheme #base[width-range~="0-550px"] #profileHeader .v-label {
+	font-size: 0.8em;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody {
+	overflow: auto;
+	padding-top: 0px;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody .v-formlayout-row {
+	display: flex;
+	flex-direction: column;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody .v-formlayout-row .v-formlayout-captioncell {
+	padding-top: 0px;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody .v-formlayout-row .v-formlayout-captioncell .v-caption {
+	font-size: 0.8em;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody .v-formlayout-row .v-formlayout-errorcell {
+	padding-top: 0px;
+}
+
+.myTheme #base[width-range~="0-550px"] #profileBody .v-formlayout-row .v-formlayout-contentcell {
+	padding-top: 0px;
+	font-size: 0.9em;
 }
 
 .myTheme #base[width-range~="0-550px"] #messageBase {
@@ -15474,10 +15500,16 @@ div.v-layout.v-horizontal.v-widget {
 	height: 100%;
 	color: black;
 	padding-right: 10px;
-	transition: all 0.5s;
+	transition: all 0.2s;
 }
 
 .myTheme #base #navigationBar .navi-item-list .v-label:hover {
+	font-size: 17px;
+	color: white;
+	background: cornflowerblue;
+}
+
+.myTheme #base #navigationBar .navi-item-list .navi-item-active {
 	font-size: 17px;
 	color: white;
 	background: cornflowerblue;
@@ -15510,7 +15542,7 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid cornflowerblue;
 	background-color: #eaf2ff;
 	border-radius: 4px;
-	box-shadow: 3px 3px 3px #00b6cd;
+	box-shadow: 1px 1px 2px cornflowerblue;
 	border: 1px outset cornflowerblue;
 	padding-bottom: 2px;
 }
@@ -15528,8 +15560,16 @@ div.v-layout.v-horizontal.v-widget {
 	height: 50%;
 }
 
+.myTheme #base #profileHeader .v-button:first-child {
+	border: 1px solid cornflowerblue;
+	background: cornflowerblue;
+	box-shadow: unset;
+	color: white;
+}
+
 .myTheme #base #profileBody {
 	padding: 10px;
+	border-left: 1px solid cornflowerblue;
 }
 
 .myTheme #base #profileBody .v-textfield {

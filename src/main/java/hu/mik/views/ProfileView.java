@@ -2,6 +2,7 @@ package hu.mik.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
@@ -16,7 +17,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.FriendRequest;
@@ -96,27 +96,32 @@ public class ProfileView extends VerticalLayout implements View {
 
 	private FormLayout createFormLayout() {
 		FormLayout form = new FormLayout();
-		form.addStyleName(ThemeConstants.BORDERED);
 		form.setMargin(false);
 		form.setId("profileBody");
 		form.setSizeFull();
 
-		TextField tfName = new TextField("Name:",
-				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getFullName()));
-		TextField tfMobile = new TextField("Mobile:",
-				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMobile()));
-		TextField tfMail = new TextField("E-Mail:",
-				this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMail()));
+		Label lblTitle = new Label(this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getTitle()));
+		lblTitle.setCaption(VaadinIcons.STAR.getHtml() + " Title:");
+		lblTitle.setCaptionAsHtml(true);
+		Label lblMobile = new Label(this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMobile()));
+		lblMobile.setCaption(VaadinIcons.PHONE.getHtml() + " Mobile:");
+		lblMobile.setCaptionAsHtml(true);
+		Label lblMail = new Label(this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getMail()));
+		lblMail.setCaption(VaadinIcons.ENVELOPE.getHtml() + " E-Mail:");
+		lblMail.setCaptionAsHtml(true);
+		Label lblRoom = new Label(this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getRoomNumber()));
+		lblRoom.setCaption(VaadinIcons.HOME.getHtml() + " Room:");
+		lblRoom.setCaptionAsHtml(true);
+		Label lblDeptNo = new Label(this.checkandSetIfNull(this.socialProfileUser.getLdapUser().getDepartmentNumber()));
+		lblDeptNo.setCaption(VaadinIcons.OFFICE.getHtml() + " Department:");
+		lblDeptNo.setCaptionAsHtml(true);
 
-		form.addComponent(tfName);
-		form.addComponent(tfMobile);
-		form.addComponent(tfMail);
+		form.addComponents(lblTitle, lblMobile, lblMail, lblRoom, lblDeptNo);
 
 		for (Component component : form) {
-			if (component.getClass().equals(TextField.class)) {
+			if (component.getClass().equals(Label.class)) {
 				component.addStyleName(ThemeConstants.BLUE_TEXT);
-				component.setEnabled(false);
-
+				component.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 			}
 		}
 		return form;
