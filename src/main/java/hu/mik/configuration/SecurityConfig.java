@@ -28,10 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl(DEFAULT_PAGE_URL, true).permitAll();
 		http.headers().frameOptions().sameOrigin();
 		http.csrf().disable();
-
-//		SecurityContextPersistenceFilter filter=new SecurityContextPersistenceFilter(http.getSharedObject(SecurityContextRepository.class));
-//		filter.setForceEagerSessionCreation(true);
-//		http.addFilter(filter);
 	}
 
 	@Autowired
