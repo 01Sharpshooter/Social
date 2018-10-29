@@ -162,7 +162,7 @@ public class ProfileView extends VerticalLayout implements View {
 				Button btnDeclineRequest = new Button(StringConstants.BTN_DECLINE_REQUEST);
 				btnDeclineRequest.addStyleName(ThemeConstants.BLUE_TEXT);
 				btnDeclineRequest.addClickListener(this::declineRequestClickListener);
-				this.headerButtonList.addComponent(btnDeclineRequest);
+				this.headerButtonList.addComponent(btnDeclineRequest, 1);
 			} else {
 				btnFriendRequest.setCaption(StringConstants.BTN_CANCEL_REQUEST);
 			}

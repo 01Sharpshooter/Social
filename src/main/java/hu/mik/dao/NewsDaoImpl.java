@@ -10,10 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.mik.beans.LdapGroup;
 import hu.mik.beans.News;
 import hu.mik.beans.User;
-import hu.mik.utils.Converters;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
@@ -33,11 +31,8 @@ public class NewsDaoImpl implements NewsDao {
 		return list;
 	}
 	@Override
-	public List<News> getPagedNewsByLdapGroup(int offset, int pageSize, LdapGroup ldapGroup){
-		List<News> list = new ArrayList<>();
-		List<String> usernames = new ArrayList<>();
-		ldapGroup.getListOfMembers().forEach(name -> usernames.add(Converters.convertLdapNameToUsername(name)));
-		list = this.em.createQuery(
+	public List<News> getPagedNewsByUsernames(int offset, int pageSize, List<String> usernames){
+		return this.em.createQuery(
 				"SELECT n FROM News n"
 				+ " JOIN FETCH n.user u"
 				+ " WHERE u.username IN (:usernames)"
@@ -47,13 +42,11 @@ public class NewsDaoImpl implements NewsDao {
 				.setFirstResult(offset)
 				.setMaxResults(pageSize)
 				.getResultList();
-		return list;
 	}
 
 	@Override
 	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user){
-		List<News> list = new ArrayList<>();
-		list = this.em.createQuery(
+		return this.em.createQuery(
 				"SELECT n FROM News n"
 				+ " JOIN FETCH n.user u"
 				+ " WHERE n.user = :user"
@@ -62,7 +55,6 @@ public class NewsDaoImpl implements NewsDao {
 				.setFirstResult(offset)
 				.setMaxResults(pageSize)
 				.getResultList();
-		return list;
 	}
 
 	@Override
