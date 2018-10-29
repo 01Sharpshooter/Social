@@ -9,7 +9,7 @@ import hu.mik.utils.ApplicationContextHolder;
 @SuppressWarnings("serial")
 public abstract class AbstractScrollablePanel extends ScrollablePanel {
 	protected int scrollValueToRefresh = 400;
-	protected int pageSize = 10;
+	protected int pageSize = 15;
 	protected int offset = 0;
 	private int scrollToBottom = 1000000;
 	private int scrollToTop = -1000000;
