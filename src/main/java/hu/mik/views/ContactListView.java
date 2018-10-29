@@ -27,7 +27,6 @@ import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
-import hu.mik.utils.Converters;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
@@ -140,7 +139,7 @@ public class ContactListView extends Panel implements View {
 		List<LdapUser> teamMembers = new ArrayList<>();
 		team.getListOfMembers().forEach(name -> {
 			if (!name.equals(this.socialUser.getLdapUser().getId())) {
-				teamMembers.add(this.ldapService.findUserByUsername(Converters.convertLdapNameToUsername(name)));
+				teamMembers.add(this.ldapService.findUserByDN(name));
 			}
 		});
 		this.contactsLayout.removeAllComponents();
