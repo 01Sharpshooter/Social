@@ -1,5 +1,6 @@
 package hu.mik.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Name;
@@ -47,13 +48,23 @@ public class LdapServiceImpl implements LdapService {
 	@Override
 	public LdapUser findUserWithGroups(String username) {
 		LdapUser user = this.findUserByUsername(username);
-		user.setLdapGroups(this.findGroupsByUserId(user.getId()));
+		if (user != null) {
+			user.setLdapGroups(this.findGroupsByUserId(user.getId()));
+		}
 		return user;
 	}
 
-//	@Override
-//	public LdapUser findUserById(Name name) {
-//		return ldapRepositoryUsers.findById(name);
-//	}
+	@Override
+	public List<String> findMemberUsernamesOfGroup(LdapGroup ldapGroup) {
+		List<String> ldapUsers = new ArrayList<>();
+		ldapGroup.getListOfMembers()
+				.forEach(m -> ldapUsers.add(this.ldapRepositoryUsers.findById(m).get().getUsername()));
+		return ldapUsers;
+	}
+
+	@Override
+	public LdapUser findUserByDN(Name name) {
+		return this.ldapRepositoryUsers.findById(name).get();
+	}
 
 }

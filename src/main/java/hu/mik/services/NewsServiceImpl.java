@@ -13,7 +13,9 @@ import hu.mik.dao.NewsDao;
 @Service
 public class NewsServiceImpl implements NewsService {
 	@Autowired
-	NewsDao newsDao;
+	private NewsDao newsDao;
+	@Autowired
+	private LdapService ldapService;
 
 	@Override
 	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user) {
@@ -33,7 +35,8 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	public List<News> getPagedNewsByLdapGroup(int offset, int pageSize, LdapGroup ldapGroup) {
-		return this.newsDao.getPagedNewsByLdapGroup(offset, pageSize, ldapGroup);
+		return this.newsDao.getPagedNewsByUsernames(offset, pageSize,
+				this.ldapService.findMemberUsernamesOfGroup(ldapGroup));
 	}
 
 	@Override

@@ -12,6 +12,8 @@ public interface LdapService {
 
 	public LdapUser findUserWithGroups(String username);
 
+	public LdapUser findUserByDN(Name name);
+
 	public List<LdapUser> findByFullNameContaining(String fullName);
 
 	public LdapGroup findGroupByGroupName(String groupName);
@@ -19,6 +21,8 @@ public interface LdapService {
 	public List<LdapGroup> findGroupsByUserId(Name memberId);
 
 	public List<LdapUser> findAllUsers();
+
+	public List<String> findMemberUsernamesOfGroup(LdapGroup ldapGroup);
 
 //	public LdapUser findUserById(Name name);
 }

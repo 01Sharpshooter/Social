@@ -7,6 +7,7 @@ import javax.naming.Name;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.ldap.odm.annotations.Transient;
 
 import hu.mik.constants.LdapConstants;
 
@@ -21,6 +22,8 @@ public class LdapGroup {
 	private List<Name> listOfMembers;
 	@Attribute(name = "member")
 	private Name member;
+	@Transient
+	private List<LdapUser> memberUsers;
 
 	public Name getId() {
 		return this.id;
@@ -44,6 +47,14 @@ public class LdapGroup {
 
 	public void setListOfMembers(List<Name> listOfMembers) {
 		this.listOfMembers = listOfMembers;
+	}
+
+	public List<LdapUser> getMemberUsers() {
+		return this.memberUsers;
+	}
+
+	public void setMemberUsers(List<LdapUser> memberUsers) {
+		this.memberUsers = memberUsers;
 	}
 
 	@Override
