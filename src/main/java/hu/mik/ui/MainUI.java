@@ -49,7 +49,6 @@ import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
 import hu.mik.services.MessageBroadcastService;
-import hu.mik.services.UserService;
 import hu.mik.utils.UserUtils;
 import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
@@ -70,8 +69,6 @@ import hu.mik.views.UserListView;
 @Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private LdapService ldapService;
 	@Autowired
@@ -240,6 +237,8 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	private void naviBarClickListener(LayoutClickEvent event) {
 		if (event.getClickedComponent() != null && event.getClickedComponent().getClass().equals(Label.class)) {
 			Label lblClicked = (Label) event.getClickedComponent();
+			this.naviItemList.forEach(c -> c.removeStyleName(ThemeConstants.NAVI_ITEM_ACTIVE));
+			lblClicked.addStyleName(ThemeConstants.NAVI_ITEM_ACTIVE);
 			this.changeDropDownVisibility();
 			String label = lblClicked.getValue().replaceFirst("<span.*</span><", "<").replaceFirst("<.?span>", "")
 					.replaceFirst("<span.*>", "");
@@ -298,26 +297,19 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	private void createNaviBarLabelList(AbstractLayout layout) {
 		this.naviItemList = new CssLayout();
-//		Label lblAdmin = new Label(VaadinIcons.COG.getHtml() + "<span class=\"folding\">Admin</span>",
-//				ContentMode.HTML);
-//		lblAdmin.addStyleName(ThemeConstants.ICON_WHITE);
 		Label lblMain = new Label(VaadinIcons.HOME.getHtml() + "<span class=\"folding\">Main</span>", ContentMode.HTML);
-//		lblMain.addStyleName(ThemeConstants.ICON_WHITE);
+		lblMain.addStyleName(ThemeConstants.NAVI_ITEM_ACTIVE);
 		Long unseenCount = this.messageService.getNumberOfUnseenConversations(this.socialUser.getDbUser());
 		this.lblMessages = new Label(
 				VaadinIcons.CHAT.getHtml() + "<span class=\"folding\">Messages (" + unseenCount + ")</span>",
 				ContentMode.HTML);
-//		this.lblMessages.addStyleName(ThemeConstants.ICON_WHITE);
+
 		Label lblContacts = new Label(VaadinIcons.USERS.getHtml() + "<span class=\"folding\">Contacts</span>",
 				ContentMode.HTML);
-//		lblContacts.addStyleName(ThemeConstants.ICON_WHITE);
+
 		Label lblLogout = new Label(VaadinIcons.EXIT.getHtml() + "<span class=\"folding\">Logout</span>",
 				ContentMode.HTML);
-		// lblLogout.addStyleName(ThemeConstants.ICON_WHITE);
 
-//		if (this.adminGroup.getListOfMembers().contains(this.socialUser.getLdapUser().getId())) {
-//			layout.addComponent(lblAdmin);
-//		}
 		this.naviItemList.addComponents(lblMain, this.lblMessages, lblContacts, lblLogout);
 		this.naviItemList.addStyleName(ThemeConstants.NAVI_ITEM_LIST);
 		layout.addComponent(this.naviItemList);
