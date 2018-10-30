@@ -19,6 +19,11 @@
 				width:100%;
 			}
 		}
+		.add-member-to-conv-window{
+			.add-member-to-conv-window-member-layout{
+				height:80% !important;
+			}		
+		}
 		.responsiveFont{
 			font-size: 1.0em;
 		}
@@ -641,6 +646,9 @@
 			.v-filterselect{
 				border-radius: 200px !important;	
 			}
+		}
+		.v-captiontext{
+			white-space: normal;
 		}			
 	}
 

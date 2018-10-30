@@ -15058,6 +15058,10 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100%;
 }
 
+.myTheme #base[width-range~="0-550px"] .add-member-to-conv-window .add-member-to-conv-window-member-layout {
+	height: 80% !important;
+}
+
 .myTheme #base[width-range~="0-550px"] .responsiveFont {
 	font-size: 1em;
 }
@@ -15721,6 +15725,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout .v-filterselect {
 	border-radius: 200px !important;
+}
+
+.myTheme .add-member-to-conv-window .v-captiontext {
+	white-space: normal;
 }
 
 .myTheme .show-full-conversation-name {
