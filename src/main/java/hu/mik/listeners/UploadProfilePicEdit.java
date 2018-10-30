@@ -21,7 +21,6 @@ import org.springframework.context.event.EventListener;
 
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
@@ -55,10 +54,11 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		for (String type : allowedTypes) {
 			if (this.mimeType.equals(type)) {
 				this.view.editImage(this.ops);
+				this.view.hideError();
 				return;
 			}
 		}
-		this.view.addComponent(new Label("Wrong file type!"));
+		this.view.showError();
 	}
 
 	@Override

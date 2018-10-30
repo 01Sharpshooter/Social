@@ -45,13 +45,18 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 
 	private VerticalLayout editorLayout;
 
+	private Label lblError;
+
 	@Override
 	public void enter(ViewChangeEvent event) {
 		this.uploadProfilePicture.setView(this);
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		this.lblError = new Label("Wrong file type!");
+		this.lblError.setVisible(false);
 		this.upload = new Upload("Upload a new profile picture! (JPEG/PNG)", this.uploadProfilePicture);
 		this.upload.setImmediateMode(true);
 		this.upload.addSucceededListener(this.uploadProfilePicture);
+		this.addComponent(this.lblError);
 		this.addComponent(this.upload);
 
 	}
@@ -122,4 +127,11 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 
 	}
 
+	public void hideError() {
+		this.lblError.setVisible(false);
+	}
+
+	public void showError() {
+		this.lblError.setVisible(true);
+	}
 }
