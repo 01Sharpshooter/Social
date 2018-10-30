@@ -72,10 +72,15 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 
 	public VerticalLayout getEditor(ByteArrayOutputStream ops) {
 		this.editorLayout = new VerticalLayout();
+		this.editorLayout.setMargin(false);
+		this.editorLayout.setSpacing(false);
 		this.addComponent(this.editorLayout);
 		this.editorLayout.setSizeFull();
+		this.editorLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		Label instructions = new Label("Scroll to zoom, move by dragging the mouse, rotate by shift+mouse dragging.");
+		instructions.setWidth("100%");
 		instructions.setStyleName(ThemeConstants.BLUE_TEXT_H3);
+		instructions.addStyleName(ThemeConstants.TEXT_CENTER);
 		this.editorLayout.addComponent(instructions);
 		this.editorLayout.addComponent(this.editor);
 		this.editorLayout.addComponent(this.editImage);
@@ -88,8 +93,8 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 		this.navigation.addComponent(resetButton);
 		this.navigation.addComponent(cancelButton);
 		this.editorLayout.addComponent(this.navigation);
-		this.editor.setWidth(300, Unit.PIXELS);
-		this.editor.setHeight(300, Unit.PIXELS);
+		this.editor.setWidth(200, Unit.PIXELS);
+		this.editor.setHeight(200, Unit.PIXELS);
 		this.editor.setImage(ops.toByteArray());
 		this.editor.resetTransformations();
 		this.editImage.setVisible(this.edit);

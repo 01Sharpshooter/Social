@@ -15745,3 +15745,7 @@ div.v-layout.v-horizontal.v-widget {
 .myTheme .margin-bottom {
 	margin-bottom: 15px !important;
 }
+
+.myTheme .text-center {
+	text-align: center;
+}

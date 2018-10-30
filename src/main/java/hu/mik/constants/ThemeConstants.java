@@ -58,6 +58,8 @@ public class ThemeConstants {
 
 	public static final String SHOW_DROPDOWN = "show-dropdown";
 
+	public static final String TEXT_CENTER = "text-center";
+
 	public static final String NAVI_ITEM_LIST = "navi-item-list";
 	public static final String NAVI_ITEM_ACTIVE = "navi-item-active";
 	public static final String NAVI_PERSON = "navi-person";
