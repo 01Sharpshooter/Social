@@ -18,6 +18,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
@@ -138,6 +139,7 @@ public class ProfileView extends VerticalLayout implements View {
 
 	private CssLayout createHeaderBtnList() {
 		this.headerButtonList = new CssLayout();
+		this.headerButtonList.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
 		if (this.socialSessionUser.getDbUser().getId() != this.socialProfileUser.getDbUser().getId()) {
 			Button btnFriendRequest = new Button();
