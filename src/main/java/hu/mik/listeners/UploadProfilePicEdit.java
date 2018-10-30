@@ -41,9 +41,8 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 
 	private PictureUploadView view;
 
+	private String extension;
 	private String mimeType;
-
-	private String fileName;
 
 	private ByteArrayOutputStream ops;
 
@@ -63,7 +62,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 
 	@Override
 	public OutputStream receiveUpload(String filename, String mimeType) {
-		this.fileName = filename;
+		this.extension = filename.substring(filename.lastIndexOf('.'), filename.length()).toLowerCase();
 		this.mimeType = mimeType;
 		return this.ops = new ByteArrayOutputStream();
 	}
@@ -79,7 +78,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 	public void receiveImage(InputStream ins) {
 		User user = this.userUtils.getLoggedInUser().getDbUser();
 
-		String imageName = System.currentTimeMillis() + this.fileName;
+		String imageName = user.getUsername() + this.extension;
 		File imageSave = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
 
 		try {
