@@ -1,5 +1,6 @@
 package hu.mik.beans;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class Conversation {
 	private Message lastMessage;
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "conversation", orphanRemoval = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
-	private Set<ConversationUser> conversationUsers;
+	private Set<ConversationUser> conversationUsers = new HashSet<>();
 
 	public boolean seenByUser(Integer userId) {
 		return this.conversationUsers.stream().filter(cu -> cu.getUser().getId().equals(userId)).findFirst().get()

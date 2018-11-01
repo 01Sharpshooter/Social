@@ -10,13 +10,14 @@
   	$green:#00FF00;
   	$grey: #696969;
   	$light-blue: #eaf2ff;
+  	$blur : "blur(2px)";
   	
 
 	#base[width-range~="0-550px"]{
 		height:auto;
 		.manyUserLayout{
-			.v-horizontallayout{
-				width:100%;
+			.v-csslayout{
+				width:100% !important;
 			}
 		}
 		.add-member-to-conv-window{
@@ -140,10 +141,10 @@
 			}
 		}
 	}
-	#base[width-range~="551px-930px"]{
+	#base[width-range~="551px-1050px"]{
 		.manyUserLayout{
-			.v-horizontallayout{
-				width:50%;
+			.v-csslayout{
+				width:50% !important;
 			}
 		}
 		.responsiveFont{
@@ -366,9 +367,30 @@
 		
 		.manyUserLayout{
 			text-align: left;
-			.v-horizontallayout{
+			.v-csslayout:hover{
+				padding-right:10px;
+				.v-image{
+					filter: #{$blur};
+				}
+				.v-label{
+					filter: #{$blur};
+				}
+				.v-button{
+					display: inherit;
+				}
+			}
+			.v-csslayout{
 				width:25%;
-				cursor: pointer;
+				.v-label{
+					margin-top:16px;
+				}
+				.v-button{
+					margin-top:10px;
+					float:right;
+					padding:0px;
+					padding-right:2px;
+					display: none;
+				}
 			}
 		}
 		

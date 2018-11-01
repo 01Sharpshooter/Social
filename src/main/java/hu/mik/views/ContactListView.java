@@ -63,7 +63,7 @@ public class ContactListView extends Panel implements View {
 		this.base = new VerticalLayout();
 
 		this.setSizeFull();
-		this.setCaption(this.socialUser.getDbUser().getUsername() + "'s Friendlist:");
+		this.setCaption(this.socialUser.getDbUser().getFullName() + "'s Friendlist:");
 		// TODO
 		this.requests = this.friendRequestService.findAllByRequestedId(this.socialUser.getDbUser().getId());
 

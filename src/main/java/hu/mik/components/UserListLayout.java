@@ -13,16 +13,12 @@ import com.vaadin.ui.CssLayout;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.services.LdapService;
 import hu.mik.services.UserService;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SuppressWarnings("serial")
 public class UserListLayout extends CssLayout {
-
-	@Autowired
-	private LdapService ldapService;
 	@Autowired
 	private UserService userService;
 
@@ -39,7 +35,7 @@ public class UserListLayout extends CssLayout {
 
 	public CssLayout createUserListLayoutFromDb(List<User> userListDb) {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
-		this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
+		// this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.setWidth("100%");
 
 		if (userListDb != null) {

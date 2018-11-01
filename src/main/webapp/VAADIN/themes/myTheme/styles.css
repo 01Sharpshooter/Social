@@ -15054,8 +15054,8 @@ div.v-layout.v-horizontal.v-widget {
 	height: auto;
 }
 
-.myTheme #base[width-range~="0-550px"] .manyUserLayout .v-horizontallayout {
-	width: 100%;
+.myTheme #base[width-range~="0-550px"] .manyUserLayout .v-csslayout {
+	width: 100% !important;
 }
 
 .myTheme #base[width-range~="0-550px"] .add-member-to-conv-window .add-member-to-conv-window-member-layout {
@@ -15198,39 +15198,39 @@ div.v-layout.v-horizontal.v-widget {
 	display: none;
 }
 
-.myTheme #base[width-range~="551px-930px"] .manyUserLayout .v-horizontallayout {
-	width: 50%;
+.myTheme #base[width-range~="551px-1050px"] .manyUserLayout .v-csslayout {
+	width: 50% !important;
 }
 
-.myTheme #base[width-range~="551px-930px"] .responsiveFont {
+.myTheme #base[width-range~="551px-1050px"] .responsiveFont {
 	font-size: 1.1em;
 }
 
-.myTheme #base[width-range~="551px-930px"] #navigationBar .v-label:not(#username) .folding {
+.myTheme #base[width-range~="551px-1050px"] #navigationBar .v-label:not(#username) .folding {
 	display: none;
 }
 
-.myTheme #base[width-range~="551px-930px"] #navigationBar .v-icon {
+.myTheme #base[width-range~="551px-1050px"] #navigationBar .v-icon {
 	display: flex !important;
 }
 
-.myTheme #base[width-range~="551px-930px"] #profileHeader .v-image {
+.myTheme #base[width-range~="551px-1050px"] #profileHeader .v-image {
 	height: 125px;
 }
 
-.myTheme #base[width-range~="551px-930px"] #profileBody .v-textfield {
+.myTheme #base[width-range~="551px-1050px"] #profileBody .v-textfield {
 	width: 100%;
 }
 
-.myTheme #base[width-range~="551px-930px"] #messageBase .chat-left-layout {
+.myTheme #base[width-range~="551px-1050px"] #messageBase .chat-left-layout {
 	width: 35%;
 }
 
-.myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout {
+.myTheme #base[width-range~="551px-1050px"] #messageBase #chatLayout {
 	width: 70%;
 }
 
-.myTheme #base[width-range~="551px-930px"] #messageBase #chatLayout .v-button {
+.myTheme #base[width-range~="551px-1050px"] #messageBase #chatLayout .v-button {
 	font-size: 12px;
 }
 
@@ -15435,9 +15435,36 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: left;
 }
 
-.myTheme #base .manyUserLayout .v-horizontallayout {
+.myTheme #base .manyUserLayout .v-csslayout:hover {
+	padding-right: 10px;
+}
+
+.myTheme #base .manyUserLayout .v-csslayout:hover .v-image {
+	filter: blur(2px);
+}
+
+.myTheme #base .manyUserLayout .v-csslayout:hover .v-label {
+	filter: blur(2px);
+}
+
+.myTheme #base .manyUserLayout .v-csslayout:hover .v-button {
+	display: inherit;
+}
+
+.myTheme #base .manyUserLayout .v-csslayout {
 	width: 25%;
-	cursor: pointer;
+}
+
+.myTheme #base .manyUserLayout .v-csslayout .v-label {
+	margin-top: 16px;
+}
+
+.myTheme #base .manyUserLayout .v-csslayout .v-button {
+	margin-top: 10px;
+	float: right;
+	padding: 0px;
+	padding-right: 2px;
+	display: none;
 }
 
 .myTheme #base .responsiveFont {

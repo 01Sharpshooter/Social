@@ -93,7 +93,7 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 			this.content.addComponent(messageZone, 0);
 		}
 
-		if (message.getSender().equals(this.loggedUser.getDbUser())) {
+		if (message.getSender().getId().equals(this.loggedUser.getDbUser().getId())) {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_SENT);
 		} else {
 			messageZone.addStyleName(ThemeConstants.CHAT_MESSAGE_RECEIVED);
