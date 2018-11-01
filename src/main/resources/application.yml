@@ -1,0 +1,26 @@
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: 'off'
+        type:
+          descriptor:
+            sql:
+              BasicBinder: 'off'
+server:
+  port: 8888
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: Password111
+    url: jdbc:postgresql://localhost:5432/SocialDB
+    username: social
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        generate_statistics: true
+  ldap:
+    password: secret
+    urls: ldap://localhost:10389/
+    username: uid=admin, ou=system

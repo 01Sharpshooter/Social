@@ -10,3 +10,4 @@ AppWidgetset
 images
 /src/main/webapp/VAADIN/hu.mik.gwt.SocialWidgetset
 /src/main/webapp/VAADIN/WEB-INF/deploy/hu.mik.gwt.SocialWidgetset/rpcPolicyManifest
+/*.factorypath
