@@ -94,6 +94,7 @@ public class ContactListView extends Panel implements View {
 	private void createGroupComboBox() {
 		this.groupSelect = new ComboBox<>("Select a team:", this.socialUser.getLdapUser().getLdapGroups());
 		this.groupSelect.setEmptySelectionAllowed(false);
+		this.groupSelect.setItemCaptionGenerator(LdapGroup::getGroupName);
 		this.groupSelect.addSelectionListener(this::groupSelectionListener);
 		if (this.socialUser.getLdapUser().getLdapGroups().size() > 0) {
 			this.groupSelect.setSelectedItem(this.socialUser.getLdapUser().getLdapGroups().get(0));

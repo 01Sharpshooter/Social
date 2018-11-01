@@ -1,14 +1,12 @@
 package hu.mik.beans;
 
 import java.io.File;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -17,10 +15,8 @@ import com.vaadin.ui.Image;
 
 import hu.mik.constants.UserConstants;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(exclude = "conversationUserSet")
 @Entity
 @Table(name = "t_user")
 public class User {
@@ -36,8 +32,6 @@ public class User {
 	private String fullName;
 	@Column(name = "enabled")
 	private boolean enabled;
-	@OneToMany(mappedBy = "user")
-	private Set<ConversationUser> conversationUserSet;
 	@Transient
 	private Image image;
 

@@ -8,8 +8,6 @@ import hu.mik.beans.User;
 public interface FriendRequestService {
 	public List<FriendRequest> findAllByRequestedId(int requestedId);
 
-	public FriendRequest findOne(User requestor, User requested);
-
 	public FriendRequest saveFriendRequest(FriendRequest request);
 
 	public void deleteFriendRequest(User requestor, User requested);

@@ -23,27 +23,28 @@ public class FriendRequestDaoImpl implements FriendRequestDao {
 
 	@Override
 	public List<FriendRequest> findAllByRequestedId(int requestedId) {
+		// @formatter:off
 		List<FriendRequest> friendRequests = new ArrayList<>();
 		friendRequests = this.em
-				.createQuery("select fr from FriendRequest fr where fr.requested.id= :requestedId", FriendRequest.class)
+				.createQuery("SELECT fr FROM FriendRequest fr"
+						+ " JOIN FETCH fr.requestor"
+						+ " WHERE fr.requested.id= :requestedId", FriendRequest.class)
 				.setParameter("requestedId", requestedId).getResultList();
 		return friendRequests;
+		// @formatter:on
 	}
 
 	@Override
 	public FriendRequest findOne(User requestor, User requested) {
-		FriendRequest fr;
 		try {
-			fr = this.em
-					.createQuery(
-							"select fr from FriendRequest fr where requestor= :requestor and requested= :requested",
-							FriendRequest.class)
+			return this.em
+					.createQuery("SELECT fr FROM FriendRequest fr"
+							+ " WHERE requestor= :requestor and requested= :requested", FriendRequest.class)
 					.setParameter("requestor", requestor).setParameter("requested", requested).getSingleResult();
 
 		} catch (NoResultException e) {
-			fr = null;
+			return null;
 		}
-		return fr;
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class FriendRequestDaoImpl implements FriendRequestDao {
 
 	@Override
 	public void deleteFriendRequest(User requestor, User requested) {
-		FriendRequest fr = this.findOne(requestor, requestor);
+		FriendRequest fr = this.findOne(requestor, requested);
 		this.em.remove(fr);
 
 	}

@@ -21,18 +21,13 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 	}
 
 	@Override
-	public FriendRequest findOne(User requestor, User requested) {
-		return this.friendRequestDao.findOne(requestor, requested);
-	}
-
-	@Override
 	public FriendRequest saveFriendRequest(FriendRequest request) {
 		return this.friendRequestDao.saveFriendRequest(request);
 	}
 
 	@Override
 	public void deleteFriendRequest(User requestor, User requested) {
-		this.friendRequestDao.deleteFriendRequest(requestor, requestor);
+		this.friendRequestDao.deleteFriendRequest(requestor, requested);
 
 	}
 
