@@ -2,6 +2,8 @@ package hu.mik.views;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +20,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.FriendRequest;
+import hu.mik.beans.Friendship;
 import hu.mik.beans.LdapGroup;
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.SocialUserWrapper;
@@ -48,7 +51,7 @@ public class ContactListView extends Panel implements View {
 	UserUtils userUtils;
 
 	private CssLayout contactsLayout;
-	private List<User> friendList = new ArrayList<>();
+	private List<User> friendList;
 	private VerticalLayout base;
 	private SocialUserWrapper socialUser;
 	private List<FriendRequest> requests;
@@ -60,16 +63,23 @@ public class ContactListView extends Panel implements View {
 		this.base = new VerticalLayout();
 
 		this.setSizeFull();
-		this.setCaption(this.socialUser.getDbUser().getUsername() + "'s " + "Friendlist:");
-
+		this.setCaption(this.socialUser.getDbUser().getUsername() + "'s Friendlist:");
+		// TODO
 		this.requests = this.friendRequestService.findAllByRequestedId(this.socialUser.getDbUser().getId());
 
-		this.friendshipService.findAllByUserId(this.socialUser.getDbUser().getId())
-				.forEach(friendShip -> this.friendList.add(this.userService.findUserById(friendShip.getFriendId())));
-
+		this.fillFriendList();
 		this.createContent();
 
 		this.setContent(this.base);
+	}
+
+	private void fillFriendList() {
+		this.friendList = new ArrayList<>();
+		Map<Boolean, List<Friendship>> partitions = this.friendshipService
+				.findAllByUserId(this.socialUser.getDbUser().getId()).stream().collect(Collectors.partitioningBy(
+						fs -> fs.getFriend().getId().equals(this.userUtils.getLoggedInUser().getDbUser().getId())));
+		partitions.get(true).forEach(fs -> this.friendList.add(fs.getUser()));
+		partitions.get(false).forEach(fs -> this.friendList.add(fs.getFriend()));
 	}
 
 	private void createContent() {

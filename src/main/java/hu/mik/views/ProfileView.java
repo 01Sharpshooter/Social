@@ -201,8 +201,8 @@ public class ProfileView extends VerticalLayout implements View {
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)) {
 			this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser().getId(),
 					this.socialSessionUser.getDbUser().getId());
-			this.friendShipService.saveFriendship(this.socialProfileUser.getDbUser().getId(),
-					this.socialSessionUser.getDbUser().getId());
+			this.friendShipService.saveFriendship(this.socialProfileUser.getDbUser(),
+					this.socialSessionUser.getDbUser());
 			this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 		} else {
 			this.friendRequestService.deleteFriendRequest(this.socialSessionUser.getDbUser().getId(),

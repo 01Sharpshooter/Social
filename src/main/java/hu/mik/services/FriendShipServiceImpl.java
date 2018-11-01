@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.mik.beans.Friendship;
+import hu.mik.beans.User;
 import hu.mik.dao.FriendShipDao;
 
 @Service
@@ -36,8 +37,8 @@ public class FriendShipServiceImpl implements FriendshipService {
 	}
 
 	@Override
-	public void saveFriendship(int userId, int friendId) {
-		this.friendshipDao.saveFriendship(userId, friendId);
+	public void saveFriendship(User user, User friend) {
+		this.friendshipDao.saveFriendship(user, friend);
 
 	}
 

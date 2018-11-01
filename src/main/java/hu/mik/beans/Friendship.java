@@ -2,9 +2,12 @@ package hu.mik.beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,10 +17,22 @@ public class Friendship {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(name = "userid")
-	private Integer userId;
-	@Column(name = "friendid")
-	private Integer friendId;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "userid")
+	private User user;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "friendid")
+	private User friend;
+
+	public Friendship() {
+		super();
+	}
+
+	public Friendship(User user, User friend) {
+		super();
+		this.user = user;
+		this.friend = friend;
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -27,20 +42,20 @@ public class Friendship {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return this.userId;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Integer getFriendId() {
-		return this.friendId;
+	public User getFriend() {
+		return this.friend;
 	}
 
-	public void setFriendId(Integer friendId) {
-		this.friendId = friendId;
+	public void setFriend(User friend) {
+		this.friend = friend;
 	}
 
 }

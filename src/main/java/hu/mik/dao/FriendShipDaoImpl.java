@@ -12,64 +12,67 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.mik.beans.Friendship;
+import hu.mik.beans.User;
 
 @Repository
-@Transactional(propagation=Propagation.REQUIRED)
-public class FriendShipDaoImpl implements FriendShipDao{
-	
+@Transactional(propagation = Propagation.REQUIRED)
+public class FriendShipDaoImpl implements FriendShipDao {
+
 	@PersistenceContext
 	EntityManager em;
 
 	@Override
 	public List<Friendship> findAllByUserId(int userId) {
-		List<Friendship> list=new ArrayList<>();
-		list=em.createQuery("select f from Friendship f where userid= :userId", 
-				Friendship.class)
-				.setParameter("userId", userId)
-				.getResultList();
-				
+		//@formatter:off
+		List<Friendship> list = new ArrayList<>();
+		list = this.em
+				.createQuery("select f from Friendship f"
+						+ " JOIN FETCH f.user user"
+						+ " JOIN FETCH f.friend friend"
+						+ " where user.id= :userId OR friend.id = :userId", Friendship.class)
+				.setParameter("userId", userId).getResultList();
+
 		return list;
+		//@formatter:on
 	}
 
 	@Override
 	public Friendship saveFriendship(Friendship friendship) {
-		em.persist(friendship);
+		this.em.persist(friendship);
 		return friendship;
 	}
 
 	@Override
 	public void deleteFriendship(int userId, int friendId) {
-		em.remove(findOne(userId, friendId));
-		em.remove(findOne(friendId, userId));
-		
+		this.em.remove(this.findOne(userId, friendId));
+
 	}
 
 	@Override
-	public Friendship findOne(int userId, int friendId) {	
+	public Friendship findOne(int userId, int friendId) {
+		//@formatter:off
 		Friendship fs;
 		try {
-			fs=em.createQuery("select f from Friendship f where userid= :userId and friendid= :friendId", 
-					Friendship.class)
-					.setParameter("userId", userId)
-					.setParameter("friendId", friendId)
-					.getSingleResult();
-			
+			fs = this.em
+					.createQuery("SELECT f FROM Friendship f"
+							+ " JOIN FETCH f.user user"
+							+ " JOIN FETCH f.friend friend"
+							+ " WHERE (user.id= :userId AND friend.id= :friendId)"
+							+ " OR (user.id= :friendId AND friend.id= :userId)",
+							Friendship.class)
+					.setParameter("userId", userId).setParameter("friendId", friendId).getSingleResult();
+
 		} catch (NoResultException e) {
-			fs=null;
-		}		
+			fs = null;
+		}
 		return fs;
+		//@formatter:on
 	}
 
 	@Override
-	public void saveFriendship(int userId, int friendId) {
-		Friendship fs=new Friendship();
-		fs.setFriendId(userId);
-		fs.setUserId(friendId);
-		em.persist(fs);
-		fs=new Friendship();
-		fs.setFriendId(friendId);
-		fs.setUserId(userId);
-		em.persist(fs);
+	public void saveFriendship(User user, User friend) {
+		Friendship fs = new Friendship(user, friend);
+		this.em.persist(fs);
 	}
 
 }
