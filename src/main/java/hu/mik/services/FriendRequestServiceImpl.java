@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.mik.beans.FriendRequest;
+import hu.mik.beans.User;
 import hu.mik.dao.FriendRequestDao;
 
 @Service
@@ -20,8 +21,8 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 	}
 
 	@Override
-	public FriendRequest findOne(int requestorId, int requestedId) {
-		return this.friendRequestDao.findOne(requestorId, requestedId);
+	public FriendRequest findOne(User requestor, User requested) {
+		return this.friendRequestDao.findOne(requestor, requested);
 	}
 
 	@Override
@@ -30,14 +31,14 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 	}
 
 	@Override
-	public void deleteFriendRequest(int requestorId, int requestedId) {
-		this.friendRequestDao.deleteFriendRequest(requestorId, requestedId);
+	public void deleteFriendRequest(User requestor, User requested) {
+		this.friendRequestDao.deleteFriendRequest(requestor, requestor);
 
 	}
 
 	@Override
-	public boolean IsAlreadyRequested(int requestorId, int requestedId) {
-		return this.friendRequestDao.IsAlreadyRequested(requestorId, requestedId);
+	public boolean IsAlreadyRequested(User requestor, User requested) {
+		return this.friendRequestDao.IsAlreadyRequested(requestor, requested);
 	}
 
 }

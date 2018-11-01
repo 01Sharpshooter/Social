@@ -153,13 +153,13 @@ public class ProfileView extends VerticalLayout implements View {
 			if (this.friendShipService.findOne(this.socialProfileUser.getDbUser().getId(),
 					this.socialSessionUser.getDbUser().getId()) != null) {
 				btnFriendRequest.setCaption(StringConstants.BTN_REMOVE_FRIEND);
-			} else if (!this.friendRequestService.IsAlreadyRequested(this.socialSessionUser.getDbUser().getId(),
-					this.socialProfileUser.getDbUser().getId())
-					&& !this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser().getId(),
-							this.socialSessionUser.getDbUser().getId())) {
+			} else if (!this.friendRequestService.IsAlreadyRequested(this.socialSessionUser.getDbUser(),
+					this.socialProfileUser.getDbUser())
+					&& !this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser(),
+							this.socialSessionUser.getDbUser())) {
 				btnFriendRequest.setCaption(StringConstants.BTN_FRIEND_REQUEST);
-			} else if (this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser().getId(),
-					this.socialSessionUser.getDbUser().getId())) {
+			} else if (this.friendRequestService.IsAlreadyRequested(this.socialProfileUser.getDbUser(),
+					this.socialSessionUser.getDbUser())) {
 				btnFriendRequest.setCaption(StringConstants.BTN_ACCEPT_REQUEST);
 				Button btnDeclineRequest = new Button(StringConstants.BTN_DECLINE_REQUEST);
 				btnDeclineRequest.addStyleName(ThemeConstants.BLUE_TEXT);
@@ -192,29 +192,29 @@ public class ProfileView extends VerticalLayout implements View {
 			this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_FRIEND_REQUEST)) {
 			FriendRequest fr = new FriendRequest();
-			fr.setRequestorId(this.socialSessionUser.getDbUser().getId());
-			fr.setRequestedId(this.socialProfileUser.getDbUser().getId());
+			fr.setRequestor(this.socialSessionUser.getDbUser());
+			fr.setRequested(this.socialProfileUser.getDbUser());
 			this.friendRequestService.saveFriendRequest(fr);
 			event.getButton().setCaption(StringConstants.BTN_CANCEL_REQUEST);
 			Notification.show(Texts.FRIEND_REQUEST_NOTIFICATION.getText(),
 					this.socialProfileUser.getLdapUser().getFullName(), Type.TRAY_NOTIFICATION);
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)) {
-			this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser().getId(),
-					this.socialSessionUser.getDbUser().getId());
+			this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser(),
+					this.socialSessionUser.getDbUser());
 			this.friendShipService.saveFriendship(this.socialProfileUser.getDbUser(),
 					this.socialSessionUser.getDbUser());
 			this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 		} else {
-			this.friendRequestService.deleteFriendRequest(this.socialSessionUser.getDbUser().getId(),
-					this.socialProfileUser.getDbUser().getId());
+			this.friendRequestService.deleteFriendRequest(this.socialSessionUser.getDbUser(),
+					this.socialProfileUser.getDbUser());
 			event.getButton().setCaption(StringConstants.BTN_FRIEND_REQUEST);
 		}
 
 	}
 
 	private void declineRequestClickListener(Button.ClickEvent event) {
-		this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser().getId(),
-				this.socialSessionUser.getDbUser().getId());
+		this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser(),
+				this.socialSessionUser.getDbUser());
 		this.header.replaceComponent(this.headerButtonList, this.createHeaderBtnList());
 	}
 

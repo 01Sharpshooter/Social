@@ -129,7 +129,7 @@ public class ContactListView extends Panel implements View {
 		this.contactsLayout.removeAllComponents();
 		if (value.matches("Requests.*")) {
 			List<User> requestors = new ArrayList<>();
-			this.requests.forEach(request -> requestors.add(this.userService.findUserById(request.getRequestorId())));
+			this.requests.forEach(request -> requestors.add(request.getRequestor()));
 			this.contactsLayout = this.userListLayout.createUserListLayoutFromDb(requestors);
 		} else if (value.matches("Friends.*")) {
 			this.contactsLayout = this.userListLayout.createUserListLayoutFromDb(this.friendList);

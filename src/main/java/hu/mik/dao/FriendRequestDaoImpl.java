@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.mik.beans.FriendRequest;
+import hu.mik.beans.User;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
@@ -24,19 +25,20 @@ public class FriendRequestDaoImpl implements FriendRequestDao {
 	public List<FriendRequest> findAllByRequestedId(int requestedId) {
 		List<FriendRequest> friendRequests = new ArrayList<>();
 		friendRequests = this.em
-				.createQuery("select fr from FriendRequest fr where fr.requestedId= :requestedId", FriendRequest.class)
+				.createQuery("select fr from FriendRequest fr where fr.requested.id= :requestedId", FriendRequest.class)
 				.setParameter("requestedId", requestedId).getResultList();
 		return friendRequests;
 	}
 
 	@Override
-	public FriendRequest findOne(int requestorId, int requestedId) {
+	public FriendRequest findOne(User requestor, User requested) {
 		FriendRequest fr;
 		try {
-			fr = this.em.createQuery(
-					"select fr from FriendRequest fr where requestorid= :requestorId and requestedid= :requestedId",
-					FriendRequest.class).setParameter("requestorId", requestorId)
-					.setParameter("requestedId", requestedId).getSingleResult();
+			fr = this.em
+					.createQuery(
+							"select fr from FriendRequest fr where requestor= :requestor and requested= :requested",
+							FriendRequest.class)
+					.setParameter("requestor", requestor).setParameter("requested", requested).getSingleResult();
 
 		} catch (NoResultException e) {
 			fr = null;
@@ -46,22 +48,22 @@ public class FriendRequestDaoImpl implements FriendRequestDao {
 
 	@Override
 	public FriendRequest saveFriendRequest(FriendRequest request) {
-		if (this.findOne(request.getRequestorId(), request.getRequestedId()) == null) {
+		if (this.findOne(request.getRequestor(), request.getRequested()) == null) {
 			this.em.persist(request);
 		}
 		return request;
 	}
 
 	@Override
-	public void deleteFriendRequest(int requestorId, int requestedId) {
-		FriendRequest fr = this.findOne(requestorId, requestedId);
+	public void deleteFriendRequest(User requestor, User requested) {
+		FriendRequest fr = this.findOne(requestor, requestor);
 		this.em.remove(fr);
 
 	}
 
 	@Override
-	public boolean IsAlreadyRequested(int requestorId, int requestedId) {
-		if (this.findOne(requestorId, requestedId) == null) {
+	public boolean IsAlreadyRequested(User requestor, User requested) {
+		if (this.findOne(requestor, requested) == null) {
 			return false;
 		}
 		return true;
