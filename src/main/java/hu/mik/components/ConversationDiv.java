@@ -71,7 +71,7 @@ public class ConversationDiv extends CssLayout {
 			this.conversationName = this.conversationPartner.getUser().getFullName();
 		} else {
 			this.conversationName = this.conversation.getConversationUsers().stream()
-					.filter(cu -> !cu.equals(this.loggedConvUser)).map(cu -> cu.getUser().getFullName())
+					.filter(cu -> !cu.getId().equals(this.loggedConvUser.getId())).map(cu -> cu.getUser().getFullName())
 					.collect(Collectors.joining(", "));
 		}
 		this.setDescription(this.conversationName);

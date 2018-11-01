@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "t_friendrequests")
 public class FriendRequest {
@@ -18,29 +21,5 @@ public class FriendRequest {
 	private Integer requestorId;
 	@Column(name = "requestedid")
 	private Integer requestedId;
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getRequestorId() {
-		return this.requestorId;
-	}
-
-	public void setRequestorId(Integer requestorId) {
-		this.requestorId = requestorId;
-	}
-
-	public Integer getRequestedId() {
-		return this.requestedId;
-	}
-
-	public void setRequestedId(Integer requestedId) {
-		this.requestedId = requestedId;
-	}
 
 }

@@ -1,7 +1,5 @@
 package hu.mik.beans;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "t_conversations")
 public class Conversation {
@@ -25,24 +29,17 @@ public class Conversation {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@EqualsAndHashCode.Exclude
 	@OneToOne(fetch = FetchType.LAZY, optional = true, cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "last_message", updatable = true)
 	private Message lastMessage;
+	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "conversation", orphanRemoval = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	private Set<ConversationUser> conversationUsers;
-
-	public Conversation() {
-		super();
-		this.conversationUsers = new HashSet<>();
-	}
 
 	public boolean seenByUser(Integer userId) {
 		return this.conversationUsers.stream().filter(cu -> cu.getUser().getId().equals(userId)).findFirst().get()
 				.isSeen();
-	}
-
-	public Conversation(ConversationUser... convUsers) {
-		this.conversationUsers = new HashSet<>(Arrays.asList(convUsers));
 	}
 
 	public void addConversationUser(ConversationUser conversationUser) {
@@ -63,60 +60,6 @@ public class Conversation {
 
 	public int getConversationUserCount() {
 		return this.conversationUsers.size();
-	}
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Message getLastMessage() {
-		return this.lastMessage;
-	}
-
-	public void setLastMessage(Message lastMessage) {
-		this.lastMessage = lastMessage;
-	}
-
-	public Set<ConversationUser> getConversationUsers() {
-		return this.conversationUsers;
-	}
-
-	public void setConversationUsers(Set<ConversationUser> conversationUsers) {
-		this.conversationUsers = conversationUsers;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		Conversation other = (Conversation) obj;
-		if (this.id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!this.id.equals(other.id)) {
-			return false;
-		}
-		return true;
 	}
 
 }

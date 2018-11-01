@@ -354,7 +354,7 @@ public class MessagesView extends CssLayout implements View {
 
 	private void setSeenFalseForEverybody() {
 		for (ConversationUser cu : this.selectedConversationDiv.getConversation().getConversationUsers()) {
-			if (!cu.getUser().equals(this.loggedUser.getDbUser())) {
+			if (!cu.getUser().getId().equals(this.loggedUser.getDbUser().getId())) {
 				cu.setSeen(false);
 			} else {
 				cu.setSeen(true);

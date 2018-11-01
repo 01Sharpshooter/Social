@@ -247,7 +247,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 				this.getNavigator().navigateTo(MainView.NAME);
 				break;
 			case "Contacts":
-				this.getNavigator().navigateTo(ContactListView.NAME + "/" + this.socialUser.getUsername());
+				this.getNavigator().navigateTo(ContactListView.NAME + "/" + this.socialUser.getDbUser().getUsername());
 				break;
 			case "Logout":
 				this.getPage().setLocation("/logout");
@@ -260,7 +260,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 					this.getNavigator().navigateTo(MessagesView.NAME);
 					break;
 				} else {
-					this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.socialUser.getUsername());
+					this.getNavigator().navigateTo(ProfileView.NAME + "/" + this.socialUser.getDbUser().getUsername());
 					break;
 				}
 			}

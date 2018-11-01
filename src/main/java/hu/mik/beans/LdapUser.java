@@ -10,7 +10,9 @@ import org.springframework.ldap.odm.annotations.Id;
 import org.springframework.ldap.odm.annotations.Transient;
 
 import hu.mik.constants.LdapConstants;
+import lombok.Data;
 
+@Data
 @Entry(base = LdapConstants.OU_USERS_FULL, objectClasses = { "top", "inetOrgPerson", "person", "organizationalPerson" })
 public class LdapUser {
 	@Id
@@ -34,85 +36,5 @@ public class LdapUser {
 	private String departmentNumber;
 	@Transient
 	private List<LdapGroup> ldapGroups;
-
-	public Name getId() {
-		return this.id;
-	}
-
-	public void setId(Name id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getFullName() {
-		return this.fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getUserPassword() {
-		return this.userPassword;
-	}
-
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
-
-	public String getMobile() {
-		return this.mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	public String getMail() {
-		return this.mail;
-	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	public List<LdapGroup> getLdapGroups() {
-		return this.ldapGroups;
-	}
-
-	public void setLdapGroups(List<LdapGroup> ldapGroups) {
-		this.ldapGroups = ldapGroups;
-	}
-
-	public String getRoomNumber() {
-		return this.roomNumber;
-	}
-
-	public void setRoomNumber(String room) {
-		this.roomNumber = room;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDepartmentNumber() {
-		return this.departmentNumber;
-	}
-
-	public void setDepartmentNumber(String departmentNumber) {
-		this.departmentNumber = departmentNumber;
-	}
 
 }

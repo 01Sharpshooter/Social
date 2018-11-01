@@ -65,7 +65,8 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 		if (!pagedResultList.isEmpty()) {
 			pagedResultList.forEach(object -> {
 				this.content.addComponent(new NewsComponent(object,
-						this.userUtils.getLoggedInUser().getDbUser().equals(object.getUser()), this.newsService));
+						this.userUtils.getLoggedInUser().getDbUser().getId().equals(object.getUser().getId()),
+						this.newsService));
 			});
 			this.offset += this.pageSize;
 		}

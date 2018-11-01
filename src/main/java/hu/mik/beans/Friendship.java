@@ -10,6 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "t_friendships")
 public class Friendship {
@@ -17,45 +25,12 @@ public class Friendship {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@NonNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	private User user;
+	@NonNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "friendid")
 	private User friend;
-
-	public Friendship() {
-		super();
-	}
-
-	public Friendship(User user, User friend) {
-		super();
-		this.user = user;
-		this.friend = friend;
-	}
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public User getFriend() {
-		return this.friend;
-	}
-
-	public void setFriend(User friend) {
-		this.friend = friend;
-	}
-
 }

@@ -16,7 +16,11 @@ import com.vaadin.server.FileResource;
 import com.vaadin.ui.Image;
 
 import hu.mik.constants.UserConstants;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(exclude = "conversationUserSet")
 @Entity
 @Table(name = "t_user")
 public class User {
@@ -34,49 +38,8 @@ public class User {
 	private boolean enabled;
 	@OneToMany(mappedBy = "user")
 	private Set<ConversationUser> conversationUserSet;
-
 	@Transient
 	private Image image;
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getImageName() {
-		return this.imageName;
-	}
-
-	public void setImageName(String image) {
-		this.imageName = image;
-	}
-
-	public String getFullName() {
-		return this.fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public boolean isEnabled() {
-		return this.enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
 
 	public Image getVaadinImage() {
 		File file = new File(UserConstants.PROFILE_PICTURE_LOCATION + this.imageName);
@@ -88,50 +51,6 @@ public class User {
 //		}
 		return this.image;
 
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-		result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		User other = (User) obj;
-		if (this.id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!this.id.equals(other.id)) {
-			return false;
-		}
-		if (this.username == null) {
-			if (other.username != null) {
-				return false;
-			}
-		} else if (!this.username.equals(other.username)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + this.id + ", username=" + this.username + ", imageName=" + this.imageName + ", fullName="
-				+ this.fullName + ", enabled=" + this.enabled + "]";
 	}
 
 }

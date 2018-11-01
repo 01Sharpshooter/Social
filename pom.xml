@@ -134,6 +134,12 @@
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.4</version><!--$NO-MVN-MAN-VER$-->
+		    <scope>provided</scope>
+		</dependency>
 		
 	</dependencies>
 	
@@ -185,8 +191,8 @@
 		        <version>8.5.2</version>
 		        <configuration>
 					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/</hostedWebapp>
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
 					<noServer>true</noServer>
 					<draftCompile>true</draftCompile>
 					<compileReport>true</compileReport>
