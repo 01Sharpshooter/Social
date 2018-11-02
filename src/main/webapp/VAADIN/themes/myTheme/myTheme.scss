@@ -381,11 +381,12 @@
 			}
 			.v-csslayout{
 				width:25%;
+				white-space:nowrap;
 				.v-label{
 					margin-top:16px;
 				}
 				.v-button{
-					margin-top:10px;
+					margin-top:6px;
 					float:right;
 					padding:0px;
 					padding-right:2px;
