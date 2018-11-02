@@ -84,8 +84,8 @@ public class ContactListView extends Panel implements View {
 
 	private void createContent() {
 		this.contactsLayout = new CssLayout();
-		this.createGroupComboBox();
 		this.createRadioBtnGroup();
+		this.createGroupComboBox();
 
 		this.base.addComponent(this.contactsLayout);
 		this.base.setExpandRatio(this.contactsLayout, 80);
@@ -126,7 +126,9 @@ public class ContactListView extends Panel implements View {
 
 	private void radioBtnListener(SingleSelectionEvent<String> event) {
 		String value = event.getSource().getValue();
-		this.groupSelect.setVisible(false);
+		if (this.groupSelect != null) {
+			this.groupSelect.setVisible(false);
+		}
 		this.contactsLayout.removeAllComponents();
 		if (value.matches("Requests.*")) {
 			List<User> requestors = new ArrayList<>();

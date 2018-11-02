@@ -15436,18 +15436,23 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base .manyUserLayout .v-csslayout:hover {
+	transition: all 0.3s;
+	background: #fafafa;
 	padding-right: 10px;
 }
 
 .myTheme #base .manyUserLayout .v-csslayout:hover .v-image {
+	transition: 0.3s filter;
 	filter: blur(2px);
 }
 
 .myTheme #base .manyUserLayout .v-csslayout:hover .v-label {
+	transition: 0.3s filter;
 	filter: blur(2px);
 }
 
 .myTheme #base .manyUserLayout .v-csslayout:hover .v-button {
+	z-index: 200;
 	display: inherit;
 }
 
@@ -15457,6 +15462,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .myTheme #base .manyUserLayout .v-csslayout .v-label {
+	padding-left: 5px;
 	margin-top: 16px;
 }
 
