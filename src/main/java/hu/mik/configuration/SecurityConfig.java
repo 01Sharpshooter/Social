@@ -23,22 +23,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(FREE_PAGES_ANT).permitAll().antMatchers(ADMIN_PAGE_URL).hasRole("ADMINS")
-				.anyRequest().authenticated().and().formLogin().loginPage(LOGIN_PAGE).loginProcessingUrl(SECURITY_URL)
-				.defaultSuccessUrl(DEFAULT_PAGE_URL, true).permitAll();
+		// @formatter:off
+		http.authorizeRequests()
+				.antMatchers(FREE_PAGES_ANT).permitAll()
+				.antMatchers(ADMIN_PAGE_URL).hasRole("ADMINS")
+				.anyRequest().authenticated()
+				.and()
+			.formLogin()
+				.loginPage(LOGIN_PAGE)
+				.loginProcessingUrl(SECURITY_URL)
+				.defaultSuccessUrl(DEFAULT_PAGE_URL, true)
+				.permitAll();
 		http.headers().frameOptions().sameOrigin();
 		http.csrf().disable();
+		// @formatter:on
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//		  auth.jdbcAuthentication().dataSource(dataSource)
-//		  .passwordEncoder(passwordEncoder())
-//		  .usersByUsernameQuery("select username, passwd, enabled from t_user where username=?")
-//		  .authoritiesByUsernameQuery("select username, role from t_role where username=?");
-		auth.ldapAuthentication().userSearchBase(LdapConstants.OU_USERS).userSearchFilter("uid={0}")
-				.groupSearchBase(LdapConstants.OU_GROUPS).groupSearchFilter("member={0}").contextSource()
-				.url("ldap://localhost:10389/" + LdapConstants.SEARCH_BASE).and().passwordCompare()
-				.passwordEncoder(new LdapShaPasswordEncoder()).passwordAttribute("userPassword");
+		// @formatter:off
+		auth.ldapAuthentication()
+			.userSearchBase(LdapConstants.OU_USERS).userSearchFilter("uid={0}")
+			.groupSearchBase(LdapConstants.OU_GROUPS).groupSearchFilter("member={0}")
+			.contextSource()
+				.url("ldap://localhost:10389/" + LdapConstants.SEARCH_BASE)
+			.and()
+			.passwordCompare()
+				.passwordEncoder(new LdapShaPasswordEncoder())
+				.passwordAttribute("userPassword");
+		// @formatter:on
 	}
 }
