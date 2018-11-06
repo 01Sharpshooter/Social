@@ -1,6 +1,7 @@
 package hu.mik.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String DEFAULT_PAGE_URL = "/main#!home";
 	private static final String ADMIN_PAGE_URL = "/**admin**";
 	private static final String SECURITY_URL = "/j_spring_security_check";
+
+	@Value("${SOCIAL_LDAP_URL}")
+	private String ldapUrl;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -46,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.userSearchBase(LdapConstants.OU_USERS).userSearchFilter("uid={0}")
 			.groupSearchBase(LdapConstants.OU_GROUPS).groupSearchFilter("member={0}")
 			.contextSource()
-				.url("ldap://localhost:10389/" + LdapConstants.SEARCH_BASE)
+				.url(this.ldapUrl + LdapConstants.SEARCH_BASE)
 			.and()
 			.passwordCompare()
 				.passwordEncoder(new LdapShaPasswordEncoder())
