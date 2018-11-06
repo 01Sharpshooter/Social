@@ -34,8 +34,6 @@ public class ThemeConstants {
 
 	public static final String CHAT_MESSAGE_RECEIVED = "chatMessageReceived";
 
-	public static final String SYSTEM_IMAGE_MENU_ICON = "images/System/menu-icon.png";
-
 	public static final String HOVER_GREEN_LAYOUTS = "hoverGreenLayouts";
 
 	public static final String NAVIGATION_BAR_ICON = "navigationBarIcon";

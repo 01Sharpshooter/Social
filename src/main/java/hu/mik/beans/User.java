@@ -8,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.vaadin.server.FileResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Image;
 
 import hu.mik.constants.UserConstants;
@@ -32,19 +32,15 @@ public class User {
 	private String fullName;
 	@Column(name = "enabled")
 	private boolean enabled;
-	@Transient
-	private Image image;
 
 	public Image getVaadinImage() {
-		File file = new File(UserConstants.PROFILE_PICTURE_LOCATION + this.imageName);
-//		if (this.image == null /* || !this.image.getSource().equals(new FileResource(file)) */) { // TODO caching issues
-		if (!file.exists()) {
-			file = new File(UserConstants.PROFILE_PICTURE_LOCATION + UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
+		if (this.imageName != null) {
+			File file = new File(UserConstants.getImageLocation() + this.imageName);
+			if (file.exists()) {
+				return new Image(null, new FileResource(file));
+			}
 		}
-		this.image = new Image(null, new FileResource(file));
-//		}
-		return this.image;
-
+		return new Image(null, new ThemeResource(UserConstants.DEFAULT_PROFILE_PICTURE));
 	}
 
 }

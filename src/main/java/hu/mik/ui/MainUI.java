@@ -176,7 +176,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 	public void refreshImage() {
 		this.socialUser = this.userUtils.getLoggedInUser();
 		this.navigationBar.refreshImage(new FileResource(
-				new File(UserConstants.PROFILE_PICTURE_LOCATION + this.socialUser.getDbUser().getImageName())));
+				new File(UserConstants.getImageLocation() + this.socialUser.getDbUser().getImageName())));
 	}
 
 	public void refreshUnseenConversationNumber() {

@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User registerDefaultUser(User user) {
-		user.setImageName(UserConstants.DEFAULT_PROFILE_PICTURE_NAME);
 		Role role = new Role();
 		role.setRole(UserConstants.DEFAULT_ROLE);
 		return this.userDao.save(user);

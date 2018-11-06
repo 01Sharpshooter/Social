@@ -115,7 +115,7 @@ public class AddMemberToConvWindow extends Window {
 		this.cbUsers.setItems(this.choosableUsers);
 		this.cbUsers.setEmptySelectionAllowed(false);
 		this.cbUsers.setItemIconGenerator(
-				user -> new FileResource(new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName())));
+				user -> new FileResource(new File(UserConstants.getImageLocation() + user.getImageName())));
 		this.cbUsers.setItemCaptionGenerator(user -> user.getFullName());
 		this.cbUsers.addSelectionListener(e -> this.userSelectionListener());
 		this.cbUsers.setPlaceholder("User to add...");

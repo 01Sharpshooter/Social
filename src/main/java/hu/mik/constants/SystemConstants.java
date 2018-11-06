@@ -1,5 +1,5 @@
 package hu.mik.constants;
 
 public class SystemConstants {
-	public static final String SESSION_ATTRIBUTE_LDAP_USER="LdapUserUsername";
+	public static final String SYSTEM_IMAGE_MENU_ICON = "images/menu-icon.png";
 }

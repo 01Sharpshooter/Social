@@ -16,6 +16,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.constants.SystemConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.ui.MainUI;
 import hu.mik.views.AdminView;
@@ -88,7 +89,7 @@ public class NavigationBar extends CssLayout {
 	}
 
 	private void createNaviMenuIcon() {
-		Image naviMenuIcon = new Image(null, new FileResource(new File(ThemeConstants.SYSTEM_IMAGE_MENU_ICON)));
+		Image naviMenuIcon = new Image(null, new FileResource(new File(SystemConstants.SYSTEM_IMAGE_MENU_ICON)));
 		naviMenuIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviMenuIcon.setId("menuIcon");
 		naviMenuIcon.addClickListener(e -> this.changeDropDownVisibility());

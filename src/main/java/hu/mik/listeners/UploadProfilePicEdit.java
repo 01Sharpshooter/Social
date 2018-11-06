@@ -79,7 +79,7 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		User user = this.userUtils.getLoggedInUser().getDbUser();
 
 		String imageName = user.getUsername() + this.extension;
-		File imageSave = new File(UserConstants.PROFILE_PICTURE_LOCATION + imageName);
+		File imageSave = new File(UserConstants.getImageLocation() + imageName);
 
 		try {
 			BufferedImage bufferedImage = ImageIO.read(ins);
@@ -92,16 +92,19 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			FileOutputStream ops = new FileOutputStream(imageSave);
 			ImageOutputStream imageOS = ImageIO.createImageOutputStream(ops);
 			writer.setOutput(imageOS);
+
+			if (user.getImageName() != null) {
+				File fileToDel = new File(UserConstants.getImageLocation() + user.getImageName());
+				if (fileToDel.exists()) {
+					fileToDel.delete();
+				}
+			}
+
 			writer.write(null, new IIOImage(bufferedImage, null, null), writerParam);
 
 			writer.dispose();
 			ins.close();
 			ops.close();
-
-			if (!user.getImageName().equals("user.png")) {
-				File fileToDel = new File(UserConstants.PROFILE_PICTURE_LOCATION + user.getImageName());
-				fileToDel.delete();
-			}
 			user.setImageName(imageName);
 			this.userUtils.getLoggedInUser().setDbUser(this.userService.save(user));
 			this.view.imageChange();
