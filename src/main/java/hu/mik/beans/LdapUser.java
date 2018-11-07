@@ -22,8 +22,6 @@ public class LdapUser {
 	private String username;
 	@Attribute(name = "cn")
 	private String fullName;
-	@Attribute(name = "userPassword")
-	private String userPassword;
 	@Attribute(name = "mobile")
 	private String mobile;
 	@Attribute(name = "mail")
