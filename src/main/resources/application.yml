@@ -8,19 +8,19 @@ logging:
             sql:
               BasicBinder: 'off'
 server:
-  port: ${SOCIAL_SERVER_PORT}
+  port: 8888
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: ${SOCIAL_DATABASE_PASSWORD}
-    url: ${SOCIAL_DATABASE_URL}
-    username: ${SOCIAL_DATABASE_USER}
+    password: Password111
+    url: jdbc:postgresql://localhost:5432/SocialDB
+    username: social
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         generate_statistics: true
   ldap:
-    password: ${SOCIAL_LDAP_PASSWORD}
-    urls: ${SOCIAL_LDAP_URL}
-    username: ${SOCIAL_LDAP_USERNAME}
+    password: secret
+    urls: ldap://localhost:10389/
+    username: uid=admin, ou=system
