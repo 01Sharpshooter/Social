@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserConstants {
-	@Value("${SOCIAL_IMAGE_FOLDER}")
 	private static String IMAGE_LOCATION;
 
 	public static final String DEFAULT_ROLE = "user";
@@ -14,7 +13,7 @@ public class UserConstants {
 
 	public static final String[] ALLOWED_PICTURE_TYPES = { "image/jpeg", "image/png" };
 
-	@Value("${SOCIAL_IMAGE_FOLDER}")
+	@Value("${folder.image}")
 	private void setImageLocation(String location) {
 		IMAGE_LOCATION = location;
 	}
