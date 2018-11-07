@@ -1,11 +1,9 @@
 package hu.mik.components;
 
-import java.io.File;
-
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
@@ -89,7 +87,7 @@ public class NavigationBar extends CssLayout {
 	}
 
 	private void createNaviMenuIcon() {
-		Image naviMenuIcon = new Image(null, new FileResource(new File(SystemConstants.SYSTEM_IMAGE_MENU_ICON)));
+		Image naviMenuIcon = new Image(null, new ThemeResource(SystemConstants.SYSTEM_IMAGE_MENU_ICON));
 		naviMenuIcon.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
 		naviMenuIcon.setId("menuIcon");
 		naviMenuIcon.addClickListener(e -> this.changeDropDownVisibility());
