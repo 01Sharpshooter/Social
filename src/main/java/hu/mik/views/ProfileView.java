@@ -141,7 +141,7 @@ public class ProfileView extends VerticalLayout implements View {
 		this.headerButtonList = new CssLayout();
 		this.headerButtonList.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
-		if (this.socialSessionUser.getDbUser().getId() != this.socialProfileUser.getDbUser().getId()) {
+		if (!this.socialSessionUser.getDbUser().getId().equals(this.socialProfileUser.getDbUser().getId())) {
 			Button btnFriendRequest = new Button();
 			btnFriendRequest.addStyleName(ThemeConstants.BLUE_TEXT);
 			Button btnMessage = new Button("Message");
