@@ -23,4 +23,6 @@ public interface UserDao {
 	public List<User> findAllByUsernames(List<String> usernames);
 
 	public void disable(User user);
+
+	public List<User> findAllEnabled();
 }

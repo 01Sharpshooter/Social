@@ -15,6 +15,8 @@ public interface UserService {
 
 	public List<User> listAll();
 
+	public List<User> listAllEnabled();
+
 	public List<User> findByFullNameContaining(String username);
 
 	public User save(User user);

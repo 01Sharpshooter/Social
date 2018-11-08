@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<User> listAllEnabled() {
+		return this.userDao.findAllEnabled();
+
+	}
+
+	@Override
 	public User findUserById(int id) {
 		return this.userDao.findById(id);
 	}
