@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String ADMIN_PAGE_URL = "/**admin**";
 	private static final String SECURITY_URL = "/j_spring_security_check";
 
-	@Value("${SOCIAL_LDAP_URL}")
+	@Value("${spring.ldap.urls}")
 	private String ldapUrl;
 
 	@Override
