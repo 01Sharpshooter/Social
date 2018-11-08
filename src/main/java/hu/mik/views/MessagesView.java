@@ -73,7 +73,7 @@ public class MessagesView extends CssLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (UI.getCurrent() instanceof MainUI) {
-			this.choosableUsers = this.userService.listAll();
+			this.choosableUsers = this.userService.listAllEnabled();
 			this.loggedUser = this.userUtils.getLoggedInUser();
 			this.setSizeFull();
 			this.createContent(event);
