@@ -29,9 +29,9 @@ public class AfterStartup {
 
 	public void registerAllUsersInDatabase() {
 		Map<String, User> dbUserMap = this.userService.listAll().stream()
-				.collect(Collectors.toMap(User::getUsername, Function.identity()));
+				.collect(Collectors.toMap(user -> user.getUsername().toLowerCase(), Function.identity()));
 		Map<String, LdapUser> ldapUserMap = this.ldapService.findAllUsers().stream()
-				.collect(Collectors.toMap(LdapUser::getUsername, Function.identity()));
+				.collect(Collectors.toMap(user -> user.getUsername().toLowerCase(), Function.identity()));
 
 		for (Entry<String, User> dbUserEntry : dbUserMap.entrySet()) {
 			if (!ldapUserMap.containsKey(dbUserEntry.getKey())) {
