@@ -13,7 +13,7 @@ import hu.mik.dao.UserDao;
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Override
 	public User registerDefaultUser(User user) {

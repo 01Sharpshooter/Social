@@ -29,7 +29,6 @@ import hu.mik.components.UserListLayout;
 import hu.mik.services.FriendRequestService;
 import hu.mik.services.FriendshipService;
 import hu.mik.services.LdapService;
-import hu.mik.services.UserService;
 import hu.mik.utils.UserUtils;
 
 @SuppressWarnings("serial")
@@ -38,17 +37,15 @@ import hu.mik.utils.UserUtils;
 public class ContactListView extends Panel implements View {
 	public static final String NAME = "FriendListView";
 	@Autowired
-	FriendshipService friendshipService;
+	private FriendshipService friendshipService;
 	@Autowired
-	FriendRequestService friendRequestService;
+	private FriendRequestService friendRequestService;
 	@Autowired
-	UserService userService;
+	private UserListLayout userListLayout;
 	@Autowired
-	UserListLayout userListLayout;
+	private LdapService ldapService;
 	@Autowired
-	LdapService ldapService;
-	@Autowired
-	UserUtils userUtils;
+	private UserUtils userUtils;
 
 	private CssLayout contactsLayout;
 	private List<User> friendList;
@@ -64,7 +61,7 @@ public class ContactListView extends Panel implements View {
 
 		this.setSizeFull();
 		this.setCaption(this.socialUser.getDbUser().getFullName() + "'s Friendlist:");
-		// TODO
+
 		this.requests = this.friendRequestService.findAllByRequestedId(this.socialUser.getDbUser().getId());
 
 		this.fillFriendList();
@@ -95,10 +92,10 @@ public class ContactListView extends Panel implements View {
 		this.groupSelect = new ComboBox<>("Select a team:", this.socialUser.getLdapUser().getLdapGroups());
 		this.groupSelect.setEmptySelectionAllowed(false);
 		this.groupSelect.setItemCaptionGenerator(LdapGroup::getGroupName);
-		this.groupSelect.addSelectionListener(this::groupSelectionListener);
 		if (this.socialUser.getLdapUser().getLdapGroups().size() > 0) {
 			this.groupSelect.setSelectedItem(this.socialUser.getLdapUser().getLdapGroups().get(0));
 		}
+		this.groupSelect.addSelectionListener(this::groupSelectionListener);
 		this.groupSelect.setVisible(false);
 
 		this.base.addComponent(this.groupSelect);
@@ -151,7 +148,7 @@ public class ContactListView extends Panel implements View {
 	private void setLayoutByTeam(LdapGroup team) {
 		List<LdapUser> teamMembers = new ArrayList<>();
 		team.getListOfMembers().forEach(name -> {
-			if (!name.equals(this.socialUser.getLdapUser().getId())) {
+			if (!name.equals(this.socialUser.getLdapUser().getDistinguishedName())) {
 				teamMembers.add(this.ldapService.findUserByDN(name));
 			}
 		});
