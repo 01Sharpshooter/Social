@@ -16,12 +16,11 @@ import lombok.Data;
 @Entry(base = LdapConstants.OU_USERS_FULL, objectClasses = { "top", "inetOrgPerson", "person", "organizationalPerson" })
 public class LdapUser {
 	@Id
-	private Name id;
-
+	private Name distinguishedName;
 	@Attribute(name = "uid")
-	private String username;
+	private String uid;
 	@Attribute(name = "cn")
-	private String fullName;
+	private String commonName;
 	@Attribute(name = "mobile")
 	private String mobile;
 	@Attribute(name = "mail")

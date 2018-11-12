@@ -65,7 +65,7 @@ public class ProfileView extends VerticalLayout implements View {
 
 				Image image = this.socialProfileUser.getDbUser().getVaadinImage();
 				image.addStyleName(ThemeConstants.BORDERED_IMAGE);
-				Label lblName = new Label(this.socialProfileUser.getLdapUser().getFullName());
+				Label lblName = new Label(this.socialProfileUser.getLdapUser().getCommonName());
 				lblName.addStyleName(ThemeConstants.BLUE_TEXT_H1);
 				lblName.addStyleName(ThemeConstants.RESPONSIVE_FONT);
 				StringBuilder strGroups = new StringBuilder();
@@ -197,7 +197,7 @@ public class ProfileView extends VerticalLayout implements View {
 			this.friendRequestService.saveFriendRequest(fr);
 			event.getButton().setCaption(StringConstants.BTN_CANCEL_REQUEST);
 			Notification.show(Texts.FRIEND_REQUEST_NOTIFICATION.getText(),
-					this.socialProfileUser.getLdapUser().getFullName(), Type.TRAY_NOTIFICATION);
+					this.socialProfileUser.getLdapUser().getCommonName(), Type.TRAY_NOTIFICATION);
 		} else if (event.getButton().getCaption().equals(StringConstants.BTN_ACCEPT_REQUEST)) {
 			this.friendRequestService.deleteFriendRequest(this.socialProfileUser.getDbUser(),
 					this.socialSessionUser.getDbUser());

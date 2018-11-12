@@ -24,7 +24,7 @@ public class UserListLayout extends CssLayout {
 
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
 		if (userListLdap != null && !userListLdap.isEmpty()) {
-			List<String> usernames = userListLdap.stream().map(lu -> lu.getUsername()).collect(Collectors.toList());
+			List<String> usernames = userListLdap.stream().map(lu -> lu.getUid()).collect(Collectors.toList());
 			List<User> userList = this.userService.findAllByUsernames(usernames);
 
 			this.createUserListLayoutFromDb(userList);

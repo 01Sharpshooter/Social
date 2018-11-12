@@ -22,12 +22,12 @@ public class LdapServiceImpl implements LdapService {
 
 	@Override
 	public LdapUser findUserByUsername(String username) {
-		return this.ldapRepositoryUsers.findByUsername(username);
+		return this.ldapRepositoryUsers.findByUid(username);
 	}
 
 	@Override
 	public List<LdapUser> findByFullNameContaining(String fullName) {
-		return this.ldapRepositoryUsers.findByFullNameContaining(fullName);
+		return this.ldapRepositoryUsers.findByCommonNameContaining(fullName);
 	}
 
 	@Override
@@ -42,14 +42,14 @@ public class LdapServiceImpl implements LdapService {
 
 	@Override
 	public List<LdapUser> findAllUsers() {
-		return this.ldapRepositoryUsers.findByFullNameContaining(" "); // findAll is bugged, it doesn't check entry base
+		return this.ldapRepositoryUsers.findByCommonNameContaining(" "); // findAll is bugged, it doesn't check entry base
 	}
 
 	@Override
 	public LdapUser findUserWithGroups(String username) {
 		LdapUser user = this.findUserByUsername(username);
 		if (user != null) {
-			user.setLdapGroups(this.findGroupsByUserId(user.getId()));
+			user.setLdapGroups(this.findGroupsByUserId(user.getDistinguishedName()));
 		}
 		return user;
 	}
@@ -58,7 +58,7 @@ public class LdapServiceImpl implements LdapService {
 	public List<String> findMemberUsernamesOfGroup(LdapGroup ldapGroup) {
 		List<String> ldapUsers = new ArrayList<>();
 		ldapGroup.getListOfMembers()
-				.forEach(m -> ldapUsers.add(this.ldapRepositoryUsers.findById(m).get().getUsername()));
+				.forEach(m -> ldapUsers.add(this.ldapRepositoryUsers.findById(m).get().getUid()));
 		return ldapUsers;
 	}
 

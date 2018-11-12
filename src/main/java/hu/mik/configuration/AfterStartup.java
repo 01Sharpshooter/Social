@@ -31,7 +31,7 @@ public class AfterStartup {
 		Map<String, User> dbUserMap = this.userService.listAll().stream()
 				.collect(Collectors.toMap(user -> user.getUsername().toLowerCase(), Function.identity()));
 		Map<String, LdapUser> ldapUserMap = this.ldapService.findAllUsers().stream()
-				.collect(Collectors.toMap(user -> user.getUsername().toLowerCase(), Function.identity()));
+				.collect(Collectors.toMap(user -> user.getUid().toLowerCase(), Function.identity()));
 
 		for (Entry<String, User> dbUserEntry : dbUserMap.entrySet()) {
 			if (!ldapUserMap.containsKey(dbUserEntry.getKey())) {
@@ -39,7 +39,7 @@ public class AfterStartup {
 
 			} else {
 				LdapUser ldapUser = ldapUserMap.get(dbUserEntry.getKey());
-				dbUserEntry.getValue().setFullName(ldapUser.getFullName());
+				dbUserEntry.getValue().setFullName(ldapUser.getCommonName());
 				dbUserEntry.getValue().setEnabled(true);
 				this.userService.save(dbUserEntry.getValue());
 			}
@@ -47,7 +47,7 @@ public class AfterStartup {
 		ldapUserMap.keySet().stream().filter(username -> !dbUserMap.keySet().contains(username)).forEach(username -> {
 			User user = new User();
 			user.setUsername(username);
-			user.setFullName(ldapUserMap.get(username).getFullName());
+			user.setFullName(ldapUserMap.get(username).getCommonName());
 			this.userService.registerDefaultUser(user);
 		});
 

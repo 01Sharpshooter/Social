@@ -9,9 +9,9 @@ import hu.mik.beans.LdapUser;
 
 @Repository
 public interface LdapRepositoryUser extends LdapRepository<LdapUser> {
-	public LdapUser findByUsername(String username);
+	public LdapUser findByUid(String uid);
 
-	public List<LdapUser> findByFullNameContaining(String fullName);
+	public List<LdapUser> findByCommonNameContaining(String commonName);
 
 	@Override
 	public List<LdapUser> findAll();

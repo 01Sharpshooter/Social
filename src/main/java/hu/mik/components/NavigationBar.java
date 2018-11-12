@@ -62,7 +62,7 @@ public class NavigationBar extends CssLayout {
 		this.naviBarImage.addClickListener(this::profileImageClickListener);
 		this.addComponent(this.naviBarImage);
 		Label name = new Label();
-		name.setValue(this.socialUser.getLdapUser().getFullName());
+		name.setValue(this.socialUser.getLdapUser().getCommonName());
 		name.setId("username");
 		this.naviPerson.addComponents(this.naviBarImage, name);
 		this.addComponent(this.naviPerson);
