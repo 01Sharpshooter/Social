@@ -7,6 +7,8 @@ import java.util.List;
 import com.vaadin.annotations.Theme;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -114,12 +116,20 @@ public class AddMemberToConvWindow extends Window {
 		this.cbUsers = new ComboBox<>();
 		this.cbUsers.setItems(this.choosableUsers);
 		this.cbUsers.setEmptySelectionAllowed(false);
-		this.cbUsers.setItemIconGenerator(
-				user -> new FileResource(new File(UserConstants.getImageLocation() + user.getImageName())));
+		this.cbUsers.setItemIconGenerator(user -> this.getUserImageIcon(user));
 		this.cbUsers.setItemCaptionGenerator(user -> user.getFullName());
 		this.cbUsers.addSelectionListener(e -> this.userSelectionListener());
 		this.cbUsers.setPlaceholder("User to add...");
 		this.memberLayout.addComponent(this.cbUsers);
+	}
+
+	private Resource getUserImageIcon(User user) {
+		File file = new File(UserConstants.getImageLocation() + user.getImageName());
+		if (file.exists()) {
+			return new FileResource(file);
+		} else {
+			return new ThemeResource(UserConstants.DEFAULT_PROFILE_PICTURE);
+		}
 	}
 
 	private void userSelectionListener() {
