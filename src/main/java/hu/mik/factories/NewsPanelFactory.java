@@ -23,17 +23,17 @@ public class NewsPanelFactory {
 	}
 
 	public NewsPanelScrollable getDefaultInstance() {
-		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService);
+		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService, true);
 		return panel.init();
 	}
 
 	public NewsPanelScrollable getUserInstance(User user) {
-		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService);
+		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService, false);
 		return panel.init(user);
 	}
 
 	public NewsPanelScrollable getLdapGroupInstance(LdapGroup ldapGroup) {
-		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService);
+		NewsPanelScrollable panel = new NewsPanelScrollable(this.userUtils, this.newsService, false);
 		return panel.init(ldapGroup);
 	}
 

@@ -45,4 +45,9 @@ public class NewsServiceImpl implements NewsService {
 
 	}
 
+	@Override
+	public Integer getMaxNewsId() {
+		return this.newsDao.getMaxNewsId();
+	}
+
 }

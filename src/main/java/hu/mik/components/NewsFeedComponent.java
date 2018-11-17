@@ -11,6 +11,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
@@ -60,6 +61,12 @@ public class NewsFeedComponent extends VerticalLayout {
 		groupList.forEach(
 				group -> this.tsGroups.addTab(this.newsPanelFactory.getLdapGroupInstance(group), group.getGroupName()));
 		this.addComponent(this.tsGroups);
+		this.tsGroups.addSelectedTabChangeListener(e -> {
+			Component tab = this.tsGroups.getSelectedTab();
+			if (tab instanceof NewsPanelScrollable) {
+				((NewsPanelScrollable) tab).refresh();
+			}
+		});
 		this.setExpandRatio(this.tsGroups, 1f);
 	}
 

@@ -22,6 +22,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import hu.mik.beans.FriendRequest;
 import hu.mik.beans.SocialUserWrapper;
+import hu.mik.components.NewsPanelScrollable;
 import hu.mik.constants.StringConstants;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.Texts;
@@ -133,6 +134,12 @@ public class ProfileView extends VerticalLayout implements View {
 		tabSheet.addTab(this.createFormLayout(), "Personal information");
 		tabSheet.setSizeFull();
 		tabSheet.addTab(this.newsPanelFactory.getUserInstance(this.socialProfileUser.getDbUser()), "News feed");
+		tabSheet.addSelectedTabChangeListener(e -> {
+			Component tab = tabSheet.getSelectedTab();
+			if (tab instanceof NewsPanelScrollable) {
+				((NewsPanelScrollable) tab).refresh();
+			}
+		});
 		return tabSheet;
 
 	}

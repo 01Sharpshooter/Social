@@ -10,6 +10,7 @@ import hu.mik.beans.User;
 import hu.mik.enums.ScrollDirection;
 import hu.mik.services.NewsService;
 import hu.mik.utils.UserUtils;
+import lombok.Getter;
 
 @SuppressWarnings("serial")
 public class NewsPanelScrollable extends AbstractScrollablePanel {
@@ -19,10 +20,13 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	private VerticalLayout content;
 	private NewsService newsService;
 	private UserUtils userUtils;
+	@Getter
+	private boolean immediateFetch;
 
-	public NewsPanelScrollable(UserUtils userUtils, NewsService newsService) {
+	public NewsPanelScrollable(UserUtils userUtils, NewsService newsService, boolean immediateFetch) {
 		super(ScrollDirection.DOWN);
 		this.newsService = newsService;
+		this.immediateFetch = immediateFetch;
 		this.content = new VerticalLayout();
 		this.content.setMargin(false);
 		this.setSizeFull();
@@ -31,20 +35,20 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public NewsPanelScrollable init() {
-		this.loadNextPage();
+		if (this.immediateFetch) {
+			this.refresh();
+		}
 		return this;
 	}
 
 	public NewsPanelScrollable init(LdapGroup ldapGroup) {
 		this.ldapGroup = ldapGroup;
-		this.loadNextPage();
-		return this;
+		return this.init();
 	}
 
 	public NewsPanelScrollable init(User user) {
 		this.user = user;
-		this.loadNextPage();
-		return this;
+		return this.init();
 	}
 
 	@Override
@@ -56,6 +60,10 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 			pagedResultList = this.newsService.getPagedNewsByLdapGroup(this.offset, this.pageSize, this.ldapGroup);
 		} else {
 			pagedResultList = this.newsService.findAllPaged(this.offset, this.pageSize);
+		}
+
+		if (pagedResultList != null && !pagedResultList.isEmpty()) {
+			this.offset = pagedResultList.get(pagedResultList.size() - 1).getId();
 		}
 
 		this.addConvertedComponents(pagedResultList);
@@ -73,9 +81,14 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void changeLdapGroup(LdapGroup ldapGroup) {
-		this.content.removeAllComponents();
-		this.offset = 0;
 		this.ldapGroup = ldapGroup;
+		this.refresh();
+
+	}
+
+	public void refresh() {
+		this.content.removeAllComponents();
+		this.offset = this.newsService.getMaxNewsId();
 		this.loadNextPage();
 		this.scrollToTop();
 	}

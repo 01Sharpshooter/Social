@@ -12,6 +12,8 @@ public interface NewsDao {
 
 	public List<News> getPagedNewsOfUser(int offset, int pageSize, User user);
 
+	public Integer getMaxNewsId();
+
 	public void saveNews(News news);
 
 	public void deleteNews(News news);
