@@ -512,10 +512,7 @@
 	  			height:50%;
 	  		}
 	  		.v-button:first-child{
-	  			border:1px solid $blue;
-	  			background: $blue;
-	  			box-shadow: unset;
-	  			color: white;
+	  			@include colored-button($blue);
 	  		}
 	  	}
 	  	#profileBody{
@@ -664,6 +661,11 @@
 	.add-member-to-conv-window{
 		height: 100%;
 		background: #efefef;
+		.v-window-header{
+			margin-right:0px !important;
+			background: cornflowerblue;
+			color: white;
+		}
 		.add-member-to-conv-window-member-layout{
 			height:100% !important;
 			overflow:auto !important;
@@ -707,5 +709,14 @@
 		text-align:center;
 	}
 
+	.blue-button{
+		@include colored-button($blue);
+	}
+}
 
+@mixin colored-button($color){
+	border:1px solid $color;
+  	background: $color;
+  	box-shadow: unset;
+  	color: white;
 }

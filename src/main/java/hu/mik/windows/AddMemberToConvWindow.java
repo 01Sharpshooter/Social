@@ -48,7 +48,8 @@ public class AddMemberToConvWindow extends Window {
 		this.center();
 		this.setModal(true);
 		this.setResizable(false);
-		this.setCaption("Members to add");
+		this.setClosable(false);
+		this.setCaption("Partners to add");
 		this.chosenUsers = new ArrayList<>();
 		this.createContent();
 	}
@@ -87,17 +88,28 @@ public class AddMemberToConvWindow extends Window {
 	private void createActionLayout() {
 		HorizontalLayout actionLayout = new HorizontalLayout();
 		Button btnSave = this.createSaveButton();
-		actionLayout.addComponents(btnSave);
+		Button btnCancel = this.createCancelButton();
+		actionLayout.addComponents(btnSave, btnCancel);
 		actionLayout.setWidth("100%");
+		actionLayout.setExpandRatio(btnSave, 1f);
 		actionLayout.setComponentAlignment(btnSave, Alignment.MIDDLE_RIGHT);
+		actionLayout.setComponentAlignment(btnCancel, Alignment.MIDDLE_RIGHT);
 
 		this.content.addComponent(actionLayout);
 
 	}
 
+	private Button createCancelButton() {
+		Button btnCancel = new Button(Texts.BTN_CANCEL.getText());
+		btnCancel.setIcon(VaadinIcons.CLOSE);
+		btnCancel.addClickListener(e -> this.close());
+		return btnCancel;
+	}
+
 	private Button createSaveButton() {
 		Button btnSave = new Button(Texts.BTN_CONFIRM.getText());
 		btnSave.setIcon(VaadinIcons.CHECK);
+		btnSave.addStyleName(ThemeConstants.BLUE_BUTTON);
 		btnSave.addClickListener(e -> this.save());
 		return btnSave;
 

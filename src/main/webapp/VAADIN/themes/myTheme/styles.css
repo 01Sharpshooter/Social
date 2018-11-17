@@ -15746,6 +15746,12 @@ div.v-layout.v-horizontal.v-widget {
 	background: #efefef;
 }
 
+.myTheme .add-member-to-conv-window .v-window-header {
+	margin-right: 0px !important;
+	background: cornflowerblue;
+	color: white;
+}
+
 .myTheme .add-member-to-conv-window .add-member-to-conv-window-member-layout {
 	height: 100% !important;
 	overflow: auto !important;
@@ -15790,4 +15796,11 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .text-center {
 	text-align: center;
+}
+
+.myTheme .blue-button {
+	border: 1px solid cornflowerblue;
+	background: cornflowerblue;
+	box-shadow: unset;
+	color: white;
 }
