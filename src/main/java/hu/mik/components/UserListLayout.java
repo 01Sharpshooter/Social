@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Label;
 
 import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
@@ -24,9 +25,9 @@ public class UserListLayout extends CssLayout {
 
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
 		if (userListLdap != null && !userListLdap.isEmpty()) {
-			List<String> usernames = userListLdap.stream().map(lu -> lu.getUid()).collect(Collectors.toList());
+			List<String> usernames = userListLdap.stream().filter(lu -> lu != null).map(lu -> lu.getUid())
+					.collect(Collectors.toList());
 			List<User> userList = this.userService.findAllByUsernames(usernames);
-
 			this.createUserListLayoutFromDb(userList);
 		}
 		// TODO check
@@ -38,11 +39,10 @@ public class UserListLayout extends CssLayout {
 		// this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.setWidth("100%");
 
-		if (userListDb != null) {
-			for (User user : userListDb) {
-				this.addComponent(new UserDiv(user));
-
-			}
+		if (userListDb != null && !userListDb.isEmpty()) {
+			userListDb.forEach(user -> this.addComponent(new UserDiv(user)));
+		} else {
+			this.addComponent(new Label("No user found"));
 		}
 		return this;
 	}

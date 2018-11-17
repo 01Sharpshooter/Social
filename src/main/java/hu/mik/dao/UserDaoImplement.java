@@ -109,6 +109,9 @@ public class UserDaoImplement implements UserDao {
 
 	@Override
 	public List<User> findAllByUsernames(List<String> usernames) {
+		if (usernames.isEmpty()) {
+			return null;
+		}
 		//@formatter:off
 		return this.em.createQuery(
 				"SELECT u FROM User u"

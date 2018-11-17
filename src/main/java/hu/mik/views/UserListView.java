@@ -40,10 +40,7 @@ public class UserListView extends Panel implements View {
 
 		List<User> userList = new ArrayList<>();
 		userList = this.userService.findByFullNameContaining(fullName);
-
-		if (userList != null) {
-			layout = this.userListLayout.createUserListLayoutFromDb(userList);
-		}
+		layout = this.userListLayout.createUserListLayoutFromDb(userList);
 		this.setContent(layout);
 	}
 
