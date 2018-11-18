@@ -6,25 +6,21 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.annotations.QueryHints;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.mik.beans.Role;
 import hu.mik.beans.User;
-import hu.mik.services.LdapService;
 
 @Repository
 @Transactional
+@CacheConfig(cacheNames = "userDao")
 public class UserDaoImplement implements UserDao {
-
-	private static final String CACHE_REGION = "userDao";
 
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
-	LdapService ldapService;
 
 	@Override
 	public User save(User user, Role role) {
@@ -57,12 +53,12 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
+	@Cacheable
 	public User findByUsername(String username) {
 		User user;
 		try {
 			user = this.em.createQuery("SELECT u FROM User u where LOWER(u.username) = :username", User.class)
-					.setParameter("username", username.toLowerCase()).setHint(QueryHints.CACHEABLE, true)
-					.setHint(QueryHints.CACHE_REGION, CACHE_REGION).getSingleResult();
+					.setParameter("username", username.toLowerCase()).getSingleResult();
 		} catch (Exception e) {
 			user = null;
 		}
@@ -75,17 +71,17 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
+	@Cacheable
 	public List<User> findAllEnabled() {
-		return this.em.createQuery("SELECT u FROM User u WHERE u.enabled = true", User.class)
-				.setHint(QueryHints.CACHEABLE, true).setHint(QueryHints.CACHE_REGION, CACHE_REGION).getResultList();
+		return this.em.createQuery("SELECT u FROM User u WHERE u.enabled = true", User.class).getResultList();
 	}
 
 	@Override
+	@Cacheable
 	public User findById(int id) {
 		User user;
 		try {
 			user = this.em.createQuery("SELECT u FROM User u where u.id= :id", User.class).setParameter("id", id)
-					.setHint(QueryHints.CACHEABLE, true).setHint(QueryHints.CACHE_REGION, CACHE_REGION)
 					.getSingleResult();
 		} catch (Exception e) {
 			user = null;
@@ -94,12 +90,12 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
+	@Cacheable
 	public List<User> findByFullNameContaining(String fullName) {
 		List<User> list = new ArrayList<>();
 		list = this.em.createQuery(
 				"SELECT u FROM User u where UPPER(u.fullName) LIKE CONCAT('%',:username,'%') AND u.enabled = true",
-				User.class).setParameter("username", fullName.toUpperCase()).setHint(QueryHints.CACHEABLE, true)
-				.setHint(QueryHints.CACHE_REGION, CACHE_REGION).getResultList();
+				User.class).setParameter("username", fullName.toUpperCase()).getResultList();
 		if (list.isEmpty()) {
 			return null;
 		} else {

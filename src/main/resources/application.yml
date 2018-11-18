@@ -4,7 +4,8 @@ logging:
       hibernate:
         SQL: off
         type: off
-        cache: debug
+      springframework:
+        cache: trace
 server:
   port: 8888
 spring:
@@ -20,20 +21,13 @@ spring:
         show_sql: true
         format_sql: true
         generate_statistics: true
-        cache:
-          provider_class: org.hibernate.cache.EhCacheProvider
-          region:
-            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
-          use_second_level_cache: true
-          use_query_cache: true
-      javax:
-        persistence:
-          sharedCache:
-            mode:ENABLE_SELECTIVE
   ldap:
     password: secret
     urls: ldap://localhost:10389/
     username: uid=admin, ou=system
+  cache:
+    ehcache:      config:
+        classpath:ehcache.xml
 vaadin:  servlet:    production-mode: true
     
 folder:
