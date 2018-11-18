@@ -76,7 +76,6 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 						this.userUtils.getLoggedInUser().getDbUser().getId().equals(object.getUser().getId()),
 						this.newsService));
 			});
-			this.offset += this.pageSize;
 		}
 	}
 
