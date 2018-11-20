@@ -6,8 +6,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,6 @@ import hu.mik.beans.User;
 
 @Repository
 @Transactional
-@CacheConfig(cacheNames = "userDao")
 public class UserDaoImplement implements UserDao {
 
 	@PersistenceContext
@@ -32,6 +32,9 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
+	@Caching(evict = { @CacheEvict(cacheNames = "user", key = "#user.username"),
+			@CacheEvict(cacheNames = "user", key = "#user.id"),
+			@CacheEvict(cacheNames = "userList", allEntries = true) })
 	public User save(User user) {
 		if (user.getId() == null) {
 			this.em.persist(user);
@@ -53,7 +56,7 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
-	@Cacheable
+	@Cacheable("user")
 	public User findByUsername(String username) {
 		User user;
 		try {
@@ -71,13 +74,13 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
-	@Cacheable
+	@Cacheable("userList")
 	public List<User> findAllEnabled() {
 		return this.em.createQuery("SELECT u FROM User u WHERE u.enabled = true", User.class).getResultList();
 	}
 
 	@Override
-	@Cacheable
+	@Cacheable("user")
 	public User findById(int id) {
 		User user;
 		try {
@@ -90,7 +93,7 @@ public class UserDaoImplement implements UserDao {
 	}
 
 	@Override
-	@Cacheable
+	@Cacheable("userList")
 	public List<User> findByFullNameContaining(String fullName) {
 		List<User> list = new ArrayList<>();
 		list = this.em.createQuery(

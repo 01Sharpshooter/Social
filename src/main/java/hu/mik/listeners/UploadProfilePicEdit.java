@@ -35,9 +35,9 @@ import hu.mik.views.PictureUploadView;
 @SpringComponent
 public class UploadProfilePicEdit implements Receiver, SucceededListener {
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	@Autowired
-	UserUtils userUtils;
+	private UserUtils userUtils;
 
 	private PictureUploadView view;
 
@@ -108,7 +108,6 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 			user.setImageName(imageName);
 			this.userUtils.getLoggedInUser().setDbUser(this.userService.save(user));
 			this.view.imageChange();
-
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
 		}

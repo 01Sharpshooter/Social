@@ -2,7 +2,6 @@ package hu.mik.components;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
@@ -29,7 +28,6 @@ import hu.mik.views.UserListView;
 public class NavigationBar extends CssLayout {
 	private CssLayout naviPerson;
 	private CssLayout naviItemList;
-	private Image naviBarImage;
 
 	private SocialUserWrapper socialUser;
 
@@ -55,17 +53,21 @@ public class NavigationBar extends CssLayout {
 	private void createNaviBarPerson() {
 		this.naviPerson = new CssLayout();
 		this.naviPerson.addStyleName(ThemeConstants.NAVI_PERSON);
-		this.naviBarImage = this.socialUser.getDbUser().getVaadinImage();
-		this.naviBarImage.setId("profilePicture");
-		this.naviBarImage.addStyleName(ThemeConstants.BORDERED_IMAGE);
-		this.naviBarImage.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
-		this.naviBarImage.addClickListener(this::profileImageClickListener);
-		this.addComponent(this.naviBarImage);
+		Image naviBarImage = this.socialUser.getDbUser().getVaadinImage();
+		this.styleNaviBarImage(naviBarImage);
+		this.addComponent(naviBarImage);
 		Label name = new Label();
 		name.setValue(this.socialUser.getLdapUser().getCommonName());
 		name.setId("username");
-		this.naviPerson.addComponents(this.naviBarImage, name);
+		this.naviPerson.addComponents(naviBarImage, name);
 		this.addComponent(this.naviPerson);
+	}
+
+	private void styleNaviBarImage(Image image) {
+		image.setId("profilePicture");
+		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
+		image.addStyleName(ThemeConstants.NAVIGATION_BAR_ICON);
+		image.addClickListener(this::profileImageClickListener);
 	}
 
 	private void createNaviBarLabelList(Long unseenConversationCount) {
@@ -108,8 +110,9 @@ public class NavigationBar extends CssLayout {
 
 	}
 
-	public void refreshImage(Resource resource) {
-		((Image) this.naviPerson.getComponent(0)).setSource(resource);
+	public void refreshImage(Image image) {
+		this.styleNaviBarImage(image);
+		this.naviPerson.replaceComponent(this.naviPerson.getComponent(0), image);
 	}
 
 	public void refreshUnseenConversationNumber(Long unseenNumber) {

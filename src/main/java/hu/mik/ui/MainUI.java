@@ -1,6 +1,5 @@
 package hu.mik.ui;
 
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,7 +16,6 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.FileResource;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.ui.Transport;
@@ -36,7 +34,6 @@ import hu.mik.beans.User;
 import hu.mik.components.NavigationBar;
 import hu.mik.constants.LdapConstants;
 import hu.mik.constants.ThemeConstants;
-import hu.mik.constants.UserConstants;
 import hu.mik.listeners.NewMessageListener;
 import hu.mik.services.ChatService;
 import hu.mik.services.LdapService;
@@ -50,7 +47,6 @@ import hu.mik.views.MessagesView;
 @Theme(ThemeConstants.UI_THEME)
 @Push(transport = Transport.WEBSOCKET_XHR)
 @PreserveOnRefresh
-//@VaadinServletConfiguration(ui = MainUI.class, productionMode = false, widgetset = "hu.mik.gwt.SocialWidgetset.gwt.xml")
 @Widgetset("hu.mik.gwt.SocialWidgetset")
 @Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {
@@ -175,8 +171,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 
 	public void refreshImage() {
 		this.socialUser = this.userUtils.getLoggedInUser();
-		this.navigationBar.refreshImage(new FileResource(
-				new File(UserConstants.getImageLocation() + this.socialUser.getDbUser().getImageName())));
+		this.navigationBar.refreshImage(this.socialUser.getDbUser().getVaadinImage());
 	}
 
 	public void refreshUnseenConversationNumber() {
