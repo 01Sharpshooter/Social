@@ -8,25 +8,29 @@ import org.springframework.stereotype.Service;
 
 import hu.mik.beans.Conversation;
 import hu.mik.listeners.NewMessageListener;
+import lombok.Synchronized;
 
 @Service
 public class MessageBroadcastService {
-	static ExecutorService executorService = Executors.newSingleThreadExecutor();
+	private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private static ConcurrentHashMap<Integer, NewMessageListener> userToListenerMap = new ConcurrentHashMap<>();
 
-	public static synchronized void register(NewMessageListener messageListener, Integer userId) {
+	@Synchronized
+	public static void register(NewMessageListener messageListener, Integer userId) {
 		if (!userToListenerMap.containsKey(userId)) {
 			userToListenerMap.put(userId, messageListener);
 		}
 	}
 
-	public static synchronized void unregister(NewMessageListener messageListener, Integer userId) {
+	@Synchronized
+	public static void unregister(NewMessageListener messageListener, Integer userId) {
 		userToListenerMap.remove(userId);
 
 	}
 
-	public static synchronized void sendMessage(Conversation conversation) {
+	@Synchronized
+	public static void sendMessage(Conversation conversation) {
 		executorService.execute(() -> {
 			conversation.getConversationUsers().stream()
 					.filter(cu -> !cu.getUser().getId().equals(conversation.getLastMessage().getSender().getId()))
@@ -35,7 +39,8 @@ public class MessageBroadcastService {
 		});
 	}
 
-	public static synchronized void refreshConversationForEveryMember(Conversation conversation) {
+	@Synchronized
+	public static void refreshConversationForEveryMember(Conversation conversation) {
 		executorService.execute(() -> {
 			conversation.getConversationUsers().stream()
 					.filter(cu -> userToListenerMap.containsKey(cu.getUser().getId()))
