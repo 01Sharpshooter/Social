@@ -31,7 +31,7 @@ public class PictureUploadView extends VerticalLayout implements View, ImageRece
 	public static final String NAME = "PictureUpload";
 
 	@Autowired
-	UploadProfilePicEdit uploadProfilePicture;
+	private UploadProfilePicEdit uploadProfilePicture;
 
 	private Image editImage = new Image();
 
