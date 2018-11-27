@@ -56,6 +56,14 @@
 			    position: absolute;
 			    cursor: pointer;
 			    height: 50px;
+			    .v-icon{
+			    	display: inherit;
+			    	color: $grey;	
+			    }
+	  		}
+	  	
+	  		#menuIcon:after{
+				content:none;
 	  		}
 		}	
 		#radioTeamSelect{
@@ -257,6 +265,7 @@
 				}
 				#latestMessagesLayout{
 					border-color: gray;
+					border-bottom: 1px solid lightgray;
 					overflow: auto;
 					width:100%;
 					height:80%;

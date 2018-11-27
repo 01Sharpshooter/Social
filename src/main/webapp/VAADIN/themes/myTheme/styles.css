@@ -15101,6 +15101,15 @@ div.v-layout.v-horizontal.v-widget {
 	height: 50px;
 }
 
+.myTheme #base[width-range~="0-550px"] #navigationBar #menuIcon .v-icon {
+	display: inherit;
+	color: #696969;
+}
+
+.myTheme #base[width-range~="0-550px"] #navigationBar #menuIcon:after {
+	content: none;
+}
+
 .myTheme #base[width-range~="0-550px"] #radioTeamSelect {
 	font-size: 12px;
 }
@@ -15310,6 +15319,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme #base #messageBase .chat-left-layout #latestMessagesLayout {
 	border-color: gray;
+	border-bottom: 1px solid lightgray;
 	overflow: auto;
 	width: 100%;
 	height: 80%;
