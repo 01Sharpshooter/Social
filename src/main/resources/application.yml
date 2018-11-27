@@ -5,7 +5,7 @@ logging:
         SQL: off
         type: off
       springframework:
-        cache: trace
+        cache: off
 server:
   port: 8888
 spring:
@@ -19,15 +19,16 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:     
-        show_sql: true
+        show_sql: false
         format_sql: false
-        generate_statistics: true
+        generate_statistics: false
         connection:
           provider_disables_autocommit: true
   ldap:
     password: secret
     urls: ldap://localhost:10389/
     username: uid=admin, ou=system
+    base: dc=social,dc=com
   cache:
     ehcache:      config:
         classpath:ehcache.xml
