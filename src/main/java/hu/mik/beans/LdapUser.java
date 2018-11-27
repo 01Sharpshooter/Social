@@ -9,11 +9,10 @@ import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 import org.springframework.ldap.odm.annotations.Transient;
 
-import hu.mik.constants.LdapConstants;
 import lombok.Data;
 
 @Data
-@Entry(base = LdapConstants.OU_USERS_FULL, objectClasses = { "top", "inetOrgPerson", "person", "organizationalPerson" })
+@Entry(objectClasses = { "inetOrgPerson", "person", "organizationalPerson" })
 public class LdapUser {
 	@Id
 	private Name distinguishedName;

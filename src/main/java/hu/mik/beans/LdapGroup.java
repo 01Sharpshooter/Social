@@ -9,11 +9,10 @@ import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 import org.springframework.ldap.odm.annotations.Transient;
 
-import hu.mik.constants.LdapConstants;
 import lombok.Data;
 
 @Data
-@Entry(base = LdapConstants.OU_GROUPS_FULL, objectClasses = { "top", "groupOfNames" })
+@Entry(objectClasses = { "groupOfNames" })
 public class LdapGroup {
 	@Id
 	private Name id;
