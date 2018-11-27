@@ -1,0 +1,16 @@
+server:
+  port: 8888
+  
+spring:
+  datasource:
+    password: Password111
+    url: jdbc:postgresql://localhost:5432/SocialDB
+    username: social
+  ldap:
+    password: secret
+    urls: ldap://localhost:10389/
+    username: uid=admin, ou=system
+    base: dc=social,dc=com
+    
+folder:
+  image: c:/Development/Java/Komolyabb/Komolyabb/images/
