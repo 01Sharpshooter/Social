@@ -79,6 +79,10 @@ public class UploadProfilePicEdit implements Receiver, SucceededListener {
 		User user = this.userUtils.getLoggedInUser().getDbUser();
 
 		String imageName = user.getUsername() + this.extension;
+		File imageFolder = new File(UserConstants.getImageLocation());
+		if (!imageFolder.exists()) {
+			imageFolder.mkdir();
+		}
 		File imageSave = new File(UserConstants.getImageLocation() + imageName);
 
 		try {
