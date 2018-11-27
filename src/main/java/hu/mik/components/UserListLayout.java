@@ -15,6 +15,7 @@ import hu.mik.beans.LdapUser;
 import hu.mik.beans.User;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.services.UserService;
+import hu.mik.utils.UserUtils;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -22,6 +23,8 @@ import hu.mik.services.UserService;
 public class UserListLayout extends CssLayout {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserUtils userUtils;
 
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
 		if (userListLdap != null && !userListLdap.isEmpty()) {
@@ -36,11 +39,11 @@ public class UserListLayout extends CssLayout {
 
 	public CssLayout createUserListLayoutFromDb(List<User> userListDb) {
 		this.addStyleName(ThemeConstants.MANY_USER_LAYOUT);
-		// this.addStyleName(ThemeConstants.HOVER_GREEN_LAYOUTS);
 		this.setWidth("100%");
 
 		if (userListDb != null && !userListDb.isEmpty()) {
-			userListDb.forEach(user -> this.addComponent(new UserDiv(user)));
+			userListDb.forEach(user -> this.addComponent(
+					new UserDiv(user, !user.getId().equals(this.userUtils.getLoggedInUser().getDbUser().getId()))));
 		} else {
 			this.addComponent(new Label("No user found"));
 		}

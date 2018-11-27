@@ -17,26 +17,26 @@ import hu.mik.views.ProfileView;
 public class UserDiv extends CssLayout {
 	private User user;
 
-	public UserDiv(User user) {
+	public UserDiv(User user, boolean withMessageButton) {
 		super();
 		this.user = user;
-		this.createContent();
+		this.createContent(withMessageButton);
 	}
 
-	private void createContent() {
+	private void createContent(boolean withMessageButton) {
 		Image image = this.user.getVaadinImage();
 		image.setHeight("100%");
 		image.addStyleName(ThemeConstants.BORDERED_IMAGE);
 		Label lblName = new Label(this.user.getFullName());
 		this.setHeight("60px");
 		this.setWidth("25%");
-//		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		this.addComponent(image);
-		this.createBtnMessage();
+		if (withMessageButton) {
+			this.createBtnMessage();
+		}
 		this.createBtnProfile();
 		this.addComponent(lblName);
 		this.addStyleName(ThemeConstants.BORDERED);
-//		this.addLayoutClickListener(this::layoutClickListener);
 	}
 
 	private void createBtnProfile() {
@@ -55,14 +55,7 @@ public class UserDiv extends CssLayout {
 		btnMessage.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		btnMessage.addStyleName(ValoTheme.BUTTON_LARGE);
 		this.addComponent(btnMessage);
-//		this.setComponentAlignment(btnMessage, Alignment.MIDDLE_RIGHT);
-//		this.setExpandRatio(btnMessage, 1f);
 		btnMessage.addClickListener(
 				e -> UI.getCurrent().getNavigator().navigateTo(MessagesView.NAME + "/" + this.user.getId()));
 	}
-
-//	private void layoutClickListener(LayoutClickEvent event) {
-//		((MainUI) this.getUI()).getNavigator().navigateTo(ProfileView.NAME + "/" + this.user.getUsername());
-//	}
-
 }
