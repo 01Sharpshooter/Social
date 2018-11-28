@@ -1,17 +1,30 @@
 The runnable JAR can be found in the /target folder. 
 The application must be configured before first run! To do so, please follow these instructions:
 
+-----------------------------
+Requirements:
+----------------------------- 
+JRE: 1.8 or higher
+PostgreSQL: 10.5 or higher
+Directory server: Anything that supports X.500 LDAP
+-----------------------------
+
 There is an application.yml file next to the JAR, in which you have to configure the connections. 
-Important! If you recompile the project, the YAML file may be deleted. 
-In this case, there is one sample in the root folder which can be copied back into the /target folder.
+Important! If you recompile the project, the YAML file may get deleted. 
+In that case, there is one sample in the root folder which can be copied back into the /target folder.
 
-Requirements: 
-	JRE: 1.8 or higher
-	PostgreSQL: 10.5 or higher
-	Directory server: Anything that supports X.500 LDAP	
-
+-----------------------------
+Database installation steps:
+-----------------------------
+ 1. Make sure that you have the above mentioned PostgreSQL version installed.
+ 2. Move to /sql/Postgre/Installation
+ 3. run Create_Database.sql
+ 4. run	Create_User.sql
+ 5. connect to the freshly created SocialDB database
+ 6. run Init_Database.sql
+----------------------------
 The configuration file:
-
+----------------------------
 server:
   port: The port to which the application is going to listen to, e.g., 8888
 spring:
@@ -26,5 +39,5 @@ spring:
     base: The starting point of LDAP queries, e.g., dc=social,dc=com    
 folder:
   image: The folder responsible for storing user images, absolute path preferred, e.g., C:/social/images/
-
+-----------------------------
 After setting all these values, the application should start without a problem.
