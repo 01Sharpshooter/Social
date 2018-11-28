@@ -48,6 +48,7 @@ public class AfterStartup {
 			User user = new User();
 			user.setUsername(username);
 			user.setFullName(ldapUserMap.get(username).getCommonName());
+			user.setEnabled(true);
 			this.userService.registerDefaultUser(user);
 		});
 
