@@ -214,7 +214,10 @@
     		padding: 15px;
     		.news-date{
     			font-size: 0.8em;
-    		}
+    		}    	
+	  		.v-button:after{
+				content:none;
+	  		}
 		}
 		
 		.notificationSmallIcon{
@@ -665,6 +668,30 @@
 		.navi-search-field{
 			display: flex !important;
 		}
+	}
+
+	.confirmDialog{
+		width: 40%;
+		height: 30%;
+		.v-window-header{
+			white-space: normal;
+		}
+		.v-horizontallayout{
+			position:absolute;
+			bottom:0;
+			margin-bottom:5px;
+			right:5px;
+		}	
+	}
+
+	.confirmDialog[width-range~="0-550px"]{
+		width: 90%;
+		height: 30%;
+	}
+
+	.confirmDialog[width-range~="551-1050px"]{
+		width: 60%;
+		height: 30%;
 	}
 
 	.add-member-to-conv-window{

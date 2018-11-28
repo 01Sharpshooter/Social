@@ -1,35 +1,30 @@
 package hu.mik.components;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import hu.mik.constants.ThemeConstants;
 import hu.mik.enums.Texts;
 
 @SuppressWarnings("serial")
 public class ConfirmDialog extends Window {
-	private String message;
 	private boolean confirmed = false;
 
 	public ConfirmDialog(String message) {
 		this.setModal(true);
-		this.setWidth("40%");
-		this.setHeight("40%");
 		this.setResizable(false);
-		this.message = message;
+		this.setClosable(false);
+		this.setCaption(message);
+		this.setStyleName("confirmDialog");
+		this.setResponsive(true);
 		this.createContent();
 	}
 
 	private void createContent() {
-		VerticalLayout content = new VerticalLayout();
-		Label message = new Label(this.message);
-		content.addComponent(message);
-		content.addComponent(this.createButtonLayout());
-		content.setExpandRatio(message, 1f);
-		this.setContent(content);
+		this.setContent(this.createButtonLayout());
 	}
 
 	private HorizontalLayout createButtonLayout() {
@@ -37,7 +32,10 @@ public class ConfirmDialog extends Window {
 			this.confirmed = true;
 			this.close();
 		});
+		btnConfirm.setIcon(VaadinIcons.CHECK);
+		btnConfirm.addStyleName(ThemeConstants.BLUE_BUTTON);
 		Button btnCancel = new Button(Texts.BTN_CANCEL.getText(), e -> this.close());
+		btnCancel.setIcon(VaadinIcons.CLOSE);
 		HorizontalLayout layoutBtn = new HorizontalLayout(btnConfirm, btnCancel);
 		layoutBtn.setWidth("100%");
 		layoutBtn.setExpandRatio(btnConfirm, 1f);

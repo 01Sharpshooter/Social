@@ -15272,6 +15272,10 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 0.8em;
 }
 
+.myTheme #base .news-box .v-button:after {
+	content: none;
+}
+
 .myTheme #base .notificationSmallIcon .v-icon {
 	height: 20px;
 	width: 20px;
@@ -15749,6 +15753,32 @@ div.v-layout.v-horizontal.v-widget {
 
 .myTheme .show-dropdown .navi-search-field {
 	display: flex !important;
+}
+
+.myTheme .confirmDialog {
+	width: 40%;
+	height: 30%;
+}
+
+.myTheme .confirmDialog .v-window-header {
+	white-space: normal;
+}
+
+.myTheme .confirmDialog .v-horizontallayout {
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 5px;
+	right: 5px;
+}
+
+.myTheme .confirmDialog[width-range~="0-550px"] {
+	width: 90%;
+	height: 30%;
+}
+
+.myTheme .confirmDialog[width-range~="551-1050px"] {
+	width: 60%;
+	height: 30%;
 }
 
 .myTheme .add-member-to-conv-window {
