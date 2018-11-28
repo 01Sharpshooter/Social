@@ -2,6 +2,7 @@ package hu.mik.components;
 
 import java.util.List;
 
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import hu.mik.beans.LdapGroup;
@@ -64,6 +65,8 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 		if (pagedResultList != null && !pagedResultList.isEmpty()) {
 			this.offset = pagedResultList.get(pagedResultList.size() - 1).getId();
+		} else {
+			this.content.addComponent(new Label("No news here :("));
 		}
 
 		this.addConvertedComponents(pagedResultList);
@@ -87,12 +90,15 @@ public class NewsPanelScrollable extends AbstractScrollablePanel {
 
 	public void refresh() {
 		this.content.removeAllComponents();
-		this.offset = this.newsService.getMaxNewsId();
+		this.offset = this.newsService.getMaxNewsId() + 1;
 		this.loadNextPage();
 		this.scrollToTop();
 	}
 
 	public void addNews(News news) {
+		if (this.offset == 1) {
+			this.content.removeAllComponents();
+		}
 		this.content.addComponent(new NewsComponent(news, true, this.newsService), 0);
 	}
 

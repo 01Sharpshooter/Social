@@ -76,9 +76,10 @@ public class NewsDaoImpl implements NewsDao {
 	}
 	@Override
 	public Integer getMaxNewsId() {
-		return (Integer) this.em.createQuery(
+		Integer max= (Integer) this.em.createQuery(
 				"SELECT MAX(n.id) FROM News n")
 				.getSingleResult();
+		return max == null ? 0 : max;
 	}
 
 }
