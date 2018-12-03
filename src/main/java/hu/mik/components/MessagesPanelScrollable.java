@@ -69,12 +69,14 @@ public class MessagesPanelScrollable extends AbstractScrollablePanel {
 	}
 
 	public void firstFill() {
+		this.previousSenderId = null;
 		this.content.removeAllComponents();
 		if (this.conversation.getLastMessage() != null) {
 			this.offset = this.conversation.getLastMessage().getId() + 1;
 		}
 		this.fillMessages();
 		this.scrollToBottom();
+		this.previousSenderId = this.messagesList.get(0).getSender().getId();
 	}
 
 	private String getMessageDateDesc(Date date) {
