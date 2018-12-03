@@ -209,16 +209,20 @@ public class MessagesView extends CssLayout implements View {
 		Conversation conversation;
 		if (usersToAdd.size() == 1) {
 			conversation = this.findOrCreateConversationWithUser(usersToAdd.get(0).getId());
+			this.sendMessage(messageText);
 		} else {
 			conversation = new Conversation();
 			usersToAdd.forEach(user -> conversation.addConversationUser(new ConversationUser(conversation, user)));
+			Message message = new Message(this.loggedUser.getDbUser(), conversation, messageText,
+					new Timestamp(System.currentTimeMillis()));
 			conversation.addConversationUser(new ConversationUser(conversation, this.loggedUser.getDbUser()));
+			conversation.setLastMessage(message);
+			this.chatService.saveConversation(conversation);
 			this.selectedConversationDiv = this.createConversationDiv(conversation);
 			this.conversationListLayout.addComponent(this.selectedConversationDiv, 0);
 			this.conversationListSelectionChange(this.selectedConversationDiv);
+			MessageBroadcastService.sendMessage(conversation);
 		}
-
-		this.sendMessage(messageText);
 	}
 
 	private ConversationDiv createConversationDiv(Conversation conversation) {

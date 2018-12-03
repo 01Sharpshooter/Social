@@ -149,6 +149,7 @@ public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 		this.access(() -> {
 			if (this.messageView != null && this.getNavigator().getCurrentView().equals(this.messageView)) {
 				this.messageView.receiveMessage(conversation);
+				this.refreshUnseenConversationNumber();
 			} else {
 				this.refreshUnseenConversationNumber();
 				this.showNewMessageNotification(conversation);

@@ -31,11 +31,11 @@ public class Conversation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@EqualsAndHashCode.Exclude
-	@OneToOne(fetch = FetchType.LAZY, optional = true, cascade = { CascadeType.MERGE })
+	@OneToOne(fetch = FetchType.LAZY, optional = true, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "last_message", updatable = true)
 	private Message lastMessage;
 	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "conversation", orphanRemoval = true, fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+	@OneToMany(mappedBy = "conversation", orphanRemoval = true, fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private Set<ConversationUser> conversationUsers = new HashSet<>();
 
 	public boolean seenByUser(Integer userId) {

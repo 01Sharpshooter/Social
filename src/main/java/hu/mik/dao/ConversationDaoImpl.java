@@ -21,12 +21,10 @@ public class ConversationDaoImpl implements ConversationDao {
 
 	@Override
 	public Conversation saveConversation(Conversation conversation) {
-		if (conversation.getId() == null) {
-			this.em.persist(conversation);
-			this.em.persist(conversation.getLastMessage());
-			conversation.getConversationUsers().forEach(conversationUser -> this.em.persist(conversationUser));
-		} else {
+		if (conversation.getId() != null) {
 			conversation = this.em.merge(conversation);
+		} else {
+			this.em.persist(conversation);
 		}
 		return conversation;
 	}

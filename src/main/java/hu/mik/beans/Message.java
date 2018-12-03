@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Data
 @RequiredArgsConstructor
@@ -32,12 +33,14 @@ public class Message {
 	@JoinColumn(name = "sender_id", updatable = false)
 	private User sender;
 	@NonNull
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "conversation_id")
 	private Conversation conversation;
 	@NonNull
 	@Column(name = "message")
 	private String message;
+	@NonNull
 	@Column(name = "time", columnDefinition = "TIMESTAMP")
 	private Timestamp time;
 
