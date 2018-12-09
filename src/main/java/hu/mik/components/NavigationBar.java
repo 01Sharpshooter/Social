@@ -14,7 +14,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import hu.mik.beans.SocialUserWrapper;
 import hu.mik.constants.ThemeConstants;
 import hu.mik.ui.MainUI;
-import hu.mik.views.AdminView;
 import hu.mik.views.ContactListView;
 import hu.mik.views.MainView;
 import hu.mik.views.MessagesView;
@@ -165,8 +164,6 @@ public class NavigationBar extends CssLayout {
 			case "Logout":
 				UI.getCurrent().getPage().setLocation("/logout");
 				MainUI.getOnlineUsers().remove(this.socialUser.getDbUser());
-			case "Admin":
-				UI.getCurrent().getNavigator().navigateTo(AdminView.NAME);
 				break;
 			default:
 				if (label.contains("Messages")) {
