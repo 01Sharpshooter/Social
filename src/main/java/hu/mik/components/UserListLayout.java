@@ -27,14 +27,13 @@ public class UserListLayout extends CssLayout {
 	private UserUtils userUtils;
 
 	public CssLayout createUserListLayoutFromLdap(List<LdapUser> userListLdap) {
+		List<User> userList = null;
 		if (userListLdap != null && !userListLdap.isEmpty()) {
 			List<String> usernames = userListLdap.stream().filter(lu -> lu != null).map(lu -> lu.getUid())
 					.collect(Collectors.toList());
-			List<User> userList = this.userService.findAllByUsernames(usernames);
-			this.createUserListLayoutFromDb(userList);
+			userList = this.userService.findAllByUsernames(usernames);
 		}
-		// TODO check
-		return this;
+		return this.createUserListLayoutFromDb(userList);
 	}
 
 	public CssLayout createUserListLayoutFromDb(List<User> userListDb) {

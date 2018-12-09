@@ -121,7 +121,7 @@ public class UserDaoImplement implements UserDao {
 		//@formatter:off
 		return this.em.createQuery(
 				"SELECT u FROM User u"
-				+ " WHERE u.username IN(:usernames)"
+				+ " WHERE LOWER(u.username) IN (:usernames)"
 				+ " AND u.enabled = true", User.class)
 		.setParameter("usernames", usernames)
 		.getResultList();

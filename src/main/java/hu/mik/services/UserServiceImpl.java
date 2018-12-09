@@ -1,6 +1,7 @@
 package hu.mik.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findAllByUsernames(List<String> usernames) {
-		return this.userDao.findAllByUsernames(usernames);
+		List<String> usernamesLower = usernames.stream().map(String::toLowerCase).collect(Collectors.toList());
+		return this.userDao.findAllByUsernames(usernamesLower);
 	}
 
 }
