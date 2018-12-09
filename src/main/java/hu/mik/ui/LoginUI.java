@@ -33,7 +33,7 @@ import hu.mik.views.DefaultView;
 @Widgetset("hu.mik.gwt.SocialWidgetset")
 public class LoginUI extends UI {
 	@Autowired
-	UserUtils userUtils;
+	private UserUtils userUtils;
 
 	@Override
 	protected void init(VaadinRequest request) {
