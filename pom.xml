@@ -216,7 +216,7 @@
 					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
 					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
 					<noServer>true</noServer>
-					<draftCompile>true</draftCompile>
+					<draftCompile>false</draftCompile>
 					<compileReport>true</compileReport>
 					<style>OBF</style>
 					<style>DETAILED</style>
@@ -235,17 +235,6 @@
 		            </execution>
 		        </executions>
     		</plugin>
-    		<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>src/main/webapp/VAADIN/widgetsets/</directory>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 

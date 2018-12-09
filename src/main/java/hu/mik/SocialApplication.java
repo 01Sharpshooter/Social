@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @EnableCaching
 @SpringBootApplication
-public class KomolyabbApplication {
+public class SocialApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(KomolyabbApplication.class, args);
+		SpringApplication.run(SocialApplication.class, args);
 	}
 }
