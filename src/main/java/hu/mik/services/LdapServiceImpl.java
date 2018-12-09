@@ -57,8 +57,8 @@ public class LdapServiceImpl implements LdapService {
 	@Override
 	public List<String> findMemberUsernamesOfGroup(LdapGroup ldapGroup) {
 		List<String> ldapUsers = new ArrayList<>();
-		ldapGroup.getListOfMembers().forEach(
-				dn -> this.ldapRepositoryUsers.findById(dn).ifPresent(ldapUser -> ldapUsers.add(ldapUser.getUid())));
+		ldapGroup.getListOfMembers().forEach(dn -> this.ldapRepositoryUsers.findById(dn)
+				.ifPresent(ldapUser -> ldapUsers.add(ldapUser.getUid().toLowerCase())));
 		return ldapUsers;
 	}
 
