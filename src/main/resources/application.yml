@@ -28,7 +28,6 @@ spring:
     password: secret
     urls: ldap://localhost:10389/
     username: uid=admin, ou=system
-    base: dc=social,dc=com
   cache:
     ehcache:      config:
         classpath:ehcache.xml

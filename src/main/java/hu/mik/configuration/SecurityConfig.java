@@ -47,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// @formatter:off
 		auth.ldapAuthentication()
-			.userSearchBase(LdapConstants.OU_USERS).userSearchFilter("uid={0}")
-			.groupSearchBase(LdapConstants.OU_GROUPS).groupSearchFilter("member={0}")
+			.userSearchFilter("uid={0}")
+			.groupSearchFilter("member={0}")
 			.contextSource()
 				.url(this.ldapUrl + LdapConstants.SEARCH_BASE)
 			.and()

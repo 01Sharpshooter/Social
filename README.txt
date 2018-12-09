@@ -35,9 +35,14 @@ spring:
   ldap:
     password: The password of the user responsible for LDAP connection, e.g., secret
     urls: The connection url of the directory server, e.g., ldap://localhost:10389/
-    username: The distinguished name of the user responsible for LDAP connection, e.g., uid=admin, ou=system
-    base: The starting point of LDAP queries, e.g., dc=social,dc=com    
+    username: The distinguished name of the user responsible for LDAP connection, e.g., uid=admin, ou=system  
 folder:
-  image: The folder responsible for storing user images, absolute path preferred, e.g., C:/social/images/
+  image: The folder responsible for storing user images, absolute path preferred, e.g., C:/social/images/  
+----------------------------
+LDAP:
+----------------------------
+Unfortunately, because of some Spring limitations, the LDAP search base is not externally configurable in this application.
+At the moment, it is configured to read from the dc=social,dc=com partition. If you would like to change that, you will have to 
+change the SEARCH_BASE constant in hu/mik/constants/LdapConstants.java then recompile the project. Sorry for the inconvenience.
 -----------------------------
 After setting all these values, the application should start without a problem.
