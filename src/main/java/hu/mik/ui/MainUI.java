@@ -47,7 +47,6 @@ import hu.mik.views.MessagesView;
 @Theme(ThemeConstants.UI_THEME)
 @Push(transport = Transport.WEBSOCKET_XHR)
 @PreserveOnRefresh
-@Widgetset("hu.mik.gwt.SocialWidgetset")
 @Viewport("width=device-width,initial-scale=1")
 public class MainUI extends UI implements ViewDisplay, NewMessageListener {
 

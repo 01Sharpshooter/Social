@@ -44,5 +44,12 @@ LDAP:
 Unfortunately, because of some Spring limitations, the LDAP search base is not externally configurable in this application.
 At the moment, it is configured to read from the dc=social,dc=com partition. If you would like to change that, you will have to 
 change the SEARCH_BASE constant in hu/mik/constants/LdapConstants.java then recompile the project. Sorry for the inconvenience.
+
+----------------------------
+MAVEN CLEAN AND INSTALL
+----------------------------
+In case you are trying to build the project from command line with maven clean install,
+you might have to run the build process more times before Vaadin is able to copy the widgetset into the JAR.
+
 -----------------------------
 After setting all these values, the application should start without a problem.

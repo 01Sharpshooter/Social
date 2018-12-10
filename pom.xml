@@ -193,13 +193,13 @@
 	<build>
 		<resources>
 		    <resource>
+		      <directory>src/main/webapp</directory>
+		    </resource>
+			<resource>
 		      <directory>src/main/resources</directory>
 		    </resource>
 		    <resource>
 		      <directory>src/main/java</directory>
-		    </resource>
-		    <resource>
-		      <directory>src/main/webapp</directory>
 		    </resource>
   		</resources>
 		<plugins>
@@ -219,6 +219,7 @@
 				<executions>
 					<execution>
 						<goals>
+							<goal>clean</goal>
 							<goal>compile</goal>
 							<goal>compile-theme</goal>
 							<goal>update-theme</goal>
@@ -226,17 +227,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>src/main/resources/VAADIN/widgetsets</directory>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-					</filesets>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

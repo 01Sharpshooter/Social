@@ -30,7 +30,6 @@ import hu.mik.views.DefaultView;
 @Theme(ThemeConstants.UI_THEME)
 @SpringUI(path = "/login")
 @Viewport("width=device-width,initial-scale=1")
-@Widgetset("hu.mik.gwt.SocialWidgetset")
 public class LoginUI extends UI {
 	@Autowired
 	private UserUtils userUtils;
