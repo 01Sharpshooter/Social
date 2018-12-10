@@ -208,33 +208,36 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-		        <groupId>com.vaadin</groupId>
-		        <artifactId>vaadin-maven-plugin</artifactId>
-		        <version>8.5.2</version>
-		        <configuration>
-					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
-					<noServer>true</noServer>
-					<draftCompile>false</draftCompile>
-					<compileReport>true</compileReport>
-					<style>OBF</style>
-					<style>DETAILED</style>
-					<strict>true</strict>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<configuration>
+					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+					<webappDirectory>${basedir}/src/main/resources/VAADIN/widgetsets</webappDirectory>
+					<hostedWebapp>${basedir}/src/main/resources/VAADIN/widgetsets</hostedWebapp>
 				</configuration>
-		        <executions>
-		            <execution>
-		                <goals>
-		                    <goal>clean</goal>
-							<goal>resources</goal>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-theme</goal>
 							<goal>update-theme</goal>
 							<goal>update-widgetset</goal>
-							<goal>compile-theme</goal>
-							<goal>compile</goal>
-		                </goals>
-		            </execution>
-		        </executions>
-    		</plugin>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/resources/VAADIN/widgetsets</directory>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
